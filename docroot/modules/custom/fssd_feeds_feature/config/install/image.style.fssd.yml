@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: fssd
+label: FSSD
+effects:
+  508ff589-5112-4c6a-8d02-029294f4f60a:
+    uuid: 508ff589-5112-4c6a-8d02-029294f4f60a
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 300
+      height: 300
+      anchor: center-center

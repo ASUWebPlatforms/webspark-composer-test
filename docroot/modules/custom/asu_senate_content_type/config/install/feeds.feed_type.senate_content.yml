@@ -1,0 +1,216 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.senator_spotlight.body
+    - field.field.node.senator_spotlight.field_academic_unit
+    - field.field.node.senator_spotlight.field_asu_affiliated_questions
+    - field.field.node.senator_spotlight.field_asu_search_profile
+    - field.field.node.senator_spotlight.field_campus
+    - field.field.node.senator_spotlight.field_first_name
+    - field.field.node.senator_spotlight.field_last_name
+    - field.field.node.senator_spotlight.field_month
+    - field.field.node.senator_spotlight.field_professional_title
+    - field.field.node.senator_spotlight.field_school_or_department
+    - field.field.node.senator_spotlight.field_senate_affiliated_question
+    - field.field.node.senator_spotlight.field_senate_year
+    - node.type.senator_spotlight
+  module:
+    - node
+label: 'Senate content'
+id: senate_content
+description: 'Senate content'
+help: ''
+import_period: -1
+fetcher: upload
+fetcher_configuration:
+  allowed_extensions: 'txt csv tsv xml opml'
+  directory: 'private://feeds'
+parser: csv
+parser_configuration:
+  delimiter: ','
+  no_headers: false
+  line_limit: 100
+processor: 'entity:node'
+processor_configuration:
+  values:
+    type: senator_spotlight
+  langcode: en
+  insert_new: 1
+  update_existing: 2
+  update_non_existent: _keep
+  skip_hash_check: false
+  skip_validation: false
+  skip_validation_types: {  }
+  authorize: true
+  revision: false
+  expire: -1
+  owner_feed_author: false
+  owner_id: 0
+custom_sources:
+  title:
+    value: Title
+    label: Title
+    machine_name: title
+    type: csv
+  '':
+    value: ''
+    label: ''
+    machine_name: ''
+    type: csv
+  last_name:
+    value: 'Last Name'
+    label: 'Last Name'
+    machine_name: last_name
+    type: csv
+  first_name:
+    value: 'First Name'
+    label: 'First Name'
+    machine_name: first_name
+    type: csv
+  professional_title:
+    value: 'Professional Title'
+    label: 'Professional Title'
+    machine_name: professional_title
+    type: csv
+  asu_search_profile:
+    value: 'ASU Search profile'
+    label: 'ASU Search profile'
+    machine_name: asu_search_profile
+    type: csv
+  school_or_department:
+    value: 'School or Department'
+    label: 'School or Department'
+    machine_name: school_or_department
+    type: csv
+  academic_unit:
+    value: 'Academic Unit'
+    label: 'Academic Unit'
+    machine_name: academic_unit
+    type: csv
+  campus:
+    value: Campus
+    label: Campus
+    machine_name: campus
+    type: csv
+  month:
+    value: Month
+    label: Month
+    machine_name: month
+    type: csv
+  year_recognized:
+    value: 'Year recognized'
+    label: 'Year recognized'
+    machine_name: year_recognized
+    type: csv
+  body:
+    value: Body
+    label: Body
+    machine_name: body
+    type: csv
+  asu_affiliated_questions:
+    value: 'ASU affiliated questions'
+    label: 'ASU affiliated questions'
+    machine_name: asu_affiliated_questions
+    type: csv
+  senate_questions:
+    value: 'Senate questions'
+    label: 'Senate questions'
+    machine_name: senate_questions
+    type: csv
+mappings:
+  -
+    target: title
+    map:
+      value: title
+    settings:
+      language: null
+    unique:
+      value: 1
+  -
+    target: field_last_name
+    map:
+      value: last_name
+    settings:
+      language: null
+    unique: {  }
+  -
+    target: field_first_name
+    map:
+      value: first_name
+    settings:
+      language: null
+    unique: {  }
+  -
+    target: field_professional_title
+    map:
+      value: professional_title
+    settings:
+      language: null
+    unique: {  }
+  -
+    target: field_asu_search_profile
+    map:
+      uri: asu_search_profile
+      title: ''
+    settings:
+      language: null
+  -
+    target: field_school_or_department
+    map:
+      value: school_or_department
+    settings:
+      language: null
+    unique: {  }
+  -
+    target: field_academic_unit
+    map:
+      target_id: academic_unit
+    settings:
+      language: null
+      reference_by: name
+      autocreate: false
+      autocreate_bundle: academic_unit
+  -
+    target: field_campus
+    map:
+      value: campus
+    settings:
+      language: null
+  -
+    target: field_month
+    map:
+      value: month
+    settings:
+      language: null
+  -
+    target: field_senate_year
+    map:
+      value: year_recognized
+    settings:
+      language: null
+    unique: {  }
+  -
+    target: body
+    map:
+      value: body
+      summary: ''
+    settings:
+      language: null
+      format: plain_text
+  -
+    target: field_asu_affiliated_questions
+    map:
+      value: asu_affiliated_questions
+      summary: ''
+    settings:
+      language: ''
+      format: full_html
+  -
+    target: field_senate_affiliated_question
+    map:
+      value: senate_questions
+      summary: ''
+    settings:
+      language: ''
+      format: full_html

@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for the asu_provost_aprview module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\views\Views;
+use \Drupal\views\Plugin\views\cache\CachePluginBase;
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function asu_provost_aprview_views_data_alter(array &$data) {
+  // This field is a pseudo field and doesn't correspond with any
+  // specific database table. This field is used to embed another View.
+  // @see \Drupal\recipe\Plugin\views\field\FullTime.
+  $data['node']['custom_views_php'] = [
+    'title' => t('Custom APR Pages View field'),
+    'field' => [
+      'title' => t('Custom APR Pages View field'),
+      'help' => t('Custom APR Pages View field is used to embed another APR view.</em>'),
+      'id' => 'custom_apr_views_field',
+    ],
+  ];
+  return $data;
+}
+
+/**
+ * Implements hook_page_attachments_alter
+ *
+ * Include jQuery/JS for the page /node/136 that has the APR Pages View.
+ */
+function asu_provost_aprview_page_attachments_alter(array &$page) {
+  // Get the current path.
+  $current_path = \Drupal::service('path.current')->getPath();
+  if ($current_path == '/node/136') {
+    $page['#attached']['library'][] = 'asu_provost_aprview/provostcustom-library';
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ *
+ * Include jQuery/JS for apr_pages content type nodes.
+ */
+function asu_provost_aprview_page_attachments(array &$attachments) {
+  // For apr_pages content type, load JS (provostcustom-aprpage-library).
+  $node = \Drupal::request()->attributes->get('node');
+  if ($node && $node instanceof Drupal\node\Entity\Node) {
+    if ($node->bundle() == 'apr_pages') {
+      $attachments['#attached']['library'][] = 'asu_provost_aprview/provostcustom-aprpage-library';
+    }
+  }
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * Override Views template twig from this module.
+ *   /templates/views-view-grouping--aprview.html.twig
+ */
+function asu_provost_aprview_theme($existing, $type, $theme, $path){
+    return [
+      'views_view_grouping__academic_program_review_apr_colleges' => [
+          'render element' => 'elements',
+          'base hook' => 'views'
+      ]
+    ];
+
+}

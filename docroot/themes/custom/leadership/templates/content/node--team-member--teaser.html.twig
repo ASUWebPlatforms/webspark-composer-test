@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Template for a Custom Node.
+ */
+#}
+{% set field_profile_link = content.field_profile_link[0]['#url']|render %}
+<div class="card pr-2 mr-4 mb-6">
+  {{ content.field_profile_image }}
+  <div class="team-member">
+    <h4 class="team-member--name">{{ label|render|striptags|trim }}</h4>
+    <p class="team-member--title">{{ content.field_profile_title|render|striptags|trim }}</p>
+    <p class="team-member--dept">{{ content.field_profile_department|render|striptags|trim }}</p>
+  </div>
+  <a href="{{ field_profile_link }}" target="_blank" rel="noopener" class="stretched-link"></a>
+</div>

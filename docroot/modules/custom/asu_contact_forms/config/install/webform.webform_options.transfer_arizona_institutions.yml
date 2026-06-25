@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: transfer_arizona_institutions
+label: 'Transfer Arizona institutions'
+category: ''
+likert: false
+options: |-
+  'Arizona Western College': 'Arizona Western College'
+  'Chandler Gilbert Community College': 'Chandler Gilbert Community College'

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="69" height="68" viewBox="0 0 69 68">
+  <g id="Group_11344" data-name="Group 11344" transform="translate(0.327 -0.341)" opacity="0.7">
+    <g id="Ellipse_9022" data-name="Ellipse 9022" transform="translate(68.673 68.341) rotate(180)" fill="#fff" stroke="#d0d0d0" stroke-width="1">
+      <ellipse cx="34.5" cy="34" rx="34.5" ry="34" stroke="none"/>
+      <ellipse cx="34.5" cy="34" rx="34" ry="33.5" fill="none"/>
+    </g>
+    <text id="play" transform="translate(35.673 43.34)" fill="#191919" font-size="25" font-family="FontAwesome6Pro-Solid, 'Font Awesome \36  Pro'"><tspan x="-9.375" y="0">play</tspan></text>
+  </g>
+</svg>

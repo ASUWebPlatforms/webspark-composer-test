@@ -1,0 +1,19 @@
+#college-dropdown label,
+#aas_degree_dropdown label {
+    position: relative;
+    display: inline-block;
+    padding-left: 20px;
+}
+
+#college-dropdown label::before,
+#aas_degree_dropdown label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    background-color: #8c1d40;
+    border-radius: 50%;
+}

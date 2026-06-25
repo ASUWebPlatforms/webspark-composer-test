@@ -1,0 +1,188 @@
+{#
+/**
+ * @file
+ * Template for Tableau Menu Navs.
+ */
+#}
+
+{% set classes = [
+  'node',
+  node.isPromoted() ? 'node--promoted',
+  node.isSticky() ? 'node--sticky',
+  not node.isPublished() ? 'node--unpublished',
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+] %}
+
+{{ attach_library('analytics/tableau-menu-nav') }}
+
+<style>
+  :root {
+    --r-link-color: rgba(140, 29, 64, 0.85);
+    --r-link-color-dark: rgba(140, 29, 64, 1);
+    --r-link-color-hover: rgba(140, 29, 64, 1);
+  }
+
+  .sidebar .card-foldable {
+    border: 0;
+  }
+
+  .sidebar .card-foldable + .card-foldable {
+    border-top: 1px solid #e5e5e5;
+  }
+
+  .sidebar .card-foldable .card-header {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .sidebar .card-foldable .card-body > .nav-link {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .sidebar .nav-link:not(.is-active) {
+    justify-content: flex-start;
+  }
+</style>
+
+<article{{ attributes.addClass(classes) }}>
+  {% block content %}
+    <div class="max-size-container center-container tw-relative">
+      <button class="btn btn-primary tw-rounded-full tw-p-0 tw-absolute tw-top-0 tw-start-0 tw-m-2"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#dashboardOffCanvas"
+        aria-controls="dashboardOffCanvas"
+        style="width: 40px !important; height: 40px; z-index: 99; left: 10px">
+        <i class="fa-solid fa-bars"></i>
+        <span class="visually-hidden">Tableau menu button. Press enter to access a list of Tableau reports.</span>
+      </button>
+
+      {# Reveal.js #}
+      <div class="reveal" style="height: 1080px">
+        <div class="slides">
+          {% for category, reports in report_groups %}
+            {# Horizontal slide for each category #}
+            <section data-index-h="{{ loop.index0 }}">
+              {% for report in reports %}
+                {# Vertical slide for each item in the category #}
+                <section data-index-v="{{ loop.index0 }}">
+                  <div class="view-original tw-text-sm tw-mb-1">
+                    <span class="fas fa-external-link-alt tw-mr-1"></span>
+                    <a class="source-link" href="{{ report.url }}">View original report</a>
+                  </div>
+                  {# Need to table showing the title for now #}
+                  {# <p style="margin: 0 auto 1rem; font-size: 1.5rem; text-align: center;">{{ report.title }}</p> #}
+                  {# TODO: Swap out for the report macro #}
+                  <div class="tw-shadow-md ratio ratio-16x9">
+                    <tableau-viz class="" id="tableau-viz" src="{{ report.url }}" width="1920" height="1080" toolbar="top"></tableau-viz>
+                  </div>
+                </section>
+              {% endfor %}
+            </section>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    {# Offcanvas menu #}
+    <div class="offcanvas offcanvas-start"
+      tabindex="-1"
+      id="dashboardOffCanvas"
+      aria-labelledby="dashboardOffCanvasLabel"
+      style="z-index: 9999; box-shadow: 0 0 !important;">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="dashboardOffCanvasLabel">Menu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        {% if node.field_description.value %}
+          <div class="tw-mb-8">
+            {{ node.field_description.value }}
+          </div>
+        {% endif %}
+        <div class="sidebar-toggler"
+          data-bs-toggle="collapse"
+          data-bs-target="#sidebar-left"
+          aria-expanded="false"
+          aria-controls="sidebar-left"
+          data-ga-name="onclick"
+          data-ga-event="collapse"
+          data-ga-type="click"
+          data-ga-region="main content"
+          data-ga-section="Lorem ipsum"
+          data-ga="Select section">
+          <p>Select Section</p>
+          <span class="fas fa-chevron-up"></span>
+        </div>
+        <nav id="sidebar-left" class="sidebar collapse tw-border-0" aria-label="Secondary">
+          {# Generate the sidebar menu #}
+          {% for category, reports in report_groups %}
+            {% set categoryKey = category|lower|preg_replace('/[^a-z0-9]+/', '') %}
+            <div class="card card-foldable tw-border-0">
+              <div class="card-header tw-px-0">
+                <a id="{{ categoryKey }}"
+                  class="collapsed nav-link"
+                  href="#{{ categoryKey }}Body"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#{{ categoryKey }}Body"
+                  aria-expanded="false"
+                  aria-controls="{{ categoryKey }}Body"
+                  data-ga-name="onclick"
+                  data-ga-event="collapse"
+                  data-ga-type="click"
+                  data-ga-region="main content"
+                  data-ga-section="{{ categoryKey }}"
+                  data-ga="Expandable link sections">
+                  <span class="tw-font-bold">{{ category }}</span>
+                  <span class="fas fa-chevron-down ms-1"></span>
+                </a>
+              </div>
+              <div id="{{ categoryKey }}Body"
+                class="collapse card-body {{ loop.first ? 'show' }}"
+                aria-labelledby="{{ categoryKey }}"
+                data-bs-parent=".sidebar">
+                {% for report in reports %}
+                  {# NOTE: This triggers a browser error but it still works. The error is caused by Drupal core form.js hash change method #}
+                  <a href="#/{{ loop.parent.loop.index0 }}/{{ loop.index0 }}"
+                    class="nav-link"
+                    data-slide="{{ loop.parent.loop.index0 }}-{{ loop.index0 }}">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 48 48"
+                      width="24px"
+                      height="24px"
+                      class="tw-mr-2">
+                      <rect width="1.5" height="9" x="22.75" y="1" fill="#78909c"/>
+                      <rect width="9" height="1.5" x="19" y="4.75" fill="#78909c"/>
+                      <rect width="1.5" height="9" x="40.75" y="19" fill="#5c6bc0"/>
+                      <rect width="9" height="1.5" x="37" y="22.75" fill="#5c6bc0"/>
+                      <rect width="1.5" height="9" x="4.75" y="19" fill="#78909c"/>
+                      <rect width="9" height="1.5" x="1" y="22.75" fill="#78909c"/>
+                      <rect width="1.5" height="9" x="22.75" y="37" fill="#5c6bc0"/>
+                      <rect width="9" height="1.5" x="19" y="40.75" fill="#5c6bc0"/>
+                      <rect width="17" height="3" x="15" y="22" fill="#e8762d"/>
+                      <rect width="3" height="17" x="22" y="15" fill="#e8762d"/>
+                      <rect width="2" height="14" x="11" y="6" fill="#ffa000"/>
+                      <rect width="14" height="2" x="5" y="12" fill="#ffa000"/>
+                      <rect width="2" height="14" x="34" y="6" fill="#607d8b"/>
+                      <rect width="14" height="2" x="28" y="12" fill="#607d8b"/>
+                      <rect width="2" height="14" x="11" y="27" fill="#c62828"/>
+                      <rect width="14" height="2" x="5" y="33" fill="#c62828"/>
+                      <rect width="2" height="14" x="34" y="27" fill="#0d47a1"/>
+                      <rect width="14" height="2" x="28" y="33" fill="#0d47a1"/>
+                    </svg>
+                    {{ report.ready ? report.title : report.title ~ ' (Preview)' }}
+                  </a>
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        </nav>
+        <div class="tw-mt-8 tw-text-sm tw-text-gray-500">
+          This presentation can be viewed in fullscreen mode by pressing the <kbd>F</kbd> key. You may also use the arrow keys to navigate between slides.
+        </div>
+      </div>
+    </div>
+  {% endblock %}
+</article>

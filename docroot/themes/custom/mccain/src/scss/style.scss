@@ -1,0 +1,204 @@
+// compile: sass src/scss/style.scss css/style.css
+// sass --watch src/scss:css
+
+// Sub theme styling.
+
+@import 'components/layout';
+@import 'components/blocks';
+@import 'components/forms';
+@import 'components/views';
+@import 'components/navigation';
+
+
+/* GENERAL STYLES
+-------------------------------------------------*/
+h1 {
+    &.text-white {
+        color: #fff !important;
+    }
+}
+.h1 {
+    &.h1-lg {
+        font-size: 6rem;
+        margin-bottom: 2.5rem;
+    }
+
+}
+
+h2 {
+    margin-bottom: 3rem;
+}
+
+.lead {
+    font-size: 1.375rem;
+    &.lead-xlg {
+        font-size: 1.825rem;
+    }
+    &.lead-lg {
+        font-size: 1.5rem;
+    }
+    &.lead-sm {
+        font-size: 1.25rem;
+    }
+
+    @media (max-width: 575.98px) { 
+        &.lead-xlg {
+            font-size: 1.25rem;
+        }
+    }
+}
+
+.indent-25 {
+    margin-left: 25%;
+    .uds-blockquote {
+        font-weight: 500;
+        font-size: 1.875rem;
+        .citation {
+            cite {
+                font-size: 1.5rem;
+            }
+        }
+    }
+    @media (max-width: 575.98px) { 
+        margin-left: 0;
+        .uds-blockquote {
+            font-size: 1.5rem;
+            .citation {
+                cite {
+                    font-size: 1.25rem;
+                }
+            }
+        }
+    }
+}
+
+.inline-header {
+    font-weight: 500;
+}
+
+.text-copper {
+ color: #8F4A3A;
+}
+
+.text-center {
+    h2 {
+        text-align: center;
+        margin: 2rem auto;
+    }
+    p {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+.gray-1-bg {
+    background-color: #F4F2EA;
+}
+
+.gray-2-bg {
+    background-color: #8F4A3A;
+    color: #ffffff;
+    a {
+        color: #ffffff;
+        &.btn-gold {
+            color: #000;
+        }
+    }
+    .card-title {
+        a {
+        color: #000;
+        }
+    }
+    .card-body {
+        a {
+            color: #000;
+            }
+        }
+
+}
+
+.star-pattern-bg {
+  background-image: url('../img/copper-star-pattern.svg');  
+  position: relative;
+  background-repeat: repeat;  
+  background-size: 68px;  
+  background-position: top; 
+  background-blend-mode: multiply;
+  overflow: hidden;
+}
+
+.hide-overlay {
+    .uds-card-and-image {
+        background-image: linear-gradient(rgba(25, 25, 25, 0) 0%, rgba(25, 25, 25, 0.0) 100%, url()) !important;
+    }
+}
+
+.hide-image-borders {
+    img {
+        border: none;
+    }
+}
+
+.text-inline-callout {
+    background-color: #FAFAFA;
+    padding: 2rem;
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.page-intro {
+    p {
+        max-width: 100%;
+        padding: 2rem;
+    }
+    &:before {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 63px; 
+        background-image: url('../img/intro-bar.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        margin-bottom: 2.25rem;
+    }
+    @media (max-width: 575.98px) { 
+        p {
+            padding: 0;
+        }
+    }
+}
+
+.wide-content {
+    h2,
+    p {
+    max-width: 816px;
+    }
+    .accordion {
+    max-width: 816px;    
+    }
+}
+
+.uds-img {
+    max-width: 100%;
+}
+
+@media (max-width: 575.98px) { 
+    .w-75 {
+        width: 100% !important;
+    }
+    .btn {
+        &.btn-gold {
+            font-size: .75rem;
+            line-height: 1rem;
+            padding: .25rem .75rem;
+        }
+    }
+}
+
+/** TEMP - REMOVE WHEN VIDEO ADDED */
+
+@media (min-width: 1260px) {
+    div.uds-hero-lg.uds-video-hero .hero, div.uds-hero-lg.uds-video-hero:after {
+         display: block; 
+    }
+}

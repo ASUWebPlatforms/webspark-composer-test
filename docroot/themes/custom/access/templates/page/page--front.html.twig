@@ -1,0 +1,36 @@
+{#
+/**
+ * @file
+ * Template for the front page.
+ */
+#}
+{% if page.header %}
+  <header>
+      {{ page.header }}
+  </header>
+{% endif %}
+<main>
+  <div class="front page page-wrapper-webspark">
+    <div class="pt-5 pb-5">
+
+      {% if page.pre_content %}
+        <div class="page__pre-content center-container max-size-container">
+          <div class="container">
+            {{ page.pre_content }}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if page.content %}
+        <div id="skip-to-content" class="page__content center-container max-size-container" tabindex="-1">
+          {{ page.content }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</main>
+{% if page.footer %}
+  <footer class="page__footer" id="asu-footer" role="contentinfo">
+    {{ page.footer }}
+  </footer>
+{% endif %}

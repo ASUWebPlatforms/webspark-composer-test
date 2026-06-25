@@ -1,0 +1,8 @@
+name: CAMO - Call Attempt Management Online
+description: Application for managing call university survey call campaigns and preliminary data cleaning. - UOEEE
+package: UOEEE
+type: module
+version: 1.0
+core_version_requirement: ^10
+libraries:
+  - camo/camo-app

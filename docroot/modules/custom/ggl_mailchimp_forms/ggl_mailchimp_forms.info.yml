@@ -1,0 +1,7 @@
+name: Great Game Lab Mailchimp Forms
+type: module
+description: 'Provides customized Mailchimp subscription form blocks.'
+package: GGL Custom
+core_version_requirement: ^9 || ^10
+dependencies:
+  - drupal:block

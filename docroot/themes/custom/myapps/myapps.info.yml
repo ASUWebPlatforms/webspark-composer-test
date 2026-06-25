@@ -1,0 +1,20 @@
+name: MyApps
+type: theme
+description: A child theme of Renovation for the MyApps website
+core_version_requirement: ^8 || ^9 || ^10
+base theme: renovation
+package: ASU - MyApps
+libraries:
+  - renovation/style
+  - renovation/tables
+  - myapps/global
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer
+components:
+  namespaces:
+    myapps: ./templates/partials

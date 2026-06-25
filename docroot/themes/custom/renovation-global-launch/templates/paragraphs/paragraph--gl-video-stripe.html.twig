@@ -1,0 +1,34 @@
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished',
+    'uds-content-align'
+  ]
+%}
+
+{% block paragraph %}
+<div class="spacing-bottom-96">
+	<div class="bg topo-black bg-top bg-percent-100 layout__full-width uds-full-width spacing-top-96 spacing-bottom-96">
+		<div class="uds-content-align text-center">
+	
+	  <div{{ attributes.addClass(classes) }}>
+	    {% block content %}
+	    	
+	    	 
+		        
+		          
+		          <div class="video-stripe-video">{{content.field_video_gl}}</div>
+		        
+		      
+	    	
+		 
+	    {% endblock %}
+	    </div>
+	    </div>
+	  
+	  </div>
+  </div>
+{% endblock paragraph %}
+

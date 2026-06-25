@@ -1,0 +1,44 @@
+.healthContainer {
+  display: flex;
+  justify-content: center;
+}
+.uds-card-and-image-right.asuhealth .card-body {
+  -webkit-line-clamp: unset!important;
+  text-overflow:unset!important;
+  overflow:visible!important;
+}
+.uds-card-and-image-right.asuhealth .card {
+  max-height: none!important;
+}
+.uds-card-and-image.asuhealth .uds-card-and-image-container {
+  max-width: 500px!important;
+}
+.uds-card-and-image.asuhealth {
+  height: fit-content!important;
+  aspect-ratio: auto!important;
+}
+.uds-card-and-image.asuhealth .uds-content-align {
+  display: flex!important;
+  justify-content:flex-start!important
+}
+
+.uds-card-and-image.asuhealth .card-body {
+  -webkit-line-clamp: unset!important;
+  text-overflow:unset!important;
+  overflow:visible!important;
+}
+.uds-card-and-image.asuhealth .card {
+  max-height: none!important;
+}
+.uds-card-and-image.asuhealth .uds-card-and-image-container {
+  max-width: 500px!important;
+}
+.uds-card-and-image.asuhealth {
+  height: fit-content!important;
+  aspect-ratio: auto!important;
+}
+.uds-card-and-image.asuhealth .uds-content-align {
+  display: flex!important;
+  justify-content:flex-start!important
+}
+

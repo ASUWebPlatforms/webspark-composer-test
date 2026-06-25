@@ -1,0 +1,7 @@
+name: WPC RFI Forms - Lead Sources
+type: module
+description: Provides a custom content type for managing lead sources submitted on RFI forms.
+package: 'WPC Custom'
+core_version_requirement: ^8.8 || ^9 ||^10
+version: '1.0.0'
+configure: wpc_rfi_forms_sources.leadsource_settings

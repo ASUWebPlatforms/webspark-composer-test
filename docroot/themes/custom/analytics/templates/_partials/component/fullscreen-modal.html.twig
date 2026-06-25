@@ -1,0 +1,63 @@
+{#
+@file
+The template for a Fullscreen Modal.
+
+The trigger for this modal is a button or anchor that contains the following data attributes:
+- data-bs-toggle
+- data-bs-target
+
+Additional data attributes can be added to the trigger to customize the modal as needed, for example:
+- data-modal-title
+- data-modal-content
+
+Note that the z-index is manually set here to ensure the modal is on top of any Drupal admin toolbars
+
+Available variables:
+- modal: The modal object.
+- id: The id to use for the modal.
+- title: The title to use for the modal.
+- content: The content to use for the modal.
+- showSource: Bopolean. Show a link to view the content source. (optional)
+
+Example use:
+
+{%
+  set modal = {
+    id: 'my-modal',
+    title: 'My Modal',
+    content: 'My Modal Content',
+  }
+%}
+{{ include('@analytics/fullscreen-modal.html.twig', modal, with_context = false) }}
+
+Note the use of "with_context = false" to prevent the modal from inheriting the context of the parent template.
+#}
+
+<div class="modal fade"
+  id="{{ id }}"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="{{ id }}-label"
+  aria-hidden="true"
+  style="z-index: 9999;">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title fs-5 tw-mt-0" id="{{ id }}-label">{{ title }}</h5>
+          {% if showSource %}
+            <div class="view-original">
+              <span class="fas fa-external-link-alt"></span>
+              <a class="source-link" href="">View original report</a>
+            </div>
+          {% endif %}
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="{{ id }}-content">{{ content }}</div>
+      </div>
+    </div>
+  </div>
+</div>

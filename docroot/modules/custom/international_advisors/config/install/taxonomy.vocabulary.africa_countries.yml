@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Africa countries'
+vid: africa_countries
+description: ''
+weight: 0

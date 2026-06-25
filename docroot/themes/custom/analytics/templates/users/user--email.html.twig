@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Template for a user view, using the Email mode.
+ */
+#}
+
+<div{{ attributes.addClass(['user', 'user--' ~ view_mode|clean_class]) }}>
+  {% block content %}
+    <a class="tw-font-bold" href="mailto:{{ user.mail.value }}">{{ user.field_name.value|default(user.name.value) }}</a>
+  {% endblock %}
+</div>

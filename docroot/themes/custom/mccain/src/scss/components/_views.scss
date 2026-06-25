@@ -1,0 +1,13 @@
+
+.views-view-responsive-grid--horizontal {
+
+	.views-view-responsive-grid__item-inner {
+		height: 100%;
+	}
+	
+	@media (max-width: 576px) {
+	  /* Stack items in a single column on mobile */
+	  grid-template-columns: 1fr;
+	}
+  }
+

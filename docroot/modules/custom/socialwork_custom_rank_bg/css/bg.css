@@ -1,0 +1,15 @@
+.bg-rank {
+    background:url(../img/sunset-thrive-silhouette-downtown.jpg) fixed center !important;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.research-center-image > img{
+    max-width: fit-content !important;
+}
+
+.cst-news-field > .views-field {
+    height: 100% !important;
+}

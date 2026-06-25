@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Template for a Custom Node.
+ */
+#}
+
+<div class="card-inner-wrapper m-1 card-hover">
+  <div class="card cards-components bg-gold">
+    <div class="card-icon">
+      {{ content.field_card_custom_icon|render }}
+    </div>
+    <div class="card-header">
+      <h3 class="card-title">{{ label|render|striptags|trim }}</h3>
+    </div>
+    <a href="#item{{ node.id }}" class="stretched-link"></a>
+  </div>
+</div>
+
+

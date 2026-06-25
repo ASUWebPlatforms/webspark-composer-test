@@ -1,0 +1,47 @@
+<?php
+
+use Drupal\analytics_tweaks\Signatures\Signature;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\user\Entity\User;
+
+/**
+ * Add user information to DrupalSettings.
+ *
+ * @param $variables
+ *
+ * @return void
+ */
+function analytics_tweaks_preprocess_html(&$variables): void
+{
+  $settings = Drupal::service('settings');
+  $signature = $settings->get('signature');
+  $user = User::load(Drupal::currentUser()->id());
+  $variables['#attached']['drupalSettings']['user']['name'] = $user->get('name')->value;
+  $variables['#attached']['drupalSettings']['user']['email'] = $user->getEmail();
+
+  // Add signature for signing requests to other endpoints such as AWS
+  $variables['#attached']['drupalSettings']['user']['signature'] = Signature::sign(
+    $user->get('name')->value,
+    $signature
+  );
+  $variables['#attached']['drupalSettings']['user']['ga_userid'] = hash('sha256', $user->get('name')->value);
+}
+
+/**
+ * Implements hook_jsonapi_entity_filter_access()
+ *
+ * @param EntityTypeInterface $entity_type
+ * @param AccountInterface $account
+ *
+ * @return array
+ */
+function analytics_tweaks_jsonapi_entity_filter_access(
+  EntityTypeInterface $entity_type,
+  AccountInterface $account
+): array {
+  return ([
+    JSONAPI_FILTER_AMONG_ALL => AccessResult::allowed(),
+  ]);
+}

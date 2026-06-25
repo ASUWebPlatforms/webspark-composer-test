@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_import_id
+    - node.type.blog_posts
+id: node.blog_posts.field_import_id
+field_name: field_import_id
+entity_type: node
+bundle: blog_posts
+label: 'Import id'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

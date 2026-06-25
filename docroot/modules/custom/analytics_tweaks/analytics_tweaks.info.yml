@@ -1,0 +1,6 @@
+name: Analytics Tweaks
+description: Custom tweaks for the Analytics site.
+type: module
+package: Analytics
+version: 1.0.0
+core_version_requirement: ^9 || ^10

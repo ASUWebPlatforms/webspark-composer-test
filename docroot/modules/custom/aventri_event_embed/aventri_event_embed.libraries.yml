@@ -1,0 +1,10 @@
+# Custom module library for general purposes.
+aventri_event_embed:
+  js:
+    https://na-admin.eventscloud.com/widgets/static/embed/embed-0.0.1.min.js: {type: external, attributes: { defer: true }}
+    js/aventri-event-embed.js: {attributes: { defer: true }}
+  css:
+    theme:
+      css/aventri-event-embed.css: { }
+  dependencies:
+    - core/jquery

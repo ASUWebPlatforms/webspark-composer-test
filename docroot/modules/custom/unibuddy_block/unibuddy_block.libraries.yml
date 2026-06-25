@@ -1,0 +1,10 @@
+unibuddy-popcard:
+  version: 1.0
+  header: true
+  js:
+    https://cdn.unibuddy.co/unibuddy-popcard.js:
+      type: external
+      attributes:
+        async: false
+  dependencies:
+    - core/drupal

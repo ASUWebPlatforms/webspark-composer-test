@@ -1,0 +1,77 @@
+  <?php
+
+    /**
+    * @file
+    * Install, update and uninstall functions for the asuaec_rfi module.
+    */
+
+    /**
+    * Implements hook_install().
+    *
+    * Creates some default entries on this module custom table.
+    *
+    * @see hook_install()
+    *
+    * @ingroup asuaec_webform_optionsdata
+    */
+
+    /**
+    * Implements hook_schema().
+    *
+    * Defines the database tables used by this module.
+    *
+    * @see hook_schema()
+    *
+    * @ingroup asuaec_webform_optionsdata
+    */
+    function asuaec_webform_optionsdata_schema() {
+
+        $schema['asu_webform_optionsdata_countries'] = array(
+            'description' => 'Stores information about the countries.',
+            'fields' => array(
+                'id' => array(
+                    'description' => 'Primary Key: Unique file ID.',
+                    'type' => 'serial',
+                    'not null' => TRUE,),
+                'countryCode2' => array(
+                    'description' => 'country code2.',
+                    'type' => 'varchar',
+                    'length' => 255,
+                    'not null' => TRUE,
+                    'default' => ''),
+                'countryCode3' => array(
+                    'description' => 'country code3.',
+                    'type' => 'varchar',
+                    'length' => 255,
+                    'not null' => TRUE),
+                'countryDesc' => array(
+                    'description' => 'country description',
+                    'type' => 'varchar',
+                    'length' => 255,
+                    'not null' => TRUE),
+            ),
+            'primary key' => array('id'),
+        );
+
+        $schema['asu_webform_optionsdata_state'] = array(
+            'descripton' => 'Gives states list',
+            'fields' => array(
+                'stateCode' => array(
+                    'description' => 'State code',
+                    'type' => 'varchar',
+                    'length' => 225,
+                    'not null' => TRUE),
+                'stateDesc' => array(
+                    'description' => 'State code',
+                    'type' => 'varchar',
+                    'length' => 225,
+                    'not null' => TRUE),
+            ),
+            'primary key' => array('stateCode'),
+        );
+
+        return $schema;
+
+    }
+
+

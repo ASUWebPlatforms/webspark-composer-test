@@ -1,0 +1,3 @@
+asupesc_degree_webservice_url: 'https://degrees.apps.asu.edu/t5/service'
+asupesc_degree_webservice_url_online: 'https://asuonline.asu.edu/lead-submissions-v3.3/programs'
+asupesc_degree_webservice_xml_url: 'https://degrees.apps.asu.edu/XmlRpcServer'

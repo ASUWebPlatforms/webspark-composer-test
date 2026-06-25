@@ -1,0 +1,15 @@
+updatehtmltags.content:
+  path: '/updatetags'
+  defaults:
+    _controller: '\Drupal\updatehtmltags\Controller\UpdateHtmlTagController::content'
+    _title: 'Hello World'
+  requirements:
+    _permission: 'access content'
+    
+updatehtmltags.tabs:
+  path: '/updatetabs'
+  defaults:
+    _controller: '\Drupal\updatehtmltags\Controller\UpdateHtmlTagController::custom_delete_block_from_node_layout'
+    _title: 'Hello World'
+  requirements:
+    _permission: 'access content'

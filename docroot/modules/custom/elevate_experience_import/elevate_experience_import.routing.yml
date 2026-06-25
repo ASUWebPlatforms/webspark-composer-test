@@ -1,0 +1,21 @@
+elevate_experience_import.favorite_toggle:
+  path: '/find-experiences/favorite/{node}/toggle'
+  defaults:
+    _controller: '\Drupal\elevate_experience_import\Controller\FavoriteController::toggle'
+  methods: [POST]
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _csrf_request_header_token: 'TRUE'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+
+elevate_experience_import.favorite_list:
+  path: '/find-experiences/favorites/list'
+  defaults:
+    _controller: '\Drupal\elevate_experience_import\Controller\FavoriteController::list'
+  methods: [GET,POST]
+  requirements:
+    _user_is_logged_in: 'TRUE'

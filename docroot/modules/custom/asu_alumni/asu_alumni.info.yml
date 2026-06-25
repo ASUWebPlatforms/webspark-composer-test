@@ -1,0 +1,10 @@
+name: ASU Alumni Templates
+description: Provide custom content templates
+package: ASUAlumni
+
+type: module
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+dependencies:
+  - drupal:media
+  - paragraphs:paragraphs

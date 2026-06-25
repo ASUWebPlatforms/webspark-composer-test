@@ -1,0 +1,7 @@
+asu_edu_components.find_my_degree_program:
+  path: '/asu-edu-components/find-my-degree-program'
+  defaults:
+    _title: 'Find my degree program'
+    _form: 'Drupal\asu_edu_components\Form\FindMyDegreeProgramForm'
+  requirements:
+    _permission: 'access content'

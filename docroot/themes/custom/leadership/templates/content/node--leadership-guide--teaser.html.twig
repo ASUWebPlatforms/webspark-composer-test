@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Template for a Custom Node.
+ */
+#}
+
+{{ attach_library('leadership/aos') }}
+
+<div id="item{{ node.id }}" class="guide-row flex-column scrollHalf">
+  <div class="scrollhalf__group d-flex flex-row align-items-center">
+    <div class="guide-body w-50 scrollHalf__group__content item--secondary" data-aos="fade-up"
+      data-aos-anchor-placement="top-bottom" data-aos-anchor="#trigger-{{ node.id }}">
+      {{ content.body }}
+    </div>
+      <div id="trigger-{{ node.id }}" class="guide-header w-50 scrollHalf__group__content">
+        {{ content.field_card_custom_icon|render }}
+        <h3 class="guide-title">{{ label|render|striptags|trim }}</h3>
+    </div>
+  </div>
+</div>
+

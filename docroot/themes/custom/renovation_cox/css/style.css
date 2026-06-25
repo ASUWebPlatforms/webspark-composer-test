@@ -1,0 +1,35 @@
+/* Remove gutters from Cox News Page card arrangement */
+.uto-home-cards .uds-card-arrangement>.uds-card-arrangement-card-container.auto-arrangement {
+  row-gap: 0;
+}
+
+.uto-home-cards .uds-card-arrangement>.uds-card-arrangement-card-container {
+  -moz-column-gap: 0;
+  column-gap: 0;
+}
+
+.uto-home-cards .card {
+  border: 0;
+}
+
+.uto-home-cards .card-img-top {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.uto-news-cards .card-img-top img {
+  aspect-ratio: 2;
+  min-width: 100%;
+}
+
+/* Legacy styles from D7 */
+.btn-primary, .btn-primary:hover {
+  color: #fff;
+  background-color: #8c1d40;
+  border-color: #8c1d40;
+}
+
+/* Leadership Cards */
+.uto-leadership-cards .card-img-top {
+  height: 23.875rem;
+}

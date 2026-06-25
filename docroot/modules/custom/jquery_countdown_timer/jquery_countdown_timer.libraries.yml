@@ -1,0 +1,14 @@
+countdown.timer:
+  version: VERSION
+  css:
+    component:
+      css/jquery_countdown_timer.css: {}
+      css/asuaec_custom.css: {}
+  js:
+    js/jquery_countdown_timer.js: {}
+    js/jquery_countdown_timer_init.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - core/once

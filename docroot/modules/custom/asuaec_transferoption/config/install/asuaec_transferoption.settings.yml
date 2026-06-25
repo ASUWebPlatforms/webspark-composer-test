@@ -1,0 +1,2 @@
+asuaec_transferoption_url: 'https://degrees.apps.asu.edu/t5/service?method=findDegreeWithTransferAgreements&fields=AcadPlan,transferAgreementInfo,Descr100,Degree,CollegeDescr100,DiplomaDescr,CollegeUrl,CampusStringArray,planCatDescr,keywords,directMatchKeywords'
+asuaec_transferoption_degreelistingpage_nid: '2097'

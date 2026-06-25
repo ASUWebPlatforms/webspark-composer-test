@@ -1,0 +1,7 @@
+contact_cron_email.csv_download:
+  path: '/cron-email/csv-download'
+  defaults:
+    _controller: '\Drupal\contact_cron_email\Controller\CronEmailController::downloadCsv'
+    _title: 'Download CSV'
+  requirements:
+    _permission: 'access content'

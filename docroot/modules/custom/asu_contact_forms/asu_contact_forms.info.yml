@@ -1,0 +1,13 @@
+name: 'ASU contact forms'
+description: 'Contact forms migrated using Featured module'
+type: module
+core_version_requirement: ^8.9 || ^9 || ^10
+dependencies:
+  - asu_contact_webform_custom_options
+  - field
+  - layout_builder
+  - node
+  - user
+  - views
+  - webform
+version: 9x-1.0

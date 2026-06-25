@@ -1,0 +1,2759 @@
+<?php
+
+use Drupal\Component\Datetime\DateTimePlus;
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\views\ViewExecutable;
+use Drupal\user\Entity\User;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * @param array $page
+ *
+ * hook_page_attachments_alter
+ * Attach JS/CSS to /schedule page, /scheduling-your-tour page and confirmation page (/see-you-soon)
+ */
+function asuaec_visit_page_attachments_alter(array &$page) {
+    $current_path = \Drupal::service('path.current')->getPath();
+    if ($current_path == '/node/1' ) { // Page - /scheduling-your-tour
+        $page['#attached']['library'][] = 'asuaec_visit/asuaec-visit-library';
+    }
+//    if ($current_path == '/node/26') { // Landing page - /schedule
+    if ($current_path == '/node/217421') { // Landing page - /schedule
+        $page['#attached']['library'][] = 'asuaec_visit/asuaec-schedulepage-library';
+    }
+    if ($current_path == '/node/217235') { // Confirmation page (DEV:/node/217235 )
+        $page['#attached']['library'][] = 'asuaec_visit/asuaec-confpage-library';
+    }
+}
+
+
+/**
+ * @param $form
+ * @param $form_state
+ * @param $form_id
+ *
+ * hook_form_alter
+ */
+function asuaec_visit_form_alter(&$form, &$form_state, $form_id)
+{
+    // Attach JS to Visit form and "Other" form
+    if ($form_id == 'webform_submission_visit_form_node_24_add_form' ||
+        $form_id == 'webform_submission_registration_form_node_217080_add_form' ||
+        $form_id == 'webform_submission_sun_devil_send_off_node_217217_add_form' ||
+        $form_id == 'webform_submission_beet_node_264061_add_form' || // Added for BEET form on 1/7/2025
+        $form_id == 'webform_submission_sko_node_263413_add_form' // Added for SKO form on 1/3/2024
+       ) { 
+        $form['#attached']['library'] = [
+            'asuaec_visit/asuaec-visitform-library',
+            'core/drupal.form', // Prevent duplicate submission. Added on 1/19/2024.
+        ];
+        // Disable and say "Processing.." after click submit button. Added on 1/19/2024.
+        $form['actions']['submit']['#attributes']  = array("onclick" => "jQuery(this).addClass('disabled'); jQuery(this).val('Processing..');");
+    }
+    // Event series add/edit page (Visit event and Barrett)
+    if ($form_id == 'eventseries_visit_event_edit_form' ||
+        $form_id == 'eventseries_barrett_edit_form' ||
+        $form_id == 'eventseries_visit_event_add_form' ||
+        $form_id == 'eventseries_barrett_add_form' ||
+        $form_id == 'eventseries_visit_event_clone_form' ||
+        $form_id == 'eventseries_barrett_clone_form'
+    ) {
+        $form['#attached']['library'] = [
+            'asuaec_visit/asuaec-eventseries-editform-library'
+        ];
+    }
+    // Turn on revision automatically for edit. Added on 1/19/2024.
+    if($form_id == 'eventseries_visit_event_edit_form' || $form_id == 'eventseries_barrett_edit_form') {
+        $form['revision']['#default_value'] = true;
+    }
+//    // Insert current user id automatically for cloning. Added on 1/19/2024.
+//    if($form_id == 'eventseries_visit_event_clone_form' || $form_id == 'eventseries_barrett_clone_form') {
+//        $username = User::load(\Drupal::currentUser()->id())->get('name')->value;
+//        $userid = User::load(\Drupal::currentUser()->id())->get('uid')->value;
+//        $form['uid']['widget'][0]['target_id']['#default_value']->set('uid', $userid);
+//        $form['uid']['widget'][0]['target_id']['#default_value']->set('name', $username);
+//    }
+}
+
+/**
+ * @param $entity
+ *
+ * hook_entity_presave
+ *
+ * Insert current user id automatically for cloning. Added on 6/4/2024
+ */
+function asuaec_visit_entity_presave(EntityInterface $entity) {
+	if ($entity->bundle() == 'visit_event' || $entity->bundle() == 'barrett'){
+		$current_user_id = \Drupal::currentUser()->id();
+		$entity->setOwnerId($current_user_id);
+	}
+}
+
+
+/**
+ * @param $existing
+ * @param $type
+ * @param $theme
+ * @param $path
+ * @return string[][]
+ *
+ * Implements hook_theme().
+ * Override Views template twigs from this module.
+ *   /templates/views-view-grouping--transfer-option-search.html.twig
+ */
+function asuaec_visit_theme($existing, $type, $theme, $path){
+    return [
+        'field__eventinstance__display-title__barrett' => [
+            'render element' => 'elements',
+            'base hook' => 'views'
+        ],
+        'field__eventinstance__display_title__visit_event' => [
+            'render element' => 'elements',
+            'base hook' => 'views'
+        ],
+        'field__eventinstance__barrett' => [
+            'render element' => 'elements',
+            'base hook' => 'views'
+        ],
+        'field__eventinstance__visit_event' => [
+            'render element' => 'elements',
+            'base hook' => 'views'
+        ],
+        'views_view_unformatted__visitd9_day_agenda__block_1' => [
+            'render element' => 'elements',
+            'base hook' => 'views'
+        ],
+        'calendar_view_day__visitd9_main_calendar_v2__block_1' => [
+            'render element' => 'elements',
+            'base hook' => 'views'
+        ],
+        'views_view_table__new_sun_devil_days_v2__block_6' => [
+            'render element' => 'elements',
+            'base hook' => 'views'
+        ],
+        'views_view_table__new_sun_devil_days_v3' => [
+          'render element' => 'elements',
+          'base hook' => 'views'
+        ]
+    ];
+}
+
+
+/**
+ * @param array $variables
+ *   An associative array containing:
+ *   - children: The view results for this day.
+ *   - timestamp: The day timestamp.
+ *   - date_format
+ *   - date_pattern
+ *
+ * Available variables:
+ * - elements: Original variables passed to this template.
+ * - attributes: HTML attributes for the wrapper.
+ * - timestamp: The datetime value.
+ * - date: The formatted date value.
+ * - empty: Wether or not this day as content.
+ * - content: Custom content.
+ * - rows: A list of view rows including the following:
+ *   - content: The content as a render array.
+ *   - attributes: The date field name used to get this content.
+ *   - from: A timestamp.
+ *   - to: Another timestamp (empty for single value date field).
+ *   - item: The date field item. Useful to get date type (e.g. 'created', 'changed', 'date', 'datetime', 'allday').
+ *   - calendar_filter: The date field used to retrieve this content.
+ *
+ *
+ * Prepares variables for a Calendar mini calendar template:
+ * calendar-view-day--visitd9_main_calendar_v2--block-1.html.twig
+ * Default template: calendar-view-day.html.twig
+ *
+ * Also, remove rows when Test mode is '1' and when capacity is met.
+ */
+function asuaec_visit_preprocess_calendar_view_day__visitd9_main_calendar_v2__block_1(&$variables) {
+//    ksm($variables['timestamp'], "timestamp"); // ex.1684911600 - Wednesday, May 24, 2023 12:00:00 AM
+
+    //-------------------------------------------------------------------------------------------
+    // Prepare variable for YYYYMMDD to use it in twig template: calendar-view-day.html.twig
+    $timestamp = $variables['timestamp'];
+    $date = new DateTime();
+    $date->setTimestamp($timestamp);
+    $variables['date_string_formatted'] =  trim(strval($date->format('Ymd'))); // YYYYMMDD
+//    ksm($variables['date_string_formatted'], 'date_string_formatted');
+
+
+    //-------------------------------------------------------------------------
+    // Grab Legend/toggle value from visit-event and barrett entity
+    // and insert them as css classes for later use. For example, "self-guided"
+
+    $variables['has_event'] = 'no-event'; // Changed on 2/1/2024
+    // If there is event on the date
+    if(is_array($variables['rows']) && sizeof($variables['rows']) > 0) {
+//        $variables['has_event'] = 'has-event'; // Changed on 2/1/2024
+
+
+//        ksm(sizeof($variables['rows']), "size of rows");
+//        ksm($variables['rows'][0][0]['content']['#row']->_entity->get('date')->getValue(), "date array"); //<-- Worked!
+
+        $variables['legend_toggle'] = []; // Array will contain css classes.
+
+        // Iterate by time of the date
+        foreach($variables['rows'] as $theindex => $event_array) {
+//            ksm($theindex, "theindex");
+//            ksm(sizeof($event_array), "size of event_array"); //<--- Always 3 because "content", "attributes" and "#values"
+
+            // Iterate event by the starttime on the date
+            $i = 0;
+            foreach($event_array as $key => $the_event_array) {
+//                ksm($key, "key");
+//                ksm($the_event_array, "the_event_array"); //<--- Doesn't work.
+
+                    if($key == 'content') {
+//                        ksm($variables['rows'][$theindex], "testing2");
+//                        ksm($the_event_array, "the_event_array");
+
+                        // Load the parent entity
+                        $eventseries_id = $variables['rows'][$theindex]['content']['#row']->eventseries_field_data_eventinstance_field_data_id;
+                        $entity_type_eventseries = 'eventseries';
+                        $entity_id_eventseries = $eventseries_id;
+                        $entity_eventseries  = \Drupal::entityTypeManager()->getStorage($entity_type_eventseries)->load($entity_id_eventseries);
+
+                        // Load the instance entity
+                        $eventinstance_id = $variables['rows'][$theindex]['content']['#row']->id;
+                        $entity_type_eventinstance = 'eventinstance';
+                        $entity_id_eventinstance = $eventinstance_id;
+                        $entity_eventinstance = \Drupal::entityTypeManager()->getStorage($entity_type_eventinstance)->load($entity_id_eventinstance);
+
+
+                        //------------Check end date-------------------// // Added on 2/5/2024.
+                        // If end time is after 5pm, check start date/time.
+                        // In DB, event is stored in UTC. Calendar is using UTC.
+                        // If start date is different from end date, look at the calendar date for this iteration. if calendar date is not matching with start date, remove the row. In other words, only display event based on start date. -------------//
+//                        ksm($eventinstance_id, "eventinstance_id");
+                        // DB query
+                        // Get row with $eventinstance_id from eventinstance_field_data table
+                        $database = \Drupal::database();
+                        $query = $database->select('eventinstance_field_data', 'eventinstance_field_data');
+                        $query->fields('eventinstance_field_data', ['id', 'date__value', 'date__end_value']);
+                        $query->condition('eventinstance_field_data.id', $eventinstance_id,'=');
+                        $result = $query->execute();
+                        $theevent = [];
+                        foreach($result as $data){
+//                            $theevent['instance_id'] = $data->id;
+                            $theevent['start_datetime'] = $data->date__value;
+                            $theevent['end_datetime'] = $data->date__end_value;
+                        }
+//                        ksm($theevent['start_datetime'], "start datetime from DB");
+//                        ksm($theevent['end_datetime'], "end datetime from DB");
+                        // Create PHP Date object
+                        // Start date
+                        $start_date_obj_fromdb = DateTime::createFromFormat("Y-m-d\TH:i:s", $theevent['start_datetime'], new DateTimeZone('UTC')); // 2024-05-17T15:00:00
+                        $start_date = $start_date_obj_fromdb->format('Ymd');
+                        // End date
+                        $end_date_obj_fromdb = DateTime::createFromFormat("Y-m-d\TH:i:s", $theevent['end_datetime'], new DateTimeZone('UTC')); // 2024-05-17T15:00:00
+                        $end_date = $end_date_obj_fromdb->format('Ymd');
+
+                        // Date of the calendar
+//                        ksm($timestamp, "timestamp of the calendar date");
+//                        ksm($variables['date_string_formatted'], 'yyyymmdd of the calendar date');
+
+                        if($start_date === $end_date) {
+                            // No problem when the start date and the end date is matching.
+                        } else {
+                            if($variables['date_string_formatted'] === $start_date) {
+                                // Event will stay in the calendar.
+                            } else {
+                                // Remove event
+                                unset($variables['rows'][$theindex][$key]); // Remove a row
+                                continue; // Go to next iteration.
+                            }
+                        }
+                        //------------END OF Check end date.-------------------//
+
+
+                        //--------------Capacity for Visit event and top-level Barrett tour----------------//
+
+                        // Get capacity to use -- If capacity is overwriten use capacity from Event instance. Otherwise, use capacity from Event series.
+                        $capacity = _get_capacity_to_use($entity_eventseries, $entity_eventinstance);
+                        // Get how many people registered for the event here
+                        $registrant_count = _get_registrant_count($eventseries_id, $variables, $theindex);
+
+                        if($capacity != '') {
+                            if ($registrant_count >= $capacity) { // Already full.
+//                                ksm("inside if - capacity - Row will be removed.");
+//                                ksm($registrant_count, "registrant_count");
+//                                ksm($capacity, "capacity");
+                                // Remove the row
+                                unset($variables['rows'][$theindex][$key]); // Remove a row
+                                continue; // Go to next iteration.
+                            }
+                        }
+                        // --------------END OF Capacity----------------//
+
+
+                        //--------------Test mode----------------//
+                        // Get user role and Test mode value here as well. If not admin AND Test mode is 1, then, don't add CSS class to date.
+
+                        // Get Test mode value
+                        $temp_array_testmode = $entity_eventseries->get('field_test_mode')->getValue();
+                        if ($temp_array_testmode[0]['value'] == 1) { // If Test mode is "1"
+//                            ksm("Test mode is on");
+                            // Get user role
+                            $roles = \Drupal::currentUser()->getRoles();
+
+                            // if not visit_admin or admin, remove the row
+                            if(!(in_array('visit_admin', $roles) || in_array('administrator', $roles))) { // Do something if user doesn't have role visit_admin
+                                unset($variables['rows'][$theindex][$key]); // Remove a row
+                                continue;
+
+                            } else { // if visit_admin or admin, leave the row and add CSS class to each date.
+                                $temp_array = $entity_eventseries->get('field_legend_toggle')->getValue();
+                                foreach ($temp_array as $legend) {
+                                    // Insert Legend/toggle into array if it is not already in the array.
+                                    //                            ksm($legend['value'], "legend value");
+                                    //                            ksm($variables['legend_toggle'], "var legend_toggle array");
+                                    if (!in_array($legend['value'], $variables['legend_toggle'])) {
+                                        array_push($variables['legend_toggle'], $legend['value']);
+                                    }
+                                }
+                                $variables['has_event'] = 'has-event'; // Added on 2/1/2024
+                            }
+
+                        } else { // When Test mode is not 1, add CSS class to each date.
+//                            ksm("Test mode is off");
+                            //                        ksm($entity->get('field_legend_toggle')->getValue(), "legend toggle");
+                            $temp_array = $entity_eventseries->get('field_legend_toggle')->getValue();
+                            //                        ksm($temp_array, "temp_array");
+                            foreach ($temp_array as $legend) {
+                                // Insert Legend/toggle into array if it is not already in the array.
+                                //                            ksm($legend['value'], "legend value");
+                                //                            ksm($variables['legend_toggle'], "var legend_toggle array");
+                                if (!in_array($legend['value'], $variables['legend_toggle'])) {
+                                    array_push($variables['legend_toggle'], $legend['value']);
+                                }
+                            }
+                            $variables['has_event'] = 'has-event'; // Added on 2/1/2024
+                        } // END OF if ($temp_array_testmode[0]['value'] == 1)
+                        //--------------END OF Test mode----------------//
+
+                    } // END OF if($key2 == 'content')
+            } // END OF foreach($event_array as $key => $the_event_array)
+        } // END OF foreach($variables['rows'] as $theindex => $event_array)
+
+        // Prepare $variables['legend_toggle_string'] that contains all CSS classes to add
+        $variables['legend_toggle_string'] = '';
+        foreach($variables['legend_toggle'] as $css_class){
+            $variables['legend_toggle_string'] .= ' ' . $css_class;
+        }
+    } // END OF if(is_array($variables['rows']) && sizeof($variables['rows']) > 0)
+    else {
+        $variables['has_event'] = 'no-event';
+    }
+
+} // END OF function asuaec_visit_preprocess_calendar_view_day__visitd9_main_calendar_v2__block_1(&$variables)
+
+
+/**
+ * @param $entity_eventseries
+ * @param $entity_eventinstance
+ *
+ * If capacity is overwriten use capacity from Event instance.
+ * Otherwise, use capacity from Event series.
+ *
+ * Returns capacity.
+ * Returns '' if capacity is not set at all.
+ */
+function _get_capacity_to_use($entity_eventseries, $entity_eventinstance) {
+    // Get Event series entity's capacity
+    $capacity_eventseries = $entity_eventseries->get('field_capacity')->getValue();
+    // Get Event instance's capacity
+    $overwrite_capacity_eventinstance = $entity_eventinstance->get('field_overwrite_capacity')->getValue()[0]['value']; // 0:No overwrite, 1: Overwrite
+
+    $capacity = '';
+    if($overwrite_capacity_eventinstance == '1') { // Overwrite
+        // Get capacity value from Event instance
+        $capacity_eventinstance = '';
+        $capacity_eventinstance = $entity_eventinstance->get('field_capacity_event_instance')->getValue();
+
+        if(sizeof($capacity_eventinstance) > 0) {
+            // Use Event instance's capacity
+            $capacity = $capacity_eventinstance[0]['value'];
+
+        } else { // Just in case if capacity is not set in Event instance, use Event series's capacity
+            if(sizeof($capacity_eventseries) > 0) {
+                // Use Event series's capacity
+                $capacity = $capacity_eventseries[0]['value'];
+            }
+        }
+
+    } // END OF if($overwrite_capacity_eventinstance == '1')
+    else { // No overwrite
+        if(sizeof($capacity_eventseries) > 0) {
+            // Use Event series's capacity
+            $capacity = $capacity_eventseries[0]['value'];
+        }
+    }
+    return $capacity;
+} // END OF function _get_capacity_to_use
+
+
+/**
+ * @param $entity_eventseries
+ * @param $entity_eventinstance
+ *
+ * If start time is overwriten use start time from Event instance.
+ * Otherwise, use start time from Event series.
+ *
+ * Returns start time in 2023-05-17T15:00:00 format. It is in UTC.
+ */
+function _get_starttime_to_use($entity_eventinstance) {
+    // NOTES: For date/time, we can just use Event instance entity.
+    $starttime_eventinstance = $entity_eventinstance->get('date')->getValue()[0]['value'];
+    return $starttime_eventinstance;
+}
+
+
+/**
+ * @param $variables
+ * @param $theindex
+ * @param $eventseries_id
+ * @param $event_start_date in 2023-05-17T15:00:00 format. It is in UTC.
+ *
+ * Count how many people are registared including guests.
+ *
+ * Returns $registrant_count which includes $guest_count.
+ * Returns 0 if registrant_count is not set at all.
+ */
+function _get_registrant_count($eventseries_id, $variables = null, $theindex = null, $event_start_date = null) {
+    // Get start date
+    // When $variables and $theindex is null, $event_start_date should be passed.
+    if(!is_null($variables)) {
+        $event_date_array = $variables['rows'][$theindex]['content']['#row']->_entity->get('date')->getValue();
+        $event_start_date = $event_date_array[0]['value']; // in 2023-05-17T15:00:00 format in UTC.
+    }
+
+    // Get timestamp of actual tour
+    $date_obj_actualtour = DateTime::createFromFormat("Y-m-d\TH:i:s", $event_start_date, new DateTimeZone('UTC'));
+    $start_timestamp_actualtour = $date_obj_actualtour->getTimestamp();
+
+    // Get date only of the actual tour in Phoenix time --- Added on 6/23/2023.
+    $date_obj_actualtour->setTimeZone(new DateTimeZone('America/Phoenix'));
+    $dateonly_actualtour = $date_obj_actualtour->format('Y-m-d');
+//    \Drupal::logger('visit')->notice("dateonly_actualtour:" . $dateonly_actualtour);
+
+    // Get timestamp that we use for Event ID
+    // NOTES: Added Time only field in Event series. For the timestamp that we use for Event ID, calculate the timestamp using the date that was clicked and the Time only field value.
+    $timestamp_for_eventid = _get_timestamp_for_eventid($eventseries_id, $dateonly_actualtour, $start_timestamp_actualtour);
+//    ksm($timestamp_for_eventid, "timestamp_for_eventid - _get_registrant_count()");
+
+    // The event id is: (Event series entity id)-(timestamp using the Time only field).
+    $event_id = $eventseries_id . '-' . $timestamp_for_eventid;
+//    \Drupal::logger('visit')->notice("event_id:" . $event_id);
+
+    // DB access
+    $nodeStorage = \Drupal::entityTypeManager()->getStorage('node');
+    $ids = $nodeStorage->getQuery()
+        ->accessCheck(FALSE)
+        ->condition('type', 'student_registered_visits') // type = bundle id (machine name)
+        ->condition('field_student_event_id', $event_id, '=')
+        ->execute();
+//    \Drupal::logger('visit')->notice("ids:<pre>" . print_r($ids, true) . "</pre>");
+    $student_registered_nodes = $nodeStorage->loadMultiple($ids);
+    // Registrant count
+    $registrant_count = sizeof($student_registered_nodes);
+    // Guest count
+    $guest_count = 0;
+    foreach ($student_registered_nodes as $nid => $node) {
+        $field_student_guests_array = $node->get('field_student_guests')->getValue();
+        if(sizeof($field_student_guests_array) > 0) {
+            $field_student_guests = $node->get('field_student_guests')->getValue()[0]['value'];
+            $guest_count = $guest_count + $field_student_guests;
+        }
+    }
+    // Put together registrant count and guest count
+    $registrant_count = $registrant_count + $guest_count;
+    return $registrant_count;
+}
+
+
+/**
+ * Prepares variables for a Day agendas template:
+ * views-view-unformatted--visitd9-day-agenda--block-1.html.twig -- Used for day agendas on the right side.
+ *
+ * Send the following to the twig file:
+ * - Event Seried ID
+ * - Event start date/time in timestamp
+ * - Privacy value - private, public and comingsoon
+ * - Publish date - Used in "Coming soon - registration opens January 2"
+ * - event_type
+ * - event_date -> datetime
+ *
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - children: The view results for this day.
+ *   - timestamp: The day timestamp.
+ *   - date_format
+ *   - date_pattern
+ */
+function asuaec_visit_preprocess_views_view_unformatted(&$variables){
+    $view = $variables['view'];
+    if($view->id() != 'visitd9_day_agenda') {
+        return;
+    }
+
+    $rows = $variables['rows'];
+    foreach ($rows as $id => $row) {
+
+//        ksm($rows[$id]['content']['#eventinstance'], "eventinstance"); //<----Works!
+//        ksm($rows[$id]['content']['#eventinstance']->getEventSeries(), "event series"); //<----Works!
+
+//        ksm($rows[$id]['content']['#row'], "test4"); //<----Works!
+//        ksm($rows[$id]['content']['#row']->id, "Event instance id"); //<----Works!
+//        ksm($rows[$id]['content']['#row']->eventseries_field_data_eventinstance_field_data_id, "Event series id"); //<----Works!
+//        ksm($rows[$id]['content']['#row']->_entity->getType(), "Event type"); //<---Works
+
+
+        //----------------------------------------------
+        // Prepare event_instance_id
+        $variables['event_instance_id'][$id] = $rows[$id]['content']['#row']->id;
+//        ksm($rows[$id]['content']['#row']->id, "event instance id");
+
+
+        //----------------------------------------------
+        // Prepare event_series_id and event_timestamp
+
+        // Prepare variable for Event Seried ID
+//        $variables['event_series_id'][$id] = $rows[$id]['content']['#eventinstance']->getEventSeries()->id();
+        $variables['event_series_id'][$id] = $rows[$id]['content']['#row']->eventseries_field_data_eventinstance_field_data_id;
+
+////        ksm($variables['event_series_id'][$id] = $rows[$id]['content']['#eventinstance'], "eventinstance");
+//        $eventseries_type = $rows[$id]['content']['#eventinstance']->getType();
+        $eventseries_type = $rows[$id]['content']['#row']->_entity->getType(); //<---Works!
+////        ksm($eventseries_type); // visit_event
+
+
+        // Prepare variable for Event start date/time in timestamp
+////        ksm($rows[$id]['content']['#eventinstance']->get('date')->value, "event date"); //<----2022-11-01T15:00:00
+//        $datetime_string = $rows[$id]['content']['#eventinstance']->get('date')->value; //<----2022-11-01T15:00:00
+        $datetime_string = $rows[$id]['content']['#row']->eventinstance_field_data_date__value; //<----2022-11-01T15:00:00
+        $date_obj = DateTime::createFromFormat("Y-m-d\TH:i:s", $datetime_string, new DateTimeZone('UTC'));
+        $timestamp = $date_obj->getTimestamp();
+        $date_obj->setTimeZone(new DateTimeZone('America/Phoenix'));
+
+        // Start timestamp
+        $variables['timestamp_start'][$id] = $timestamp;
+
+        // event_date ex. Wed, 05/03/23 03:00 pm
+//        $variables['event_date'][$id] = $date_obj->format('D, m/d/y h:i a'); // Let's use this field for SF Event name. Changing format. 6/14/2023
+        $variables['datetime'][$id] = $date_obj->format('Y/m/d H:i:s');
+        // dateonly ex. 2023-05-03
+        $variables['dateonly'][$id] = $date_obj->format('Y-m-d');
+        // Start time
+        $variables['time_start'][$id] = $date_obj->format('h:i a');
+        // Timestamp for event id which we calculate using the Time Only field in Event series entity.
+        $variables['timestamp_for_eventid'][$id] = _get_timestamp_for_eventid($variables['event_series_id'][$id], $variables['dateonly'][$id], $timestamp);
+        // Prepare variable for Event end date/time in timestamp
+        $datetime_string = $rows[$id]['content']['#row']->eventinstance_field_data_date__end_value;
+        $date_obj = DateTime::createFromFormat("Y-m-d\TH:i:s", $datetime_string, new DateTimeZone('UTC'));
+        // End timestamp
+        $timestamp = $date_obj->getTimestamp();
+        $date_obj->setTimeZone(new DateTimeZone('America/Phoenix'));
+        $variables['timestamp_end'][$id] = $timestamp;
+        // End time
+        $variables['time_end'][$id] = $date_obj->format('h:i a');
+
+
+        //---------------------------------------------
+        // Load the parent entity
+        $entity_type_eventseries = 'eventseries';
+        $entity_id_eventseries = $variables['event_series_id'][$id];
+        $entity_eventseries = \Drupal::entityTypeManager()->getStorage($entity_type_eventseries)->load($entity_id_eventseries);
+
+
+        // Load the instance entity
+        $entity_type_eventinstance = 'eventinstance';
+        $entity_id_eventinstance = $rows[$id]['content']['#row']->id;
+        $entity_eventinstance = \Drupal::entityTypeManager()->getStorage($entity_type_eventinstance)->load($entity_id_eventinstance);
+
+
+        //--------------Capacity for Visit event----------------//
+
+        // Get capacity to use -- If capacity is overwriten use capacity from Event instance. Otherwise, use capacity from Event series.
+        $capacity = _get_capacity_to_use($entity_eventseries, $entity_eventinstance);
+
+        // Get how many people registered for the event here
+        $registrant_count = _get_registrant_count($variables['event_series_id'][$id], $variables, $id);
+
+        if($capacity != '') {
+            if($registrant_count >= $capacity) { // Already full. <--- I feel like it hsould be >=. weird. But if I use >=, it doesn't work.
+                // Remove the row
+                unset($variables['rows'][$id]); // Remove a row
+                continue; // Go to next iteration.
+            }
+        }
+        // --------------END OF Capacity----------------//
+
+
+        //--------------Test mode----------------//
+
+        // Get the field_test_mode and remove row when Test mode is 1.
+        $temp_array_testmode = $entity_eventseries->get('field_test_mode')->getValue();
+//        ksm($temp_array_testmode, "temp_array_testmode from asuaec_visit_preprocess_views_view_unformatted");
+
+        //--------------Dealing with Test mode----------------//
+        // If Test mode is "1", get user role. If not admin, remove the row.
+        if ($temp_array_testmode[0]['value'] == 1) { // If Test mode is "1"
+            // Get user role
+            $roles = \Drupal::currentUser()->getRoles();
+
+            // if not visit_admin or admin, remove the row
+            if(!(in_array('visit_admin', $roles) || in_array('administrator', $roles))) { // Do something if user doesn't have role visit_admin
+                //        if(in_array('visit_admin', $roles)) { // Do something if user doesn't have role visit_admin -----JUST FOR DEVELOPMENT
+                unset($variables['rows'][$id]); // Remove a row
+            }
+        }  // END OF if ($temp_array_testmode[0]['value'] == 1)
+
+        //--------------END OF Test mode----------------//
+
+
+
+        //---------------------------
+        // Prepare Privacy value
+
+        // Get the field_privacy
+        $temp_array_privacy = $entity_eventseries->get('field_privacy')->getValue();
+        $privacy = $temp_array_privacy[0]['target_id']; // tid - 23: Private, 24: Public, 22: Coming soon
+        switch($privacy) {
+            case '23': // Private
+                $variables['privacy'][$id] = 'private';
+                break;
+            case '24': // Public
+                $variables['privacy'][$id] = 'public';
+                break;
+            case '22': // Coming soon
+                $variables['privacy'][$id] = 'comingsoon';
+                break;
+        }
+
+
+        //---------------------------
+        // Prepare Publish date value - Publish date is only for visit_event
+        if($eventseries_type == 'visit_event') {
+            $temp_array_publishdate = $entity_eventseries->get('field_publish_date')->getValue();
+            if(sizeof($temp_array_publishdate) > 0){
+                $publish_date = $temp_array_publishdate[0]['value']; // 2023-01-02
+                $date_obj = date_create($publish_date); // Get Php Date object
+                $variables['publish_date_formatted'][$id] = date_format($date_obj, 'F j');
+            } else {
+                $variables['publish_date_formatted'][$id] = '';
+            }
+        }
+
+        //---------------------------
+        // Prepare classes value for legend_toggle
+        $variables['legend_toggle'] = [];
+        $temp_array = $entity_eventseries->get('field_legend_toggle')->getValue();
+//        ksm($temp_array, "temp array");
+        foreach ($temp_array as $legend) {
+            // Insert Legend/toggle into array if it is not already in the array.
+            //                            ksm($legend['value'], "legend value");
+            //                            ksm($variables['legend_toggle'], "var legend_toggle array");
+            if (!in_array($legend['value'], $variables['legend_toggle'])) {
+                array_push($variables['legend_toggle'], $legend['value']);
+            }
+        }
+//        ksm($variables['legend_toggle'], "var legend_toggle after each" );
+        $variables['legend_toggle_string'][$id] = '';
+        foreach($variables['legend_toggle'] as $css_class){
+            $variables['legend_toggle_string'][$id] .= ' ' . $css_class;
+        }
+//        ksm($variables['legend_toggle_string'][$id], "legend_toggle_string");
+
+        //---------------------------
+        // Prepare event_type
+        $variables['event_type'][$id] =  _getValueOfEvent($entity_eventseries, 'field_evtype');
+
+        //---------------------------
+        // Prepare event_displaytitle
+        $variables['event_display_title'][$id] =  _getValueOfEvent($entity_eventseries, 'field_display_title');
+
+        //---------------------------
+        // Prepare visitor_type
+        $variables['visitor_type'][$id] =  _getValueOfEvent($entity_eventseries, 'field_visitor_type');
+
+    } // END OF foreach ($rows as $id => $row) {
+} // END OF function asuaec_visit_preprocess_views_view_unformatted(&$variables)
+
+
+/**
+ * @param $eventseries_id
+ * @param $dateonly // date only ex. 2023-05-03 or 20230503 in Phoenix time. Date that was clicked.
+ * @param $timestamp_actualtour
+ * @return int|mixed
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ *
+ * Helping function
+ * Return timestamp that we can use for event id which we calculate using the Time only field in Event series entity.
+ * If Original time only field is empty, if $timestamp_actualtour is passed, it will use $timestamp_actualtour.
+ * If Original time only field is empty, if $timestamp_actualtour is not passed, it will return ''.*
+ */
+function _get_timestamp_for_eventid($eventseries_id, $dateonly, $timestamp_actualtour = '') {
+    $ret_value = '';
+    // Load the Event series entity
+    $entity_type_eventseries = 'eventseries';
+    $entity_id_eventseries = $eventseries_id;
+    $entity_eventseries  = \Drupal::entityTypeManager()->getStorage($entity_type_eventseries)->load($entity_id_eventseries);
+
+    // Get Time only field value from Event series entity
+    $timeonly = _getValueOfEvent($entity_eventseries, 'field_start_time_for_eventid', null);
+//    ksm($timeonly, "timeonly timestamp"); // 36000
+//    ksm($dateonly, "dateonly"); // 2023-06-27   Y-m-d
+
+    // dateonly - If it comes in as YYYYmmdd
+
+    if($timeonly != '') {
+
+        // Get the timestamp for the date at 0 o'clock.
+        if(strpos($dateonly, '-') == false) {
+            $date_obj = DateTime::createFromFormat("Ymd\TH:i:s", $dateonly . 'T00:00:00', new DateTimeZone('America/Phoenix'));
+        } else {
+            $date_obj = DateTime::createFromFormat("Y-m-d\TH:i:s", $dateonly . 'T00:00:00', new DateTimeZone('America/Phoenix'));
+        }
+        $timestamp_at0oclock = $date_obj->getTimestamp();
+//        ksm($timestamp_at0oclock, "timestamp_at0oclock");
+        // Combine timestamp value at 0 o'clock and Time only field value
+        $timestamp_for_eventid = $timestamp_at0oclock + intval($timeonly);
+//        ksm($timestamp_for_eventid, "timestamp_for_eventid");
+//        ksm($timestamp_actualtour, "start timestamp for actual event");
+        $ret_value = $timestamp_for_eventid;
+
+    } else {
+        $ret_value = $timestamp_actualtour;
+    }
+    return $ret_value;
+}
+
+
+/**
+ * @param $entity_eventseries
+ * @param $field_name
+ * @param null $overwrite_field_name
+ * @return mixed|string
+ *
+ * Helping function
+ * Get field value from Event Series entity
+ */
+function _getValueOfEvent($entity_eventseries, $field_name, $overwrite_field_name = null) { // $overwrite_field_name is a boolean field.
+    $ret_value = '';
+    $temp_array = $entity_eventseries->get($field_name)->getValue();
+    if(sizeof($temp_array) > 0){
+        $ret_value = $temp_array[0]['value'];
+    } else {
+        $ret_value = '';
+    }
+    return $ret_value;
+}
+
+
+/**
+ * @param \Drupal\field\Entity\FieldStorageConfig $definition
+ *   The field definition.
+ * @param \Drupal\Core\Entity\ContentEntityInterface|null $entity
+ *   The entity being created if applicable.
+ * @param bool $cacheable
+ *   Boolean indicating if the results are cacheable.
+ *
+ * @return array
+ *   An array of possible key and value options.
+ *
+ * @see options_allowed_values()
+ *
+ * Set dynamic allowed values for the college(s) field in Additional tour Paragraph.
+ */
+function asuaec_visit_allowed_values_function(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL) {
+//    \Drupal::logger('visit')->notice("testing1:" . $entity->bundle());
+    $options = [];
+    // field_college field inside paragraph additional_tour
+    // Allowed values will be coming from database.
+    if ($entity->bundle() == 'additional_tour') {
+
+        $database = \Drupal::database();
+        $table = 'asu_ugrad_interest_category_degrees';
+        $field_array = array('categoryprogramcode', 'categoryprogramDesrc100');
+        $orderby = 'categoryprogramDesrc100';
+        $query = $database->select($table, 't');
+        $query->fields('t', $field_array);
+//    $query->condition($field_state, $state, '=');
+        $query->orderBy($orderby, 'ASC');
+        $result = $query->distinct()->execute();
+//        $options = [];
+        foreach ($result as $record) {
+            if ($record->categoryprogramDesrc100 == "Business, W. P. Carey School of" && $record->categoryprogramcode == "UGES") {
+                continue;
+            }
+            if ($record->categoryprogramDesrc100 == "Interdisciplinary Arts and Sciences, New College of" && $record->categoryprogramcode == "UGES") {
+                continue;
+            }
+            $program_code = $record->categoryprogramcode; // "UGES"
+            $college_name = $record->categoryprogramDesrc100; // Business, W. P. Carey School of
+            $options[$program_code] = $college_name;
+        }
+        unset($options['UGHO']);
+        asort($options);
+
+//        \Drupal::logger('visit')->notice("options:<pre>" . print_r($options, true) . "</pre>");
+    }
+    return $options;
+}
+
+
+/**
+ * @param ViewExecutable $view
+ *
+ * hook_views_pre_render
+ *
+ * Insert value in placeholder in Day agenda:
+ * - Display title
+ * - Additional tour
+ * - Barrett tour under Exp ASU
+ */
+function asuaec_visit_views_pre_render(\Drupal\views\ViewExecutable $view) {
+
+    if ($view->id() == 'visitd9_day_agenda') {
+
+        // Clear cache
+        \Drupal::service('cache.render')->invalidateAll();
+
+        $current_path = \Drupal::service('path.current')->getPath();
+        $result = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
+        $uriSegment_array = explode('/',$result);
+//        ksm($uriSegment_array, "uriSegment_array");
+            //0 => string (0) ""
+            //⇄1 => string (9) "dayevents"
+            //⇄2 => string (8) "20230620"
+            //⇄3 => string (5) "Tempe"
+            //⇄4 => string (16) "Graduate student"
+            //⇄5 => string (1) "0"
+        $lastUriSegment = end($uriSegment_array);
+        $category_id = $lastUriSegment; // For Ugrad, the tid for Visit bucket. For Grad, it becomes 0.
+        // Get the date clicked
+        $thedate_clicked = $uriSegment_array[2]; // 20221122
+        // Get Person type because for Grad, we don't need to worry about Additional tour/Barrett tour under Exp ASU.
+        $person_type = $uriSegment_array[4];
+
+        $barrett_under_expasu = false;
+        foreach($view->result as $key => $rr){
+//            ksm($key, "key");
+
+            // Get Parent id (Event series ID)
+            $parent_id = $view->result[$key]->_entity->get('eventseries_id')->getValue();
+            // ksm($parent_id, "parent_id"); // Event series entity id
+            // Load parent Event series entity
+            if(isset($parent_id)) {
+                $entity_type = 'eventseries';
+                $entity_id = $parent_id[0]['target_id'];
+//                ksm($entity_id, "entity_id"); // Event series
+                $entity = \Drupal::entityTypeManager()->getStorage($entity_type)->load($entity_id);
+                $barrett_entity_ids_array = [];
+                $addtour_paragraph_entity_ids_array = [];
+                $barretttour_under_expasu_entity_ids_array = [];
+                //                ksm($parent_id[0]['target_id'], "parent_id 0 target_id"); // Event series entity id
+
+
+                //--------Display title ---------------//
+
+                // NOTES:
+                // Get Display title and plug it into field_placeholder_display_title.
+                // if Display title is empty, use just title.
+                $display_title_array = $entity->get('field_display_title')->getValue();
+                if(sizeof($display_title_array) > 0) {
+                    $display_title = '<h4>' . $display_title_array[0]['value'] . '</h4>';
+                } else {
+                    $title_array = $entity->get('title')->getValue();
+                    $display_title = '<h4>' . $title_array[0]['value'] . '</h4>';
+                }
+                $output_formattablemarkup_displaytitle = new FormattableMarkup($display_title, []);
+                $rr->_entity->set('field_placeholder_display_title', $output_formattablemarkup_displaytitle); //<-- This worked!
+
+                //--------END OF Display title ---------------//
+
+
+                // NOTES: Grad doesn't have Additional tour or Barrett under Exp ASU
+                if($person_type == "Graduate student") {
+                    continue; // Go to the next iteration.
+                }
+
+
+                //----------------------------------------------------------------------------------------------//
+                //-------- Proess for Additional tour and Barrett tour under Exp ASU starts here ---------------//
+
+                // Get array of colleges based on category ID (Visit bucket)
+                $collegesArrayBasedOnCat = _get_collegearray_basedoncategory($category_id);
+
+                // For "Visit event"
+                if($entity->bundle() == "visit_event") {
+
+					$campus = $entity->get('field_campus')->getValue(); //Added by Arcahana
+					$campus_value = $campus[0]['value']; //Added by Arcahana
+
+                    //------ Barrett under Experience ASU --------//
+                    // Get Barrett tour display title and time under Experience ASU
+
+                    // Get "Overwrite Barrett tour" boolean value first.
+                    $overwrite_barretttour_array = $view->result[$key]->_entity->get('field_overwrite_barretttour')->getValue();
+                    $overwrite_barretttour = $overwrite_barretttour_array[0]['value']; // 0 or 1: 1 means to overwrite.
+
+                    if($overwrite_barretttour == '1') { // Overwrite
+                        // Get Barrett tour instance under Experience ASU
+                        $instance_barrett_tour = $view->result[$key]->_entity->get('field_barrett_tours_event_instan')->getValue();
+//                        ksm($instance_barrett_tour, "instance_barrett_tour");
+                        // When sizeof($instance_barrett_tour) == 0, there is no Barrett tour.
+                        if(sizeof($instance_barrett_tour) > 0) { // Overwritten
+                            foreach($instance_barrett_tour as $thearray) {
+                                array_push($barretttour_under_expasu_entity_ids_array, $thearray['target_id']);
+                            }
+//                            ksm($barretttour_under_expasu_entity_ids_array, "barretttour_under_expasu_entity_ids_array - Overwritten");
+                        }
+
+                    } else { // No overwrite
+                        // Get Barrett Event series entity ids that were attached to the visit_event Event series entity
+                        foreach($entity->get('field_barrett_tours')->getValue() as $thearray) {
+                            array_push($barretttour_under_expasu_entity_ids_array, $thearray['target_id']);
+                        }
+//                        ksm($barretttour_under_expasu_entity_ids_array, "barretttour_under_expasu_entity_ids_array - No overwritten");
+                    }
+//                    ksm($barretttour_under_expasu_entity_ids_array, "barretttour_under_expasu_entity_ids_array - after if");
+
+                    if(sizeof($barretttour_under_expasu_entity_ids_array) > 0) {
+                        $output_barrett = '';
+                        $barrett_under_expasu = true;
+                        // NOTES: _prepare_output_barrett() calls the function to check capacity.
+                        $output_barrett = _prepare_output_barrett($barretttour_under_expasu_entity_ids_array, $thedate_clicked, $barrett_under_expasu);
+                        if($output_barrett != '') {
+                            $output_formattablemarkup_barrett = new FormattableMarkup($output_barrett, []);
+                            $rr->_entity->set('field_placeholder_for_barrett', $output_formattablemarkup_barrett);
+                        }
+                    } // END OF if(sizeof($barretttour_under_expasu_entity_ids_array) > 0)
+
+                    //-------- END OF Barrett under Experience ASU --------------//
+
+
+                    //-------- Additional tours/Academic sessions ---------------//
+
+                    // Get "Overwrite Additional tour" boolean value first.
+                    $overwrite_addtour_array = $view->result[$key]->_entity->get('field_overwrite_addtour')->getValue();
+                    $overwrite_addtour = $overwrite_addtour_array[0]['value']; // 0 or 1. 1 means to overwrite.
+
+                    if($overwrite_addtour == '1') { // Overwrite
+                        // Get Add tour instance
+                        $instance_add_tour = $view->result[$key]->_entity->get('field_additional_tours_eventinst')->getValue();
+                        // When sizeof($instance_add_tour) == 0, there is no additional tour.
+                        if(sizeof($instance_add_tour) > 0) { // Overwritten
+                            foreach($instance_add_tour as $thearray) {
+                                array_push($addtour_paragraph_entity_ids_array, $thearray['target_id']);
+                            }
+//                        ksm($addtour_paragraph_entity_ids_array, "addtour_paragraph_entity_ids_array - Overwritten");
+                        }
+
+                    } else { // No overwrite
+                        foreach($entity->get('field_additional_tours')->getValue() as $thearray) {
+                            array_push($addtour_paragraph_entity_ids_array, $thearray['target_id']);
+                        }
+//                        ksm($addtour_paragraph_entity_ids_array, "addtour_paragraph_entity_ids_array - No overwritten");
+                    }
+
+                    // Let's just do Entity load here for Additional tour.
+                    // NOTES: _prepare_output_addtours() calls the function to check capacity and to check college that is associated with Visit bucket that were selected.
+                    $output_addtours = [];
+                    if(sizeof($addtour_paragraph_entity_ids_array) > 0) {
+                        $output_addtours = _prepare_output_addtours($addtour_paragraph_entity_ids_array, $collegesArrayBasedOnCat, $thedate_clicked, $entity_id, $campus_value); // In this case, $entity_id is Event series entity id. $campus_value added by Archana
+//                        ksm($output_addtours, "output addtours");
+
+                        if($output_addtours > 0) {
+                            $output_formattablemarkup_addtour = new FormattableMarkup($output_addtours['output'], []);
+                            $rr->_entity->set('field_placeholder_for_addtour2', $output_formattablemarkup_addtour); // NOTES: field_placeholder_for_addtour2 has to be plain text in order to display in full_html.
+                        }
+
+                    } // END OF if(sizeof($addtour_paragraph_entity_ids_array) > 0)
+
+                    //----------- END OF Additional tours/Academic sessions ---------------//
+
+
+                    //----------------------------------------------------------------------------------------------//
+                    //-------- Event description - Added on 7/21/2023 ---------------//
+
+                    // Find out if there is College session included
+                    // NOTE: If College session is included, display field_event_description.
+                    // If College session is not included, display field_event_description_no_acad.
+                    // Insert one of them into field_placeholder_description in Event instance.
+                    if(array_key_exists('collegesession_included', $output_addtours) && $output_addtours['collegesession_included'] == true) { // College session is included
+
+                        // Get Event description values from Event Series
+                        $event_description_w_collegesession = $entity->hasField('field_event_description_html') ? $entity->get('field_event_description_html')->getValue() : '';
+                        $rr->_entity->set('field_placeholder_for_descr_html', $event_description_w_collegesession);
+                    } else {
+                        $event_description_no_collegesession = $entity->hasField('field_event_descr_no_collegesess') ? $entity->get('field_event_descr_no_collegesess')->getValue() : '';
+                        $rr->_entity->set('field_placeholder_for_descr_html', $event_description_no_collegesession);
+                    }
+
+
+                } // END OF if($entity->bundle() != "visit_event")
+
+                if($entity->bundle() == "barrett") {
+
+                    //-------- For Barrett solo: "I prefer to only visit with Barrett, The Honors College." - Added on 7/24/2023 ---------------//
+
+                    // NOTE: For Barrett solo (top-level) just insert the text into field_placeholder_for_message
+                    // NOTE: Now it could be Academic facility tour. Only for Event type of "Barrett tour", display "I prefer to only visit with Barrett, The Honors College".
+
+                    // Get Event type
+                    $event_type = $entity->get('field_evtype')->getValue()[0]['value'];
+                    if($event_type == "Barrett tour") {
+                      //Code added by Archana for Barrett tooltip
+                      $barrett_tip_data = "<p>Established in 1988, Barrett has been recognized as the \"gold standard\" among honors colleges in the nation. An undergraduate student can be engaged in the Barrett experience at any of ASU’s four metropolitan Phoenix campuses.</p>";
+                      $barrett_info_tool_tip = '<div class="custom-tooltip"><div class="custom-tooltip-container-acadsessions"><button tabindex="0" class="uds-tooltip uds-tooltip-button uds-tooltip-dark" aria-describedby="tooltip-desc-1"><span class="fa-stack"><svg class="campus-svg svg-inline--fa fa-circle fa-w-16 fa-stack-2x" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="#8c1d40" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path></svg><svg class="svg-inline--fa fa-info fa-w-6 fa-stack-1x" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="info" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512" data-fa-i2svg=""><path fill="#ffffff" d="M20 424.229h20V279.771H20c-11.046 0-20-8.954-20-20V212c0-11.046 8.954-20 20-20h112c11.046 0 20 8.954 20 20v212.229h20c11.046 0 20 8.954 20 20V492c0 11.046-8.954 20-20 20H20c-11.046 0-20-8.954-20-20v-47.771c0-11.046 8.954-20 20-20zM96 0C56.235 0 24 32.235 24 72s32.235 72 72 72 72-32.235 72-72S135.764 0 96 0z"></path></svg></span></button><div role="tooltip" class="custom-tooltip-description" id="tooltip-desc-1"><button style="color:#fff;" type="button" class="btn btn-default popup-close-btn"><svg class="svg-inline--fa fa-window-close fa-w-16" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="window-close" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-83.6 290.5c4.8 4.8 4.8 12.6 0 17.4l-40.5 40.5c-4.8 4.8-12.6 4.8-17.4 0L256 313.3l-66.5 67.1c-4.8 4.8-12.6 4.8-17.4 0l-40.5-40.5c-4.8-4.8-4.8-12.6 0-17.4l67.1-66.5-67.1-66.5c-4.8-4.8-4.8-12.6 0-17.4l40.5-40.5c4.8-4.8 12.6-4.8 17.4 0l66.5 67.1 66.5-67.1c4.8-4.8 12.6-4.8 17.4 0l40.5 40.5c4.8 4.8 4.8 12.6 0 17.4L313.3 256l67.1 66.5z"></path></svg></button><div class="formatted-text">'.$barrett_tip_data.'</div></div></div></div>';
+
+                                //$rr->_entity->set('field_placeholder_message_text', new FormattableMarkup("<p>I prefer to only visit with Barrett, The Honors College.</p>", []));
+                      $rr->_entity->set('field_placeholder_message_text', new FormattableMarkup("<div class='acad-session-div'>I prefer to only visit with Barrett, The Honors College.$barrett_info_tool_tip</div>", []));
+
+                    } // END OF if($event_type == "Barrett tour")
+                    //-------- END OF For Barrett solo: "I prefer to only visit with Barrett, The Honors College." ---------------//
+
+
+                    //-------- Event description - Added on 7/21/2023 ---------------//
+
+                    // Get Event description values from Event Series
+                    $event_description = $entity->hasField('field_event_description_html') ? $entity->get('field_event_description_html')->getValue() : '';
+                    // NOTE: For Barrett solo (top-level) just insert field_event_description into field_placeholder_description
+                    $rr->_entity->set('field_placeholder_for_descr_html', $event_description);
+
+
+                    //-------- END OF Event description - Added on 7/21/2023 ---------------//
+
+                } // END OF if($entity->bundle() == "barrett")
+            } // END OF if(isset($parent_id))
+        } // END OF foreach($view->result as $key => $rr)
+    } // END OF if ($view->id() == 'visitd9_day_agenda')
+   /** code added by Archana to update sun devil days view to change views output Register/Watch link text value based on event date and create JS variables **/
+  if ($view->id() == "new_sun_devil_days" && ( ($view->current_display == 'block_1') || ($view->current_display == 'block_2') || ($view->current_display == 'block_3') || ($view->current_display == 'block_4') || ($view->current_display == 'block_5' ) || ($view->current_display == 'block_12' )))  {
+    foreach($view->result as $value){
+      $over_capacity_value = $value->_entity->get('field_capacity_event_instance')->value;
+      //ksm($over_capacity_value);
+      $entity_instance_id = $value->_entity->get('id')->value;
+      $entity_series_id = $value->_relationship_entities['eventseries_id']->get('id')->value;
+      $privcay_tid = $value->_relationship_entities['eventseries_id']->get('field_privacy')->target_id;
+      $event_end_date = $value->_entity->get('date')->end_value;
+      $event_start_date = $value->_entity->get('date')->value;
+      $unixstarttime = strtotime("{$event_start_date} -7 hours");
+      $unixtotime = strtotime("{$event_end_date} -7 hours");
+      $personType = $value->_relationship_entities['eventseries_id']->get('field_visitor_type')->value;
+      $campus = $value->_relationship_entities['eventseries_id']->get('field_campus')->value;
+      $overwrite_capacity = $value->_entity->get('field_overwrite_capacity')->value;
+      $series_capacity = $value->_relationship_entities['eventseries_id']->get('field_capacity')->value;
+
+      //ksm($series_capacity);
+      $timeonly = $value->_relationship_entities['eventseries_id']->get('field_start_time_for_eventid')->value;
+      $event_date_time = date("Y/m/d H:i:s", strtotime("{$event_start_date} -7 hours"));
+
+
+      $just_date = date("Y-m-d", strtotime($event_start_date));
+      $end_date_string = strtotime($event_end_date);
+      $start_date_format = date("Y-m-d", strtotime("{$event_start_date} -7 hours"));
+      //$start_time_format = date("F jS, Y", $date_string);
+      $start_time_format = date("h:i a", strtotime("{$event_start_date} -7 hours"));
+      $end_date_format = date("Y-m-d", strtotime("{$event_end_date} -7 hours"));
+      $end_time_format = date("h:i a", strtotime("{$event_end_date} -7 hours"));
+
+
+      $date_obj = DateTime::createFromFormat("Y-m-d\TH:i:s", $event_start_date, new DateTimeZone('UTC'));
+      $date_obj->setTimeZone(new DateTimeZone('America/Phoenix'));
+      $dateonly = $date_obj->format('Y-m-d');
+      $display_title = $value->_relationship_entities['eventseries_id']->get('field_display_title')->value;
+      if($timeonly != '') {
+
+        // Get the timestamp for the date at 0 o'clock.
+        if(strpos($dateonly, '-') == false) {
+          $date_obj = DateTime::createFromFormat("Ymd\TH:i:s", $dateonly . 'T00:00:00', new DateTimeZone('America/Phoenix'));
+        } else {
+          $date_obj = DateTime::createFromFormat("Y-m-d\TH:i:s", $dateonly . 'T00:00:00', new DateTimeZone('America/Phoenix'));
+        }
+        $timestamp_at0oclock = $date_obj->getTimestamp();
+        // Combine timestamp value at 0 o'clock and Time only field value
+        $timestamp_for_eventid = $timestamp_at0oclock + intval($timeonly);
+        $ret_value = $timestamp_for_eventid;
+
+      } else {
+        $ret_value = $timestamp_actualtour;
+      }
+      $event_id = $entity_series_id.'-'.$ret_value;
+      //ksm($event_id);
+      //ksm($entity_series_id);
+//			ksm($ret_value);
+      $persontype_no_space = str_replace(' ','-',$personType);
+      $database = \Drupal::database();
+      $nquery = $database->select('node__field_student_event_id', 'sei');
+      $nquery->fields('sei', ['entity_id']);
+      $nquery->condition('sei.field_student_event_id_value', $event_id,'=');
+      $nresult = $nquery->execute();
+      $all_guests = 0;
+      $etype = "Sun Devil Day";
+      $link = "/registration-form?eid=$event_id&seriesid=$entity_series_id&etype=$etype&dt=$event_date_time&from=$start_time_format&to=$end_time_format&ts=$unixstarttime&ts2=$unixtotime&date=$just_date&instid=$entity_instance_id&campus=$campus&c-aid=null&c-eid=null";
+      $total_registratnts = _get_sundevilregistrant_count($event_id);
+
+      //$data = 'event-id='.$event_id.',total-registrants='.$total_registratnts.',capacity='.$series_capacity.',overwritecapacity='.$over_capacity_value;
+      //ksm($over_capacity_value);
+//            ksm($privcay_tid, "privcay_tid");
+      if($privcay_tid == 22){
+        $register = "<p class='sundevil-comingsoon'>Coming soon</p>";
+      } else if($privcay_tid == 75){ // Registration closed
+        $register = "<p class='sundevil-closed'>Registration closed</p>";
+      } else {
+        if($overwrite_capacity == "1"){
+          if($total_registratnts >= intval($over_capacity_value)){
+            $register = "<p class='sundevil-comingsoon'>Registration closed</p>";
+          }
+          else{
+            $register = "<a href='$link'><button name='$personType|$etype|$unixstarttime|$unixtotime|$display_title|$campus|$start_time_format|$end_time_format' class='btn btn-maroon sundevil-btn register-btn-{$event_id}{$persontype_no_space}'>Register</button></a>";
+            //$register = "<button name='$personType|$etype|$unixstarttime|$unixtotime|$display_title' class='btn btn-maroon sundevil-btn register-btn-{$event_id}{$persontype_no_space}'>Register</button>";
+          }
+        }
+        else{
+          if($total_registratnts >= intval($series_capacity)){
+            $register = "<p class='sundevil-comingsoon'>Registration closed</p>";
+          }
+          else{
+            $register = "<a href='$link'><button name='$personType|$etype|$unixstarttime|$unixtotime|$display_title|$campus|$start_time_format|$end_time_format' class='btn btn-maroon sundevil-btn register-btn-{$event_id}{$persontype_no_space}'>Register</button></a>";
+            //$register = "<button name='$personType|$etype|$unixstarttime|$unixtotime|$display_title' class='btn btn-maroon sundevil-btn register-btn-{$event_id}{$persontype_no_space}'>Register</button>";
+          }
+        }
+      }
+
+      $content = \Drupal\Core\Render\Markup::create($register);
+      //$datetdate = $content.'-'.$event_date_time;
+      $value->_relationship_entities['eventseries_id']->set('title', $content);
+      //$value->_relationship_entities['eventseries_id']->set('date', $datetdate);
+      $view->element['#attached']['library'][] = 'asuaec_visit/sundevilJsLib';
+
+    }
+  }
+  /** End of Archana's code for sundevil day **/
+
+    // Transfer Day - 11/5/2023
+    if ($view->id() == "transfer_day" && ( ($view->current_display == 'block_1') || ($view->current_display == 'block_2') || ($view->current_display == 'block_3') || ($view->current_display == 'block_4')))  {
+      foreach($view->result as $value){
+        $over_capacity_value = $value->_entity->get('field_capacity_event_instance')->value;
+        //ksm($over_capacity_value);
+        $entity_instance_id = $value->_entity->get('id')->value;
+        $entity_series_id = $value->_relationship_entities['eventseries_id']->get('id')->value;
+        $privcay_tid = $value->_relationship_entities['eventseries_id']->get('field_privacy')->target_id;
+        $event_end_date = $value->_entity->get('date')->end_value;
+        $event_start_date = $value->_entity->get('date')->value;
+        $unixstarttime = strtotime("{$event_start_date} -7 hours");
+        $unixtotime = strtotime("{$event_end_date} -7 hours");
+        $personType = $value->_relationship_entities['eventseries_id']->get('field_visitor_type')->value;
+        $campus = $value->_relationship_entities['eventseries_id']->get('field_campus')->value;
+        $overwrite_capacity = $value->_entity->get('field_overwrite_capacity')->value;
+        $series_capacity = $value->_relationship_entities['eventseries_id']->get('field_capacity')->value;
+
+        //ksm($series_capacity);
+        $timeonly = $value->_relationship_entities['eventseries_id']->get('field_start_time_for_eventid')->value;
+        $event_date_time = date("Y/m/d H:i:s", strtotime("{$event_start_date} -7 hours"));
+
+
+        $just_date = date("Y-m-d", strtotime($event_start_date));
+        $end_date_string = strtotime($event_end_date);
+        $start_date_format = date("Y-m-d", strtotime("{$event_start_date} -7 hours"));
+        //$start_time_format = date("F jS, Y", $date_string);
+        $start_time_format = date("h:i a", strtotime("{$event_start_date} -7 hours"));
+        $end_date_format = date("Y-m-d", strtotime("{$event_end_date} -7 hours"));
+        $end_time_format = date("h:i a", strtotime("{$event_end_date} -7 hours"));
+
+
+        $date_obj = DateTime::createFromFormat("Y-m-d\TH:i:s", $event_start_date, new DateTimeZone('UTC'));
+        $date_obj->setTimeZone(new DateTimeZone('America/Phoenix'));
+        $dateonly = $date_obj->format('Y-m-d');
+        $display_title = $value->_relationship_entities['eventseries_id']->get('field_display_title')->value;
+        if($timeonly != '') {
+
+          // Get the timestamp for the date at 0 o'clock.
+          if(strpos($dateonly, '-') == false) {
+            $date_obj = DateTime::createFromFormat("Ymd\TH:i:s", $dateonly . 'T00:00:00', new DateTimeZone('America/Phoenix'));
+          } else {
+            $date_obj = DateTime::createFromFormat("Y-m-d\TH:i:s", $dateonly . 'T00:00:00', new DateTimeZone('America/Phoenix'));
+          }
+          $timestamp_at0oclock = $date_obj->getTimestamp();
+          // Combine timestamp value at 0 o'clock and Time only field value
+          $timestamp_for_eventid = $timestamp_at0oclock + intval($timeonly);
+              $ret_value = $timestamp_for_eventid;
+
+        } else {
+          $ret_value = $timestamp_actualtour;
+        }
+        $event_id = $entity_series_id.'-'.$ret_value;
+        //ksm($event_id);
+        //ksm($entity_series_id);
+  //			ksm($ret_value);
+        $persontype_no_space = str_replace(' ','-',$personType);
+        $database = \Drupal::database();
+        $nquery = $database->select('node__field_student_event_id', 'sei');
+        $nquery->fields('sei', ['entity_id']);
+        $nquery->condition('sei.field_student_event_id_value', $event_id,'=');
+        $nresult = $nquery->execute();
+        $all_guests = 0;
+
+        $etype = "Transfer Day";
+        $link = "/registration-form-v2?eid=$event_id&seriesid=$entity_series_id&etype=$etype&dt=$event_date_time&from=$start_time_format&to=$end_time_format&ts=$unixstarttime&ts2=$unixtotime&date=$just_date&instid=$entity_instance_id&campus=$campus&ptype=College transfer&displaytitle=$display_title&c-aid=null&c-eid=null";
+
+        $total_registratnts = _get_sundevilregistrant_count($event_id);
+
+        //$data = 'event-id='.$event_id.',total-registrants='.$total_registratnts.',capacity='.$series_capacity.',overwritecapacity='.$over_capacity_value;
+        //ksm($over_capacity_value);
+        if($privcay_tid == 22){
+          $register = "<p class='sundevil-comingsoon'>Coming soon</p>";
+        } else if($privcay_tid == 75){ // Registration closed
+            $register = "<p class='sundevil-closed'>Registration closed</p>";
+        } else {
+          if($overwrite_capacity == "1"){
+
+            if($total_registratnts >= intval($over_capacity_value)){
+              $register = "<p class='sundevil-comingsoon'>Registration closed</p>";
+            }
+            else{
+              $register = "<a href='$link'><button name='$personType|$etype|$unixstarttime|$unixtotime|$display_title|$campus|$start_time_format|$end_time_format' class='btn btn-maroon sundevil-btn register-btn-{$event_id}{$persontype_no_space}'>Register</button></a>";
+              //$register = "<button name='$personType|$etype|$unixstarttime|$unixtotime|$display_title' class='btn btn-maroon sundevil-btn register-btn-{$event_id}{$persontype_no_space}'>Register</button>";
+            }
+          }
+          else{
+
+            if($total_registratnts >= intval($series_capacity)){
+              $register = "<p class='sundevil-comingsoon'>Registration closed</p>";
+            }
+            else{
+              $register = "<a href='$link'><button name='$personType|$etype|$unixstarttime|$unixtotime|$display_title|$campus|$start_time_format|$end_time_format' class='btn btn-maroon sundevil-btn register-btn-{$event_id}{$persontype_no_space}'>Register</button></a>";
+              //$register = "<button name='$personType|$etype|$unixstarttime|$unixtotime|$display_title' class='btn btn-maroon sundevil-btn register-btn-{$event_id}{$persontype_no_space}'>Register</button>";
+            }
+          }
+        }
+
+
+        $content = \Drupal\Core\Render\Markup::create($register);
+        //$datetdate = $content.'-'.$event_date_time;
+        $value->_relationship_entities['eventseries_id']->set('title', $content);
+        //$value->_relationship_entities['eventseries_id']->set('date', $datetdate);
+        $view->element['#attached']['library'][] = 'asuaec_visit/sundevilJsLib';
+
+      }
+    }
+
+
+
+
+//    // We can comment this "if" when the site goes live to increase performance.
+//    // We don't have to print anything in mini-calendar. We will hide it with CSS anyways.
+//    if ($view->id() == 'visitd9_main_calendar_v2') {
+//
+//        // Clear cache
+//        \Drupal::service('cache.render')->invalidateAll();
+//
+//        // This foreach worked - 2/22/2023 at 11am
+//        foreach($view->result as $key => $rr){
+////            ksm($key, "key");
+//
+//
+//            // Notes: Removing a row - Finally, removing row from preprocess worked.
+//
+//
+//                    // Get Parent id (Event series ID)
+//                    $parent_id = $view->result[$key]->_entity->get('eventseries_id')->getValue();
+//        //            ksm($parent_id, "parent_id");
+//
+//                    // Load parent Event series entity
+//        //            ksm($parent_id, "parent_id"); // Event series entity id
+//                    if(isset($parent_id)) {
+//                        $entity_type = 'eventseries';
+//                        $entity_id = $parent_id[0]['target_id'];
+////                        ksm($entity_id, "entity_id"); // Event series
+//                        $entity = \Drupal::entityTypeManager()->getStorage($entity_type)->load($entity_id);
+//                        $barrett_entity_ids_array = [];
+//                        $addtour_paragraph_entity_ids_array = [];
+//        //                ksm($parent_id[0]['target_id'], "parent_id 0 target_id"); // Event series entity id
+//
+//                        //--------Display title ---------------//
+//
+//                        // Get Display title and plug it into field_placeholder_display_title.
+//                        // if Display title is empty, use just title.
+//                        $display_title_array = $entity->get('field_display_title')->getValue();
+////                                ksm($display_title_array, "display_title");
+//                        if(sizeof($display_title_array) > 0) {
+//                            $display_title = '<h4>' . $display_title_array[0]['value'] . '</h4>';
+//                        } else {
+//                            $title_array = $entity->get('title')->getValue();
+//                            $display_title = '<h4>' . $title_array[0]['value'] . '</h4>';
+//                        }
+//                        $output_formattablemarkup_displaytitle = new FormattableMarkup($display_title, []);
+//                        $rr->_entity->set('field_placeholder_display_title', $output_formattablemarkup_displaytitle); //<-- This worked!
+//
+//
+//
+//
+//
+//
+//                    } // END OF if(isset($parent_id))
+////
+////
+////                    $output_addtours = "<p>This is my test. I hope it works!</p>";
+////                    $output_formattablemarkup_addtour = new FormattableMarkup($output_addtours, []);
+////                    $rr->_entity->set('field_placeholder_display_name', $output_formattablemarkup_addtour, true); // field_placeholder_for_addtour2 has to be plain text in order to display in full_html.
+////
+//
+//        } // END OF foreach($view->result as $key => $rr)
+//
+//
+//
+//
+//
+//    } // END OF if ($view->id() == 'visitd9_main_calendar_v2')
+
+
+
+
+} // END OF function asuaec_visit_views_pre_render()
+
+
+
+/* helper added by Archana function to get total registrant */
+function _get_sundevilregistrant_count($event_id){
+	/* code to query the students registartnts content to get count of sun devil day registrants and their guests */
+			$database = \Drupal::database();
+            $nquery = $database->select('node__field_student_event_id', 'sei');
+            $nquery->fields('sei', ['entity_id']);
+            $nquery->condition('sei.field_student_event_id_value', $event_id,'=');
+            $nresult = $nquery->execute();
+            foreach($nresult as $ndata){
+                $nid[$ndata->entity_id] = $ndata->entity_id;
+            }
+            if(!empty($nid)){
+
+                $gquery = $database->select('node__field_student_guests', 'fsg');
+                $gquery->fields('fsg', ['field_student_guests_value']);
+                $gquery->condition('fsg.entity_id', $nid,'IN');
+                $gresult = $gquery->execute();
+                foreach($gresult as $gdata){
+                    $guests[] = $gdata->field_student_guests_value;
+                }
+
+                $total_registratnts = count($nid) + array_sum($guests);
+            }
+            else{
+                $total_registratnts = 0;
+            }
+	return $total_registratnts;
+}
+
+
+function asuaec_visit_preprocess_views_view_table__new_sun_devil_days_v2__block_6(&$variables){
+  $view = $variables['view'];
+  if($view->id() != 'new_sun_devil_days_v2') {
+    return;
+  }
+  $view->element['#attached']['library'][] = 'asuaec_visit/sundevilJsLib';
+
+  $rows = $variables['rows'];
+  foreach ($rows as $id => $row) {
+//    ksm($id, "id"); // Serial number from 0
+
+//    if($eventinstance_id == '6313') {
+//      ksm($rows[$id]['columns'], "rows id columns");
+//      \Drupal::logger('visit')->notice("rows id columns:<pre>" . print_r($rows[$id]['columns'], true) . "</pre>");
+//    }
+
+    // Event instance id
+    $eventinstance_id = trim(strip_tags($rows[$id]['columns']['id']['content'][0]['field_output']['#markup']->__toString()));
+    // Event series id
+    //$eventseries_id = trim(strip_tags($rows[$id]['columns']['eventseries_id']['content'][0]['field_output']['#markup']->__toString())); //<---This was empty when not logged in and resulted in error. Added a different View field to get event series id.
+    $eventseries_id = trim(strip_tags($rows[$id]['columns']['id_1']['content'][0]['field_output']['#markup']->__toString()));
+    // Person type
+    $personType = trim(strip_tags($rows[$id]['columns']['field_visitor_type_1']['content'][0]['field_output']['#markup']->__toString()));
+    $persontype_no_space = preg_replace('/\s+/', '', $personType);
+    // Event type
+    $etype = trim(strip_tags($rows[$id]['columns']['field_evtype']['content'][0]['field_output']['#markup']->__toString()));
+
+    // Start timestamp
+    $startend_timestamp = trim(strip_tags($rows[$id]['columns']['date__value_1']['content'][0]['field_output']['#markup']->__toString()));
+    $temp_array = explode('-',  preg_replace('/\s+/', '', $startend_timestamp));
+    $unixstarttime = trim($temp_array[0]);
+    $unixtotime = trim($temp_array[1]);
+
+    // Event id = series id + unix start time
+    $event_id = $eventseries_id . '-' . $unixstarttime;
+
+    // Display time
+    $datetime = new DateTime();
+    $datetime->setTimestamp($unixstarttime);
+    $datetime->setTimezone(new DateTimeZone('America/Phoenix'));
+    $event_date_time = $datetime->format('Y/m/d H:i:s'); // Adjust the format as needed
+
+    // Just date
+    $just_date = $datetime->format('Y-m-d');
+
+    // Time
+    $start_time_format = $datetime->format('h:i a');
+
+    $datetime2 = new DateTime();
+    $datetime2->setTimestamp($unixtotime);
+    $datetime2->setTimezone(new DateTimeZone('America/Phoenix'));
+    $end_time_format = $datetime2->format('h:i a');
+
+    // Campus
+    $campus = trim(strip_tags($rows[$id]['columns']['field_campus']['content'][0]['field_output']['#markup']->__toString()));
+    // Display title
+    $display_title = trim(strip_tags($rows[$id]['columns']['field_display_title']['content'][0]['field_output']['#markup']->__toString()));
+
+    // Prepare variables to be used in Views template: views-view-table--new-sun-devil-days-v2--block-6.html.twig
+    $variables['register_href'][$id] = "/registration-form?eid=$event_id&seriesid=$eventseries_id&etype=$etype&dt=$event_date_time&from=$start_time_format&to=$end_time_format&ts=$unixstarttime&ts2=$unixtotime&date=$just_date&instid=$eventinstance_id&campus=$campus&int=y&ptype=y&c-aid=null&c-eid=null";
+
+    $variables['register_btn_name'][$id] = "$personType|$etype|$unixstarttime|$unixtotime|$display_title|$campus|$start_time_format|$end_time_format";
+
+    $variables['register_btn_class'][$id] = "btn btn-maroon sundevil-btn register-btn-{$event_id}{$persontype_no_space}";
+
+
+    //--------------Capacity for Visit event and top-level Barrett tour----------------//
+    $variables['capacity'][$id] = 'not_full';
+    // Get capacity to use -- If capacity is overwriten use capacity from Event instance. Otherwise, use capacity from Event series.
+
+    // Load the series entity
+    $entity_type_eventseries = 'eventseries';
+    $entity_id_eventseries = $eventseries_id;
+    $entity_eventseries  = \Drupal::entityTypeManager()->getStorage($entity_type_eventseries)->load($entity_id_eventseries);
+
+    // Load the instance entity
+    $entity_type_eventinstance = 'eventinstance';
+    $entity_id_eventinstance = $eventinstance_id;
+    $entity_eventinstance = \Drupal::entityTypeManager()->getStorage($entity_type_eventinstance)->load($entity_id_eventinstance);
+
+    $capacity = _get_capacity_to_use($entity_eventseries, $entity_eventinstance);
+//    if($eventinstance_id == '6313') {
+//      ksm($capacity, "capacity");
+//    }
+    // Get how many people registered for the event here
+    // $event_start_date in 2023-05-17T15:00:00 format. It is in UTC.
+    $datetime3 = new DateTime();
+    $datetime3->setTimestamp($unixstarttime);
+    $datetime3->setTimezone(new DateTimeZone('UTC'));
+    $event_start_date = $datetime3->format('Y-m-d\TH:i:s');
+//    if($eventinstance_id == '6313') {
+//      ksm($event_start_date, "event_start_date in UTC");
+//    }
+    $registrant_count = _get_registrant_count($eventseries_id, null, null, $event_start_date);
+//    if($eventinstance_id == '6313') {
+//      ksm($registrant_count, "registrant_count");
+//    }
+
+    if($capacity != '') {
+      if ($registrant_count >= $capacity) { // Already full.
+        // Remove the row
+        //unset($variables['rows'][$id]); // Remove a row
+
+        // Registration closed
+        $variables['capacity'][$id] = 'full';
+
+        continue; // Go to next iteration.
+      }
+    }
+    // --------------END OF Capacity----------------//
+
+    // --------------Privacy------------------------//
+    $privacy = trim(strip_tags($rows[$id]['columns']['field_privacy']['content'][0]['field_output']['#markup']->__toString()));
+    if($privacy == 'Coming soon') {
+      $variables['privacy'][$id] = 'coming_soon';
+    } else if($privacy == 'Registration closed') {
+      $variables['privacy'][$id] = 'registration_closed';
+    }
+
+
+
+
+
+  } // END OF foreach ($rows as $id => $row) {
+} // END OF function asuaec_visit_preprocess_views_view_table__new_sun_devil_days__block_6(&$variables)
+
+
+function asuaec_visit_preprocess_views_view_table__new_sun_devil_days_v3(&$variables){
+  $view = $variables['view'];
+  if($view->id() != 'new_sun_devil_days_v3') {
+    return;
+  }
+  $view->element['#attached']['library'][] = 'asuaec_visit/sundevilJsLib';
+
+  $rows = $variables['rows'];
+  foreach ($rows as $id => $row) {
+    // --------------Test mode------------------------//
+    $test_mode = trim(strip_tags($rows[$id]['columns']['field_test_mode']['content'][0]['field_output']['#markup']->__toString()));
+    $roles = \Drupal::currentUser()->getRoles();
+    if ($test_mode === 'On') {
+      if(!(in_array('visit_admin', $roles) || in_array('administrator', $roles) || in_array('site_builder', $roles))) { // Anonymous user
+        unset($variables['rows'][$id]); // Remove a row
+        continue;
+      }
+    }
+    // --------------END OF Test mode-----------------//
+
+    // Event instance id
+    $eventinstance_id = trim(strip_tags($rows[$id]['columns']['id']['content'][0]['field_output']['#markup']->__toString()));
+    // Event series id
+    //$eventseries_id = trim(strip_tags($rows[$id]['columns']['eventseries_id']['content'][0]['field_output']['#markup']->__toString())); //<---This was empty when not logged in and resulted in error. Added a different View field to get event series id.
+    $eventseries_id = trim(strip_tags($rows[$id]['columns']['id_1']['content'][0]['field_output']['#markup']->__toString()));
+    // Person type
+//    $personType = trim(strip_tags($rows[$id]['columns']['field_visitor_type_1']['content'][0]['field_output']['#markup']->__toString()));
+//    $persontype_no_space = preg_replace('/\s+/', '', $personType);
+    // Event type
+    $etype = trim(strip_tags($rows[$id]['columns']['field_evtype']['content'][0]['field_output']['#markup']->__toString()));
+
+    $display_title = trim(strip_tags($rows[$id]['columns']['field_display_title']['content'][0]['field_output']['#markup']->__toString())); // Added on 4/3/2026
+
+    // Start timestamp
+    $startend_timestamp = trim(strip_tags($rows[$id]['columns']['date__value_1']['content'][0]['field_output']['#markup']->__toString()));
+    $temp_array = explode('-',  preg_replace('/\s+/', '', $startend_timestamp));
+    $unixstarttime = trim($temp_array[0]);
+    $unixtotime = trim($temp_array[1]);
+
+
+    // Display time
+    $datetime = new DateTime();
+    $datetime->setTimestamp($unixstarttime);
+    $datetime->setTimezone(new DateTimeZone('America/Phoenix'));
+    $event_date_time = $datetime->format('Y/m/d H:i:s'); // Adjust the format as needed
+
+    // Just date
+    $just_date = $datetime->format('Y-m-d');
+
+    // Time
+    $start_time_format = $datetime->format('h:i a');
+
+    $datetime2 = new DateTime();
+    $datetime2->setTimestamp($unixtotime);
+    $datetime2->setTimezone(new DateTimeZone('America/Phoenix'));
+    $end_time_format = $datetime2->format('h:i a');
+
+    // Get timestamp for Event id
+    $starttime_for_eventid = trim(strip_tags($rows[$id]['columns']['field_start_time_for_eventid']['content'][0]['field_output']['#markup']->__toString()));
+//    ksm($starttime_for_eventid, "starttime_for_eventid"); // 09:00 am
+
+    $newDateTime = DateTime::createFromFormat("Y-m-d h:i a", $just_date . '' . $starttime_for_eventid, new DateTimeZone('America/Phoenix'));
+    $timestamp_for_eventid = $newDateTime->getTimestamp();
+//    ksm($timestamp_for_eventid, "timestamp_for_eventid");
+
+    // Event id = series id + timestamp for Event id
+//    $event_id = $eventseries_id . '-' . $unixstarttime;
+    $event_id = $eventseries_id . '-' . $timestamp_for_eventid;
+
+    // Campus
+    $campus = trim(strip_tags($rows[$id]['columns']['field_campus']['content'][0]['field_output']['#markup']->__toString()));
+    // Display title
+    $display_title = trim(strip_tags($rows[$id]['columns']['field_display_title']['content'][0]['field_output']['#markup']->__toString()));
+
+    // Prepare variables to be used in Views template: views-view-table--new-sun-devil-days-v2--block-6.html.twig
+    // Switched to /registration-form-v2 on 4/3/2026.
+    // Needed to add the display title on 4/3/2026.
+    $variables['register_href'][$id] = "/registration-form-v2?eid=$event_id&seriesid=$eventseries_id&etype=$etype&dt=$event_date_time&from=$start_time_format&to=$end_time_format&ts=$unixstarttime&ts2=$unixtotime&date=$just_date&instid=$eventinstance_id&campus=$campus&displaytitle=$display_title&intlist=y&ptypelist=y&c-aid=null&c-eid=null";
+
+//    $variables['register_btn_name'][$id] = "$personType|$etype|$unixstarttime|$unixtotime|$display_title|$campus|$start_time_format|$end_time_format";
+    $variables['register_btn_name'][$id] = "noptype|$etype|$unixstarttime|$unixtotime|$display_title|$campus|$start_time_format|$end_time_format";
+
+//    $variables['register_btn_class'][$id] = "btn btn-maroon sundevil-btn register-btn-{$event_id}{$persontype_no_space}";
+//    $variables['register_btn_class'][$id] = "btn btn-maroon btn-sm sundevil-btn register-btn-{$event_id}noptype";
+    $variables['register_btn_class'][$id] = "btn btn-maroon sundevil-btn register-btn-{$event_id}noptype";
+
+
+
+    //--------------Capacity for Visit event and top-level Barrett tour----------------//
+    $variables['capacity'][$id] = 'not_full';
+    // Get capacity to use -- If capacity is overwriten use capacity from Event instance. Otherwise, use capacity from Event series.
+
+    // Load the series entity
+    $entity_type_eventseries = 'eventseries';
+    $entity_id_eventseries = $eventseries_id;
+    $entity_eventseries  = \Drupal::entityTypeManager()->getStorage($entity_type_eventseries)->load($entity_id_eventseries);
+
+    // Load the instance entity
+    $entity_type_eventinstance = 'eventinstance';
+    $entity_id_eventinstance = $eventinstance_id;
+    $entity_eventinstance = \Drupal::entityTypeManager()->getStorage($entity_type_eventinstance)->load($entity_id_eventinstance);
+
+    $capacity = _get_capacity_to_use($entity_eventseries, $entity_eventinstance);
+//    if($eventinstance_id == '6313') {
+//      ksm($capacity, "capacity");
+//    }
+    // Get how many people registered for the event here
+    // $event_start_date in 2023-05-17T15:00:00 format. It is in UTC.
+    $datetime3 = new DateTime();
+    $datetime3->setTimestamp($unixstarttime);
+    $datetime3->setTimezone(new DateTimeZone('UTC'));
+    $event_start_date = $datetime3->format('Y-m-d\TH:i:s');
+//    if($eventinstance_id == '6313') {
+//      ksm($event_start_date, "event_start_date in UTC");
+//    }
+    $registrant_count = _get_registrant_count($eventseries_id, null, null, $event_start_date);
+//    if($eventinstance_id == '6313') {
+//      ksm($registrant_count, "registrant_count");
+//    }
+
+    if($capacity != '') {
+      if ($registrant_count >= $capacity) { // Already full.
+        // Remove the row
+        //unset($variables['rows'][$id]); // Remove a row
+
+        // Registration closed
+        $variables['capacity'][$id] = 'full';
+
+        continue; // Go to next iteration.
+      }
+    }
+    // --------------END OF Capacity----------------//
+
+    // --------------Privacy------------------------//
+    $privacy = trim(strip_tags($rows[$id]['columns']['field_privacy']['content'][0]['field_output']['#markup']->__toString()));
+    if($privacy == 'Coming soon') {
+      $variables['privacy'][$id] = 'coming_soon';
+    } else if($privacy == 'Registration closed') {
+      $variables['privacy'][$id] = 'registration_closed';
+    }
+
+
+
+
+
+  } // END OF foreach ($rows as $id => $row)
+} // END OF function asuaec_visit_preprocess_views_view_table__new_sun_devil_days_v3(&$variables)
+
+
+
+
+
+
+
+/**
+ * @param $entity_id_eventseries
+ * @param $entity_id_eventinstance
+ * @return string
+ * Returns 'open' or 'full'.
+ *
+ * This is for Barrett under Exp ASU.
+ * Called from _check_barrett_event_is_happening().
+ */
+function _check_capacity($entity_id_eventseries, $entity_id_eventinstance) {
+    $ret_value = 'open';
+
+    //--------------Capacity for Visit event and top-level Barrett tour----------------//
+
+    $entity_type_eventseries = 'eventseries';
+    $entity_eventseries  = \Drupal::entityTypeManager()->getStorage($entity_type_eventseries)->load($entity_id_eventseries);
+
+    // Load the instance entity
+    $entity_type_eventinstance = 'eventinstance';
+    $entity_eventinstance = \Drupal::entityTypeManager()->getStorage($entity_type_eventinstance)->load($entity_id_eventinstance);
+
+    // Get capacity to use -- If capacity is overwriten use capacity from Event instance. Otherwise, use capacity from Event series.
+    $capacity = _get_capacity_to_use($entity_eventseries, $entity_eventinstance);
+
+    // Get start time in 2023-05-17T15:00:00 format -- If start time is overwriten use start time from Event instance. Otherwise, use start time from Event series.
+    $starttime = _get_starttime_to_use($entity_eventinstance); // TODO: need to test!
+
+    // Get how many people registered for the event here
+    $registrant_count = _get_registrant_count($entity_id_eventseries, null, null, $starttime );
+//    ksm($registrant_count, "registrant_count - _check_capacity");
+
+    if($capacity != '') {
+        if ($registrant_count >= $capacity) { // Already full.
+            $ret_value = 'full';
+        }
+    }
+    // --------------END OF Capacity----------------//
+
+    // ret_value: open or full
+    return $ret_value;
+}
+
+
+/**
+ * @param $date // In yyyymmdd format
+ * @param $event_series_id
+ * @return mixed
+ *
+ * Returns Barrett event instance id from date and top-level Barret Event series id.
+ * Called from VisitBevformHndler.php at line 829.
+ */
+function _get_barrett_eventinstanceid_from_date_and_eventseriesid($date, $event_series_id) {
+    $barrett_instance_id = '';
+    // Load View4: Barrett find Event instance id from entity id and date
+    $view4 = \Drupal\views\Views::getView('barrett_find_event_instance_id_from_entity_id_and_date');
+    $view4->setDisplay('default');
+    $view4->setArguments([$date, $event_series_id]); // Date in yyyymmdd format
+    $view4->execute();
+
+    // Get the results of the Additional tours view.
+    $view4_result = $view4->result;
+//    ksm($view4_result, "view4_result");
+
+    $barrett_instance_id_array = [];
+//    $barrett_eventseries_ids_array = [];
+//    $barrett_array = [];
+    foreach ($view4_result as $row) {
+        $theid = $row->_entity->id();
+//        ksm($theid, "theid");
+        array_push($barrett_instance_id_array, $theid);
+//        ksm($barrett_instance_id_array, "barrett_instance_id_array inside foreach"); // 313
+    }
+//    ksm($barrett_instance_id_array, "barrett_instance_id_array"); // 313
+    $barrett_instance_id = $barrett_instance_id_array[0];
+    return $barrett_instance_id;
+}
+
+
+/**
+ * @param string $date in yyyymmdd format
+ *
+ * @return boolean
+ * Returns true if $barrett_entity_id is included in Barrett tours that is happening on the day AND capacity is not full.
+ * Returns false if $barrett_entity_id is not happening on the day OR $barrett_entity_id is included in Barrett tours that is happening on the day, but capacity full.
+ *
+ * Called from _prepare_output_barrett().
+ */
+function _check_barrett_event_is_happening($date, $barrett_entity_id) { // $date is in yyyymmdd format
+    $ret_value = false;
+    // Load View3: Barrett tour check
+    $view3 = \Drupal\views\Views::getView('barrett_tour_check');
+//            $view2->setArguments($parent_id); // Parent id
+    $view3->setArguments([$date]); // Date in yyyymmdd format
+    $view3->setDisplay('default');
+    $view3->execute();
+    // Get the results of the Additional tours view.
+    $view3_result = $view3->result;
+
+//    $barrett_instance_id_array = [];
+    $barrett_eventseries_ids_array = [];
+    $barrett_array = [];
+    foreach ($view3_result as $row) {
+        $theid = $row->_entity->id();
+//        array_push($barrett_instance_id_array, $theid);
+        array_push($barrett_eventseries_ids_array, _get_eventseries_id($theid));
+        $barrett_array += [_get_eventseries_id($theid) => $theid]; // This is to look up Instance ID from Series ID
+    }
+//    ksm($barrett_instance_id_array, "barrett_tour_instance_id_array"); // 334
+//    ksm($barrett_eventseries_id_array, "barrett_eventseries_id_array"); // 18
+//    ksm($barrett_array, "barrett_array");
+
+    // $barrett_eventseries_ids_array contains the Barrett series ids that is happening on the day.
+    // See if $barrett_entity_id is included in $barrett_eventseries_ids_array
+    if(in_array($barrett_entity_id, $barrett_eventseries_ids_array)) {
+        if(_check_capacity($barrett_entity_id, $barrett_array[$barrett_entity_id]) == 'open') { // $barrett_array[$barrett_entity_id] contains Instance ID.
+            $ret_value = true;
+        } else { // When _check_capacity() returns 'full'
+            $ret_value = false;
+        }
+    } else {
+        $ret_value = false;
+    }
+//    return $barrett_eventseries_ids_array; // 451 and 449 -- 449 is top level Barrett on 5/24. 451 ise the Barrett under Exp ASU.
+    return $ret_value;
+}
+
+
+/**
+ * @param array $barrett_entity_ids_array
+ *
+ * @param string $thedate_clicked
+ *
+ * @return string $output_barrett
+ *
+ * Helping function
+ * Iterate view2's result and return html output for Barrett tour under Experience ASU.
+ *
+ * Calls function _check_barrett_event_is_happening(), and then, _check_barrett_event_is_happening function calls _check_capacity() function to check capacity.
+ */
+function _prepare_output_barrett($barrett_entity_ids_array, $thedate_clicked, $barrett_under_expasu = true) { // This is only for Barrett under Experience ASU. So, $barrett_under_expasu is always passed true.
+    $output_barrett = '';
+    // Load Barrett Event series entity to get title and time
+    foreach($barrett_entity_ids_array as $barrett_entity_id) {
+
+        // Compare and check if the Barrett event is happening. _check_barrett_event_is_happening() also checks capacity.
+        if(_check_barrett_event_is_happening($thedate_clicked, $barrett_entity_id)) {
+
+            $entity_type_barrett = 'eventseries';
+            $entity_id_barrett = $barrett_entity_id;
+            $entity_barrett = \Drupal::entityTypeManager()->getStorage($entity_type_barrett)->load($entity_id_barrett);
+            $barrett_display_title = $entity_barrett->get('field_display_title')->getValue()[0]['value'];
+            $barrett_display_title_html = '<div><strong>' . $entity_barrett->get('field_display_title')->getValue()[0]['value'] . '</strong>(optional)</div>';
+
+            // Get type - Added on 9/28/2023.
+            $barrett_evtype = $entity_barrett->get('field_evtype')->getValue()[0]['value'];
+//            ksm($barrett_evtype, "barrett_evtype");
+
+            // Get instance
+            // Load the instance entity
+            $entity_id_eventinstance = _get_barrett_eventinstanceid_from_date_and_eventseriesid($thedate_clicked, $entity_id_barrett);
+            $entity_type_eventinstance = 'eventinstance';
+            $entity_eventinstance = \Drupal::entityTypeManager()->getStorage($entity_type_eventinstance)->load($entity_id_eventinstance);
+
+            //----------- Get Barrett actual start and end time ------------------//
+            // Need to check if time was overwritten for the Barrett under Exp ASU. So, use date/time from Event instance.
+
+            // Let's look at instance
+            // Start time
+            $start_time_string = $entity_eventinstance->get('date')->getValue()[0]['value']; // 2023-07-19T14:00:00
+//            date_default_timezone_set('UTC'); //<--Don't use this!
+            $date_obj = DateTime::createFromFormat("Y-m-d\TH:i:s", $start_time_string, new DateTimeZone('UTC'));
+            $date_obj->setTimeZone(new DateTimeZone('America/Phoenix'));
+//            ksm($date_obj, "date_obj");
+            $date_formatted = $date_obj->format('g:i a');
+//            ksm($date_formatted, "date_formatted"); // 7:00 am AZ time
+            // Get actual Start timestamp
+            $start_timestamp = $date_obj->getTimestamp();
+
+            // End time
+            $end_time_string = $entity_eventinstance->get('date')->getValue()[0]['end_value']; // 2023-07-19T15:30:00
+            $date_obj2 = DateTime::createFromFormat("Y-m-d\TH:i:s", $end_time_string, new DateTimeZone('UTC'));
+            $date_obj2->setTimeZone(new DateTimeZone('America/Phoenix'));
+//            ksm($date_obj2, "date_obj2");
+            $date_formatted2 = $date_obj2->format('g:i a');
+//            ksm($date_formatted2, "date_formatted 2"); // 7:00 am AZ time
+            // Get actual End timestamp
+            $end_timestamp = $date_obj2->getTimestamp();
+
+            //----------- Timestamp that we can use for event id which we calculate using the Time only field in Event series entity ---------------//
+            // $start_timestamp is just for backup in case Original time is empty.
+            $timestamp_for_eventid = _get_timestamp_for_eventid($entity_id_barrett, $thedate_clicked, $start_timestamp);
+            //----------- END OF Timestamp that we can use for event id which we calculate using the Time only field in Event series entity ---------------//
+
+            if($barrett_under_expasu == true) {
+                $barrett_css_class = "barrett-tour-under-expasu mb-2";
+                $barrett_input_name = "event-barrett-under-expasu";
+            } else {
+                $barrett_css_class = "barrett-tour";
+                $barrett_input_name = "event-barrett";
+            }
+
+            // NOTES:
+            // $start_timestamp -- Actual start timestamp for Barrett tour under Exp ASU
+            // $timestamp_for_eventid -- Original start time that was calculated using Time only field and the date clicked.
+
+            // Radio button version
+//            $output_barrett .= '<div class="' . $barrett_css_class . '">' . $barrett_display_title_html  . '<input class="ml-1" type="radio" name="' . $barrett_input_name . '" value="' . $barrett_entity_id . '-' . $timestamp_for_eventid . "|" . $start_timestamp . "|" . $end_timestamp . "|" . $barrett_display_title . '" > ' . _format_time_webstandard($thedate_clicked, $date_formatted) . ' &mdash; ' . _format_time_webstandard($thedate_clicked, $date_formatted2) . '</div>';
+
+            $barrett_info_tool_tip = '';
+            if($barrett_evtype == "Barrett tour") {
+                // Add tooltip for Barrett - Added on 9/27/2023.
+                $barrett_tip_data = "<p>Established in 1988, Barrett has been recognized as the \"gold standard\" among honors colleges in the nation. An undergraduate student can be engaged in the Barrett experience at any of ASU’s four metropolitan Phoenix campuses.</p>";
+                $barrett_info_tool_tip = '<div class="ml-1 custom-tooltip"><div class="custom-tooltip-container-acadsessions"><button tabindex="0" class="uds-tooltip uds-tooltip-button uds-tooltip-dark" aria-describedby="tooltip-desc-1"><span class="fa-stack"><svg class="campus-svg svg-inline--fa fa-circle fa-w-16 fa-stack-2x" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="#8c1d40" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path></svg><svg class="svg-inline--fa fa-info fa-w-6 fa-stack-1x" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="info" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512" data-fa-i2svg=""><path fill="#ffffff" d="M20 424.229h20V279.771H20c-11.046 0-20-8.954-20-20V212c0-11.046 8.954-20 20-20h112c11.046 0 20 8.954 20 20v212.229h20c11.046 0 20 8.954 20 20V492c0 11.046-8.954 20-20 20H20c-11.046 0-20-8.954-20-20v-47.771c0-11.046 8.954-20 20-20zM96 0C56.235 0 24 32.235 24 72s32.235 72 72 72 72-32.235 72-72S135.764 0 96 0z"></path></svg></span></button><div role="tooltip" class="custom-tooltip-description" id="tooltip-desc-1"><button style="color:#fff;" type="button" class="btn btn-default popup-close-btn"><svg class="svg-inline--fa fa-window-close fa-w-16" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="window-close" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-83.6 290.5c4.8 4.8 4.8 12.6 0 17.4l-40.5 40.5c-4.8 4.8-12.6 4.8-17.4 0L256 313.3l-66.5 67.1c-4.8 4.8-12.6 4.8-17.4 0l-40.5-40.5c-4.8-4.8-4.8-12.6 0-17.4l67.1-66.5-67.1-66.5c-4.8-4.8-4.8-12.6 0-17.4l40.5-40.5c4.8-4.8 12.6-4.8 17.4 0l66.5 67.1 66.5-67.1c4.8-4.8 12.6-4.8 17.4 0l40.5 40.5c4.8 4.8 4.8 12.6 0 17.4L313.3 256l67.1 66.5z"></path></svg></button><div class="formatted-text">' . $barrett_tip_data . '</div></div></div></div>';
+
+            } else {
+            }
+
+            // Checkbox verson
+//            $output_barrett .= '<div class="' . $barrett_css_class . '">' . $barrett_display_title_html  . '<input class="ml-1" type="checkbox" name="' . $barrett_input_name . '" value="' . $barrett_entity_id . '-' . $timestamp_for_eventid . "|" . $start_timestamp . "|" . $end_timestamp . "|" . $barrett_display_title . '" > ' . _format_time_webstandard($thedate_clicked, $date_formatted) . ' &mdash; ' . _format_time_webstandard($thedate_clicked, $date_formatted2) . '</div>';
+
+            $output_barrett .= '<div class="' . $barrett_css_class . '">' . $barrett_display_title_html  . '<input class="ml-1" type="checkbox" name="' . $barrett_input_name . '" value="' . $barrett_entity_id . '-' . $timestamp_for_eventid . "|" . $start_timestamp . "|" . $end_timestamp . "|" . $barrett_display_title . '" > ' . _format_time_webstandard($thedate_clicked, $date_formatted) . ' &mdash; ' . _format_time_webstandard($thedate_clicked, $date_formatted2) . $barrett_info_tool_tip . '</div>';
+
+
+            // TODO: Place it in array in order to sort chronologically
+
+
+        } // END OF if(in_array($barrett_entity_id, $barrett_eventseries_ids_array))
+    } // END OF foreach($barrett_entity_ids_array as $barrett_entity_id)
+
+    return $output_barrett;
+}
+
+
+/**
+ * @param $entity_paragraph
+ * @param $thedate_clicked // In yyyymmdd format
+ * @param $eventseries_entity_id
+ * @param $addtour_paragraph_entity_id
+ * @return string
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ *
+ * Called from _prepare_output_addtours().
+ * Returns "open" or "full".
+ * When Start time for entity ID is missing, returns full.
+ */
+function _check_capacity_for_addtour($entity_paragraph, $thedate_clicked, $eventseries_entity_id, $addtour_paragraph_entity_id) {
+    $retVavlue = 'open';
+
+    // STEP 1: Get Additional tour top-level capacity
+    $capacity = $entity_paragraph->get('field_capacity')->getValue() != null ? $entity_paragraph->get('field_capacity')->getValue()[0]['value'] : '';
+//        ksm($capacity, "capacity addtour top level"); // <-- Additional tour top-level capacity
+
+    // STEP 2: Get boolean value for capacity overwrite
+    $capacity_overwrite_bool = $entity_paragraph->get('field_overwrite_capacity_addtour')->getValue() != null ? $entity_paragraph->get('field_overwrite_capacity_addtour')->getValue()[0]['value'] : '';
+//        ksm($capacity_overwrite_bool, "capacity_overwrite_bool");
+
+    // STEP 3: Get capacity to use
+    // NOTES: Include code for overwrite
+    // Check if the overwrite checkbox (field_overwrite_capacity_addtour) is checked.
+    // If checked, iterate Capacity set (Date and capacity) and use the one with the correct date.
+
+    $capacity_to_use = $capacity;
+    if($capacity_overwrite_bool == '1') {
+        $capacity_overwrite_para_ids = $entity_paragraph->get('field_capacity_overwrite_para')->getValue() != null ? $entity_paragraph->get('field_capacity_overwrite_para')->getValue() : ''; // 329
+//        ksm($capacity_overwrite_para_ids, "capacity_overwrite_para test");
+
+        foreach($capacity_overwrite_para_ids as $overwrite_para) {
+
+            $overwrite_para_id = $overwrite_para['target_id'];
+//            ksm($capacity_overwrite_para_id, "capacity_overwrite_para_id");
+
+            // Load capacity overwrite paragraph using Paragraph ID
+            $entity_type_overwrite = 'paragraph';
+            $entity_id_overwrite = $overwrite_para_id;
+            $entity_paragraph_overwrite = \Drupal::entityTypeManager()->getStorage($entity_type_overwrite)->load($entity_id_overwrite);
+//            ksm($entity_paragraph_capoverwrite, "entity_paragraph_capoverwrite");
+
+            // Get Capacity overwrite -> Date (Overwritten date)
+            $date_overwrite = $entity_paragraph_overwrite->get('field_date_only')->getValue() != null ? $entity_paragraph_overwrite->get('field_date_only')->getValue()[0]['value'] : ''; // 2023-06-13
+//            ksm($date_capoverwrite, "date_capoverwrite"); // 2023-06-13, 2023-06-02
+            $date_overwrite_nodash_str = str_replace("-","",$date_overwrite);
+//            ksm($date_capoverwrite_nodash_str, "date_capoverwrite_nodash string");
+
+            // Get date clicked
+//            ksm($thedate_clicked, "thedate_clicked"); // 20230613
+            if($date_overwrite_nodash_str == $thedate_clicked) { // If date matches
+                // Get Capacity overwrite -> Capacity (Overwritten capacity).
+                $capacity_overwrite = $entity_paragraph_overwrite->get('field_capacity')->getValue() != null ? $entity_paragraph_overwrite->get('field_capacity')->getValue()[0]['value'] : '';
+//                ksm($capacity_capoverwrite, "capacity_capoverwrite"); // 50
+                $capacity_to_use = $capacity_overwrite;
+            }
+
+        } // END OF foreach
+    } // END OF if($capacity_overwrite_bool == '1')
+//    ksm($capacity_to_use, "capacity_to_use");
+
+
+    // STEP 4: Get how many people registered for the Additional tour
+
+    // Get timestamp for Additional tour ID
+//            ksm($entity_paragraph, "entity_paragraph");
+    // NOTES: Instead of $entity_paragraph->get('field_time_range')->getValue()[0]['from'], we need to use field_start_time_for_addtourid field value.
+//    $time_range_from = $entity_paragraph->get('field_time_range')->getValue()[0]['from'];
+    //        ksm($time_range_from, "time_range_from"); // 57600
+
+    $start_time_for_addtourid = '';
+    if($entity_paragraph->hasField('field_start_time_for_addtourid') == true && $entity_paragraph->get('field_start_time_for_addtourid')->getValue() != false) {
+        $start_time_for_addtourid = $entity_paragraph->get('field_start_time_for_addtourid')->getValue()[0]['value'];
+//        ksm($start_time_for_addtourid, "start_time_for_addtourid - _check_capacity_for_addtour()");
+    }
+    if($start_time_for_addtourid == '') {
+        \Drupal::logger('visit')->notice("Start time for additional tour ID has to be entered for Event series ID:" . $eventseries_entity_id);
+        return 'full';
+    }
+    $datenew = DateTime::createFromFormat("Ymd g:i a", $thedate_clicked . "00:00 am");
+    $timestamp_ofthedateat0am = $datenew->getTimestamp(); // Timestamp of the date at 0:00am
+//    $timestamp_datetime_start = $timestamp_ofthedateat0am + $time_range_from; // Add timestamp of the date at 0:00am and timestamp for the event time.
+    $timestamp_for_addtourid = $timestamp_ofthedateat0am + intval($start_time_for_addtourid); // Add timestamp of the date at 0:00am and timestamp for the event time.
+
+    // Get Additional tour ID ex. 1-1-1686672000 (Parent Event series id + Paragraph id + starttime)
+//    $addtour_id = $eventseries_entity_id . '-' . $addtour_paragraph_entity_id . '-' . $timestamp_datetime_start;
+    $addtour_id = $eventseries_entity_id . '-' . $addtour_paragraph_entity_id . '-' . $timestamp_for_addtourid;
+//            ksm($addtour_id, "addtour_id"); // ex. 1-328-1686697200, 1-6-1686668400
+
+
+    // Get how many people already registered for the Additional tour
+    // Count Additional tour registrant node.
+    // DB
+    $nodeStorage = \Drupal::entityTypeManager()->getStorage('node');
+    $ids = $nodeStorage->getQuery()
+        ->accessCheck(FALSE)
+        ->condition('type', 'additional_tour_registrant') // type = bundle id (machine name)
+        ->condition('field_additional_tour_id', $addtour_id, '=')
+        ->execute();
+
+    $addtourreg_nodes = $nodeStorage->loadMultiple($ids);
+    //    ksm($student_registered_nodes, "student_registered_nodes");
+    // Registrant count
+    $registrant_count = sizeof($addtourreg_nodes);
+    //    ksm($registrant_count, "registrant_count new");
+
+    // Guest count
+    $guest_count = 0;
+    foreach ($addtourreg_nodes as $nid => $node) {
+        $field_student_guests_array = $node->get('field_student_guests')->getValue();
+        //        ksm($field_student_guests_array, "field_student_guests");
+        if(sizeof($field_student_guests_array) > 0) {
+            $field_student_guests = $node->get('field_student_guests')->getValue()[0]['value'];
+            $guest_count = $guest_count + $field_student_guests;
+        }
+    }
+    // Put together registrant count and guest count
+    $registrant_count = $registrant_count + $guest_count;
+    //        ksm($registrant_count, "registrant_count"); // Correct!
+
+
+    // STEP 5: Finally Compare registrant count with capacity to use
+//    ksm($registrant_count, "registrant_count");
+//    ksm($capacity_to_use, "capacity_to_use right before if");
+    if($capacity_to_use != '') {
+        if ($registrant_count >= $capacity_to_use) { // Already full.
+            // Remove the row
+//            continue; // Go to next iteration.
+            $retVavlue = "full";
+        }
+    }
+//    ksm($retVavlue, "retValue");
+    return $retVavlue;
+} // END OF function _check_capacity_for_addtour()
+
+
+/**
+ * @param $entity_paragraph
+ * @param $thedate_clicked // In yyyymmdd format
+ * @param $eventseries_entity_id
+ * @param $addtour_paragraph_entity_id
+ * @return mixed|string
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ *
+ * Returns actual capacity to use.
+ * Called from VisitWebformHandler.php at line 781.
+ */
+function _get_capacity_for_addtour($entity_paragraph, $thedate_clicked, $eventseries_entity_id, $addtour_paragraph_entity_id) {
+
+    // STEP 1: Get Additional tour top-level capacity
+    $capacity = $entity_paragraph->get('field_capacity')->getValue() != null ? $entity_paragraph->get('field_capacity')->getValue()[0]['value'] : '';
+//        ksm($capacity, "capacity addtour top level"); // <-- Additional tour top-level capacity
+
+    // STEP 2: Get boolean value for capacity overwrite
+    $capacity_overwrite_bool = $entity_paragraph->get('field_overwrite_capacity_addtour')->getValue() != null ? $entity_paragraph->get('field_overwrite_capacity_addtour')->getValue()[0]['value'] : '';
+//        ksm($capacity_overwrite_bool, "capacity_overwrite_bool");
+
+    // STEP 3: Get capacity to use
+    // NOTES: Include code for overwrite
+    // Check if the overwrite checkbox (field_overwrite_capacity_addtour) is checked.
+    // If checked, iterate Capacity set (Date and capacity) and use the one with the correct date.
+
+    $capacity_to_use = $capacity;
+    if($capacity_overwrite_bool == '1') {
+        $capacity_overwrite_para_ids = $entity_paragraph->get('field_capacity_overwrite_para')->getValue() != null ? $entity_paragraph->get('field_capacity_overwrite_para')->getValue() : ''; // 329
+//        ksm($capacity_overwrite_para_ids, "capacity_overwrite_para test");
+
+        foreach($capacity_overwrite_para_ids as $overwrite_para) {
+
+            $overwrite_para_id = $overwrite_para['target_id'];
+//            ksm($capacity_overwrite_para_id, "capacity_overwrite_para_id");
+
+            // Load capacity overwrite paragraph using Paragraph ID
+            $entity_type_overwrite = 'paragraph';
+            $entity_id_overwrite = $overwrite_para_id;
+            $entity_paragraph_overwrite = \Drupal::entityTypeManager()->getStorage($entity_type_overwrite)->load($entity_id_overwrite);
+//            ksm($entity_paragraph_capoverwrite, "entity_paragraph_capoverwrite");
+
+            // Get Capacity overwrite -> Date (Overwritten date)
+            $date_overwrite = $entity_paragraph_overwrite->get('field_date_only')->getValue() != null ? $entity_paragraph_overwrite->get('field_date_only')->getValue()[0]['value'] : ''; // 2023-06-13
+//            ksm($date_capoverwrite, "date_capoverwrite"); // 2023-06-13, 2023-06-02
+            $date_overwrite_nodash_str = str_replace("-","",$date_overwrite);
+//            ksm($date_capoverwrite_nodash_str, "date_capoverwrite_nodash string");
+
+            // Get date clicked
+//            ksm($thedate_clicked, "thedate_clicked"); // 20230613
+            if($date_overwrite_nodash_str == $thedate_clicked) { // If date matches
+                // Get Capacity overwrite -> Capacity (Overwritten capacity).
+                $capacity_overwrite = $entity_paragraph_overwrite->get('field_capacity')->getValue() != null ? $entity_paragraph_overwrite->get('field_capacity')->getValue()[0]['value'] : '';
+//                ksm($capacity_capoverwrite, "capacity_capoverwrite"); // 50
+                $capacity_to_use = $capacity_overwrite;
+            }
+
+        } // END OF foreach
+
+    } // END OF if($capacity_overwrite_bool == '1')
+//    ksm($capacity_to_use, "capacity_to_use");
+    return $capacity_to_use;
+} // END OF function _get_capacity_for_addtour()
+
+
+/**
+ * @param $entity_paragraph
+ * @param $thedate_clicked
+ * @param $eventseries_entity_id
+ * @param $addtour_paragraph_entity_id
+ * @return array
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ *
+ * Returns array of ttimestamps:
+ * - Actual start timestamp
+ * - Actual end timestamp
+ * - timestamp for addtour id
+ *
+ * Called from VisitWebformHandler.php at line 792.
+ */
+function _get_timestamps_for_addtour($entity_paragraph, $thedate_clicked, $eventseries_entity_id, $addtour_paragraph_entity_id) {
+
+    // STEP 1: Get original Time range values in Event series
+    $time_range_from = $entity_paragraph->get('field_time_range')->getValue()[0]['from']; // Added isset on 6/30/2023
+    $time_range_to = $entity_paragraph->get('field_time_range')->getValue()[0]['to'];
+//        $time_range_to = isset($entity_paragraph->get('field_time_range')->getValue()[0]['to']) ? $entity_paragraph->get('field_time_range')->getValue()[0]['to'] : ''; // Added isset on 6/30/2023
+//        ksm($time_range_from, "time_range_from - original");
+//        ksm($time_range_to, "time_range_to - original");
+
+    // STEP 2: Get boolean value for Time range overwrite
+    $timerange_overwrite_bool = $entity_paragraph->get('field_overwrite_time_addtour')->getValue() != null ? $entity_paragraph->get('field_overwrite_time_addtour')->getValue()[0]['value'] : '';
+//        ksm($timerange_overwrite_bool, "timerange_overwrite_bool");
+
+    // STEP 3: Get Time range to use
+    $timerange_from_to_use = $time_range_from;
+    $timerange_to_to_use = $time_range_to;
+    if($timerange_overwrite_bool == '1') {
+        $time_overwrite_para_ids = $entity_paragraph->get('field_time_overwrite_para')->getValue() != null ? $entity_paragraph->get('field_time_overwrite_para')->getValue() : ''; // 329
+//            ksm($time_overwrite_para_ids, "time_overwrite_para_ids");
+
+        foreach($time_overwrite_para_ids as $overwrite_para) {
+            $overwrite_para_id = $overwrite_para['target_id'];
+//                ksm($overwrite_para_id, "time_overwrite_para_id");
+
+            // Load the time overwrite paragraph using Paragraph ID
+            $entity_type_overwrite = 'paragraph';
+            $entity_id_overwrite = $overwrite_para_id;
+            $entity_paragraph_overwrite = \Drupal::entityTypeManager()->getStorage($entity_type_overwrite)->load($entity_id_overwrite);
+//                ksm($entity_paragraph_overwrite, "entity_paragraph_overwrite");
+
+            // Get Time range overwrite -> Date (Overwritten date) -- Which date when we need to overwrite
+            $date_overwrite = $entity_paragraph_overwrite->get('field_date_only')->getValue() != null ? $entity_paragraph_overwrite->get('field_date_only')->getValue()[0]['value'] : ''; // 2023-06-13
+//                ksm($date_overwrite, "date_timeoverwrite"); // 2023-06-13, 2023-06-02
+            $date_overwrite_nodash_str = str_replace("-","",$date_overwrite);
+//                ksm($date_overwrite_nodash_str, "date_overwrite_nodash_str");
+
+            // Get date clicked
+//                ksm($thedate_clicked, "thedate_clicked"); // 20230613
+            if($date_overwrite_nodash_str == $thedate_clicked) { // If date matches
+                // Get Time range overwrite -> Time range (Overwritten Time range).
+                $timerange_overwrite_from = $entity_paragraph_overwrite->get('field_time_range')->getValue() != null ? $entity_paragraph_overwrite->get('field_time_range')->getValue()[0]['from'] : '';
+                $timerange_overwrite_to = $entity_paragraph_overwrite->get('field_time_range')->getValue() != null ? $entity_paragraph_overwrite->get('field_time_range')->getValue()[0]['to'] : '';
+//                    ksm($timerange_overwrite_from, "timerange_overwrite_from");
+//                    ksm($timerange_overwrite_to, "timerange_overwrite_to");
+                $timerange_from_to_use = $timerange_overwrite_from;
+                $timerange_to_to_use = $timerange_overwrite_to;
+            }
+        } // END OF foreach
+    } // END OF if($time_overwrite_bool == '1')
+
+    //---------- END OF Additional tour Time range ------------//
+
+    //---------- Prepare 3 timestamps: Actual start and end. Also, timestamp for addtour id ----------------------------------
+
+    // NOTES: In addition to "Time range from", also grab Time field value. Need to use Time field value for Additional tour ID and for capacity counting.
+    $time_for_addtourid = $entity_paragraph->get('field_start_time_for_addtourid')->getValue()[0]['value'];
+//        ksm($time_for_addtourid, "time_for_addtourid");
+
+    // Format time
+    $datenew = DateTime::createFromFormat("Ymd g:i a", $thedate_clicked . "00:00 am", new DateTimeZone('America/Phoenix'));
+    $timestamp_ofthedateat0am = $datenew->getTimestamp(); // Timestamp of the date at 0:00am
+//                    ksm($datenew->format("Y/m/d g:i a"), "test"); // <--- GMT 12:00am
+//                    ksm($timestamp_ofthedateat0am, "timestamp_ofthedateat0am");
+
+    // Actual start time timestamp
+    $timestamp_datetime_start = $timestamp_ofthedateat0am + $timerange_from_to_use; // Add timestamp of the date at 0:00am and timestamp for the event time.
+    $timestamp_datetime_end = $timestamp_ofthedateat0am + $timerange_to_to_use;
+    // Timestamp for Add tour ID
+    $timestamp_for_addtourid = $timestamp_ofthedateat0am + $time_for_addtourid;
+
+    $timestamp_array = array(
+        'start' => $timestamp_datetime_start,
+        'end' => $timestamp_datetime_end,
+        'timestamp_for_addtourid' => $timestamp_for_addtourid,
+    );
+
+    return $timestamp_array;
+
+} // END OF function _get_timestamps_for_addtour($entity_paragraph, $thedate_clicked, $eventseries_entity_id, $addtour_paragraph_entity_id)
+
+
+/**
+ * @param $addtour_paragraph_entity_ids_array
+ * @param $collegesArrayBasedOnCat
+ * @param $thedate_clicked
+ * @param $eventseries_entity_id
+ * @param $campus
+ * @return array
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ *
+ * Helping function
+ * Iterate view2's result and return html output for additional tours (academic sessions)
+ */
+function _prepare_output_addtours($addtour_paragraph_entity_ids_array, $collegesArrayBasedOnCat, $thedate_clicked, $eventseries_entity_id,$campus) { //$campus added by Archana
+
+    $addtour_array_collegesession = [];
+    $addtour_array_housingtour = [];
+
+    foreach($addtour_paragraph_entity_ids_array as $addtour_paragraph_entity_id) {
+
+        $entity_type = 'paragraph';
+        $entity_id = $addtour_paragraph_entity_id;
+        $entity_paragraph = \Drupal::entityTypeManager()->getStorage($entity_type)->load($entity_id);
+//        ksm($entity_paragraph, "entity_para");
+
+        //--------------- Check Privacy ------------------//
+        // NOTES: If it is Private, don't show it. Otherwise, show it.
+        $privacy = $entity_paragraph->hasField('field_privacy') && sizeof($entity_paragraph->get('field_privacy')->getValue()) > 0 ? $entity_paragraph->get('field_privacy')->getValue()[0]['value'] : '';
+        if($privacy == 'Private') {
+            continue; // Go to next iteration.
+        }
+        //--------------- END OF Check Privacy ------------------//
+
+        //----------Check Additional tour type -----------------
+
+        // Get type of Additional tour
+        $addtour_type = $entity_paragraph->get('field_addtour_type')->getValue() != null ? $entity_paragraph->get('field_addtour_type')->getValue()[0]['value'] : '';
+        // NOTES:
+        // For College session, we need to check College field in the paragraph (additional tour) and display only paragraph (additional tour) with college that is associated with the Visit bucket selected.
+        // For Housing tour, always display the paragraph (additional tour).
+		$college = ''; // Added on 5/6/2024
+        if($addtour_type == "College session") {
+            // Get college. We need to see if we can include this paragraph or not based on the Visit bucket.
+            $college = $entity_paragraph->get('field_college')->getValue() != null ? $entity_paragraph->get('field_college')->getValue()[0]['value'] : '';
+//            ksm($college, "college");
+//            ksm($collegesArrayBasedOnCat, "collegesArrayBasedOnCat");
+
+            // Remove Additional tour if it is not listed in $collegesArrayBasedOnCat for College session type.
+            if (!in_array($college, $collegesArrayBasedOnCat)) {
+                continue; // If not in $collegesArrayBasedOnCat, stop here and go to the next iteration.
+            }
+        }
+
+        //----------END OF Check Additional tour type --------------
+
+        //----------Check Additional tour capacity -----------------
+
+        // NOTES: Capacity is checked only when there is radio button.
+
+        // Get "Need radio button" value
+        $need_radio_button = $entity_paragraph->get('field_need_radio_button')->getValue() != null ? $entity_paragraph->get('field_need_radio_button')->getValue()[0]['value'] : '';
+//        ksm($need_radio_button, "need_radio_button");
+        // Only when "Need radio button" is 1, count capacity.
+        if($need_radio_button == '1') {
+            $capacity_status = _check_capacity_for_addtour($entity_paragraph, $thedate_clicked, $eventseries_entity_id, $addtour_paragraph_entity_id); // Returns "open" or "full";
+            if($capacity_status == "full") {
+                continue;
+            }
+        } // END OF if($need_radio_button == 1)
+
+        //-----------END OF Check Additional tour capacity -------------
+
+
+
+        //---------- Additional tour Time range ------------//
+
+        // NOTES: Make Time range over-writable on a specific day
+
+        // STEP 1: Get original Time range values in Event series
+        $time_range_from = (!is_null($entity_paragraph)) && $entity_paragraph->hasField('field_time_range') && sizeof($entity_paragraph->get('field_time_range')->getValue()) > 0 ? $entity_paragraph->get('field_time_range')->getValue()[0]['from'] : '';
+        $time_range_to = (!is_null($entity_paragraph)) && $entity_paragraph->hasField('field_time_range') && sizeof($entity_paragraph->get('field_time_range')->getValue()) > 0 ? $entity_paragraph->get('field_time_range')->getValue()[0]['to'] : '';
+//        $time_range_to = isset($entity_paragraph->get('field_time_range')->getValue()[0]['to']) ? $entity_paragraph->get('field_time_range')->getValue()[0]['to'] : ''; // Added isset on 6/30/2023
+//        ksm($time_range_from, "time_range_from - original");
+//        ksm($time_range_to, "time_range_to - original");
+
+        // STEP 2: Get boolean value for Time range overwrite
+        $timerange_overwrite_bool = $entity_paragraph->get('field_overwrite_time_addtour')->getValue() != null ? $entity_paragraph->get('field_overwrite_time_addtour')->getValue()[0]['value'] : '';
+//        ksm($timerange_overwrite_bool, "timerange_overwrite_bool");
+
+        // STEP 3: Get Time range to use
+        $timerange_from_to_use = $time_range_from;
+        $timerange_to_to_use = $time_range_to;
+        if($timerange_overwrite_bool == '1') {
+            $time_overwrite_para_ids = $entity_paragraph->get('field_time_overwrite_para')->getValue() != null ? $entity_paragraph->get('field_time_overwrite_para')->getValue() : ''; // 329
+//            ksm($time_overwrite_para_ids, "time_overwrite_para_ids");
+
+            foreach($time_overwrite_para_ids as $overwrite_para) {
+                $overwrite_para_id = $overwrite_para['target_id'];
+//                ksm($overwrite_para_id, "time_overwrite_para_id");
+
+                // Load the time overwrite paragraph using Paragraph ID
+                $entity_type_overwrite = 'paragraph';
+                $entity_id_overwrite = $overwrite_para_id;
+                $entity_paragraph_overwrite = \Drupal::entityTypeManager()->getStorage($entity_type_overwrite)->load($entity_id_overwrite);
+//                ksm($entity_paragraph_overwrite, "entity_paragraph_overwrite");
+
+                // Get Time range overwrite -> Date (Overwritten date) -- Which date when we need to overwrite
+                $date_overwrite = $entity_paragraph_overwrite->get('field_date_only')->getValue() != null ? $entity_paragraph_overwrite->get('field_date_only')->getValue()[0]['value'] : ''; // 2023-06-13
+//                ksm($date_overwrite, "date_timeoverwrite"); // 2023-06-13, 2023-06-02
+                $date_overwrite_nodash_str = str_replace("-","",$date_overwrite);
+//                ksm($date_overwrite_nodash_str, "date_overwrite_nodash_str");
+
+                // Get date clicked
+//                ksm($thedate_clicked, "thedate_clicked"); // 20230613
+                if($date_overwrite_nodash_str == $thedate_clicked) { // If date matches
+                    // Get Time range overwrite -> Time range (Overwritten Time range).
+                    $timerange_overwrite_from = $entity_paragraph_overwrite->get('field_time_range')->getValue() != null ? $entity_paragraph_overwrite->get('field_time_range')->getValue()[0]['from'] : '';
+                    $timerange_overwrite_to = $entity_paragraph_overwrite->get('field_time_range')->getValue() != null ? $entity_paragraph_overwrite->get('field_time_range')->getValue()[0]['to'] : '';
+//                    ksm($timerange_overwrite_from, "timerange_overwrite_from");
+//                    ksm($timerange_overwrite_to, "timerange_overwrite_to");
+                    $timerange_from_to_use = $timerange_overwrite_from;
+                    $timerange_to_to_use = $timerange_overwrite_to;
+                }
+            } // END OF foreach
+        } // END OF if($time_overwrite_bool == '1')
+
+        //---------- END OF Additional tour Time range ------------//
+
+
+        //---------- Prepare output ----------------------------------
+
+        $addtour_name = (!is_null($entity_paragraph)) && $entity_paragraph->hasField('field_addtour_name') && sizeof($entity_paragraph->get('field_addtour_name')->getValue()) > 0 ? $entity_paragraph->get('field_addtour_name')->getValue()[0]['value'] : '';
+        if($addtour_name == '') {
+            continue; // Go to the next iteration.
+        }
+
+        $need_radio_button = $entity_paragraph->get('field_need_radio_button')->getValue()[0]['value']; // 1 or 0 -- 1 is Yes. 0 is No.
+//                    ksm($need_radio_button, "need_radio_button"); // 1 or 0
+        // NOTES: In addition to "Time range from", also grab Time field value. Need to use Time field value for Additional tour ID and for capacity counting.
+        $time_for_addtourid = '';
+        if($entity_paragraph->hasField('field_start_time_for_addtourid') == true && $entity_paragraph->get('field_start_time_for_addtourid')->getValue() != false) {
+            $time_for_addtourid = $entity_paragraph->get('field_start_time_for_addtourid')->getValue()[0]['value'];
+//        ksm($time_for_addtourid, "time_for_addtourid");
+        }
+
+        // Format time
+        $datenew = DateTime::createFromFormat("Ymd g:i a", $thedate_clicked . "00:00 am", new DateTimeZone('America/Phoenix'));
+        $timestamp_ofthedateat0am = $datenew->getTimestamp(); // Timestamp of the date at 0:00am
+//                    ksm($datenew->format("Y/m/d g:i a"), "test");
+//                    ksm($timestamp_ofthedateat0am, "timestamp_ofthedateat0am");
+
+        // Actual start time timestamp
+        $timestamp_datetime_start = $timestamp_ofthedateat0am + $timerange_from_to_use; // Add timestamp of the date at 0:00am and timestamp for the event time.
+        // Timestamp for Add tour ID
+        $timestamp_for_addtourid = $timestamp_ofthedateat0am + intval($time_for_addtourid);
+
+        // Create Date obj from timestamp
+        // For America/Phoenix
+        $date_obj_phx = DateTimePlus::createFromTimestamp($timestamp_datetime_start);
+        $date_obj_phx->setTimeZone(new DateTimeZone('America/Phoenix'));
+        $time_start_formatted = $date_obj_phx->format('g:i a');
+//        ksm($time_start_formatted, "time_start_formatted - _prepare_output_addtours()");
+//        $time_start_formatted = date( "g:i a", $timestamp_datetime_start);
+        $time_start_formatted_webstandard = str_replace("am","a.m.",$time_start_formatted);
+        $time_start_formatted_webstandard = str_replace("pm","p.m.",$time_start_formatted_webstandard);
+
+        // Do the same for end time
+        $timestamp_datetime_end = $timestamp_ofthedateat0am + $timerange_to_to_use;
+
+        // Create Date obj from timestamp
+        // For America/Phoenix
+        $date_obj_phx = DateTimePlus::createFromTimestamp($timestamp_datetime_end);
+        $date_obj_phx->setTimeZone(new DateTimeZone('America/Phoenix'));
+        $time_end_formatted = $date_obj_phx->format('g:i a');
+//        ksm($time_end_formatted, "time_end_formatted - _prepare_output_addtours()");
+//        $time_end_formatted = date( "g:i a", $timestamp_datetime_end);
+        $time_end_formatted_webstandard = str_replace("am","a.m.",$time_end_formatted);
+        $time_end_formatted_webstandard = str_replace("pm","p.m.",$time_end_formatted_webstandard);
+
+        if($addtour_type == "College session") {
+            $addtour_array_collegesession[$entity_id] = ['para_id' => $entity_id, 'addtour_name' => $addtour_name, 'college_name' => $college, 'time_range' => $time_start_formatted_webstandard . ' &mdash; ' . $time_end_formatted_webstandard, 'need_radio_button' => $need_radio_button, 'addtour_timestamp_start' => $timestamp_datetime_start, 'addtour_timestamp_end' => $timestamp_datetime_end, 'addtour_type' => $addtour_type, 'timestamp_for_addtourid' => $timestamp_for_addtourid ];
+        }
+        if($addtour_type == "Housing tour") {
+            $addtour_array_housingtour[$entity_id] = ['para_id' => $entity_id, 'addtour_name' => $addtour_name, 'college_name' => $college, 'time_range' => $time_start_formatted_webstandard . ' &mdash; ' . $time_end_formatted_webstandard, 'need_radio_button' => $need_radio_button, 'addtour_timestamp_start' => $timestamp_datetime_start, 'addtour_timestamp_end' => $timestamp_datetime_end, 'addtour_type' => $addtour_type, 'timestamp_for_addtourid' => $timestamp_for_addtourid ];
+        }
+
+    } // END OF foreach($addtour_paragraph_entity_ids_array as $addtour_paragraph_entity_id)
+
+
+    //---------- Build actual output code for Additional tours -----------
+
+//    ksm($addtour_array_collegesession, "addtour_array college session");
+//    ksm($addtour_array_housingtour, "addtour_array housing tour");
+
+    $output_addtours = '';
+    $collegesession_included = false;
+    if(sizeof($addtour_array_collegesession) > 0) {
+        $output_addtours .= _get_html_output_for_addtour_array($addtour_array_collegesession, $eventseries_entity_id,$campus,$college); // Added $campus,$college by Archana
+        $collegesession_included = true;
+    }
+    if(sizeof($addtour_array_housingtour) > 0) {
+        $output_addtours .= _get_html_output_for_addtour_array($addtour_array_housingtour, $eventseries_entity_id,$campus,$college); // Added $campus,$college by Archana
+    }
+//    return $output_addtours;
+
+    // Changed to include $collegesession_included on 7/21/2023
+    $retArray['output'] = $output_addtours;
+    $retArray['collegesession_included'] = $collegesession_included;
+
+    return $retArray;
+} // END OF function _prepare_output_addtours()
+
+
+/**
+ * @param $addtour_array
+ * @param $eventseries_entity_id
+ * @return string
+ *
+ * Helping function
+ * Build HTML output for Addtour_array.
+ * Called from _prepare_output_addtours().
+ */
+function _get_html_output_for_addtour_array($addtour_array, $eventseries_entity_id,$campus,$college) { //Added $campus,$college by Archana
+    $i = 0;
+    $output_addtours = '';
+
+	/*** Archana's code to add description tooltip***/
+
+
+		$database = \Drupal::database();
+		$table = 'taxonomy_term_field_data';
+		$field_array = array('tid');
+		foreach ($addtour_array as $addtour) {
+	//        ksm($addtour, "addtour");
+
+			$tooltip = ''; // Added on 5/6/2024
+			if ($addtour['addtour_type'] == "College session") { // Added if on 5/6/2024
+
+				$campus_query = $database->select($table, 't');
+				$campus_query->fields('t', $field_array);
+				$campus_query->condition('name', $campus, '=');
+				$result = $campus_query->distinct()->execute();
+				foreach ($result as $record) {
+						$value_of_campus = $record->tid;
+				}
+
+				$collegequery = $database->select($table, 't');
+				$collegequery->fields('t', $field_array);
+				$collegequery->condition('description__value', "%" . $collegequery->escapeLike($addtour['college_name']) . "%", 'LIKE');
+				$collresult = $collegequery->distinct()->execute();
+				foreach ($collresult as $collrecord) {
+						$value_of_college = $collrecord->tid;
+				}
+
+
+				$aview = \Drupal\views\Views::getView('academic_description');
+				$aview->setDisplay('page_1');
+				$exposed_filters = ['field_asd_campus_target_id' => $value_of_campus, 'field_college_target_id' => $value_of_college];
+				$aview->setExposedInput($exposed_filters);
+				$aview->execute();
+				//$view_render = $aview->render();
+				//$result = \Drupal::service('renderer')->renderRoot($view_render);
+				foreach ($aview->result as $arow) {
+					 $node = $arow->_entity;
+					 // Get the full description value.
+					 $desc = $node->get('field_academic_session_descripti')->value;
+				}
+				if(!empty($desc)){
+					//$begin_tag = '<div class="tour-desc"><p class="acad_tours">';
+					//$end_tag = "</div>";
+					$tooltip = '<div class="custom-tooltip"><div class="custom-tooltip-container-acadsessions"><button tabindex="0" class="uds-tooltip uds-tooltip-button uds-tooltip-dark" aria-describedby="tooltip-desc-1"><span class="fa-stack"><svg class="campus-svg svg-inline--fa fa-circle fa-w-16 fa-stack-2x" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="#8c1d40" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path></svg><svg class="svg-inline--fa fa-info fa-w-6 fa-stack-1x" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="info" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512" data-fa-i2svg=""><path fill="#ffffff" d="M20 424.229h20V279.771H20c-11.046 0-20-8.954-20-20V212c0-11.046 8.954-20 20-20h112c11.046 0 20 8.954 20 20v212.229h20c11.046 0 20 8.954 20 20V492c0 11.046-8.954 20-20 20H20c-11.046 0-20-8.954-20-20v-47.771c0-11.046 8.954-20 20-20zM96 0C56.235 0 24 32.235 24 72s32.235 72 72 72 72-32.235 72-72S135.764 0 96 0z"></path></svg></span></button><div role="tooltip" class="custom-tooltip-description" id="tooltip-desc-1"><button style="color:#fff;" type="button" class="btn btn-default popup-close-btn"><svg class="svg-inline--fa fa-window-close fa-w-16" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="window-close" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-83.6 290.5c4.8 4.8 4.8 12.6 0 17.4l-40.5 40.5c-4.8 4.8-12.6 4.8-17.4 0L256 313.3l-66.5 67.1c-4.8 4.8-12.6 4.8-17.4 0l-40.5-40.5c-4.8-4.8-4.8-12.6 0-17.4l67.1-66.5-67.1-66.5c-4.8-4.8-4.8-12.6 0-17.4l40.5-40.5c4.8-4.8 12.6-4.8 17.4 0l66.5 67.1 66.5-67.1c4.8-4.8 12.6-4.8 17.4 0l40.5 40.5c4.8 4.8 4.8 12.6 0 17.4L313.3 256l67.1 66.5z"></path></svg></button><div class="formatted-text">'.$desc.'</div></div></div></div>';
+				}
+				else{
+					//$begin_tag = '';
+					//$end_tag = '';
+					$tooltip = '';
+				}
+
+			} // END OF if ($addtour['addtour_type'] == "College session")
+
+
+	/*** End of Archana code ****/
+
+
+//        ksm($addtour, "addtour");
+        if ($i == 0) {
+            if ($addtour['addtour_type'] == "College session") {
+                $output_addtours .= '<div><strong>Additional tours/sessions</strong> (optional)</div>';
+            }
+            if ($addtour['addtour_type'] == "Housing tour") {
+                $output_addtours .= '<div><strong>Residential Hall Open House</strong> (optional)</div>';
+            }
+        }
+		$output_addtours .= '<div class="add_tours_div m-1">'; //added by Archana
+        //$output_addtours .= '<p>';
+        if ($addtour['need_radio_button'] == "1") {
+            $addtour_entityid = $addtour['para_id']; //<-- This is the $target_id from line 273. Target_id is the paragraph's entity id.
+
+//            $output_addtours .= '<div class="acad-session-div"><input type="radio" name="add-tour" value="' . $eventseries_entity_id . '-' . $addtour_entityid . '-' . $addtour['timestamp_for_addtourid'] . '" > '; <---Very original one before change. 8/4/2023
+
+            $output_addtours .= '<div class="acad-session-div"><input type="radio" name="add-tour" value="' . $eventseries_entity_id . '-' . $addtour_entityid . '-' . $addtour['timestamp_for_addtourid'] . '|' . $addtour['addtour_timestamp_start'] . '|' . $addtour['addtour_timestamp_end'] . '|' . $addtour['addtour_name'] . '" > ';
+            // This is for testing with checkbox:
+//            $output_addtours .= '<div class="acad-session-div"><input type="checkbox" name="add-tour" value="' . $eventseries_entity_id . '-' . $addtour_entityid . '-' . $addtour['timestamp_for_addtourid'] . '|' . $addtour['addtour_timestamp_start'] . '|' . $addtour['addtour_timestamp_end'] . '|' . $addtour['addtour_name'] . '" > ';
+
+        } else {
+            $output_addtours .= '<div class="acad-session-div">';
+        }
+        $output_addtours .= $addtour['addtour_name'];
+        $output_addtours .= ' ' . $addtour['time_range'] .'</div>' . $tooltip.'</div>'; //updated by Archana
+
+        $i++;
+    }
+    return $output_addtours;
+
+	/*$output_addtours_all = $output_addtours.$tooltip.$end_tag; // Archana's code
+	return $output_addtours_all;*/
+}
+
+
+/**
+ * @param string $barrett_instance_id
+ *
+ * @return string $eventseries_id
+ */
+function _get_eventseries_id($barrett_instance_id) {
+    $database = \Drupal::database();
+    $table = 'eventinstance_field_data';
+    $field_array = array('eventseries_id');
+    $query = $database->select($table, 't');
+    $query->fields('t', $field_array);
+    $query->condition('id', $barrett_instance_id, '=');
+    $result = $query->distinct()->execute();
+    $eventseries_id = '';
+    foreach ($result as $record) {
+        $eventseries_id = $record->eventseries_id;
+    }
+    return $eventseries_id;
+}
+
+
+/**
+ * @param string $thedate_clicked
+ *  date in Ymd format or Y-m-d format
+ * @param string $time
+ *   ex: 03:30 pm
+ *
+ * @return string $timestamp
+ *
+ * Helping function
+ * Get timestamp from time.
+ */
+function _get_timestamp($thedate_clicked, $time) {
+    if($time == '') {
+        $time = '00:00 am';
+    }
+    // Get timestamp of start datetime
+    if(strpos($thedate_clicked, '-') == false) {
+        $datenew = DateTime::createFromFormat("Ymd g:i a", $thedate_clicked . " " . $time);
+    } else {
+        $datenew = DateTime::createFromFormat("Y-m-d g:i a", $thedate_clicked . " " . $time);
+    }
+    $timestamp = $datenew->getTimestamp(); // Timestamp of the date at start time
+    return $timestamp;
+}
+
+
+/**
+ * @param string $thedate_clicked
+ *  date in Ymd format
+ * @param string $start_time_barrett
+ *   ex: 03:30 pm
+ * @param string $duration_minutes
+ *   ex: 2700
+ *
+ * @return string
+ *   ex: 4:15 p.m.
+ *
+ * Helping function
+ */
+function _get_endtime_from_starttime_and_duration($thedate_clicked, $start_time_barrett, $duration_minutes) {
+
+    // Get timestamp of start datetime
+    $timestamp_startdatetime = _get_timestamp($thedate_clicked, $start_time_barrett);
+    // Get timestamp of end datetime
+    $timestamp_end = $timestamp_startdatetime + $duration_minutes; // Add timestamp of the date at 0:00am and timestamp for the event time.
+
+    $time_end_formatted = date( "g:i a", $timestamp_end);
+    $time_end_formatted_webstandard = _format_time_webstandard($thedate_clicked, $time_end_formatted);
+
+    return $time_end_formatted_webstandard;
+}
+
+
+/**
+ * @param string $thedate_clicked
+ *  date in Ymd format
+ * @param string $time
+ *  time in g:i a format. ex: 3:00 pm
+ * @return string
+ *   ex: 4:15 p.m.
+ *
+ * Helping function
+ * Format time in Webstarndard.
+ */
+function _format_time_webstandard($thedate_clicked, $time) {
+    $timestamp = _get_timestamp($thedate_clicked, $time);
+    $time_formatted = date( "g:i a", $timestamp);
+    $time_formatted_webstandard = str_replace("am", "a.m.", $time_formatted);
+    $time_formatted_webstandard = str_replace("pm", "p.m.", $time_formatted_webstandard);
+
+    return $time_formatted_webstandard;
+}
+
+
+/**
+ * @param $key
+ * @param $message
+ * @param $params
+ *
+ * Implements hook_mail().
+ * For emailing, we need hook_mail. Works with sendConfEmail() in VisitWebformHander.php.
+ */
+function asuaec_visit_mail($key, &$message, $params) {
+    $options = array(
+        'langcode' => $message['langcode'],
+    );
+    switch ($key) {
+        case 'visit_conf_email':
+        case 'visit_conf_email_failure':
+        case 'visit_post_failure':
+            $message['from'] = \Drupal::config('system.site')->get('mail');
+            $message['subject'] = t('@subject', ['@subject' => $params['subject']], $options);
+            $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed'; // Needed this to display images.
+            $message['body'][] = $params['message'];
+            break;
+    }
+}
+
+
+/**
+ * @return array
+ *   An array of colleges based on bucket.
+ *
+ * Helping function to get array of colleges based on Visit bucket/category ID
+ */
+function _get_collegearray_basedoncategory($category_id) {
+    // Visit bucket code here
+    $collegesArrayBasedOnBucket = [];
+    // College code:
+    // UGAS: New College
+    // UGLS: College of Integrative Sciences and Arts
+    // UGCS: Cronkite
+    // UGNH: Collegge of Health Solutions
+    // UGNU: Edson College of Nursing and Health Innovation
+    // UGLA: The College of Liberal Arts and Sciences
+    // UGPP: Watts College of Public Service and Community Solutions
+    // UGGF: College of Global Futures
+    // UGHI: Herberger
+    // UGES: Engineering
+    // UGBA: WP Carey Business
+    // UGTB: Thunderbird
+    // UGTE: Teachers College
+    // UGUC: University College
+    switch($category_id) {
+        case '25': // 'Anthropology, Sociology and Cultural Studies'
+            array_push($collegesArrayBasedOnBucket, 'UGLA', 'UGPP', 'UGGF', 'UGAS', 'UGHI');
+            break;
+
+        case '26': // 'Architecture, Construction and Design'
+            array_push($collegesArrayBasedOnBucket, 'UGLA', 'UGHI', 'UGES');
+            break;
+
+        case '27': // 'Business'
+            array_push($collegesArrayBasedOnBucket, 'UGBA', 'UGTB', 'UGES', 'UGLA', 'UGNH', 'UGPP', 'UGNU', 'UGCS');
+            break;
+
+        case '28': // 'Communication and Languages'
+            array_push($collegesArrayBasedOnBucket, 'UGLA', 'UGBA', 'UGTB', 'UGAS', 'UGLS', 'UGCS', 'UGHI');
+            break;
+
+        case '29': // 'Computer Science, Software Engineering and Mathematics':
+            array_push($collegesArrayBasedOnBucket, 'UGGF', 'UGNH', 'UGLS', 'UGES', 'UGAS', 'UGLA', 'UGBA');
+            break;
+
+        case '30': // 'Criminology and Forensics':
+            array_push($collegesArrayBasedOnBucket, 'UGLA', 'UGPP', 'UGAS');
+            break;
+
+        case '31': // 'Earth, Space and Flight':
+            array_push($collegesArrayBasedOnBucket, 'UGLA', 'UGES');
+            break;
+
+        case '32': // 'Education and Teaching':
+            array_push($collegesArrayBasedOnBucket, 'UGTE', 'UGLA', 'UGAS');
+            break;
+
+        case '33': // 'Engineering':
+            array_push($collegesArrayBasedOnBucket, 'UGES');
+            break;
+
+        case '34': // 'Exploratory':
+            array_push($collegesArrayBasedOnBucket, 'UGUC', 'UGAS', 'UGBA', 'UGTE' );
+            break;
+
+        case '72': // 'Fashion':
+            array_push($collegesArrayBasedOnBucket, 'UGHI');
+            break;
+
+        case '73': // 'Film and Media':
+            array_push($collegesArrayBasedOnBucket, 'UGHI', 'UGCS', 'UGLA');
+            break;
+
+        case '35': // 'Fine Arts and Performance':
+            array_push($collegesArrayBasedOnBucket, 'UGHI', 'UGAS');
+            break;
+
+        case '76': // Global Management and Leadership
+            array_push($collegesArrayBasedOnBucket, 'UGTB');
+            break;
+
+        case '36': // 'Health and Wellness':
+            array_push($collegesArrayBasedOnBucket, 'UGLS', 'UGNU', 'UGNH', 'UGES', 'UGPP', 'UGAS', 'UGLA');
+            break;
+
+        case '37': // 'History, Philosophy and Humanities':
+                array_push($collegesArrayBasedOnBucket, 'UGLS', 'UGAS', 'UGLA', 'UGGF');
+                break;
+
+        case '38': // 'Journalism'
+            array_push($collegesArrayBasedOnBucket, 'UGCS', 'UGNH', 'UGPP');
+            break;
+
+        case '39': // 'Nursing':
+            array_push($collegesArrayBasedOnBucket, 'UGNU');
+            break;
+
+        case '40': // 'Pre-health':
+            array_push($collegesArrayBasedOnBucket, 'UGBA', 'UGHI', 'UGTE', 'UGES', 'UGGF', 'UGNH', 'UGLS', 'UGAS', 'UGCS', 'UGLA', 'UGNU', 'UGPP', 'UGTB'); // Thunderbird School of Global Management
+            break;
+
+        case '41': // 'Pre-law':
+            array_push($collegesArrayBasedOnBucket, 'UGHI', 'UGCS', 'UGLA');
+            break;
+
+        case '42': // 'Psychology':
+            array_push($collegesArrayBasedOnBucket, 'UGAS', 'UGLA', 'UGPP', 'UGES');
+            break;
+
+        case '43': // 'Public Service and Political Science':
+            array_push($collegesArrayBasedOnBucket, 'UGGF', 'UGLS', 'UGAS', 'UGLA', 'UGPP', 'UGBA');
+            break;
+        
+        case '44': // 'Science'
+            array_push($collegesArrayBasedOnBucket, 'UGLS', 'UGLA', 'UGES', 'UGNH', 'UGAS');
+            break;
+        
+        case '45': // 'Sports, Tourism and Recreation':
+            array_push($collegesArrayBasedOnBucket, 'UGBA', 'UGPP', 'UGCS', 'UGNH');
+            break;
+
+        case '46': // 'Sustainability and the Environment':
+            array_push($collegesArrayBasedOnBucket, 'UGGF', 'UGBA', 'UGES', 'UGPP', 'UGAS', 'UGLS', 'UGLA'); // UGGF - College of Global Futures. Added on 4/27/2022.
+            break;
+    }
+    return $collegesArrayBasedOnBucket;
+}
+
+
+/**
+ * @param $a
+ * @param $b
+ * @return string
+ *
+ * Called from WebformConfiamtionPage.php at line 292:
+ *     usort($merged_addtour_barrett_array, 'compare_timestamp');
+ */
+function compare_timestamp($a, $b) {
+    //$a's timestamp value   // 1-477-1693843200|1693843200|1693846800|Aviation tour test
+    $temp_array_a = explode('|', $a);
+    $a_timestamp = $temp_array_a[1];
+
+    //$b's timestamp value
+    $temp_array_b = explode('|', $b);
+    $b_timestamp = $temp_array_b[1];
+
+    return $a_timestamp - $b_timestamp;
+}

@@ -1,0 +1,5 @@
+name: ASU AEC Form Manager testing
+type: module
+description: 'ASU AEC Form Manager testing'
+package: ASU
+core_version_requirement: '^8 || ^9 || ^10'

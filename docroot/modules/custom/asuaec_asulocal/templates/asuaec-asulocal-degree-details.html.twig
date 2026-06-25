@@ -1,0 +1,244 @@
+{#
+  Degree details page body.
+#}
+<section class="asu-degree-details container">
+
+  <div class="row g-4">
+    {# LEFT: main content #}
+    <div class="col-12 col-lg-8">
+      {# Intro #}
+      {% if short_description %}
+        <div class="asu-degree-details__intro mt-8">
+          {{ short_description|raw }}
+        </div>
+      {% endif %}
+    </div>
+
+    {# RIGHT: quick facts card #}
+    <div class="col-12 col-lg-4 mt-10">
+
+      {% if total_credit_hours or weeks_per_class or total_classes or next_start_date %}
+        <div class="card asu-degree-details__facts">
+          <div class="card-body">
+
+            <h2 class="mb-3"><span class="highlight-black">Quick facts</span></h2>
+
+            <div class="row gy-2">
+              {% if next_start_date %}
+                <div class="col-12">
+                  <strong>Next start date:</strong> {{ next_start_date|date('m/d/Y') }}
+                </div>
+              {% endif %}
+            
+              {% if total_classes %}
+                <div class="col-12">
+                  <strong>Total classes:</strong> {{ total_classes }}
+                </div>
+              {% endif %}
+
+              {% if weeks_per_class %}
+                <div class="col-12">
+                  <strong>Weeks per class:</strong> {{ weeks_per_class }}
+                </div>
+              {% endif %}
+
+              {% if total_credit_hours %}
+                <div class="col-12">
+                  <strong>Credit hours:</strong> {{ total_credit_hours }}
+                </div>
+              {% endif %}
+
+            </div>
+
+          </div>
+        </div>
+      {% endif %}
+
+    </div>
+
+  </div>
+
+
+  {# Featured courses #}
+  {% if featured_courses_title or featured_courses_description %}
+    <div class="asu-degree-details__featured mt-5">
+      <h2>{{ featured_courses_title ?: 'Featured courses' }}</h2>
+      {% if featured_courses_description %}
+        <div class="asu-degree-details__featured-body">
+          {{ featured_courses_description|raw }}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+
+
+  {# ------------------------------------------------------------
+    Curriculum Courses (cards + modal details)
+  ------------------------------------------------------------- #}
+  {% if curriculum_courses is defined and curriculum_courses|length %}
+    <div class="asu-degree-details__courses mt-5 mb-8" data-course-list>
+
+      <div class="row g-4 mt-1">
+        {% for course in curriculum_courses %}
+          {% set course_id = 'course-modal-' ~ loop.index %}
+          {% set course_code = (course.subject ?? '') ~ ' ' ~ (course.catalog_number ?? '') %}
+          {% set course_title = course.title ?? '' %}
+          {% set course_desc = course.description ?? '' %}
+
+          {# Hide everything after the 8th card initially #}
+          <div
+            class="col-12 col-md-6 col-lg-3 course-item {{ loop.index > 8 ? 'd-none' : '' }}"
+            data-course-item
+          >
+            <div class="card h-100">
+              <div class="card-body">
+                <h3 class="mb-3">
+                  {{ course_code ? course_code ~ ':' : '' }}
+                  {{ course_title }}
+                </h3>
+
+                {# gold bar #}
+                <div style="width:28px;height:4px;background:#FFC627;"></div>
+              </div>
+
+              <div class="card-footer bg-white border-0 pt-0 pb-3 d-flex justify-content-between align-items-center">
+                <a
+                  href="#{{ course_id }}"
+                  class="asu-course-details-link"
+                  data-bs-toggle="modal"
+                  data-bs-target="#{{ course_id }}"
+                >
+                  View course details
+                </a>
+
+                <span class="asu-course-details-icon" aria-hidden="true">›</span>
+              </div>
+            </div>
+          </div>
+
+          {# Modal #}
+          <div
+            class="modal fade"
+            id="{{ course_id }}"
+            tabindex="-1"
+            aria-labelledby="{{ course_id }}-label"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h2 class="modal-title h5" id="{{ course_id }}-label">
+                    {{ course_code ? course_code ~ ':' : '' }} {{ course_title }}
+                  </h2>
+
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                  {% if course_desc %}
+                    <p class="mb-0">{{ course_desc }}</p>
+                  {% else %}
+                    <p class="mb-0">Course description is not available.</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      {# Show more / Show less toggle #}
+      {% if curriculum_courses|length > 8 %}
+        <div class="text-center mt-4">
+          <a
+            href="#"
+            class="asu-show-toggle"
+            data-course-toggle
+          >
+            Show more
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+
+  {# Careers section (with optional image) #}
+  {% if related_careers_title or related_careers_description %}
+    <div class="asu-degree-details__careers mt-5">
+      <h2>{{ related_careers_title ?: 'Career outlook' }}</h2>
+
+      <div class="row gy-3 align-items-start">
+        {% if related_careers_image %}
+          <div class="col-12 col-lg-4">
+            <img
+              src="{{ related_careers_image }}"
+              alt=""
+              class="img-fluid"
+              loading="lazy"
+              decoding="async"
+            >
+          </div>
+        {% endif %}
+
+        <div class="col-12 {{ related_careers_image ? 'col-lg-8' : 'col-lg-12' }}">
+          {% if related_careers_description %}
+            <div class="asu-degree-details__careers-body">
+              {{ related_careers_description|raw }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+
+  {# ------------------------------------------------------------
+    Career items (bamm_program.career_items parsed into career_items)
+  ------------------------------------------------------------- #}
+  {% if career_items is defined and career_items|length %}
+    <div class="asu-degree-details__career-items mt-5 mb-6">
+
+      <div class="row g-4 mt-1">
+        {% for item in career_items %}
+          {% set title = item.title ?? '' %}
+          {% set growth = item.growth ?? '' %}
+          {% set salary = item.salary ?? '' %}
+
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body">
+                {% if title %}
+                  <h3 class="mb-3">{{ title }}</h3>
+                {% endif %}
+
+                <div style="width:28px;height:4px;background:#FFC627;"></div>
+
+                <div class="mt-4">
+                  {% if growth %}
+                    <div><strong>Growth:</strong> {{ growth }}%</div>
+                  {% endif %}
+                  {% if salary %}
+                    <div><strong>Salary:</strong> {{ salary }}</div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  {# Learn more button - Link to ASU Online site. #}
+  {% if detail_page %}
+    <div class="asu-degree-details__cta mt-5">
+      <a class="btn btn-gold" href="https://asuonline.asu.edu{{ detail_page }}">
+        Learn more
+      </a>
+    </div>
+  {% endif %}
+
+</section>

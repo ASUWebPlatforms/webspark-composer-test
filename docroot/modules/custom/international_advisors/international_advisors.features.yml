@@ -1,0 +1,4 @@
+excluded:
+  - field.field.node.degree_detail_page.layout_builder__layout
+  - field.field.node.degree_listing_page.layout_builder__layout
+required: true

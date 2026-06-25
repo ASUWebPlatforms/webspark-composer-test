@@ -1,0 +1,5 @@
+services:
+  weba11y9_migration.product_breadcrumb:
+    class: Drupal\weba11y9_migration\Breadcrumb\ProductBreadcrumbBuilder
+    tags:
+      - { name: breadcrumb_builder, priority: 1100 }

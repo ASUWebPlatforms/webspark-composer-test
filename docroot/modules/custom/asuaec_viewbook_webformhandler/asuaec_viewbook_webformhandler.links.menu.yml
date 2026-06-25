@@ -1,0 +1,7 @@
+# Define default links for this module.
+
+asuaec_viewbook_webformhandler.asuaec_viewbook_webformhandler_settings:
+  title: ASU AEC Viewbook Webform Handler settings
+  description: ASU AEC Viewbook Webform Handler settings
+  parent: system.admin_config_system
+  route_name: asuaec_viewbook_webformhandler.asuaec_viewbook_webformhandler_settings

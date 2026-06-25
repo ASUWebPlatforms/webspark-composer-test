@@ -1,0 +1,6 @@
+#!/bin/bash
+## Description: Run PHP CodeSniffer
+## Usage: phpcs
+## Example: ddev phpcs [options] [file|directory...]
+
+./vendor/bin/phpcs -n -d memory_limit=512M --standard=Drupal,DrupalPractice --extensions=php,module,inc,install,test,profile,theme,css,info,txt,md,yml --ignore=node_modules,bower_components,vendor --colors "$@"

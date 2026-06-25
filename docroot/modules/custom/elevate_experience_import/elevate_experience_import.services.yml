@@ -1,0 +1,9 @@
+services:
+  elevate_experience_import.feeds_parse_subscriber:
+    class: Drupal\elevate_experience_import\EventSubscriber\ExperienceParseSubscriber
+    tags:
+      - { name: event_subscriber }
+  elevate_experience_import.feeds_presave_subscriber:
+    class: Drupal\elevate_experience_import\EventSubscriber\ExperiencePresaveSubscriber
+    tags:
+      - { name: event_subscriber }

@@ -1,0 +1,8 @@
+name: FDIST - File and Incentive Distribution
+description: Application for creating and distributing survey completion confirmation documents. - UOEEE
+package: UOEEE
+type: module
+version: 1.0
+core_version_requirement: ^10
+libraries:
+  - fdist/fdist-app

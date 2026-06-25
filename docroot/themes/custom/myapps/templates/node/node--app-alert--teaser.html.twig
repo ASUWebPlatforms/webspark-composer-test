@@ -1,0 +1,35 @@
+{#
+/**
+ * @file
+ * Template for a Node component.
+ */
+#}
+
+{%
+  set classes = [
+  'node',
+  node.isPromoted() ? 'node--promoted',
+  node.isSticky() ? 'node--sticky',
+  not node.isPublished() ? 'node--unpublished',
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+]
+%}
+
+<article{{ attributes.addClass(classes) }}>
+  <div class="border border-primary px-3 py-2 mb-3">
+    <div>
+      {% block content %}
+        <i class="fas fa-bell"></i>
+        {{ content }}
+      {% endblock %}
+    </div>
+    <div>
+      <h3 class="mb-0">
+        {{ title_prefix }}
+        <a class="text-decoration-none" href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ node.title.value }}</a>
+        {{ title_suffix }}
+      </h3>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,6 @@
+global-styling:
+    version: 1.0
+    css:
+        component:
+            css/renovationcustom_office.style.css: {}
+   

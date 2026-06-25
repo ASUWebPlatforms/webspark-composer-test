@@ -1,0 +1,5 @@
+subscription-form:
+  version: 1.x
+  css:
+    theme:
+      css/subscription-form.css: {}

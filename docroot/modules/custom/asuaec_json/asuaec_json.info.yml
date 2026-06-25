@@ -1,0 +1,5 @@
+name: asuaec_json
+type: module
+description: 'ASU AEC custom module to create Json pages'
+package: ASU
+core_version_requirement: ^9 || ^10 || ^11

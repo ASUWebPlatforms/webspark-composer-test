@@ -1,0 +1,19 @@
+services:
+
+  logger.channel.apadmin:
+    parent: logger.channel_base
+    arguments: ['apadmin']
+    
+  cache.apadmin:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    factory: 'cache_factory:get'
+    arguments: ['apadmin']
+
+  apadmin.dashboard_globals:
+    class: Drupal\apadmin\Service\DashboardGlobals
+    arguments:
+      - '@cache.apadmin'
+      - '@database'
+      - '@datetime.time'        
+      - '@logger.channel.apadmin'
+    public: true

@@ -1,0 +1,90 @@
+#!/bin/bash
+
+## Description: Update version numbers in Webspark library and info files
+## Usage: asusf:set-version <version>
+## Example: "ddev asusf:set-version 2.5.0"
+
+## IMPORTANT NOTE: This script usually runs within asusf:prep-release-mr.
+## It is provided indpendently so it can be used when creating hotfix releases
+## which don't use the same prep-release-mr workflow.
+
+# Color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+NC='\033[0m' # No Color
+
+# Check if version argument is provided
+if [ -z "$1" ]; then
+  echo -e "${RED}❌ Error: Version number required${NC}"
+  echo -e "${CYAN}Usage: ddev asusf:set-version <version>${NC}"
+  echo -e "${CYAN}Example: ddev asusf:set-version 2.5.0${NC}"
+  exit 1
+fi
+
+VERSION="$1"
+
+# Validate semantic version format (basic check)
+if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?$ ]]; then
+  echo -e "${RED}❌ Error: Invalid semantic version format${NC}"
+  echo -e "${YELLOW}Expected format: MAJOR.MINOR.PATCH (e.g., 2.5.0 or 2.5.0-alpha.1)${NC}"
+  exit 1
+fi
+
+echo -e "${BOLD}${BLUE}🚀 Updating version to: ${GREEN}$VERSION${NC}"
+echo ""
+
+# Base path for webspark modules
+WEBSPARK_PATH="/var/www/html/docroot/profiles/contrib/webspark"
+MODULES_PATH="$WEBSPARK_PATH/modules"
+
+# Counter for updated files
+UPDATED_COUNT=0
+
+# Update all *.libraries.yml files in webspark modules
+echo -e "${CYAN}📚 Updating *.libraries.yml files in webspark modules...${NC}"
+# TODO Considering recursivity to be overkill. Could be added in the future.
+while IFS= read -r file; do
+  if [ -f "$file" ]; then
+    # Use sed to replace version line, handling optional quotes
+    sed -i -E "s/^(\\s*)version: .*/\1version: $VERSION/" "$file"
+    echo -e "  ${GREEN}✓${NC} Updated: ${file#$WEBSPARK_PATH/}"
+    ((UPDATED_COUNT++))
+  fi
+done < <(find "$MODULES_PATH" -name "*.libraries.yml" -type f)
+
+echo ""
+
+# Update webspark.info.yml
+INFO_FILE="$WEBSPARK_PATH/webspark.info.yml"
+if [ -f "$INFO_FILE" ]; then
+  echo -e "${CYAN}📄 Updating webspark.info.yml...${NC}"
+  sed -i "s/^version: .*/version: $VERSION/" "$INFO_FILE"
+  echo -e "  ${GREEN}✓${NC} Updated: webspark.info.yml"
+  ((UPDATED_COUNT++))
+else
+  echo -e "  ${YELLOW}⚠️  Warning: webspark.info.yml not found${NC}"
+fi
+
+echo ""
+
+THEME_LIB_FILE="$WEBSPARK_PATH/themes/renovation/renovation.libraries.yml"
+if [ -f "$THEME_LIB_FILE" ]; then
+  echo -e "${CYAN}🧶 Updating renovation.libraries.yml...${NC}"
+  sed -i -E "s/^(\\s*)version: .*/\1version: $VERSION/" "$THEME_LIB_FILE"
+  echo -e "  ${GREEN}✓${NC} Updated: renovation.libraries.yml"
+  ((UPDATED_COUNT++))
+else
+  echo -e "  ${YELLOW}⚠️  Warning: renovation.libraries.yml not found${NC}"
+fi
+
+echo ""
+echo -e "${BOLD}${CYAN}================================${NC}"
+echo -e "${BOLD}${GREEN}✨ Update complete!${NC}"
+echo -e "${BOLD}Files updated: ${YELLOW}$UPDATED_COUNT${NC}"
+echo -e "${BOLD}Version set to: ${GREEN}$VERSION${NC}"
+echo -e "${BOLD}${CYAN}================================${NC}"
+

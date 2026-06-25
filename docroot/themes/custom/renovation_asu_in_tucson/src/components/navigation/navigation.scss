@@ -1,0 +1,67 @@
+.block-inline-blockasu-edu-sidebar-navigation nav {
+  background-color: #fff;
+
+  a {
+    padding: 1.5rem 1rem !important;
+  }
+
+  a + a {
+    border-top: 1px solid $uds-color-base-gray-3;
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    border-top: 1px solid #d0d0d0;
+  }
+}
+
+.block-inline-blockasu-edu-sidebar-navigation {
+  a {
+    margin-left: 0;
+    text-decoration: none;
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    margin-bottom: $uds-size-spacing-4;
+  }
+}
+
+nav.accordion {
+  .card {
+    margin-bottom: 0;
+  }
+}
+
+.block-inline-blockmenu-sidebar {
+  a {
+    text-decoration: none;
+  }
+}
+
+.block-inline-blockmenu-sidebar {
+  @media screen and (max-width: $uds-grid-container-max-width-md) {
+    margin-bottom: $uds-size-spacing-6;
+
+    .sidebar-toggler, .sidebar {
+      margin-left: $uds-size-spacing-4;
+      margin-right: $uds-size-spacing-4;
+    }
+
+    .sidebar-toggler {
+      &[aria-expanded=false] {
+        svg {
+          transform: none;
+        }
+      }
+
+      &[aria-expanded=true] {
+        svg {
+          transform: rotate(-180deg);
+        }
+      }
+    }
+
+    h3 {
+      margin-left: $uds-size-spacing-4;
+    }
+  }
+}

@@ -1,0 +1,7 @@
+administer uoeee db api:
+  title: 'Administer UOEEE DB API settings'
+  description: 'Change which tables/columns are exposed by the UOEEE DB API'
+
+upload files via uoeee API:
+  title: 'Upload files via UOEEE API'
+  description: 'Allows access to the custom file upload endpoint.'

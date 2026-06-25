@@ -1,0 +1,44 @@
+<?php
+
+use Drupal\taxonomy\Entity\Term;
+
+function gp_dataquiz_handler_install() {
+
+  //creates default end states
+  $vocabulary_id = 'end_states'; 
+  $terms_to_create = [
+    'Transaction is Restricted under 28 CFR Part 202',
+    'Transaction is Prohibited under 28 CFR Part 202',
+    'Scenario not likely covered by 28 CFR Part 202',
+  ];
+
+  foreach ($terms_to_create as $term_name) {
+    $term = Term::create([
+      'parent' => [], // Leave empty for top-level terms, or specify parent term IDs
+      'name' => $term_name,
+      'vid' => $vocabulary_id,
+    ]);
+    $term->save();
+  }
+
+    //creates default transaction types
+
+  $transaction_id = 'transaction_type'; 
+  $transaction_terms = [
+    'Vendor, Employment, or Investment Agreement',
+    'Any Transaction involving Human \'omic data',
+    'Data Brokerage',
+    'Not sure if Data Brokerage',
+    'None of the above',
+  ];
+
+  foreach ($transaction_terms as $transaction_name) {
+    $term = Term::create([
+        'parent' => [], // Leave empty for top-level terms, or specify parent term IDs
+        'name' => $transaction_name,
+        'vid' => $transaction_id,
+    ]);
+    $term->save();
+  }
+
+}

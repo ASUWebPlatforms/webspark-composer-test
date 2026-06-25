@@ -1,0 +1,78 @@
+<?php
+
+use Drupal\Core\Entity\EntityMalformedException;
+use Drupal\Core\Entity\EntityStorageException;
+use Drupal\flag\Entity\Flagging;
+
+/**
+ * Create the custom pages for the Analytics website.
+ * Implements hook_theme().
+ *
+ * @see https://www.drupal.org/docs/theming-drupal/twig-in-drupal/create-custom-twig-templates-for-custom-module
+ *
+ * @param $existing
+ * @param $type
+ * @param $theme
+ * @param $path
+ *
+ * @return array
+ */
+function analytics_designs_theme($existing, $type, $theme, $path): array
+{
+  // Note that underscores will be replaced with dashes
+  // Keep the variables key also
+  return [
+    'my_content' => [
+      'variables' => []
+    ],
+  ];
+}
+
+/**
+ * Automatically add metadata to the flagging entity.
+ * This data will later be used by views.
+ * Implements hook_flagging_insert().
+ *
+ * @throws EntityStorageException
+ * @throws EntityMalformedException
+ */
+function analytics_designs_flagging_insert(Flagging $flagging): void
+{
+  $flagged_entity = $flagging->getFlaggable();
+  $flagging->set("field_entity_title", $flagged_entity->label());
+  $flagging->set("field_entity_url", $flagged_entity->toUrl()->toString());
+
+  if ($flagging->getFlagId() === "favorites") {
+    $flagging->set("field_entity_type", $flagged_entity->bundle());
+    $flagging->set(
+      "field_entity_description",
+      $flagged_entity->get("field_description")->value
+    );
+    if ($flagged_entity->hasField("field_group")) {
+      $flagging->set(
+        "field_entity_group",
+        $flagged_entity->get("field_group")->getValue()
+      );
+    }
+  }
+
+  if ($flagging->getFlagId() === "favorite_group") {
+    $flagging->set("field_entity_type", "group");
+    $flagging->set(
+      "field_entity_description",
+      $flagged_entity->get("field_group_description")->value
+    );
+  }
+
+  if ($flagging->getFlagId() === "favorite_terms") {
+    $flagging->set("field_entity_type", $flagged_entity->bundle());
+    $termDescription = strip_tags($flagged_entity->get("description")->value);
+    $flagging->set("field_entity_description", $termDescription);
+  }
+
+  try {
+    $flagging->save();
+  } catch (EntityStorageException $e) {
+    Drupal::logger("analytics_designs")->error($e->getMessage());
+  }
+}

@@ -1,0 +1,63 @@
+@media screen and (min-width:992px){
+.js-form-item.form-item.js-form-type-radio {
+    width: 80%;
+   }
+    
+   .checkbox_next{
+	   margin-left: 45%;
+	   margin-right: 45%;	
+	}
+
+     .js-form-wrapper{
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+     }
+}
+
+.js-form-item.form-item.js-form-type-radio {
+   
+    border: 1px solid #D0D0D0;
+    padding: 10px;
+}
+
+form.uds-form .form-check input[type=checkbox]+label, form.uds-form .form-check input[type=radio]+label{
+  
+   display: block !important;
+}
+
+form.uds-form .form-check input[type=radio]+label:before{
+	display: none !important;
+}
+
+
+.fieldset-legend {
+    font-size: 1.8rem !important;
+}
+.checkbox_next{
+	cursor: pointer;
+}
+.survey-progress-bar{
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  background: #ffffff;
+  /*display:flex;*/
+}
+
+.outer-bar{
+ /* width: 75%; */
+  border: 1px solid #D0D0D0;
+  height: 12px;
+  margin-top: 8px;
+}
+
+.rhside{
+  text-align: right;
+}
+
+.inner-bar{
+  /*border: 1px solid #D0D0D0; */
+  height: inherit;
+  margin-left:-12px;
+}

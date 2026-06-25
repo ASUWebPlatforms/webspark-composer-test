@@ -1,0 +1,12 @@
+# Define the menu links for this module
+
+entity.wpc_rfi_forms_sources_leadsource.collection:
+  title: 'WPC Lead Sources'
+  route_name: entity.wpc_rfi_forms_sources_leadsource.collection
+  description: 'Lead Source Custom Entity'
+
+wpc_rfi_forms_sources_leadsource.admin.structure.settings:
+  title: 'WPC Lead Sources Settings'
+  description: 'Configure Lead Sources'
+  route_name:  wpc_rfi_forms_sources.leadsource_settings
+  parent: system.admin_structure

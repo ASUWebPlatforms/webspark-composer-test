@@ -1,0 +1,9 @@
+name: 'ASU features survey'
+type: module
+core_version_requirement: '^8.9 || ^9 || ^10'
+dependencies:
+  - asu_survey
+  - field
+  - layout_builder
+  - metatag
+  - webform

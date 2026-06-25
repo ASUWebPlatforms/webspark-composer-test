@@ -1,0 +1,10 @@
+style:
+  version: VERSION
+  css:
+    theme:
+      assets/css/customrenovation_leadership.style.css: {}
+  js:
+    assets/js/customrenovation_leadership.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

@@ -1,0 +1,8 @@
+uuid: d653f950-da61-4483-98d3-35128567f77b
+langcode: en
+status: true
+dependencies: {  }
+id: sda_athletic_ticker
+label: 'SDA Athletic Ticker'
+revision: 0
+description: 'Inferno Athletic ticker slider'

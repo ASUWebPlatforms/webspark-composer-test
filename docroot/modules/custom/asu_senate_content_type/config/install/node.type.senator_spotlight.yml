@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+name: 'Senator Spotlight'
+type: senator_spotlight
+description: 'Senator Spotlight content type to be used to enter data for senators, this will result in individual nodes and Views on the homepage and Senator Spotlight webpage.'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: true

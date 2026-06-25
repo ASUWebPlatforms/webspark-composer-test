@@ -1,0 +1,20 @@
+// MyApps custom mixins
+@import "variables";
+
+/*
+ Returns max width + element centering wrapped with CSS selectors
+ @param (list) elements - CSS selector identifiers (must include class or ID identifiers at the
+                          front of strings)
+ */
+@mixin container-bounded-width($elements) {
+  #{$elements} {
+    @include container-bounded-width-base();
+  }
+}
+/*
+ Returns base CSS for applying maximum width and centering to an element
+ */
+@mixin container-bounded-width-base() {
+  margin: 0 auto;
+  max-width: map-get($container-max-widths, 'xl');
+}

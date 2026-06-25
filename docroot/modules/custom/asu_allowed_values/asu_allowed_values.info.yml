@@ -1,0 +1,5 @@
+name: ASU CCk field allowed values
+type: module
+description: 'Module to update Post content type select option cck fields allowed values programmatically from database'
+package: ASU
+core_version_requirement: ^8.8 || ^9 || ^10

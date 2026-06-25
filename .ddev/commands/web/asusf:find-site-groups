@@ -1,0 +1,95 @@
+#!/bin/bash
+
+##
+## This script finds the group name and ID for a given ASU Site Factory site.
+## It can be used with either a site name or a URL fragment.
+##
+## Usage: asusf:find-site-groups [SITE_NAME_OR_URL_FRAGMENT]
+## Description: This script finds the group name and ID for a given ASU Site.
+## Example: ddev asusf:find-site-groups <site_name>
+##
+## To  use it, set up the needed ACQUIA_FACTORY_URL, ACQUIA_API_KEY, ACQUIA_API_SECRET, ACQUIA_ACSF_USERNAME and ACQUIA_ACSF_KEY
+## in global or project config, just as described in https://ddev.readthedocs.io/en/stable/users/providers/acquia/.
+##  - The ACQUIA_ACSF_USERNAME is the username you use to log in to the ASU Factory site (ASURITE@asu.edu).
+##  - The ACQUIA_ACSF_KEY is the API key found at https://www.asufactory1.acsitefactory.com/user/your_user_id/api-key.
+##
+## This script requires the jq, drush, and acli commands to be available.
+## Install jq: https://jqlang.org/download/
+## Install Drush: https://www.drush.org/13.x/install/ (likely already installed via Composer)
+## Install acli: https://docs.acquia.com/acquia-cloud-platform/add-ons/acquia-cli/docs/install
+
+
+if [ "$#" -ne 1 ]; then
+  echo "Error: This script requires exactly one argument." >&2
+  echo "Usage: $(basename "$0") <sitename_or_url_fragment>" >&2
+  exit 1
+fi
+
+# Define color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+# Example of using color codes:
+# echo -e "${RED}This is red text.${NC}"
+
+# Handle initial authentication via Acquia secrets and ssh
+function authenticate() {
+  if [ -z "${ACQUIA_FACTORY_URL:-}" ]; then echo "Please make sure you have set ACQUIA_FACTORY_URL in your project or global config" && exit 1; fi
+  if [ -z "${ACQUIA_API_KEY:-}" ] || [ -z "${ACQUIA_API_SECRET:-}" ]; then echo "Please make sure you have set ACQUIA_API_KEY and ACQUIA_API_SECRET in your project or global config" && exit 1; fi
+  if [ -z "${ACQUIA_ACSF_USERNAME:-}" ] || [ -z "${ACQUIA_ACSF_KEY:-}" ]; then echo "Please make sure you have set ACQUIA_ACSF_USERNAME and ACQUIA_ACSF_KEY in your project or global config" && exit 1; fi
+  if [ -z "${AH_ORGANIZATION_UUID:-}" ]; then echo "Please make sure you have set AH_ORGANIZATION_UUID in your project or global config" && exit 1; fi
+  if ! command -v ddev drush >/dev/null; then echo "Please make sure your project contains drush, ddev composer require drush/drush" && exit 1; fi
+  ssh-add -l >/dev/null || { echo "Please 'ddev auth ssh' before running this command." && exit 1; }
+  acli auth:login -n -vvv --key="${ACQUIA_API_KEY}" --secret="${ACQUIA_API_SECRET}"
+  acli auth:acsf-login --username="${ACQUIA_ACSF_USERNAME}" --key="${ACQUIA_ACSF_KEY}" --factory-url="${ACQUIA_FACTORY_URL}"
+}
+
+function get_groups() {
+  SITE_NAME="$1"
+  echo -e "🔍 ${BLUE}Looking up site(s) with domain fragment $SITE_NAME...${NC}"
+  JSON_RESPONSE=$(acli acsf:sites:find --domain_contains="$SITE_NAME")
+  echo "$JSON_RESPONSE"
+  # Check if any sites were found in the JSON response:w
+
+  # jq -e will exit with a non-zero status if the path doesn't exist or results in null/false
+  if ! echo "$JSON_RESPONSE" | jq -e '.sites[0]' > /dev/null; then
+    echo -e "${RED}No sites found matching domain fragment '$SITE_NAME'.${NC}"
+    exit 1
+  fi
+
+  echo -e "${BLUE}Processing groups for all found sites...${NC}"
+
+  # Iterate over each site found in the JSON_RESPONSE
+  # jq -c '.sites[]' outputs each site object as a compact JSON string on a new line
+  echo "$JSON_RESPONSE" | jq -c '.sites[]' | while IFS= read -r site_json; do
+    # Extract a display name for the site (e.g., its name or primary domain)
+    # Assuming '.name' field exists for the site object
+    SITE_DISPLAY_NAME=$(echo "$site_json" | jq -r '.site // "Unknown Site"')
+
+    echo -e "${GREEN}Processing site: $SITE_DISPLAY_NAME${NC}"
+
+    # Get group IDs for the current site
+    # Using '(.groups // [])[]' ensures that if 'groups' is null or missing,
+    # it's treated as an empty array, preventing errors.
+    CURRENT_SITE_GROUP_IDS=$(echo "$site_json" | jq -r '(.groups // [])[]')
+
+    if [ -z "$CURRENT_SITE_GROUP_IDS" ]; then
+      echo "No groups found for site: $SITE_DISPLAY_NAME"
+      continue # Skip to the next site
+    fi
+
+    for GROUP_ID in $CURRENT_SITE_GROUP_IDS; do
+      echo -e "${YELLOW}Getting group matching ID $GROUP_ID for site $SITE_DISPLAY_NAME${NC}"
+      acli acsf:groups:get "$GROUP_ID"
+      echo -e "${NC}" # Reset color / add spacing
+    done
+  done
+
+  exit 0
+}
+
+authenticate || (printf "Failed to authenticate" && exit $?)
+
+get_groups $1

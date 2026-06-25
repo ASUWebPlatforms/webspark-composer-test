@@ -1,0 +1,12 @@
+@import '../../sass/extends/video';
+
+.block-inline-blockvideo {
+  .container {
+    padding: 0;
+    .col-12,
+    .col-md-10,
+    .col-lg-12 {
+      padding: 0;
+    }
+  }
+}

@@ -1,0 +1,6 @@
+surveylogin-app:
+  version: 1.0
+  js:
+  css:
+    component:
+  dependencies:

@@ -1,0 +1,98 @@
+
+.asu-president {
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    .block-inline-blockasu-edu-links-only-cards {
+      h2 {
+        width: 70%;
+      }
+    }
+  }
+}
+
+.asu-about {
+    @media screen and (max-width: $uds-grid-container-max-width-lg) {
+      .block-inline-blockasu-edu-links-only-cards {
+        margin-bottom: 0;
+      }
+    }
+}
+
+.asu-research {
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    .block-inline-blockasu-edu-links-only-cards {
+      h2 {
+        max-width: 40%;
+      }
+
+      h3 {
+        font-size: $uds-size-font-medium;
+      }
+    }
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    .block-inline-blockasu-edu-links-only-cards {
+      &.spacing-top-72 {
+        padding-top: 0;
+      }
+    }
+  }
+}
+
+.block-inline-blockasu-edu-links-only-cards {
+  .card {
+    border: none;
+    background-color: transparent;
+  }
+
+  h3 {
+    margin-top: 0;
+  }
+
+  a {
+    display: block;
+    margin-bottom: 0.5em;
+    margin-left: 0;
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    &.spacing-top-72 {
+      margin-top: $uds-size-spacing-6;
+      padding-top: $uds-size-spacing-4;
+    }
+
+    .row-spaced {
+      margin-bottom: 0;
+       > .col {
+        margin-bottom: 0;
+       }
+    }
+
+    .card {
+      margin-bottom: 0;
+    }
+
+    h2 {
+      margin-bottom: 0;
+      line-height: $uds-size-spacing-4;
+    }
+
+    h3 {
+      margin-top: $uds-size-spacing-2;
+    }
+    margin-bottom: $uds-size-spacing-4;
+  }
+}
+
+// 3 Cards No Image
+.block-inline-blockasu-edu-for-the-media {
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    &.spacing-top-72 {
+      padding-top: $uds-size-spacing-3;
+    }
+
+    .row-spaced {
+      margin-bottom: $uds-size-spacing-2;
+    }
+  }
+}

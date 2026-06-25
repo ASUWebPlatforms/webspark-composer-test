@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Compact Experience Finder entry point for the homepage.
+ *
+ * Renders the same two exposed BEF filters as the Experience Finder (turned
+ * into dropdowns by the shared JS), but the form is re-pointed at the full
+ * /find-experiences results page in elevate_experience_import_form_alter(). The
+ * filters are identical (same identifiers, multi-valued), so a selection here
+ * lands pre-checked on the results page.
+ *
+ * Variables (from elevate_experience_import_preprocess_views_view):
+ * - exposed: the rendered exposed filter form.
+ * - find_experiences_url: string URL of the results page (for the explore link).
+ *
+ * The view rows are intentionally not rendered — this block is just the form.
+ */
+#}
+{{ attach_library('elevate_experience_import/experience_finder') }}
+<section{{ attributes.addClass('experience-finder').addClass('experience-finder-home') }}>
+  <div class="experience-finder-home__inner">
+    <h2 class="experience-finder-home__title">{{ 'Find experiences that work for you.'|t }}</h2>
+
+    {% if exposed %}
+      <div class="experience-finder__filters experience-finder-home__filters">{{ exposed }}</div>
+    {% endif %}
+
+    <a class="experience-finder-home__explore" href="{{ find_experiences_url }}">
+      {{ 'Or explore all experience'|t }} <span aria-hidden="true">&raquo;</span>
+    </a>
+  </div>
+</section>

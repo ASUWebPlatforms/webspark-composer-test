@@ -1,0 +1,7 @@
+{
+    "name": "analytics/analytics_groups",
+    "description": "Manage groups for the Analytics website.",
+    "type": "drupal-module",
+    "license": "MIT",
+    "require": {}
+}

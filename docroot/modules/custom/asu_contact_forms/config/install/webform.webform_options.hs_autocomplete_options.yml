@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: hs_autocomplete_options
+label: 'HS autocomplete options'
+category: 'High school'
+likert: false
+options: |-
+  'Hamilton high school': 'Hamilton high school'
+  Basis: Basis

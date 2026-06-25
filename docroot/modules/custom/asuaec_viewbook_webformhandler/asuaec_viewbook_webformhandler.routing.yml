@@ -1,0 +1,7 @@
+asuaec_viewbook_webformhandler.asuaec_viewbook_webformhandler_settings:
+  path: '/admin/config/asuaec-viewbook-webformhandler'
+  defaults:
+    _form: '\Drupal\asuaec_viewbook_webformhandler\Form\RfiAdminSwitch'
+    _title: 'ASU AEC Viewbook Webform Handler - Admin config page'
+  requirements:
+    _permission: 'administer asuaec_viewbook_webformhandler'

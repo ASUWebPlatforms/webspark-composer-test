@@ -1,0 +1,9 @@
+# Custom module library for general purposes.
+a11y_report_form:
+  js:
+    js/a11y-report-form.js: {}
+  dependencies:
+    - core/drupalSettings
+    - core/jquery
+    - core/js-cookie
+    - core/once

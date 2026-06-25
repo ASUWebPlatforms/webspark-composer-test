@@ -1,0 +1,6 @@
+#!/bin/bash
+## Description: Run Stylelint
+## Usage: stylelint
+## Example: ddev stylelint [options] [file|directory]
+
+yarn stylelint "$@"

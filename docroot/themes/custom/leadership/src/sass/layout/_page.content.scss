@@ -1,0 +1,125 @@
+// Page: Content
+// -----------------------------------------------------------------------------
+
+@keyframes scroll_2 {
+  0%   { transform: translateY(0); opacity: 1; }
+  25%  { opacity: 1; }
+  75%  { transform: translateY(.75em); opacity: 0; }
+  100% { transform: translateY(0); opacity: 0; }
+}
+
+.w-33 {
+  width: 33%!important;
+    @media (max-width: 575.98px) {
+      width: 100% !important;
+  }
+}
+
+.w-85 {
+  width: 85% !important;
+}
+
+.underline-gold {
+  text-decoration: underline #ffc627;
+
+}
+
+.no-click {
+  &.card-hover {
+    &:hover {
+      transform: scale(1.05);
+      cursor: default;
+      box-shadow: 0 8px 16px rgb(25 25 25 / 20%);
+    }
+  }
+}
+
+.scroll-icon {
+  display: block;
+  position: relative;
+  height: 2em;
+  width: 1em;
+  border: .25em solid #fff;
+  border-radius: .7em;
+  background-color: #fff;
+  &__dot {
+    display: block;
+    position: absolute;
+    left: 50%;
+    background: #191919;
+    height: .5em;
+    width: .5em;
+    top: .6em;
+    margin-left: -.25em;
+    border-radius: 50%;
+    transform-origin: top center;
+    backface-visibility: hidden;
+    animation: scroll_2 2s ease-out infinite;
+  }
+  @media (max-width: 575.98px) {
+    display: none;
+  }
+}
+
+.form-actions {
+  .form-submit {
+    &.btn-maroon {
+      color: #212529;
+      background-color: #ffc627;
+      border-color: #ffc627;
+    }
+    &.btn-maroon:hover {
+      color: #212529;
+      background-color: #ffc627;
+      border-color: #ffc627;
+    }
+  }
+}
+
+.webform-button--submit {
+  &.btn-maroon {
+    color: #212529;
+    background-color: #ffc627;
+    border-color: #ffc627;
+  }
+  &.btn-maroon:hover {
+    color: #212529;
+    background-color: #ffc627;
+    border-color: #ffc627;
+  }
+}
+
+@media (min-width: 992px) {
+  .uds-image-overlap {
+      max-height: 100%;
+      margin: 0 12px;
+      display: grid;
+      grid-template-columns: 1.5rem 1fr 20rem 10rem 1.5rem;
+      grid-template-rows: 12.75rem 1fr 12.75rem;
+      gap: 0 0;
+  }
+}
+
+.bg-gray-1 {
+    a {
+    &.btn-gold {
+        color: #212529;
+      }
+    }
+  }
+
+  .block--leadership-content {
+  .video-btn {
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    margin-bottom: 96px;
+      img {
+        width: 100% !important;
+      }
+    }
+  }
+
+  .captcha {
+    margin-bottom: 36px;
+  }

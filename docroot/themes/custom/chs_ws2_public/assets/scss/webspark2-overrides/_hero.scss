@@ -1,0 +1,15 @@
+div[class^=uds-hero] {
+
+    h1 {
+        line-height: 4.513rem;
+        max-width: 100%;
+    }
+}
+
+.uds-video-hero {
+    .highlight- {
+        background-color: $gold;
+        color: $dark;
+        box-shadow: -0.15em 0 0 $gold, 0.15em 0 0 $gold;
+    }
+}

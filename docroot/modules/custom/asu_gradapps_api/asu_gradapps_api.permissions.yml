@@ -1,0 +1,4 @@
+access asu gradapps api endpoints:
+  title: 'Access ASU GRADAPPS API endpoints (announcements, gf_data)'
+  description: 'Allows users with this permission to access the /asu_gradapps_api/announcements and /asu_gradapps_api/gf_data endpoints.'
+  restrict access: TRUE

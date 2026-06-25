@@ -1,0 +1,4 @@
+cron_notification:
+  subject: 'Notification: Cron executed'
+  body: |
+    This is a notification to inform you that the cron job has been executed successfully.

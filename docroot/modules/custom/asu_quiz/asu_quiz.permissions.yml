@@ -1,0 +1,3 @@
+administer asu_quiz:
+  title: 'Administer ASU Quiz'
+  description: 'Make changes to the ASU Quiz module&#039;s settings.'

@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: high_school
+label: 'High School'
+category: ''
+likert: false
+options: ''

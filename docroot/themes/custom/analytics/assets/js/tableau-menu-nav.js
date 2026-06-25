@@ -1,0 +1,2 @@
+document.addEventListener("DOMContentLoaded",(function(){Reveal.initialize({controls:!1,controlsTutorial:!1,controlsLayout:"edges",progress:!1,hash:!0,jumpToSlide:!0,history:!0,keyboard:!0,keyboardCondition:null,overview:!1,touch:!1,fragments:!1,embedded:!0,disableLayout:!1,help:!1,preloadIframes:!0,width:1920,height:1080})}));
+//# sourceMappingURL=tableau-menu-nav.js.map

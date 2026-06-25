@@ -1,0 +1,12 @@
+.asu-admission {
+  .block-inline-blockasu-edu-content-image-overlap {
+    @media screen and (max-width: $uds-grid-container-max-width-lg) {
+      margin-top: 0;
+    }
+  }
+  .block-inline-blockasu-edu-bottom-image-with-cta {
+    @media screen and (max-width: $uds-grid-container-max-width-lg) {
+      padding-top: $uds-size-spacing-4;
+    }
+  }
+}

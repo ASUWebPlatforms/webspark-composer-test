@@ -1,0 +1,51 @@
+// Application
+// -----------------------------------------------------------------------------
+@import "../base/mixins";
+
+// Max width content is manually set for the following DOM elements.
+// Requires classes or IDs inside of the .page__content div
+$node-application-containers-max-capped: (
+  ".block--getpro-tabs",
+  "article.node.application"
+);
+
+.node--application {
+  .page__content {
+    // Application content type - Global
+    // layout
+    @include container-bounded-width($node-application-containers-max-capped);
+
+    [class^=application__] {
+      padding: 0 1rem;
+    }
+    // Field-specific
+    .application__body {
+      font-size: 1.25rem;
+    }
+    .application__field-company-logo img.card-img-top {
+      max-width: 8.125rem;
+      max-height: 8.125rem;
+      float: right;
+      padding-left: 1rem;
+    }
+    p {
+      max-width: 75ch;
+    }
+  }
+}
+
+// Media rules
+@media all and (max-width: map-get($grid-breakpoints, 'lg')) {
+  .node--application {
+    .page__content {
+      // Page title
+      #block-pagetitle .container {
+        margin-left: 0;
+        margin-right: initial;
+        h1 {
+          padding-left: 0;
+        }
+      }
+    }
+  }
+}

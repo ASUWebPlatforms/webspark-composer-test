@@ -1,0 +1,8 @@
+{% set media_entity = element[0]['#media'] %}
+{% set image_field = media_entity.field_media_image %}
+
+{% if image_field.entity %}
+	<div class="mw-1200 mx-auto mb-6">
+		<img class="mw-1200" src="{{ file_url(image_field.entity.uri.value) }}" alt="{{ image_field.alt }}"/>
+	</div>
+{% endif %}

@@ -1,0 +1,7 @@
+# Define default links for this module.
+
+asuaec_rfib2_directpost.asuaec_rfib2_directpost_settings:
+  title: ASU AEC RFI B2 direct post settings
+  description: ASU AEC RFI B2 direct post settings
+  parent: system.admin_config_system
+  route_name: asuaec_rfib2_directpost.asuaec_rfib2_directpost_settings

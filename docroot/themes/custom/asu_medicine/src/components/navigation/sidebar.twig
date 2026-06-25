@@ -1,0 +1,9 @@
+{{ content.field_heading }}
+
+<nav class="sidebar accordion" aria-label="Secondary">
+
+  {% for link in nav_links %}
+    <a class="nav-link" href="{{ link.url }}">{{ link.title }}</a>
+  {% endfor %}
+
+</nav>

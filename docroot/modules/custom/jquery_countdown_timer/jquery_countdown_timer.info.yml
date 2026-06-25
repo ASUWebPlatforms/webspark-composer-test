@@ -1,0 +1,7 @@
+name: 'ASU AEC jQuery Countdown Timer'
+type: module
+description: 'This is a custom version of jQuery countdown timer module. jquery_countdown_timer.js was modified in order to remove Weeks. It lives in custom folder.'
+package: custom
+core_version_requirement: ^8 || ^9 || ^10
+dependencies:
+  - drupal:block

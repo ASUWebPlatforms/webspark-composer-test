@@ -1,0 +1,37 @@
+{#
+/**
+ * @file
+ * Template for a Block component.
+ *
+ * Available config:
+ * - html_tag: The HTML tag for the block.
+ * - block_utility_classes: An array of utility classes for block.
+ */
+#}
+{% set block_classes = [
+  'select-topic-block',
+  'py-4',
+]
+%}
+<div{{ attributes.addClass(block_classes) }}>
+
+  {{ title_prefix }}
+  {% if label %}
+    {% block label %}
+      <h2{{ title_attributes }}>{{ label }}</h2>
+    {% endblock %}
+  {% endif %}
+  {{ title_suffix }}
+  <div class="row">
+    <div class="col-4 my-4 text-align-right">
+      <h3 class="select-topic-block--label text-align-right my-0 pb-1">Explore by topic category</h3>
+      <div class="select-topic-block--link"><a href="/topics">See all topics</a></div>
+    </div>
+    <div class="col-5 my-4">
+      {{ content.topic_category }}
+    </div>
+  </div>
+
+</div>
+
+

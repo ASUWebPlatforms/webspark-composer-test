@@ -1,0 +1,29 @@
+{#
+/**
+ * @file
+ * Template for the main page.
+ */
+#}
+<div class="page">
+  <main class="block">
+    {% if page.header %}
+      <div class="container">
+        {{ page.header }}
+      </div>
+    {% endif %}
+
+    {% if page.content %}
+      <div class="page__content pb-5">
+        <div class="container">
+        {{ page.content }}
+        </div>
+      </div>
+    {% endif %}
+  </main>
+
+  {% if page.footer %}
+    <footer class="page__footer" role="contentinfo">
+      {{ page.footer }}
+    </footer>
+  {% endif %}
+</div>

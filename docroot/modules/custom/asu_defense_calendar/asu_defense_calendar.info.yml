@@ -1,0 +1,5 @@
+name: ASU Defense Calendar
+type: module
+description: 'Search and display announcements with AJAX.'
+package: ASU
+core_version_requirement: ^9 || ^10

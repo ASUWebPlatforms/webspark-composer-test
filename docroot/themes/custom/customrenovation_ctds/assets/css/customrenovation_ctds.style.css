@@ -1,0 +1,241 @@
+/* Fix btn-primary issue */
+.btn-primary {
+  background-color: #8c1d40;
+  color: view-home-news-feature;
+}
+.btn-primary a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  color: #ffffff;
+  background-color: #8c1d40;
+  border-color: #8c1d40;
+}
+
+/* remove extra padding from nested containers */
+.container .container {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* fix pagination alignment to be centered */
+.pagination {
+  justify-content: center;
+}
+
+/* fix image carousel bullet on black bg */
+.glide__bullet--active {
+  border: 1px solid #d0d0d0 !important;
+}
+
+.goldbg {
+  background-color: #ffc627;
+}
+
+/* Size degree programs overview grid */
+.degreeprograms .row .col-lg-6 img {
+  width: auto;
+  display: block;
+  margin: 0;
+  clear: both;
+}
+
+.degreeprograms .row .col-lg-6 {
+  margin-bottom: 3px;
+  margin-top: 3px;
+}
+
+.degreeprograms .row .col-lg-6 {
+  padding: 25px;
+}
+
+@media only screen and (min-width: 992px) {
+  .bottom-row {
+    border-top: 5px dotted #000;
+  }
+
+  .degreeprograms .row .col-lg-6 {
+    border-right: 5px dotted #000;
+  }
+
+  .degreeprograms .row .col-lg-6 img {
+    height: 70px;
+    width: auto;
+  }
+
+  .degreeprograms .row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .degreeprograms .row .col-lg-6 p {
+    clear: both;
+    max-width: 300px;
+  }
+
+  .degreeprograms {
+    margin-bottom: 48px;
+  }
+}
+.degreeprograms .row .col-lg-6:last-child {
+  border-right: none;
+  padding-right: 0px;
+}
+
+.degreeprograms .row .col-lg-6 {
+  margin-bottom: 3px;
+  margin-top: 3px;
+}
+
+.firstyear.svg, .transferstudents.svg, .graduatestudents.svg, .veterans.svg {
+  height: 80px;
+}
+
+/* fix ranking comparison text bg and wrap */
+.rcontbox p {
+  font-size: 0.875rem;
+  line-height: 1.43rem;
+  letter-spacing: -0.01rem;
+}
+
+.rcontbox p span.highlight-black {
+  box-shadow: 0.3em 0 0 #191919, 0.3em 0 0 #191919;
+  background: #191919;
+  color: #ffc627;
+  padding: 5px;
+  padding-left: 0px;
+  box-shadow: -5px 0 0 #000;
+}
+
+.rcontbox p span[class^=highlight-] {
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+div.rank div.school {
+  margin-bottom: 5px;
+}
+
+.gold-downtown-bg {
+  padding: 96px 0 96px 0;
+  background-image: url(/sites/default/files/uploads/2019/08/sunset-thrive-silhouette-downtown.jpg);
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  min-height: 525px;
+  margin-bottom: -40px;
+}
+
+p.rcontext {
+  background-color: #000;
+  color: #ffc627;
+  display: inline;
+  white-space: pre-wrap;
+  line-height: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: arial, sans-serif;
+  padding: 5px;
+  padding-left: 0px;
+  box-shadow: -5px 0 0 #000;
+  -webkit-box-decoration-break: clone;
+  -o-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.watts-schools {
+  overflow: hidden;
+}
+
+.watts-schools h2 {
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+}
+
+/* Fix weird background issue for mobile */
+.layout__full-width {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.layout__full-width .layout__region--first {
+  width: 100%;
+}
+
+/* end bg fix */
+/* make watts image larger */
+@media (min-width: 768px) {
+  #about-watts > .uds-card-and-image {
+    height: 600px;
+  }
+}
+/* Fix views pager */
+.views-element-container nav.pager {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.views-element-container nav.pager ul {
+  list-style: none;
+  display: inline-flex;
+  padding: 0;
+}
+
+.views-element-container nav.pager li {
+  padding: 1rem;
+}
+
+.view-home-news-feature {
+  padding: 0.5rem 1rem;
+  background-color: rgba(255, 198, 39, 0.65);
+  margin-left: 4px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 512px;
+  border-top: 1px solid white;
+  border-right: 1px solid white;
+}
+.view-home-news-feature .featured-story {
+  display: inline-block;
+  background-color: #454545;
+  color: #fff;
+  padding: 0.25rem 0.6rem;
+  font-weight: 600;
+  font-size: 1.65rem;
+  position: relative;
+  top: 0.5em;
+  left: 50%;
+  transform: translateX(-50%);
+  min-height: 20px;
+}
+.view-home-news-feature > div {
+  align-self: center;
+}
+.view-home-news-feature .well {
+  padding: 19px;
+  margin-bottom: 20px;
+  background-color: #fafafa;
+  border-radius: 0;
+  box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 12px;
+  border: 1px solid #ddd;
+  max-width: 800px;
+}
+.view-home-news-feature .well .thumb {
+  margin: 1rem;
+}
+@media screen and (min-width: 1020px) {
+  .view-home-news-feature .well .thumb {
+    float: left;
+  }
+}
+
+.more-link {
+  text-align: right;
+  padding: 10px;
+}
+/*# sourceMappingURL=customrenovation_ctds.style.css.map*/

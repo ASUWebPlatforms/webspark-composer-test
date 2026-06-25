@@ -1,0 +1,4 @@
+services:
+  asu_cost_comparison_tool.WebformSubmissionHelper:
+    class: Drupal\asu_cost_comparison_tool\Service\webformSubmissionHelper
+    arguments: ['@entity_type.manager']

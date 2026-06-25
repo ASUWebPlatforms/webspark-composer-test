@@ -1,0 +1,151 @@
+#yearNav {
+    background-color: #E6F7FC;
+    display: inline-block;
+    padding: 10px;
+}
+
+#yearNav>ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    list-style: none;
+    margin: 5px 0 0;
+    padding: 0;
+}
+
+.responseset {
+    border: 1px dashed #d17900;
+    padding: 10px;
+    background-color: #fff;
+    max-width: 700px;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.responseset .alert {
+    background-color: #f8f8f8;
+    padding: 5px 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #d17900;
+    font-size: 0.9rem;
+    border: none;
+}
+
+.responseset h2 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #0056a4;
+    margin: 10px 0;
+}
+
+.responseset a {
+    color: #800020 !important;
+    text-decoration: underline;
+    font-size: 0.9rem;
+    font-weight: normal;
+    cursor: pointer;
+    display: block;
+    margin-top: 5px;
+    transition: color 0.3s ease-in-out;
+}
+
+.responseset a:hover {
+    color: #600015 !important;
+}
+
+.responsedetail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, padding 0.3s ease-out;
+    padding: 0 10px;
+}
+
+.responsedetail.open {
+    max-height: 500px;
+    padding: 10px 10px;
+    transition: max-height 0.5s ease-in, padding 0.3s ease-in;
+}
+
+.text-right {
+    text-align: right;
+    margin: 1rem 0;
+}
+
+.people-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    align-items: stretch;
+}
+
+.person-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: left;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    min-height: 250px;
+}
+
+.person-image {
+    flex-shrink: 0;
+    margin-right: 12px;
+}
+
+.person-image img {
+    width: 110px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 2px solid #800020;
+}
+
+.person-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.person-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #800020;
+    margin-bottom: 3px;
+}
+
+.person-title a {
+    color: #800020;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+
+.person-title a:hover {
+    color: #600015;
+}
+
+.person-description {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.scp-list-table table {
+    margin-top: 20px;
+}
+
+@media (max-width: 992px) {
+    .people-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .people-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}

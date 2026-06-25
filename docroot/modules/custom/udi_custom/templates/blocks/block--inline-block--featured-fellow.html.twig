@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Template for a block.
+ */
+#}
+
+{% set display = content.field_grid_links_display|render|trim|striptags %}
+
+{% set interest_in_oppr = content.field_interest_in_opportunity|render %}
+
+{% set classes = [
+  'block',
+  'block-' ~ configuration.provider|clean_class,
+  'block-' ~ plugin_id|clean_class,
+  'block-featured-fellow',
+] %}
+
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {% if label %}
+    {% block label %}
+      <h2{{ title_attributes }}>{{ label }}</h2>
+    {% endblock %}
+  {% endif %}
+  {{ title_suffix }}
+
+  <div class="block-featured-fellow--profile mb-1">
+    {{ content.field_team_member }}
+  </div>
+    <div class="block-featured-fellow--body">
+    <p>{{ content.field_body }}</p>
+    {% if interest_in_oppr %}
+      <p><strong>What interested me about this opportunity…</strong><br />{{ interest_in_oppr }}</p>
+    {% endif %}
+    {% if content.field_work_during_fellowship|render is not empty %}
+      <p><strong>During this fellowship, I have been working on…</strong><br />{{ content.field_work_during_fellowship }}</p>
+    {% endif %}
+    {% if content.field_fellowship_focal_areas|render is not empty %}
+      <p><strong>Fellowship Focal Areas:</strong><br />{{ content.field_fellowship_focal_areas }}</p>
+    {% endif %}
+  </div>
+</div>

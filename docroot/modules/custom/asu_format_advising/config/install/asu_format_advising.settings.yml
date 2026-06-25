@@ -1,0 +1,28 @@
+introduction:
+  value: >
+    <p><img src="https://live-pants-graduateapps-d7.ws.asu.edu/sites/default/files/formatwizard_logo_maroon_on_white150x.png" alt="Format Wizard" height="80" width="300"/></p>
+    <p>The Format Wizard is designed to aid students who must produce a thesis, dissertation, or equivalent under the supervision of their committee chair, and successfully defend it as part of their degree requirements. The Format Wizard employs Arizona State University's specific formatting guidelines to generate a template into which you insert your document's text.</p>
+    <p>Copies of your document will be placed in the ASU Library Digital Repository and ProQuest (UMI/ProQuest). Because of this, your document must meet professional standards of published research. Both your committee and the Graduate College expect to see evidence of careful attention to style and format in the document that you present to fulfill the requirements for your graduate degree.</p>
+    <p>Each page contains instructions and guides. Below is a sample formatted document. Please look at the document before using the Format Wizard so you have an idea of the final product being created as you walk through the steps.</p>
+    <p>For your reference, please review the <a href="https://graduate.asu.edu/current-students/completing-your-degree/formatting-your-thesis-or-dissertation/asu-graduate-college" target="_blank">Graduate College Format Manual</a> and <a href="/formatadv_docs/docs/formatteddocument.pdf" target="_blank">Sample Formatted Document</a>.</p>
+    <p><strong>For people with Macintosh (MAC), MacBook's, MacAir's, etc. computers if you have a high screen resolution sometimes the instructions will overlap the text fields. The recommended resolution for a Mac computer for this tool is 1040+ by 1280+.</strong></p>
+    <p>If you receive an error message while trying to access or use the Format Wizard, please clear your browser’s cache and try accessing the tool again.</p>
+create_document:
+  value: >
+    <p>Once you have created your document, insert your text into the Additional information sections, and into each chapter. Please note: you must update the page numbers in the Table of Contents to correspond with your chapters in the document once you have inserted your content. Return to Step 7 to make changes to the document.</p>
+    <p>For your reference, please review the <a href="https://graduate.asu.edu/current-students/completing-your-degree/formatting-your-thesis-or-dissertation/asu-graduate-college" target="_blank">Graduate College Format Manual</a> and <a href="/formatadv_docs/docs/formatteddocument.pdf" target="_blank">Sample Formatted Document</a>.</p>
+    <p>By clicking the Create Document button, a Word document will be generated that meets ASU Format Review guidelines. The Format Wizard has successfully been tested and verified with Word 2003, Word 2007 and Word 2010 on Windows XP/Vista/7 and Word 2004, Word 2008, and Word 2011 on Mac OSX. OpenOffice is not supported at the present time.</p>
+    <p>Once you have generated your document by clicking on "Create Document," save it as a Microsoft Word document.</p>
+    <p>Guides and Hints:</p>
+    <ol>
+      <li>First level headings of each chapter are formatted for you. Only paste text and subheadings of chapters into the generated document.</li>
+      <li>Check the abstract to ensure that no special characters were turned to coding; if they were, correct accordingly.</li>
+      <li>Check the pagination of the Table of Contents, List of Tables,
+      List of Figures, et cetera, against the pages of the finished document.</li>
+      <li>Check your citations to ensure they accord with your chosen style guide.</li>
+      <li>Save the generated document as a Word file.</li>
+      <li>Correct problems as necessary in the document.</li>
+      <li>See the format manual for further information on tables, figures, and symbols/nomenclature.</li>
+      <li>See the style guide quick references for further information specific to style guides.</li>
+    </ol>
+    <p>After you click Create Document, changes to the created document can be made through editing in Step 7. To return to Step 7 click the back button in Step 8. Note, once you click create document again, you will need to reinsert text if necessary.</p>                    

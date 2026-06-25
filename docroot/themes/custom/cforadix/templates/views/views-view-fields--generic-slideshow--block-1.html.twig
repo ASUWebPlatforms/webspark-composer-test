@@ -1,0 +1,21 @@
+<div class="hero-section">
+	{% if fields.field_image.content|striptags|trim|replace({" image":" "," \n": " ",' ': ''}) is not empty %}
+		<div id="viewblock3" class="uds-hero genericblock1 uds-hero-md" style="background-image: linear-gradient(180deg, #19191900 0%, #191919c9 100%), url('{{ file_url(fields.field_image.content|striptags|trim|replace({" image":" "," \n": " ",' ': ''})) }}');">
+			{% if 'show-caption' in fields.field_hide_title.content|render|render  %}
+				<div class="container uds-hero-container">
+					<h1 class="heading heading-one col-md-8">
+						<span class="highlight highlight-gold highlight-heading-one">{{ parent_node_title|default(fields.title.content) }}</span>
+					</h1>
+					{% if fields.field_link.content is not empty %}
+						<div class="uds-hero-text col-sm-12 col-md-7">
+							<p>{{ fields.body.content }}</p>
+							{{ fields.field_link.content }}
+						</div>
+					{% else %}
+						<span></span>
+					{% endif %}
+				</div>
+			{% endif %}
+		</div>
+	{% endif %}
+</div>

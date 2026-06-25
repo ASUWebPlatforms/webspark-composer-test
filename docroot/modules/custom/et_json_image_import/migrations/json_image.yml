@@ -1,0 +1,50 @@
+# Takes images from JSON file and imports them into Drupal as image files.
+id: json_image
+label: Import images from JSON file
+migration_group: WP_JSON
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  constants:
+    FILEDIRECTORY: 'public://'
+  urls:
+    - 'public://json/et_json_image_import.json'
+  item_selector: 0
+  fields:
+    -
+      name: image_url
+      label: 'URL of image on source site'
+      selector: image_url
+    -
+      name: alt_text
+      label: 'Alt Text'
+      selector: alt_text
+    -
+      name: filename
+      label: 'Filename'
+      selector: filename
+  ids:
+    filename: # filename used as identifier in next steps of migration
+      type: string
+process:
+  destination_full_path:
+    plugin: concat
+    source:
+        - constants/FILEDIRECTORY
+        - filename
+  uri:
+    plugin: download
+    source:
+      - image_url
+      - '@destination_full_path'
+    file_exists: rename
+  uid:
+    plugin: default_value
+    default_value: 1 # Assign to user 1 (admin)
+  status:
+    plugin: default_value
+    default_value: 1 # Set file status to permanent
+  filename: filename
+destination:
+  plugin: entity:file

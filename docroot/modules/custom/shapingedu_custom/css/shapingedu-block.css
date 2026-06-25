@@ -1,0 +1,22 @@
+/* Remove gutters from homepage card arrangement */
+.home-cards .uds-card-arrangement>.uds-card-arrangement-card-container.auto-arrangement {
+  row-gap: 0;
+}
+
+.home-cards .uds-card-arrangement>.uds-card-arrangement-card-container {
+  -moz-column-gap: 0;
+  column-gap: 0;
+}
+
+.home-cards .card {
+  border: 0;
+}
+
+.home-cards .card-img-top {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.shapingedu-event-cards .card-img-top img {
+  aspect-ratio: 2;
+}

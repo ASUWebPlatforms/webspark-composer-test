@@ -1,0 +1,42 @@
+{#{{ dump(content['#entity'].field_degree_detail_hero_image) }}#}
+{% set hero_style = content['#entity'].field_degree_detail_hero_size.value %}
+{% set hero_image_target_id = content['#entity'].field_degree_detail_hero_image.0.target_id %}
+
+{{ hero_image_target_id }}
+{% for key, image in content.field_degree_detail_hero_image  %}
+  {% set media = image.entity %}
+  {# The field name in the referenced entity is "field_image_file #}
+  {% set file = media.field_image_file.entity | merge({'#image_style': 'thumbnail'}) %}
+  {% set uri = file_url(file.uri.value)  %}
+  <img src="{{ uri }}" alt="{{ media.name.value }}" />
+{% endfor %}
+
+{% if hero_image_target_id is not empty %}
+  {{ file_url(hero_image_target_id) }}
+{% endif %}
+
+{% if content %}
+  <div{{ attributes.addClass('layout__full-width') }}>
+{#    {% if content.first %}#}
+      <div {{ region_attributes.first.addClass('layout__region', 'layout__region--first') }}>
+        <section>
+          <div class="uds-hero {{ hero_style == "large" ? 'uds-hero-lg' : 'uds-hero-md' }}">
+            <div class="hero-overlay"></div>
+
+                {{ content }}
+
+            <h1 data-testid="hero-title" style="max-width: 100%;"><span class="text-dark highlight-gold">{{ content['#entity'].getTitle() }}</span></h1>
+          </div>
+          <div class="content">
+
+            {% for key, item in content.first %}
+              {% if not loop.first %}
+                {{ item.content }}
+              {% endif %}
+            {% endfor %}
+          </div>
+        </section>
+      </div>
+{#    {% endif %}#}
+  </div>
+{% endif %}

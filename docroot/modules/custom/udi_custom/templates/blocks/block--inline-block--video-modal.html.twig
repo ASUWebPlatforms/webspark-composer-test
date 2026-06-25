@@ -1,0 +1,61 @@
+{#
+/**
+ * @file
+ * Template for a block.
+ */
+#}
+
+{{ attach_library('udi_custom/modals') }}
+
+{% set display = content.field_grid_links_display|render|trim|striptags %}
+{% set unique_id = block.id.value %}
+
+{% set classes = [
+  'block',
+  'block-' ~ configuration.provider|clean_class,
+  'block-' ~ plugin_id|clean_class,
+  'block-video-modal',
+] %}
+
+<article{{ attributes.addClass(classes) }} id="video-block-{{ unique_id }}">
+  {{ title_prefix }}
+  {% if label %}
+    {% block label %}
+      <h2{{ title_attributes }}>{{ label }}</h2>
+    {% endblock %}
+  {% endif %}
+  {{ title_suffix }}
+  <div class="block-video-modal--video">
+    <!--<img src="{{ content.field_static_image|render|striptags|trim }}">
+    <button type="button" data-toggle="modal" data-target="#udiVideoModal--{{ unique_id }}" class="video-play">
+      <img src="/modules/custom/udi_custom/css/images/play.svg">
+    </button>
+    <div id="udiVideoModal--{{ unique_id }}" class="modal fade " tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="embedded-video">
+              <div class="video-player" id="video--{{ unique_id }}">
+                <iframe title="vimeo-player" id="embed--{{ unique_id }}" class="video-embed" src="{{ content.field_udi_video_url|render|striptags|trim }}" height="360" width="640" frameborder="0" allowfullscreen></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>-->
+    <div class="modal-content--bypass">
+      <div class="modal-body">
+        <div class="embedded-video">
+          <div class="video-player" id="video--{{ unique_id }}">
+            <iframe title="vimeo-player" id="embed--{{ unique_id }}" class="video-embed" src="{{ content.field_udi_video_url|render|striptags|trim }}" height="360" width="640" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="udi-video__caption my-2">
+     {{ content.field_heading|render|striptags|trim }}
+    </div>
+  </div>

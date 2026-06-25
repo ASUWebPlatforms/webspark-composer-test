@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'International countries'
+vid: international_countries
+description: ''
+weight: 0

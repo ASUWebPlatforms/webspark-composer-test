@@ -1,0 +1,6 @@
+asu_feeds_customization.degreePopulateForm:
+  title: 'Populate degrees'
+  description: 'Form to populate degrees data'
+  route_name: asu_feeds_customization.degreePopulateForm
+  parent: system.admin_config_system
+  weight: 11

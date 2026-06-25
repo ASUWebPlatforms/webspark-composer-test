@@ -1,0 +1,43 @@
+{#
+@file
+The template for the minimal teaser.
+
+Available variables:
+- title: The title.
+- content: The content.
+- draft: Boolean. If the content is a draft. This should only be visible to the owner of the content.
+- button: Array of button objects.
+  - url: The button URL.
+  - text: The button text.
+  - color: The button color (maroon, gold, dark).
+#}
+{# TODO: Create a way to allow a user to either view or edit the node, base upon path or permissions #}
+
+{# Minimal A - https://xd.adobe.com/view/1b8ba4f1-505b-41e0-9aa6-81f94f0863b4-4ed8/screen/a4ee3477-0e30-43dd-8133-f5aac9520503/specs/?x_product=xd-jira%2F2.0 #}
+<div class="tw-border tw-border-[#d0d0d0] tw-border-solid tw-bg-white tw-p-8">
+  <div class="row gy-2 align-items-center">
+    <div class="col-12 col-md-9">
+      <h3 class="tw-my-0 tw-leading-none">{{ title }}</h3>
+      <p class="tw-mt-2 tw-mb-0 tw-leading-none tw-inline-block">{{ content }}</p>
+      {# TODO: Ensure that only the people that have permission to edit the content can view this  #}
+      {% if draft %}
+        <span class="badge text-bg-gray-2 tw-inline-block">Draft</span>
+      {% endif %}
+    </div>
+
+    <div class="col-12 col-md-3 md:tw-text-right">
+      {# TODO: If the current user has permission to edit the content, give them the option to edit it #}
+      <a href="{{ button.url }}"
+        class="btn btn-md btn-{{ button.color|default('maroon') }}"
+        data-ga="Button link here"
+        data-ga-name="onclick"
+        data-ga-event="link"
+        data-ga-action="click"
+        data-ga-type="internal link"
+        data-ga-region="main content"
+        data-ga-section="card default title">
+        {{ button.text }}
+      </a>
+    </div>
+  </div>
+</div>

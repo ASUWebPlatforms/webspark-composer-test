@@ -1,0 +1,21 @@
+.btn.btn-primary a {
+  color: #fff;
+  background: #8c1d40;
+  text-decoration: none;
+}
+.btn.btn-secondary, .btn.btn-secondary:hover {
+  color: #fff;
+  background-color: #191919;
+  border-color: #191919;
+}
+.btn.btn-secondary a, .btn.btn-secondary a:hover {
+  color: #fff;
+  background-color: #191919;
+  border-color: #191919;
+  text-decoration: none;
+}
+
+/* Remove border from embedded images without captions */
+.formatted-text .embedded-media img {
+  border: none;
+}

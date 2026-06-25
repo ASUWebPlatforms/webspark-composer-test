@@ -1,0 +1,67 @@
+
+/*------------------------------------------------------------------
+1. Basic Card Utilities
+--------------------------------------------------------------------*/
+
+.card {
+  &.no-border {
+    border: none;
+    .card-icon-top {
+      margin: 2rem 0;
+    }
+    .card-header {
+      padding: 24px 0 16px;
+    }
+    .card-body {
+      padding: 0 0 24px;
+    }
+  }
+}
+
+/*------------------------------------------------------------------
+10. Custom UDI Cards
+--------------------------------------------------------------------*/
+
+.card {
+  //border: none;
+  &--side-icon {
+    .card-icon {
+      margin: 0 1rem 0 0 !important;
+    }
+    .card-icon,
+    .card-title {
+      font-size: 4rem;
+    }
+    .card-header {
+      padding-bottom: 0 !important;
+    }
+    .card-body {
+      padding: 0 5rem 24px 0 !important;
+      p {
+        font-weight: 700;
+        font-size: 1rem;
+        line-height: 1.5rem;
+        letter-spacing: -.015rem;
+        opacity: 1;
+        margin: 0;
+      }
+    }
+  }
+
+
+  &.no-border {
+    &.card-hover {
+      &:hover {
+        padding: .5rem;
+      }
+    }
+    .card-header {
+      padding: 24px 0 16px; //@TODO - make only when border is no-border
+    }
+  }
+}
+
+.profile-img {
+  max-width: 144px;
+  max-height: 144px;
+}

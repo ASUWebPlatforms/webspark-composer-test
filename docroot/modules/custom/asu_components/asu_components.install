@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Install/Update hooks for asu_components.
+ */
+
+use Drupal\node\Entity\NodeType;
+use Drupal\paragraphs_library\Entity\LibraryItem;
+use Drupal\paragraphs\Entity\Paragraph;
+
+/**
+ 
+ */
+function asu_components_update_9101() {
+   $paragraph = Paragraph::create([
+      'type' => 'animated_quote',   // paragraph type machine name
+      'field_paragraph_body' => [   // paragraph's field machine name
+          'value' => 'test',                  // body field value
+          'format' => 'wysiwyg',         // body text format
+      ],
+  ]);
+
+  $paragraph->save();
+
+}

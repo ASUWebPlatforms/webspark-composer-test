@@ -1,0 +1,31 @@
+.block-inline-blockasu-edu-anim-content-buttons .animated-content-section .content-section{
+ width: 100%;
+}
+.block-inline-blockasu-edu-animated-quote h2.h4,
+.block-inline-blockasu-edu-animated-quote h3.h1,
+.block-inline-blockasu-edu-animated-quote .source {
+  color: #fff;
+}
+.asu-home #wrapper-footer-columns {
+  display: block!important;
+}
+span.noHighlight {
+  background: #fff!important;
+}
+.block-inline-blocktestimonial-on-image-background {
+  display: flex;
+  justify-content:center;
+}
+.node-6 span.highlight-gold {
+  box-shadow: none!important;
+}
+.node-6 .quoteWrapper strong, .node-6 .quoteWrapper span.highlight-gold {
+  background: #ffc627;
+  padding: .5px 0;
+}
+.node-19 .uds-list, .node-20 .uds-list {
+  padding-bottom: 1.5rem!important;
+}
+.node-19 .uds-list li, .node-20 .uds-list li {
+  margin-bottom: 0.5rem!important;
+}

@@ -1,0 +1,11 @@
+
+{% set classes = [
+  elements['#embed'] == true ? 'embedded-media',
+  ' p-2'
+] %}
+
+  <tr><td{{ attributes.addClass(classes) }}>
+    {{ title_suffix.contextual_links }}
+    {{ content }}
+  </td></tr>
+

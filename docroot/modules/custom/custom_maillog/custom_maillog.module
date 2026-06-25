@@ -1,0 +1,38 @@
+<?php
+
+use Drupal\user\UserInterface;
+use Drupal\Component\Utility\Html;
+use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\DeprecationHelper;
+use Drupal\Core\Utility\Error;
+use Drupal\Core\Render\Markup;
+
+
+
+  function form_customization_mail_alter(&$message) {
+    
+    $current_user = \Drupal::currentUser();
+    $uid = $current_user->id();
+    $date = new DateTime();
+    $timeZone = $date->getTimezone();
+
+    $message_content = (string) $message['body'][0];
+       
+    
+    \Drupal::database()->insert('custom_mail_log')
+    ->fields([
+        'uid' => $uid,
+        'from' => $message['from'],
+        'to' => $message['to'],
+        'subject' => $message['subject'],
+        'module' => $message['module'],
+        'message' => $message_content,
+        'created_at'=>date('Y-m-d H:i:s')." ".$timeZone->getName(),
+    ])
+    ->execute();
+   
+    
+  }
+
+  
+?>

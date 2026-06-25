@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * Ensure the 'adfs_claims_handler_pwr' and 'adfs_claims_handler_vwr' fields
+ * are properly registered.
+ */
+function analytics_groups_update_9003(&$sandbox): void
+{
+  Drupal::entityTypeManager()->clearCachedDefinitions();
+
+  $entity = 'group';
+  $fields = [
+    'adfs_claims_handler_pwr',
+    'adfs_claims_handler_vwr',
+  ];
+  $manager = Drupal::entityDefinitionUpdateManager();
+  $definitions = Drupal::service('entity_field.manager')->getFieldDefinitions($entity, $entity);
+
+  foreach ($fields as $field) {
+    if (!empty($definitions[$field])) {
+      $manager->installFieldStorageDefinition($field, $entity, 'analytics_groups', $definitions[$field]);
+    }
+  }
+}

@@ -1,0 +1,210 @@
+<?php
+
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function tech_media_unused_view_views_data_alter(&$data)
+{
+
+  $table = 'node_field_data'; // Base table for Content (Node) views.
+
+  $data[$table]['node_block_media_report'] = [
+    'title' => t('Node Block Media Report'),
+    'help'  => t('Per-node table of blocks with media, file name/size, and a delete link.'),
+    'group' => t('Tech Media Unused View'),
+    'field' => [
+      'id' => 'node_block_media_report',
+    ],
+  ];
+
+  return $data;
+}
+
+/**
+ * Find our field handler on this display.
+ */
+function _tmuv_get_handler(ViewExecutable $view)
+{
+  $fields = $view->display_handler->getHandlers('field');
+  foreach ($fields as $f) {
+    if ($f->getPluginId() === 'node_block_media_report') {
+      return $f;
+    }
+  }
+  return NULL;
+}
+
+/**
+ * Read the configured items-per-page & current page from the pager (best effort).
+ */
+function _tmuv_get_pager_state(ViewExecutable $view): array
+{
+  $limit = 0;
+  $page  = 0;
+
+  // Items per page.
+  try {
+    if (method_exists($view->pager, 'getItemsPerPage')) {
+      $limit = (int) $view->pager->getItemsPerPage();
+    }
+  } catch (\Throwable $e) {
+  }
+  if (!$limit && isset($view->pager->options['items_per_page'])) {
+    $limit = (int) $view->pager->options['items_per_page'];
+  }
+  if (!$limit && property_exists($view->pager, 'items_per_page')) {
+    $limit = (int) $view->pager->items_per_page;
+  }
+
+  // Current page (0-based).
+  if (property_exists($view->pager, 'current_page')) {
+    $page = (int) $view->pager->current_page;
+  }
+
+  return ['limit' => max(0, $limit), 'page' => max(0, $page)];
+}
+
+function _tmuv_should_sort(ViewExecutable $view): array
+{
+  if ($view->storage->get('base_table') !== 'node_field_data') {
+    return [FALSE, 'desc'];
+  }
+  $handler = _tmuv_get_handler($view);
+  if (!$handler) {
+    return [FALSE, 'desc'];
+  }
+  $opts = $handler->options ?? [];
+  if (empty($opts['sort_nodes_by_max_bytes'])) {
+    return [FALSE, 'desc'];
+  }
+  $dir = (!empty($opts['sort_nodes_direction']) && $opts['sort_nodes_direction'] === 'asc') ? 'asc' : 'desc';
+  return [TRUE, $dir];
+}
+
+/**
+ * Implements hook_views_pre_execute().
+ */
+function tech_media_unused_view_views_pre_execute(ViewExecutable $view)
+{
+  [$enabled, $dir] = _tmuv_should_sort($view);
+  if (!$enabled) {
+    return;
+  }
+
+  // Remember original pager state.
+  $state = _tmuv_get_pager_state($view);
+  $view->build_info['_tmuv_pager_state'] = $state;
+  $view->build_info['_tmuv_sort_dir'] = $dir;
+
+  // Remove SQL limit/offset so we get ALL rows.
+  try {
+    if (method_exists($view->query, 'setLimit')) {
+      $view->query->setLimit(0);
+    }
+    if (method_exists($view->query, 'setOffset')) {
+      $view->query->setOffset(0);
+    }
+  } catch (\Throwable $e) {
+  }
+
+  if (isset($view->pager->options['items_per_page'])) {
+    $view->pager->options['items_per_page'] = 0;
+  }
+  if (property_exists($view->pager, 'items_per_page')) {
+    $view->pager->items_per_page = 0;
+  }
+}
+
+function _tmuv_compute_max_bytes(ViewExecutable $view): void
+{
+  $handler = _tmuv_get_handler($view);
+  if (!$handler) {
+    return;
+  }
+  foreach ($view->result as $i => $row) {
+    $node = $row->_entity ?? NULL;
+    if ($node instanceof \Drupal\node\NodeInterface) {
+      try {
+        $max = method_exists($handler, 'computeMaxBytesForNode') ? (int) $handler->computeMaxBytesForNode($node) : 0;
+      } catch (\Throwable $e) {
+        $max = 0;
+      }
+      $view->result[$i]->_tmuv_max_bytes = $max;
+    } else {
+      $view->result[$i]->_tmuv_max_bytes = 0;
+    }
+  }
+}
+
+/**
+ * Reorder all results by max bytes and then paginate manually.
+ */
+function _tmuv_sort_and_slice(ViewExecutable $view): void
+{
+  $dir   = $view->build_info['_tmuv_sort_dir'] ?? 'desc';
+  $state = $view->build_info['_tmuv_pager_state'] ?? ['limit' => 0, 'page' => 0];
+
+  // Sort globally.
+  usort($view->result, static function ($a, $b) use ($dir): int {
+    $av = (int) ($a->_tmuv_max_bytes ?? 0);
+    $bv = (int) ($b->_tmuv_max_bytes ?? 0);
+    return $dir === 'asc' ? ($av <=> $bv) : ($bv <=> $av);
+  });
+
+  $total = count($view->result);
+  $limit = (int) ($state['limit'] ?? 0);
+  $page  = (int) ($state['page'] ?? 0);
+
+  if ($limit > 0) {
+    $start = $page * $limit;
+    $view->result = array_slice($view->result, $start, $limit);
+  }
+
+  // Update pager totals (best effort).
+  $view->total_rows = $total;
+  try {
+    if (method_exists($view->pager, 'setTotalItems')) {
+      $view->pager->setTotalItems($total);
+    }
+    // Restore desired per-page to render correct links.
+    if (isset($view->pager->options['items_per_page'])) {
+      $view->pager->options['items_per_page'] = $limit;
+    }
+    if (property_exists($view->pager, 'items_per_page')) {
+      $view->pager->items_per_page = $limit;
+    }
+  } catch (\Throwable $e) {
+  }
+}
+
+/**
+ * Implements hook_views_post_execute().
+ */
+function tech_media_unused_view_views_post_execute(ViewExecutable $view)
+{
+  [$enabled,] = _tmuv_should_sort($view);
+  if (!$enabled) {
+    return;
+  }
+  // Compute max bytes for every node in the full result set.
+  _tmuv_compute_max_bytes($view);
+  // Sort + manual paginate.
+  _tmuv_sort_and_slice($view);
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function tech_media_unused_view_views_pre_render(ViewExecutable $view)
+{
+  [$enabled,] = _tmuv_should_sort($view);
+  if (!$enabled) {
+    return;
+  }
+  if (!isset($view->result[0]->_tmuv_max_bytes)) {
+    _tmuv_compute_max_bytes($view);
+  }
+  _tmuv_sort_and_slice($view);
+}

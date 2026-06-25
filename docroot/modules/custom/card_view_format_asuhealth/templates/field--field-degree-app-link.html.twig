@@ -1,0 +1,12 @@
+{% for item in items %}
+  {% if attribute(item.content, '#type') == 'link' %}
+    {% set attributes = attribute(item.content, '#attributes')|default({}) %}
+    {% set attributes = attributes|merge({'class': ['btn btn-md btn-dark']}) %}
+    {% set new_content = item.content|merge({'#attributes': attributes, '#title': 'Learn more'}) %}
+    <div class="card-buttons">
+      <div class="card-button">
+        {{ new_content }}
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}

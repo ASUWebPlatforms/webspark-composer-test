@@ -1,0 +1,7 @@
+aas2bas_search.taxonomy_dropdown:
+  path: '/taxonomy-dropdown'
+  defaults:
+    _title: 'Taxonomy Dropdown'
+    _controller: '\Drupal\aas2bas_search\Controller\TaxonomyDropdownController::content'
+  requirements:
+    _permission: 'access content'

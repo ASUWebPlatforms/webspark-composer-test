@@ -1,0 +1,7 @@
+global-js:
+  version: 1.x
+  js:
+    js/recaptchareset.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings

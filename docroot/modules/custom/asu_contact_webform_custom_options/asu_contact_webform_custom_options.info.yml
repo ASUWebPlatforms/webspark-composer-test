@@ -1,0 +1,6 @@
+name: ASU contact Webforms Custom options
+type: module
+description: 'This module provides States, Countries, High schools and Institution lists as webform options'
+package: ASU
+dependencies: webform
+core_version_requirement: ^8.8 || ^9 || ^10

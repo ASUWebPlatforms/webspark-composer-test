@@ -1,0 +1,99 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function asu_defense_calendar_schema() {
+	$schema['announcements'] = array(
+		'description' => t('The table for defense calender details.'),
+		'fields' => array(
+			'id' => array(
+				'description' => t('id for defense record'),
+				'type' => 'serial',
+				'length' => 11,
+				'not null' => TRUE,
+			),
+			'lname' => array(
+				'description' => t('last name'),
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE
+			),
+			'fname' => array(
+				'description' => t('first name'),
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE
+			),
+			'level' => array(
+				'description' => t('scheduled or rescheduled'),
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE
+			),
+			'datetime' => array(
+				'description' => t('date when defense is scheduled'),
+				'mysql_type' => 'datetime',
+				'not null' => TRUE
+			),
+			'defense_type' => array(
+			    'description' => t('defense type'),
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => FALSE
+			),
+			'building' => array(
+				'description' => t('building where defense is scheduled'),
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE
+			),
+			'room' => array(
+				'description' => t('room no'),
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE
+			),
+            'virtual_audiencelink' => array(
+                'description' => t('defense virtual audience link'),
+            'type' => 'varchar',
+            'length' => 255,
+            'not null' => FALSE
+            ),
+			'virtual_meetinglink' => array(
+			        'description' => t('defense virtual meeting link'),
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => FALSE
+			),
+			'title' => array(
+				'description' => t('thesis title'),
+				'type' => 'text',
+				'size' => 'big',
+				'not null' => TRUE
+			),
+			'descr' => array(
+				'description' => t('thesis area of study'),
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE
+			),
+			'bldg_location' => array(
+				'description' => t('building location'),
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE
+			),
+			'degree' => array(
+				'description' => t('degree'),
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE
+			),
+		),
+		'indexes' => array(
+			'id' => array('id'),
+		),
+	);
+	return $schema;
+}

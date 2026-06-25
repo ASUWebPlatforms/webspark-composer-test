@@ -1,0 +1,30 @@
+uuid: b138e973-1f09-4cab-934a-062c44eb319f
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_content
+    - options
+id: block_content.field_sda_theme
+field_name: field_sda_theme
+entity_type: block_content
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: light
+      label: 'White and Gold'
+    -
+      value: dark
+      label: 'Black and Gold'
+    -
+      value: gray
+      label: 'Maroon and Gray'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

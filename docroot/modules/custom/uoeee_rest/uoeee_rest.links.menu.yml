@@ -1,0 +1,5 @@
+uoeee_rest.uoeee_db_api_settings:
+  title: 'UOEEE DB API settings'
+  description: 'Configure allowed tables and defaults for the UOEEE DB API.'
+  route_name: uoeee_rest.uoeee_db_api_settings
+  parent: system.admin_config_development

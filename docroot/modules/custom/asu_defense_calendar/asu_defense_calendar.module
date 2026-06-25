@@ -1,0 +1,26 @@
+<?php
+
+use Symfony\Component\Serializer\Encoder\JsonDecode;
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function asu_defense_calendar_preprocess_block(array &$variables) {
+
+  if ($variables['plugin_id'] === 'asu_brand_header') {
+      
+    $current_path = \Drupal::service('path.current')->getPath();
+
+    // DO NOT REMOVE HARDCODING SITE TITLE BY REQUEST
+    if (str_contains($current_path, 'defensecal')) {
+      $variables['content']['#attached']['drupalSettings']['asu_brand']['props']['title'] = 'Defense Calendar';
+    }
+    
+    if (str_contains($current_path, 'graduate-faculty') || str_contains($current_path, 'formatadvising')) {
+      $variables['content']['#attached']['drupalSettings']['asu_brand']['props']['title'] = 'Graduate College';
+    }
+
+    // Add path cache context to ensure the cache varies by path.
+    $variables['#cache']['contexts'][] = 'url.path';
+  }
+}

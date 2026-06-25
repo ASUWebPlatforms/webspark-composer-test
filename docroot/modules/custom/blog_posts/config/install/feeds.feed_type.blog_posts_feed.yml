@@ -1,0 +1,245 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.blog_posts.body
+    - field.field.node.blog_posts.field_blog_image
+    - field.field.node.blog_posts.field_blog_svg_image
+    - field.field.node.blog_posts.field_button_text
+    - field.field.node.blog_posts.field_categories
+    - field.field.node.blog_posts.field_featured
+    - field.field.node.blog_posts.field_import_id
+    - field.field.node.blog_posts.field_podcast_videos
+    - field.field.node.blog_posts.field_previous_site_pub_date
+    - field.field.node.blog_posts.field_short_description
+    - field.field.node.blog_posts.field_show_on_blog_home_page
+    - field.field.node.blog_posts.field_type_of_post
+    - node.type.blog_posts
+  module:
+    - feeds_tamper
+    - node
+third_party_settings:
+  feeds_tamper:
+    tampers:
+      6ef93d2b-a5ac-4e45-ad2b-aa689f2e608f:
+        separator: ', '
+        limit: null
+        plugin: explode
+        source: categories
+        weight: 0
+        label: Explode
+        uuid: 6ef93d2b-a5ac-4e45-ad2b-aa689f2e608f
+id: blog_posts_feed
+label: 'Blog posts feed'
+description: 'Feeds to import blog posts'
+help: ''
+import_period: -1
+fetcher: upload
+fetcher_configuration:
+  allowed_extensions: 'txt csv tsv xml opml'
+  directory: 'private://feeds'
+parser: csv
+parser_configuration:
+  delimiter: ','
+  no_headers: false
+  line_limit: 100
+processor: 'entity:node'
+processor_configuration:
+  langcode: en
+  update_existing: 2
+  update_non_existent: _keep
+  expire: -1
+  owner_feed_author: false
+  owner_id: 0
+  authorize: true
+  skip_hash_check: false
+  values:
+    type: blog_posts
+custom_sources:
+  '':
+    label: ''
+    value: ''
+    machine_name: ''
+  title:
+    label: Title
+    value: Title
+    machine_name: title
+  short_description:
+    label: Short-description
+    value: Short-description
+    machine_name: short_description
+  nid:
+    label: Nid
+    value: Nid
+    machine_name: nid
+  podcast_videos:
+    label: Podcast/Videos
+    value: Podcast/Videos
+    machine_name: podcast_videos
+  short_description1:
+    label: 'Short description'
+    value: 'Short description'
+    machine_name: short_description1
+  type_of_post:
+    label: 'Type of post'
+    value: 'Type of post'
+    machine_name: type_of_post
+  show_on_blog_home_page:
+    label: 'show on blog home page'
+    value: 'show on blog home page'
+    machine_name: show_on_blog_home_page
+  categories:
+    label: Categories
+    value: Categories
+    machine_name: categories
+  button_text:
+    label: 'Button text'
+    value: 'Button text'
+    machine_name: button_text
+  body:
+    label: Body
+    value: Body
+    machine_name: body
+  blog_image:
+    label: 'Blog image'
+    value: 'Blog image'
+    machine_name: blog_image
+  blog_image_alt:
+    label: 'Blog image Alt'
+    value: 'Blog image Alt'
+    machine_name: blog_image_alt
+  blog_image_title:
+    label: 'Blog image Title'
+    value: 'Blog image Title'
+    machine_name: blog_image_title
+  featured:
+    label: Featured
+    value: Featured
+    machine_name: featured
+  svg_image:
+    label: 'SVG image'
+    value: 'SVG image'
+    machine_name: svg_image
+  blog_svg_image_alt:
+    label: 'Blog svg image alt'
+    value: 'Blog svg image alt'
+    machine_name: blog_svg_image_alt
+  blog_svg_image_title:
+    label: 'Blog svg image title'
+    value: 'Blog svg image title'
+    machine_name: blog_svg_image_title
+  post_date:
+    label: 'Post date'
+    value: 'Post date'
+    machine_name: post_date
+  path:
+    label: Path
+    value: Path
+    machine_name: path
+mappings:
+  -
+    target: title
+    map:
+      value: title
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_import_id
+    map:
+      value: nid
+    unique:
+      value: '1'
+    settings:
+      language: null
+  -
+    target: field_podcast_videos
+    map:
+      value: podcast_videos
+    settings:
+      language: ''
+      format: full_html
+  -
+    target: field_short_description
+    map:
+      value: short_description1
+    settings:
+      language: ''
+      format: full_html
+  -
+    target: field_type_of_post
+    map:
+      value: type_of_post
+    settings:
+      language: null
+  -
+    target: field_show_on_blog_home_page
+    map:
+      value: show_on_blog_home_page
+    settings:
+      language: null
+  -
+    target: field_categories
+    map:
+      target_id: categories
+    settings:
+      language: ''
+      reference_by: name
+      autocreate: 0
+  -
+    target: field_button_text
+    map:
+      value: button_text
+    settings:
+      language: null
+      format: plain_text
+  -
+    target: body
+    map:
+      value: body
+      summary: ''
+    settings:
+      language: ''
+      format: full_html
+  -
+    target: field_blog_image
+    map:
+      target_id: blog_image
+      alt: blog_image_alt
+      title: blog_image_title
+    settings:
+      language: ''
+      reference_by: fid
+      existing: '2'
+      autocreate: 0
+  -
+    target: field_featured
+    map:
+      value: featured
+    settings:
+      language: null
+  -
+    target: field_blog_svg_image
+    map:
+      target_id: svg_image
+      alt: blog_svg_image_alt
+      title: blog_svg_image_title
+    settings:
+      language: ''
+      reference_by: fid
+      existing: '2'
+      autocreate: 0
+  -
+    target: field_previous_site_pub_date
+    map:
+      value: post_date
+    settings:
+      language: ''
+      timezone: America/Phoenix
+  -
+    target: path
+    map:
+      alias: path
+      pathauto: ''
+    settings:
+      language: ''

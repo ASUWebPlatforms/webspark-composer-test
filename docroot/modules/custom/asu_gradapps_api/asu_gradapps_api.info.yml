@@ -1,0 +1,9 @@
+name: 'ASU GRADAPPS API'
+type: module
+description: 'Provides API endpoints for announcements and GF data.'
+core_version_requirement: ^10
+package: Custom
+dependencies:
+  - drupal:serialization
+  - drupal:rest
+  

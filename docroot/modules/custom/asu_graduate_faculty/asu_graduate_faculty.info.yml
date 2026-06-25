@@ -1,0 +1,6 @@
+name: ASU Graduate Faculty
+type: module
+description: 'Provides functionality specific to ASU graduate faculty.'
+package: ASU
+core_version_requirement: ^9 || ^10
+configure: asu_graduate_faculty.settings

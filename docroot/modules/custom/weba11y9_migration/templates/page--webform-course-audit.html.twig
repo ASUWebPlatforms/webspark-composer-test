@@ -1,0 +1,40 @@
+{#
+/**
+ * @file
+ * Page template for course_audit webform pages.
+ *
+ * Matches the Access theme's DOM structure: class on <main>, no
+ * center-container/max-size-container wrappers, header inside <main>.
+ *
+ * Variable weba11y9_main_class is set in weba11y9_migration_preprocess_page().
+ */
+#}
+<div class="page">
+  <main id="main-content" class="pt-5 pb-5 {{ weba11y9_main_class }}">
+    {% if page.header %}
+      <div class="container">
+        {{ page.header }}
+      </div>
+    {% endif %}
+
+    {% if page.pre_content %}
+      <div class="page__pre-content">
+        <div class="container">
+          {{ page.pre_content }}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if page.content %}
+      <div class="page__content">
+        {{ page.content }}
+      </div>
+    {% endif %}
+  </main>
+
+  {% if page.footer %}
+    <footer class="page__footer" role="contentinfo">
+      {{ page.footer }}
+    </footer>
+  {% endif %}
+</div>

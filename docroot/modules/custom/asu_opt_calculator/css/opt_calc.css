@@ -1,0 +1,319 @@
+#asu-preopt-calculator-form-data, #asu-opt-calculator-opt-form-data{
+    margin:10px;
+}
+
+#asu-opt-calculator-dates-form label{
+    display: block !important;
+}
+
+
+.form-item-opt-degree-type .form-item label{
+    float:left;
+}
+
+.terms .form-item{
+    margin-top: 0px !important;
+    margin-right: 30px;
+}
+
+#edit-opt-type--wrapper{
+    display: none;
+}
+
+@media (min-width: 700px){
+    .date_divs{
+        width: 30%;
+        float:left;
+        height: 106px;
+        background: #cccccc;
+    }
+    
+    .second_date_divs{
+        width: 30%;
+        float:left;
+        height: 106px;
+       background: #c0c0c0;
+    }
+    
+    .third_date_divs{
+        width: 30%;
+        float:left;
+        height: 106px;
+        background: #cccccc;
+    }
+    
+    [class="1_date_divs"] {
+        width: 30%;
+        float:left;
+        height: 106px;
+        background: #cccccc;
+    }
+    
+    [class="2_date_divs"] {
+        width: 30%;
+        float:left;
+        height: 106px;
+       background: #c0c0c0;
+    }
+    
+    [class="3_date_divs"] {
+        width: 30%;
+        float:left;
+        height: 106px;
+        background: #cccccc;
+    }
+    
+   
+}
+
+@media (max-width: 700px){
+
+    .form-item-full-text-d1, .form-item-full-text-d2, .form-item-full-text-d3, .form-item-part-text-d1, .form-item-part-text-d2, .form-item-part-text-d3{
+        margin-bottom: 5% !important;
+    }
+    
+    #full_first_div, #full_second_div, #full_third_div, #part_first_div, #part_second_div, #part_third_div{
+        border: 1px solid #cccccc;
+    }
+    
+    .form-item-full-start-d1 label, .form-item-full-start-d2 label, .form-item-full-start-d3 label, .form-item-part-start-d1 label, .form-item-part-start-d2 label, .form-item-part-start-d3 label, .form-item-datetime label, .form-item-begin-full-employment label{
+        display: block !important;
+    }
+    
+    .opt_message{
+        display: block;
+    }
+}
+ 
+@media (min-width: 980px){
+    
+    #asu-preopt-calculator-form-data .form-item-datetime label, #asu-opt-calculator-opt-form-data .form-item-datetime label{
+      /*display:inline-block;*/
+     display:block;
+    }
+
+    #edit-datetime{
+       padding: 0px !important;
+   }
+   
+   
+   
+   .terms{
+       margin-bottom:20px;
+   }
+   
+   .terms label{
+    float: none !important;
+   }
+  
+    
+   
+   #asu-preopt-calculator-form-data .form-text, #asu-opt-calculator-opt-form-data .form-text{
+       height:35px !important;
+       width: 220px !important;
+   }
+   
+   #asu-preopt-calculator-form-data .form-item label, #asu-opt-calculator-opt-form-data .form-item label{
+       float:left;
+       margin-right:10px;
+   }
+   
+   .terms_container{
+       margin-bottom:20px;
+   }
+   #edit-opt-degree-period-test{
+       margin-right: 20px;;
+   }
+   
+   #range_date > *{
+       display:inline-block;
+   }
+   
+   
+   .terms > *{
+      display:inline-block;
+      
+   }
+   
+   .terms option{
+      display: block !important
+   }
+   .terms_container> *{
+    display:inline-block;
+   }
+   
+   .form-item-opt-term, .form-item-opt-year{
+        /*border:1px outset #cccccc;
+        border-radius: 2px;*/
+        padding:10px;
+    }
+   
+}
+
+
+#edit-datetime{
+    color: #747474 !important;
+}
+
+.date_divs{
+        background: #cccccc;
+        margin-bottom:20px;
+        padding-left: 10px;
+        padding-top:10px;
+        padding-right: 10px;
+    }
+    
+.second_date_divs{
+        background: #c0c0c0;
+        margin-bottom:20px;
+        padding-left: 10px;
+        padding-top:10px;
+        padding-right: 10px;
+    }
+    
+.third_date_divs{
+        background: #cccccc;
+        margin-bottom:20px;
+        padding-left: 10px;
+        padding-top:10px;
+        padding-right: 10px;
+    }
+
+
+.date_divs_1{
+        background: #cccccc;
+        margin-bottom:20px;
+    }
+    
+.date_divs_2{
+        background: #c0c0c0;
+        margin-bottom:20px;
+    }
+    
+.date_divs_3{
+     background: #cccccc;
+     margin-bottom:20px;
+  
+    }
+    
+    
+#full_first_div, #full_second_div, #full_third_div, #part_first_div, #part_second_div, #part_third_div{
+    margin-bottom:20px !important;
+}
+
+
+#full_1_div, #full_2_div, #full_3_div, #part_first_div, #part_second_div, #part_thitd_div{
+    margin-bottom:20px !important;
+}
+
+
+/*.field_one, .field_two, .field_three{
+    padding-top:10px;
+}*/
+
+
+
+.container-text-date label{
+   
+}
+
+#grace_period{
+    margin-bottom:40px;
+}
+
+.grace_markup{
+    font-size: 14px;
+}
+
+.grace-text{
+    padding:10px;
+    background:#eee;
+    border-radius: 3px;
+    border:1px solid #ccc;
+    line-height: 3em;
+}
+/*
+.container-text-date .form-text{
+    margin-top: 15px;
+}*/
+
+/*.field_odd{
+    background: #cccccc;
+}
+
+.field_even{
+    background: #c0c0c0;
+}*/
+
+.calculator_markup{
+    font-size:16px;
+    font-weight:bold;
+}
+
+#edit-opt-part-fieldset1 label, #edit-opt-fieldset label{
+    float:none !important;
+   /* margin-left: 10px;*/
+}
+
+#edit-begin-employment-datepicker-popup-0{
+    margin-top:-20px;
+}
+
+#edit-total-submit{
+    display: none;
+}
+
+#edit-begin-full-employment{
+    padding: 0px !important;
+}
+
+
+.date_pick_div{
+    display:none !important;
+}
+
+
+
+#opt_calculator_page a{
+  border-bottom: none;
+}
+
+#opt_calculator_page{
+  margin-bottom: 80px;
+}
+
+.opt_button{
+    padding: 10px 15px 10px 15px;
+    border: 1px outset #a30046;
+    border-radius: 2px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.opt_button:hover{
+    background: #ffc500;
+}
+
+.active_button{
+    background: #ffc500;
+}
+
+#edit-full-end-d1 , #edit-full-end-d2 , #edit-full-end-d3  {
+    float: none !important;
+}
+
+#edit-part-end-d1  , #edit-part-end-d2  , #edit-part-end-d3{
+    float: none !important;
+}
+
+.form-item-full-start-d1  label{
+    display: block !important;
+}
+
+#edit-opt-fieldset > label > .element-invisible{
+    display: none !important;
+}
+
+.form-item-begin-full-employment label{
+    display: block;
+}

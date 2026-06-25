@@ -1,0 +1,30 @@
+<?php
+
+use Drupal\user\UserInterface;
+use Drupal\asu_user\EventSubscriber;
+/**
+ * @file
+ * custom_asu_user.module - ASU User code.
+ * Pull first name, last name and full name from cas server upon user login
+ * @author
+ * Arcahan Vannela
+ *
+ */
+
+function custom_asu_user_user_login(UserInterface $account) {
+	$cas_username = $account->get('name')->value;
+	$asu_profile = _asu_user_get_elastic_profile_record($cas_username);
+	$first_name = $asu_profile['first_name']['raw'];
+	$last_name = $asu_profile['last_name']['raw'];
+	$full_name = $asu_profile['display_name']['raw'];
+	$check_first_name = $account->get('field_first_name')->getValue();
+	if(empty($check_first_name)){
+		$account->set('field_first_name',$first_name);
+		$account->set('field_last_name',$last_name);
+		$account->set('field_full_name',$full_name);
+		// Save user account.
+		$account->save();
+	}
+	//\Drupal::logger('useracount')->notice('<pre><code>' . print_r($asu_profile, TRUE) . '</code></pre>');
+}
+

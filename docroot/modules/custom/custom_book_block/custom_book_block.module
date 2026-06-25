@@ -1,0 +1,92 @@
+<?php
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\devel\Plugin\Devel\Dumper\Kint;
+
+/**
+ * Implements hook_theme().
+ */
+function custom_book_block_theme() {
+    return array(
+     'ws_custom_block' => array(
+              'variables' => array('books' => array(), 'child' => array()),
+          ),
+    );
+  }
+
+
+
+
+/**
+ * Implements hook_help().
+ */
+function custom_book_block_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.custom_book_block':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Custom views contextual filter Plugin') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+// function custom_book_block_node_view_alter(array &$build, \Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display) {
+//   // Check if the entity type is 'node'.
+//   dump($build);
+//   exit;
+//   if ($entity->getEntityTypeId() == 'node') {
+//     // Check if the view mode is 'full'.
+//     if ($display->getMode() == 'full') {
+//       // Modify the layout section block.
+//       // Replace 'field_layout_section' with the actual field name of your layout section block.
+//       if (isset($build['field_layout_section'])) {
+//         // Modify the render array of the layout section block as needed.
+//         // For example, you can add CSS classes, alter attributes, etc.
+//         // Here we're adding a CSS class to the block.
+//         $build['field_layout_section']['#attributes']['class'][] = 'custom-layout-section';
+//       }
+//     }
+//   }
+// }
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+  */
+// function custom_book_block_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+//   // Check if the entity type is 'node'.
+//   dump($entity);
+//   exit;
+//   if ($entity->getEntityTypeId() == 'node') {
+//     // Check if the view mode is 'full'.
+//     if ($view_mode == 'full') {
+//       // Get the layout section.
+//       $layout = $entity->get('layout_builder__layout')->first()->getValue();
+//       dump($layout);
+//       exit;
+//       // Replace 'your_section_uuid' with the UUID of the layout section you want to modify.
+//       $section_uuid = 'your_section_uuid';
+      
+//       // Remove the block from the layout section.
+//       if (isset($layout['sections'][$section_uuid])) {
+//         $section = \Drupal::service('layout_builder.section_repository')->load($layout['sections'][$section_uuid]['uuid']);
+//         $block_uuid = 'block_plugin_id'; // Replace with the UUID of the block you want to remove.
+//         $section->removeComponent($block_uuid);
+        
+//         // Save the layout section.
+//         $section->save();
+//       }
+      
+//       // Save the layout changes.
+//       $entity->save();
+//     }
+//   }
+// }
+

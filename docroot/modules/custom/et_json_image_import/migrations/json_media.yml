@@ -1,0 +1,47 @@
+id: json_media
+label: 'Migrate images to media'
+migration_group: WP_JSON
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  constants:
+    FILEDIRECTORY: 'public://'
+  urls:
+    - 'public://json/et_json_image_import.json'
+  item_selector: 0
+  fields:
+    -
+      name: image_url
+      label: 'URL of image on source site'
+      selector: image_url
+    -
+      name: alt_text
+      label: 'Alt Text'
+      selector: alt_text
+    -
+      name: filename
+      label: 'Filename'
+      selector: filename
+  ids:
+    filename: # filename used as identifier in next steps of migration
+      type: string
+process:
+  image_target_id:
+    plugin: migration_lookup
+    migration: json_image
+    no_stub: true
+    source: filename
+  skip_if_missing_image:
+    plugin: skip_on_empty
+    source: '@image_target_id'
+    method: row
+    message: 'Skipping media item because source image was not imported.'
+  field_media_image/target_id: '@image_target_id'
+  field_media_image/alt: alt_text
+  uid:
+    plugin: default_value
+    default_value: 1 # Assign to user 1 (admin)
+destination:
+  plugin: 'entity:media'
+  default_bundle: image

@@ -1,0 +1,51 @@
+custom-style:
+  version: VERSION
+  css:
+    theme:
+      css/custom_style.css: {}
+  js:
+    js/custom_script.js: {}
+    js/heroes.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+
+quiz-form:
+  version: VERSION
+  js:
+    js/quiz_triggerClick.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+
+quiz-confirmation-page:
+  version: VERSION
+  js:
+    js/quiz_conf.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+
+renovation.chartjs:
+  remote: https://github.com/chartjs/Chart.js
+  version: 3.2.0
+  license:
+    name: MIT
+    url: https://github.com/chartjs/Chart.js/blob/master/LICENSE.md
+    gpl-compatible: true
+  js:
+    https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js: { type: external, minified: true }
+
+global-styling:
+  css:
+    theme:
+      css/style.css: {}
+  js:
+      js/script.js: {}
+  dependencies:
+      - core/jquery
+      - core/drupal
+      - core/jquery.once

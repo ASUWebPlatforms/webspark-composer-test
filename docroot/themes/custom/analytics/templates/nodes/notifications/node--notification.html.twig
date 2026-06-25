@@ -1,0 +1,43 @@
+{% extends '@renovation/node/node.twig' %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h2>{{ label }}</h2>
+        <hr class="copy-divider"/>
+      </div>
+    </div>
+    <div class="row">
+      {% if node.field_notification_category.value %}
+        <div class="col-12 col-md">
+          <h3>Category</h3>
+          <p>{{ content.field_notification_category }}</p>
+        </div>
+      {% endif %}
+      {% if node.field_start_day.value %}
+        <div class="col-12 col-md">
+          <h3>Starting</h3>
+          <p>{{ content.field_start_day }}</p>
+        </div>
+      {% endif %}
+      {% if node.field_end_day.value %}
+        <div class="col-12 col-md">
+          <h3>Ending</h3>
+          <p>{{ content.field_end_day }}</p>
+        </div>
+      {% endif %}
+    </div>
+    <div class="row">
+      <div class="col">
+        <h3>Details</h3>
+        {{ content.body }}
+        {% if node.field_link.uri %}
+          <a href="{{ node.field_link.uri }}" role="button" class="btn btn-md btn-maroon">
+            {{ node.field_link.title }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

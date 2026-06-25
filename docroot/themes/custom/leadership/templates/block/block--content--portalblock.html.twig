@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * Template for a content block.
+ */
+#}
+{% set classes = [
+  'spacing-top-96',
+  'pacing-bottom-96',
+  'row',
+  'block',
+  'block-inline-blockcard-arrangement',
+  'block-' ~ configuration.provider|clean_class,
+  'block-' ~ plugin_id|clean_class,
+  
+] %}
+<div class="container">
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {% if label %}
+    {% block label %}
+      <h2{{ title_attributes }}>{{ label }}</h2>
+    {% endblock %}
+  {% endif %}
+  {{ title_suffix }}
+  {{ content }}
+</div>Fitzgen

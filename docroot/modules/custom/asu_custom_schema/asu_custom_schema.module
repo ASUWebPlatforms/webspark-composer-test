@@ -1,0 +1,167 @@
+<?php
+
+/**
+ * @file
+ * ASU Custom Schema — two-level Schema.org JSON-LD management.
+ *
+ * Level 1: Bundle settings stored in Drupal config (exportable via drush cex).
+ * Level 2: Node settings stored as base fields (revision-aware).
+ *
+ * Base field columns are created automatically on module install via
+ * hook_install() in asu_custom_schema.install.
+ */
+
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeInterface;
+
+// ---------------------------------------------------------------------------
+// Base field definitions (revision-aware node fields)
+// ---------------------------------------------------------------------------
+
+/**
+ * Implements hook_entity_base_field_info().
+ *
+ * Adds two revision-aware fields to all node types:
+ *  - asu_schema_enabled  (boolean)
+ *  - asu_schema_json     (string_long)
+ */
+function asu_custom_schema_entity_base_field_info(EntityTypeInterface $entity_type): array {
+  if ($entity_type->id() !== 'node') {
+    return [];
+  }
+
+  $fields = [];
+
+  $fields['asu_schema_enabled'] = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Schema Enabled'))
+    ->setDescription(t('Whether Schema.org JSON-LD is output for this node.'))
+    ->setRevisionable(TRUE)
+    ->setDefaultValue(FALSE)
+    ->setDisplayConfigurable('form', FALSE)
+    ->setDisplayConfigurable('view', FALSE);
+
+  $fields['asu_schema_json'] = BaseFieldDefinition::create('string_long')
+    ->setLabel(t('Schema JSON'))
+    ->setDescription(t('Schema.org JSON-LD for this node.'))
+    ->setRevisionable(TRUE)
+    ->setDefaultValue('')
+    ->setDisplayConfigurable('form', FALSE)
+    ->setDisplayConfigurable('view', FALSE);
+
+  return $fields;
+}
+
+// ---------------------------------------------------------------------------
+// JSON-LD output
+// ---------------------------------------------------------------------------
+
+/**
+ * Implements hook_page_attachments().
+ */
+function asu_custom_schema_page_attachments(array &$attachments): void {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if (!$node instanceof NodeInterface) {
+    return;
+  }
+
+  // Level 1: content type must have schema enabled (config).
+  $bundle_enabled = \Drupal::config('asu_custom_schema.bundle.' . $node->bundle())
+    ->get('enabled') ?? FALSE;
+  if (!$bundle_enabled) {
+    return;
+  }
+
+  // Level 2: this node must have schema enabled (base field).
+  if (!(bool) $node->get('asu_schema_enabled')->value) {
+    return;
+  }
+
+  /** @var \Drupal\asu_custom_schema\Service\SchemaBuilder $builder */
+  $builder = \Drupal::service('asu_custom_schema.builder');
+  $schema  = $builder->buildSchema($node);
+
+  if (empty($schema)) {
+    return;
+  }
+
+  $attachments['#attached']['html_head'][] = [
+    [
+      '#type'       => 'html_tag',
+      '#tag'        => 'script',
+      '#value'      => json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_HEX_TAG),
+      '#attributes' => ['type' => 'application/ld+json'],
+    ],
+    'asu_custom_schema_jsonld_' . $node->id(),
+  ];
+}
+
+// ---------------------------------------------------------------------------
+// Level 1: content type edit form
+// ---------------------------------------------------------------------------
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter() for node_type_form.
+ */
+function asu_custom_schema_form_node_type_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  /** @var \Drupal\node\NodeTypeInterface $node_type */
+  $node_type = $form_state->getFormObject()->getEntity();
+  $bundle    = $node_type->id();
+  $enabled   = \Drupal::config('asu_custom_schema.bundle.' . $bundle)->get('enabled') ?? FALSE;
+
+  $form['asu_custom_schema'] = [
+    '#type'   => 'details',
+    '#title'  => t('Schema.org Markup'),
+    '#group'  => 'additional_settings',
+    '#weight' => 20,
+  ];
+
+  $form['asu_custom_schema']['bundle_schema_enabled'] = [
+    '#type'          => 'checkbox',
+    '#title'         => t('Enable Schema.org markup for this content type'),
+    '#description'   => t(
+      'When enabled, a <strong>Schema</strong> tab appears on each node of this type '
+      . 'allowing editors to configure JSON-LD per node. '
+      . 'This setting is exportable via <code>drush config:export</code>.'
+    ),
+    '#default_value' => (int) $enabled,
+  ];
+
+  $form['actions']['submit']['#submit'][] = 'asu_custom_schema_node_type_form_submit';
+}
+
+/**
+ * Submit handler for the content type edit form.
+ */
+function asu_custom_schema_node_type_form_submit(array &$form, FormStateInterface $form_state): void {
+  /** @var \Drupal\node\NodeTypeInterface $node_type */
+  $node_type = $form_state->getFormObject()->getEntity();
+  $bundle    = $node_type->id();
+  $enabled   = (bool) $form_state->getValue('bundle_schema_enabled');
+
+  \Drupal::configFactory()
+    ->getEditable('asu_custom_schema.bundle.' . $bundle)
+    ->set('bundle', $bundle)
+    ->set('enabled', $enabled)
+    ->save();
+
+  \Drupal::service('cache_tags.invalidator')->invalidateTags(['node_list:' . $bundle]);
+}
+
+// ---------------------------------------------------------------------------
+// Cleanup
+// ---------------------------------------------------------------------------
+
+/**
+ * Implements hook_ENTITY_TYPE_delete() for node_type.
+ *
+ * Remove bundle config when a content type is deleted.
+ */
+function asu_custom_schema_node_type_delete(EntityInterface $node_type): void {
+  $config = \Drupal::configFactory()->getEditable('asu_custom_schema.bundle.' . $node_type->id());
+  if (!$config->isNew()) {
+    $config->delete();
+  }
+}

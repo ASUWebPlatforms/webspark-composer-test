@@ -1,0 +1,11 @@
+global-styling:
+  version: 1.0.0
+  css:
+    component:
+      css/style.css: {}
+keyword_list_toggle:
+  js:
+    js/keyword-list-toggle.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

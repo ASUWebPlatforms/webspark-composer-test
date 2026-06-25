@@ -1,0 +1,42 @@
+.mw-800{
+    max-width: 800px;
+}
+
+.mw-1200{
+    max-width: 1200px;
+}
+
+.uds-img .uds-figure .uds-caption-text{
+    min-height: 187px;
+    font-size: 16px;
+}
+
+.uds-img .uds-figure .uds-caption-text p:first-of-type{
+    padding-bottom: 24px;
+}
+
+/*.uds-img .uds-figure-caption h3{
+    min-height: 56px;
+}*/
+
+@media (min-width: 992px) {
+    .uds-image-overlap .content-wrapper {
+        grid-column: 3 / span 2;
+        grid-row: 2 / span 1;
+        padding: 40px;
+        align-self: center;
+    }
+}
+
+
+/* Request same height */
+.uds-img .uds-figure {
+    width: 100%;
+    display: grid;
+    height: 100%;
+    border: 1px solid #d0d0d0;
+}
+
+.uds-img .uds-figure .uds-figure-caption {
+    border: 0px;
+}

@@ -1,0 +1,5 @@
+radix_custom:
+  version: VERSION
+  css:
+    theme:
+      radix_custom.css: {}

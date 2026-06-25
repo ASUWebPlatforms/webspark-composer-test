@@ -1,0 +1,73 @@
+#!/bin/bash
+##
+## Usage: asusf:init
+## Description: Prepare local DDEV environment for ASU Site Factory development.
+##
+## This script initializes the ASU Site Factory settings by appending the required
+## include statement to the `settings.php` file located in the repository.
+##
+
+set -eu -o pipefail
+
+# Define color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RED_BG='\033[41m'
+GREEN_BG='\033[42m'
+NC='\033[0m' # No Color
+
+function show_help() {
+  sed -n 's/^##//p' ${0}
+}
+
+while :; do
+  case ${1:-} in
+  -h | -\? | --help)
+    show_help
+    exit
+    ;;
+  --) # End of all options.
+    shift
+    break
+    ;;
+  -?*)
+    printf 'WARN: Unknown option (ignored): %s\n' "$1" >&2
+    ;;
+  *) # Default case: No more options, so break out of the loop.
+    break ;;
+  esac
+
+  shift
+done
+
+function add_asusf_to_settings_php() {
+
+  # Define the path to the settings.php file
+  settings_file="/var/www/html/docroot/sites/default/settings.php"
+
+  # Define the line of text to append
+  line_to_append="\n// Generated include for local ASU Site Factory development, added by \"ddev asusf:init\"
+if (getenv('IS_DDEV_PROJECT') == 'true') {
+  require __DIR__ . '/asusf.local.settings.inc';
+}"
+  # Check if the DDEV include has been added
+  if ! grep -Fq "settings.ddev.php" "$settings_file"; then
+      echo -en "${RED_BG}[error]${RED} Your 'docroot/sites/default/settings.php' file does not have the required DDEV include statement.\n${NC}Please run ${YELLOW}ddev config --update${NC} and then run this command again\n"
+      exit 1
+  fi
+  # Check if the line already exists in the file
+  if grep -Fq "asusf.local.settings.inc" "$settings_file"; then
+      echo -en " ${YELLOW}ASU Site Factory settings have already been installed.${NC}\n"
+  else
+      # Append the desired lines to the file
+      if echo -e "$line_to_append" >> "$settings_file"; then
+          echo -en " ${GREEN_BG}[success]${GREEN} ASU Site Factory settings have successfully been installed.${NC}\n"
+      else
+          echo -en " ${RED_BG}[error]${RED} Failed to add ASU Site Factory settings${NC}\n" >&2
+          exit 1
+      fi
+  fi
+}
+
+add_asusf_to_settings_php

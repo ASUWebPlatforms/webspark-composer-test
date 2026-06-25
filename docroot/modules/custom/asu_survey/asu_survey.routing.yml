@@ -1,0 +1,36 @@
+asu_survey.admin_settings:
+    path: '/admin/config/content/survey_results'
+    defaults:
+      _form: '\Drupal\asu_survey\Form\SurveyAdminContent'
+      _title: 'Survey admin content'
+    requirements:
+      _permission: 'administer asu_survey'
+      
+asu_survey.survey_confirm_page:
+  path: '/survey/confirmation/{sid}'
+  defaults:
+    _controller: '\Drupal\asu_survey\Controller\SurveyConfirmController::survey_confirm_page'
+    _title: 'ASU Veterans Survey'
+  requirements:
+    _permission: 'access content'
+
+
+asu_survey.survey_ajax_page:
+  path: '/survey/confirmation/json'
+  defaults:
+    _controller: '\Drupal\asu_survey\Controller\SurveyAjaxController::survey_ajax_page'
+    _title: 'Survey Json data'
+  requirements:
+    _permission: 'access content'
+
+asu_survey.survey_online_degrees_page:
+  path: '/survey/online/degrees/{type}/{aoi}'
+  defaults:
+    _controller: '\Drupal\asu_survey\Controller\SurveyOnlineDegreeController::survey_online_degrees_page'
+    _title: 'Survey Online Degrees Json data'
+  requirements:
+    _permission: 'access content'
+
+    
+    
+    

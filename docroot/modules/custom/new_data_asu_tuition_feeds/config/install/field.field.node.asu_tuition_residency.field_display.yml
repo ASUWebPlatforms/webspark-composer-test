@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_display
+    - node.type.asu_tuition_residency
+id: node.asu_tuition_residency.field_display
+field_name: field_display
+entity_type: node
+bundle: asu_tuition_residency
+label: Display
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

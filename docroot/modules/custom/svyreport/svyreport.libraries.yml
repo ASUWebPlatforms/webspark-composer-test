@@ -1,0 +1,9 @@
+svyreport-app:
+  version: 1.01
+  js:
+    svyreport-app/dist/svyreport_min.js: { preprocess: false  }
+  css:
+    component:
+      svyreport-app/dist/svyreport_min.css: { }
+  dependencies:
+    - core/drupalSettings

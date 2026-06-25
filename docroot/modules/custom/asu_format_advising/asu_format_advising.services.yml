@@ -1,0 +1,11 @@
+services:
+  asu_format_advising.node_query:
+    class: Drupal\asu_format_advising\NodeQueryService
+    arguments: ['@current_user', '@entity_field.manager']
+  asu_format_advising.field_details:
+    class: Drupal\asu_format_advising\FieldDetailsService
+    arguments: ['@entity_field.manager', '@entity_type.manager', '@entity_display.repository']
+  asu_format_advising.element_summary:
+    class: Drupal\asu_format_advising\Element\ElementSummary
+    tags:
+      - { name: form_element }

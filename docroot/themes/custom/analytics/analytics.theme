@@ -1,0 +1,9 @@
+<?php
+/**
+ * @file
+ * Functions to support theming in the MyApps theme.
+ */
+
+foreach (glob(dirname(__FILE__) . '/includes/*.inc') as $filename) {
+  require_once $filename;
+}

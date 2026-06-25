@@ -1,0 +1,75 @@
+<?php
+
+use Drupal\Core\Mail\MailFormatHelper;
+use Drupal\Core\Mail\MailManagerInterface;
+use Drupal\Component\Utility\SafeMarkup;
+use Drupal\Component\Utility\Html;
+
+/**
+ * Implements hook_mail() to confirmation email.
+ */
+/**
+ * Implements hook_mail().
+ */
+/**
+ * Implements hook_mail().
+ */
+function asu_cost_comparison_tool_mail($key, &$message, $params) {
+  $config = \Drupal::config('asu_cost_comparison_tool.settings');
+  $default_from = $config->get('email_from') ?: 'no-reply@example.com';
+  $default_reply = $config->get('email_reply_to') ?: $default_from;
+
+  switch ($key) {
+    case 'cost_tool_confirmation':
+      // Subject
+      $subject = !empty($params['subject']) ? $params['subject'] : t('Cost Tool Confirmation');
+      $message['subject'] = $subject;
+
+      // body_html might be string or array (avoid Array to string conversion)
+      if (isset($params['body_html'])) {
+        if (is_array($params['body_html'])) {
+          // join array parts with two newlines (if your builder produces array segments)
+          $html = implode("\n\n", array_map('strval', $params['body_html']));
+        } else {
+          $html = (string) $params['body_html'];
+        }
+      } else {
+        $html = '';
+      }
+
+      // Plain text fallback
+      $plain = trim(preg_replace('/\s+/', ' ', strip_tags($html)));
+      if ($plain === '') {
+        // allow explicit plain param fallback or a generic message
+        $plain = !empty($params['body_plain']) ? $params['body_plain'] : (!empty($params['plain']) ? $params['plain'] : t('Your results are attached.'));
+      }
+
+      // Put plain text on $message['body'] (Drupal mail backend expects an array of lines)
+      $message['body'] = isset($message['body']) && is_array($message['body']) ? $message['body'] : [];
+      //$message['body'][] = $plain;
+
+      // Provide HTML to mail backend via params (conventional)
+     // $message['params']['html_body'] = $params['html'];
+
+      // Headers
+      // Determine "from" and "reply-to" values (params override config)
+      $from_address = !empty($params['from']) ? $params['from'] : $default_from;
+      // Accept both 'reply-to' and 'reply_to' keys for flexibility
+      $reply_address = !empty($params['reply-to']) ? $params['reply-to'] : (!empty($params['reply_to']) ? $params['reply_to'] : $default_reply);
+
+      // Suggest headers for HTML. Some transports ignore these, but many honour them.
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8';
+      $message['headers']['From'] = $from_address;
+      $message['headers']['Reply-To'] = $reply_address;
+      $message['headers']['Sender'] = $from_address;
+      $message['body'][] = $html; 
+      // Return-Path is commonly controlled by the SMTP server; set here as a hint only
+      $message['headers']['Return-Path'] = $from_address;
+
+      // Also set message['from'] which many transports use as the envelope sender
+      $message['from'] = $from_address;
+
+      break;
+  }
+}
+  

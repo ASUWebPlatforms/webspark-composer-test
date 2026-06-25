@@ -1,0 +1,6 @@
+lodestar-styling:
+  css:
+    component:
+      lodestar-styling/css/lodestar-custom.css: {}
+  js:
+    lodestar-styling/js/lodestar-custom.js: {}

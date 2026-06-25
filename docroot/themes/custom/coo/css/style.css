@@ -1,0 +1,25 @@
+/* general style tweaks */
+.figure img{ border: none; }
+.page-wrapper-webspark main {padding-bottom: 0 !important;}
+
+/* facts table */
+.facts-table{border-collapse: collapse; border-style: hidden;}
+.facts-table td {border:1px solid #D0D0D0;}
+.facts-table tr:hover, .facts-table tr:focus, .facts-table tr:hover td, .facts-table tr:focus td {background-color:white !important;}
+.facts-table tbody {border-color: transparent}
+.uds-table>table.facts-table tbody tr:nth-child(2n) td {background-color: white}
+.uds-table {border: none}
+
+/* mobile */
+@media (max-width: 767px) {
+.mobile-only{display: block}
+.desktop-only {display: none}
+}
+
+/* desktop */
+@media (min-width: 768px) {
+.mobile-only{display: none}
+.desktop-only {display: block}
+
+}
+

@@ -1,0 +1,10 @@
+name: ASU Mexico Custom Features and Styles
+type: module
+description: Enables custom website features and styles for use with Webspark 2.0
+package: 'Custom Modules'
+core_version_requirement: ^10 || ^11
+version: '3.0.0'
+configure: asumex_custom.configuration_form
+dependencies:
+  - drupal:block
+  - twig_tweak:twig_tweak

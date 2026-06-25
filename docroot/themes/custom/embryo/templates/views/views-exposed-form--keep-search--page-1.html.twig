@@ -1,0 +1,38 @@
+{{ attach_library('embryo/keyword_list_toggle') }}
+
+{% if q is not empty %}
+  {{ q }}
+{% endif %}
+<div class="block block-layout-builder block-inline-blocktext-content clearfix default">
+  <div class="formatted-text">
+      <div class="uds-highlighted-heading">
+        <h3><span class="highlight-gold">Filter my results</span></h3>
+      </div>
+  </div>
+</div>
+<div id="views-exposed-form-keep-search-searchtermblock">
+{% if form.search_api_fulltext is defined %}
+  {{ form.search_api_fulltext }}
+{% endif %}
+{% if form.actions is defined %}
+  {{ form.actions }}
+{% endif %}
+</div>
+
+{% if form.field_keyword_collapsible is defined %}
+  <div class="">
+    {{ form.field_keyword_collapsible }}
+  </div>
+{% endif %}
+
+{% if form.field_author_collapsible is defined %}
+  {{ form.field_author_collapsible }}
+{% endif %}
+
+{% if form.field_collection_collapsible is defined %}
+  {{ form.field_collection_collapsible }}
+{% endif %}
+
+{% if form.actions.reset is defined %}
+  {{ form.actions.reset }}
+{% endif %}

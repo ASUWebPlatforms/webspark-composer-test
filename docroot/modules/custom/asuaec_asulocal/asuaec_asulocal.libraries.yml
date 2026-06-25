@@ -1,0 +1,10 @@
+degree_courses:
+  version: 1.x
+  js:
+    js/degree-courses.js: {}
+  css:
+    theme:
+      css/degree-courses.css: {}
+  dependencies:
+    - core/drupal
+    - core/once

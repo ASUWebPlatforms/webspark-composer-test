@@ -1,0 +1,35 @@
+<?php
+
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\field\Entity\FieldStorageConfig;
+//use Drupal\Core\Database\Connection;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\views\Plugin\views\style\StylePluginBase;
+use Drupal\views\Views;
+use Drupal\views\Plugin\views\cache\CachePluginBase;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\views\ViewExecutable;
+use Drupal\Core\Mail\MailManagerInterface;
+use Drupal\Component\Utility\SafeMarkup;
+use Drupal\Component\Utility\Html;
+
+
+/**
+ * Implements hook_mail().
+ */
+function asu_resend_email_mail($key, &$message, $params) {
+    $options = array(
+        'langcode' => $message['langcode'],
+    );
+    switch ($key) {
+        case 'send_confirmation_email':
+            $message['from'] = \Drupal::config('system.site')->get('mail');
+            $message['subject'] = t('@subject', ['@subject' => $params['subject']], $options);
+            $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed'; // Needed this to display images.
+            $message['body'][] = $params['message'];
+            break;
+    }
+}
+
+

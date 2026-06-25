@@ -1,0 +1,16 @@
+asu_components.content:
+  path: '/customparagraphs'
+  defaults:
+    _controller: 'Drupal\asu_components\Controller\AsuController::newparagraph'
+    _title: 'custom paragraphs'
+  requirements:
+    _permission: 'access content'
+
+asu_components.world:
+  path: '/asublock'
+  defaults:
+    _controller: 'Drupal\asu_components\Controller\AsuController::overview'
+    _title: 'asublock'
+  requirements:
+    _role: 'administrator'
+    _permission: 'access content'

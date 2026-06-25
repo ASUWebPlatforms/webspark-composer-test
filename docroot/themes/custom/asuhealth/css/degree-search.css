@@ -1,0 +1,130 @@
+div[class^=uds-hero] .hero-overlay {
+  display: none!important;
+}
+.formatted-text .uds-list li {
+  margin-bottom: 0.5rem;
+}
+.pb-5 {
+  padding-bottom: 0!important;
+}
+span.noHighlight {
+  background: #fff!important;
+  font-weight: normal!important;
+}
+h3 span.highlight-gold {
+  box-shadow:none!important;
+}
+
+.facets-widget-checkbox ul {
+  list-style-type: none !important;
+  padding: 0px !important;
+}
+li.facet-item input {
+  margin: 0 5px 0 0;
+}
+.view-degree-search-solr8 .card-degree .btn-tag {
+  cursor: auto;
+}
+
+.view-degree-search-solr8 .card-degree .btn-tag:hover {
+  transform: none;
+}
+
+.view-degree-search-solr8 .card-degree .btn-tag:active {
+  border: 1px solid #d0d0d0;
+}
+
+
+.block-facet--checkbox.block h2,
+form#views-exposed-form-degree-search-solr8-page-3 .fieldset-legend {
+  font-size: 1rem;
+  letter-spacing: -.015rem;
+  line-height: 1.5rem;
+  font-weight: 700;
+}
+
+.degree-search-wrap hr,
+form#views-exposed-form-degree-search-solr8-page-3 hr {
+  margin: 2rem 0;
+}
+
+.card-header .card-title:after {
+  background-color: #ffc627;
+  content: "";
+  display: block;
+  height: .25rem;
+  margin-top: 1rem;
+  width: 2rem;
+}
+
+.views-exposed-form.needs-validation.contextual-region.block, .view-filters, #views-exposed-form-degree-search-solr8-block-1 {
+  padding: 1rem;
+  background-color: #e8e8e8;
+}
+@media (min-width: 1024px) {
+  .views-exposed-form.needs-validation.contextual-region.block, #views-exposed-form-degree-search-solr8-block-1 {
+    display: flex;
+    justify-content: space-around;
+    /*align-items: flex-start;*/
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
+#views-exposed-form-degree-search-solr8-block-1 .form-actions .btn {
+  margin-top: 10px;
+}
+.uds-card-arrangement>.uds-card-arrangement-card-container {
+  margin-top:0;
+}
+@media (max-width: 1023px) {
+  .views-exposed-form.needs-validation.contextual-region.block, #views-exposed-form-degree-search-solr8-block-1 {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+li.facet-item .facet-item {
+  margin-left: 10px;
+}
+
+.uds-img:is(img) {
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+}
+
+aside .h4, aside h4 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -.01875rem;
+  line-height: 1.625rem;
+}
+
+#collapseExample .card {
+  --card-child-padding:0;
+  border:none;
+  background:unset;
+}
+
+#collapseExample .form-control {
+  padding:0;
+}
+
+#collapseExample .bef-checkboxes ul li ul {
+  padding-left: 2rem !important;
+  list-style-type: none !important;
+}
+
+#collapseExample .bef-checkboxes ul,
+#collapseExample .bef-checkboxes ul li {
+  padding-left: 0 !important;
+  list-style: none !important;
+}
+
+#block-asuhealth-ready {
+  background: #fafafa;
+}
+

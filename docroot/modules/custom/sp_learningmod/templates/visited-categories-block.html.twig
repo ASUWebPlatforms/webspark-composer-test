@@ -1,0 +1,22 @@
+<div class="visited-categories">
+	<div class="d-flex flex-wrap gap-2 spacing-bottom-48">
+		{% for category in categories %}
+			<a class="btn {{ category.button_class }}" href="{{ category.url }}">{{ category.button_text }}
+				{{ category.title }}</a>
+		{% endfor %}
+	</div>
+
+	{% for response in responses %}
+		<div class="response-category {% if loop.index is even %}grey-bg{% endif %}">
+			<h2 class="response-title">{{ response.title }}</h2>
+			<div class="response-box">
+				{% for field in response.fields %}
+					<div class="response-item">
+						<strong class="response-label">{{ field.label }}:</strong>
+						<p class="response-text">{{ field.value }}</p>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	{% endfor %}
+</div>

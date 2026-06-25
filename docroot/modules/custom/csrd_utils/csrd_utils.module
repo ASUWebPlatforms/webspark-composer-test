@@ -1,0 +1,75 @@
+<?php
+
+use Drupal\commerce_cart\Form\AddToCartFormInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\CloseModalDialogCommand;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function csrd_utils_page_attachments(array &$page) {
+  $store = \Drupal::service('commerce_store.current_store')->getStore();
+  $cart = \Drupal::service('commerce_cart.cart_provider')
+  ->getCart('default', $store);
+  if ($cart) {
+    $cart_items = count($cart-> getItems());
+    $page['#attached']['drupalSettings']['cartItems'] = $cart_items;
+  }
+  $page['#attached']['library'][] = 'csrd_utils/csrd_utils';
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function csrd_utils_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
+   $form_validate = $form_state->getBuildInfo()['callback_object'] instanceof AddToCartFormInterface;
+  // Check if the form builder implements the AddToCartFormInterface.
+  if ($form_validate) {
+    // Using getInstanace method to create Object.
+    ajaxAddProductToCartForm($form_id, $form);
+    $form['actions']['continue-shoping'] = [
+      '#type' => 'button',
+      '#value' => t('Continue shopping'),
+      '#attributes' => [
+        'onclick' => 'return false;',
+        'class' => ['close-modal'],
+      ],
+    ];
+    if (isset($form['actions']['submit']['#disabled'])) {
+      $form['actions']['submit']['#disabled'] = 'disabled';
+    }
+    $form['actions']['submit']['#attributes']['class'][] = "btn-gold-forced";
+  }
+}
+
+function ajax_add_product_to_cart_validate(&$form, $form_state) {
+  $response = new AjaxResponse();
+  $form_id = $form_state->getUserInput()['form_id'];
+  if ($form_state->hasAnyErrors()) {
+    // If form is having errors, rebuild form.
+    $response->addCommand(new ReplaceCommand('#commerce-product-' . $form_id, $form));
+  }
+  $response->addCommand(new \Drupal\Core\Ajax\PrependCommand('.product-information', ['#type' => 'status_messages']));
+  return $response;
+}
+
+
+function ajaxAddProductToCartForm($form_id, &$form) {
+  // // Add ajax callback to the form.
+  $form['actions']['submit']['#attributes']['class'][] = 'use-ajax';
+  $form['actions']['submit']['#ajax'] = [
+    'callback' => 'ajax_add_product_to_cart_validate',
+    'disable-refocus' => TRUE,
+    'event' => 'click',
+  ];
+  return $form;
+}
+
+function continue_shopping_close_modal() {
+  $command = new CloseModalDialogCommand();
+  $response = new AjaxResponse();
+  $response->addCommand($command);
+  return $response;
+}

@@ -1,0 +1,8 @@
+excluded:
+  - asu_tuition.admin_settings
+  - core.base_field_override.node.asu_tuition_fee_code_data.promote
+  - core.base_field_override.node.asu_tuition_fee_code_data.status
+  - core.base_field_override.node.asu_tuition_fee_rate_data.promote
+  - core.base_field_override.node.asu_tuition_fee_rate_data.status
+  - core.base_field_override.node.asu_tuition_residency.promote
+  - core.base_field_override.node.asu_tuition_residency.status

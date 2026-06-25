@@ -1,0 +1,29 @@
+{
+  "devDependencies": {
+    "eslint": "^8.53.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-formatter-gitlab": "^5.0.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jquery": "^1.5.1",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-yml": "^1.8.0",
+    "postcss": "^8.5.6",
+    "postcss-jsx": "^0.36.4",
+    "postcss-sass": "^0.5.0",
+    "postcss-scss": "^4.0.9",
+    "prettier": "^3.0.3",
+    "stylelint": "^15.10.1",
+    "stylelint-checkstyle-formatter": "^0.1.2",
+    "stylelint-config-standard": "^34.0.0",
+    "stylelint-formatter-gitlab": "^1.0.2",
+    "stylelint-order": "^6.0.3",
+    "stylelint-prettier": "^4.1.0"
+  },
+  "scripts": {
+    "eslint": "eslint docroot/profiles/contrib/webspark/modules/**/*.js docroot/profiles/contrib/webspark/themes/renovation/*.js",
+    "eslint:fix": "eslint --fix docroot/profiles/contrib/webspark/modules/**/*.js docroot/profiles/contrib/webspark/themes/renovation/*.js",
+    "stylelint": "stylelint 'docroot/profiles/contrib/webspark/modules/**/*.{scss,css}' 'docroot/profiles/contrib/webspark/themes/renovation/*.{scss,css}' --cache --color",
+    "stylelint:fix": "stylelint 'docroot/profiles/contrib/webspark/modules/**/*.{scss,css}' 'docroot/profiles/contrib/webspark/themes/renovation/*.{scss,css}' --fix"
+  }
+}

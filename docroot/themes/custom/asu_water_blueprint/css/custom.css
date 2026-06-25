@@ -1,0 +1,82 @@
+html {
+  /* Fixes horizontal scrollbar caused by card carousel */
+  overflow-x: hidden;
+}
+
+.header-main a[href^="https://asu.maps.arcgis.com/apps/webappviewer/index.html"]
+{
+  color: #fff;
+  background-color: #8c1d40;
+  border-color: #8c1d40;
+  border-radius: 400rem;
+
+  display: inline-block;
+
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: center;
+
+  padding: 0.7rem 1rem;
+
+  transition: 0.03s ease-in-out;
+}
+.header-main a[href^="https://asu.maps.arcgis.com/apps/webappviewer/index.html"]::after
+{
+  display: none !important;
+}
+.header-main a[href^="https://asu.maps.arcgis.com/apps/webappviewer/index.html"]:hover
+{
+  transform: scale(1.05);
+}
+
+/* Search */
+form#search-form input[type="search"] {
+  padding-left: 0.5rem;
+}
+form#search-form details#edit-advanced {
+  display: none;
+}
+
+/* Alert banner */
+.container .banner {
+  padding: 2rem;
+}
+
+/* Select Topics Block */
+/* Adjust text color for dark background */
+.gray-1-bg .select-topic-block--label,
+.morse-code-black .select-topic-block--label,
+.network-black .select-topic-block--label,
+.topo-black .select-topic-block--label {
+  color: white;
+  font-size: 2rem;
+}
+.gray-1-bg .select-topic-block--link a,
+.morse-code-black .select-topic-block--link a,
+.network-black .select-topic-block--link a,
+.topo-black .select-topic-block--link a {
+  color: #FFC627;
+}
+
+/* Heading highlight */
+.uds-card-arrangement .uds-card-arrangement-content-container h2 {
+  background: #ffc627;
+  box-shadow: -.15em 0 0 #ffc627,.15em 0 0 #ffc627;
+  color: #191919;
+  padding-right: 0;
+}
+
+/* Resources list */
+.resources--list .item-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.resources--list .item-list ul > li {
+  max-width: unset;
+}
+
+/* Resource heading topic links */
+.content.text-white .resource--topics a {
+  color: #FFFFFF;
+}

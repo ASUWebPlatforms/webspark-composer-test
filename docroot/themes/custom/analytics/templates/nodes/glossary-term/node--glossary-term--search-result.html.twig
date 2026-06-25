@@ -1,0 +1,13 @@
+{% set preview = 'No description provided.' %}
+{% if node.body.value %}
+  {% set preview = node.body.value|striptags|slice(0, 85) ~ (node.body.value|length > 85 ? '...') %}
+{% endif %}
+{% set data = {
+  'title': node.title.value,
+  'url': node|entity_url,
+  'metadata': preview,
+} %}
+
+<article class="glossary-term__teaser--search-result">
+  {{ include('@analytics/data-dictionary-teaser-search-result.twig', data) }}
+</article>

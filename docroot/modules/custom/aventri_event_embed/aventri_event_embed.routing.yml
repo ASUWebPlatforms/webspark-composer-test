@@ -1,0 +1,7 @@
+aventri_event_embed.config:
+ path: '/admin/config/aventri-event-embed/adminsettings'
+ defaults:
+   _form: '\Drupal\aventri_event_embed\Form\AventriConfigForm'
+   _title: 'Aventri Event Embed global settings'
+ requirements:
+   _permission: 'administer site configuration'

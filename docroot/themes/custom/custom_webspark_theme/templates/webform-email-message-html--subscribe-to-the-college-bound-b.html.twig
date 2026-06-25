@@ -1,0 +1,390 @@
+{#
+/**
+ * @file
+ * Default theme implementation for webform email wrapper template as HTML.
+ *
+ * Available variables:
+ * - message: The email message which contains to, from, subject, message, etc…
+ * - webform_submission: The webform submission.
+ * - handler: The webform handler.
+ *
+ * @ingroup themeable
+ */
+#}
+
+<style>
+    v\:* { behavior: url(#default#VML); display:inline-block}
+    @import url(http://fonts.googleapis.com/css?family=Roboto:400,300italic,300,100italic,100,700,400italic,500,500italic,700italic,900,900italic);
+    [style*='Roboto'] {
+        font-family: 'Roboto', Arial, sans-serif !important
+    }
+    #outlook a {padding:0;}
+    body{
+        width:100% !important;
+        -webkit-text-size-adjust:100%;
+        -ms-text-size-adjust:100%;
+        margin:0;
+        padding:0;
+    }
+    /*.ReadMsgBody {width: 100%;}
+    .ExternalClass {width:100%;}
+    .backgroundTable {margin:0 auto; padding:0; width:100%;!important;}*/
+    table td {border-collapse: collapse;}
+    .ExternalClass * {line-height: 115%;}
+    td.header {
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+        color: #ffb310;
+        font-size: 42px;
+        font-weight: 400;
+        letter-spacing: -1px !important;
+    }
+    a[x-apple-data-detectors] {
+        color: inherit !important;
+        text-decoration: none !important;
+        font-size: inherit !important;
+        font-family: inherit !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+    }
+    @media (max-width: 480px) {
+        .header {
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
+            padding-right: 0px !important;
+            padding-left: 0px !important;
+            font-size: 28px !important;
+            letter-spacing: -1px !important;
+            line-height: 30px !important;
+        }
+        a[x-apple-data-detectors] {
+            color: inherit !important;
+            text-decoration: none !important;
+            font-size: inherit !important;
+            font-family: inherit !important;
+            font-weight: inherit !important;
+            line-height: inherit !important;
+        }
+    }
+    /* td.headline {
+         padding-top: 5px !important;
+         padding-bottom: 15px !important;
+         color: #ffb310;
+         font-size: 32px;
+         line-height: 44px;
+         font-weight: 300;
+     }*/
+    @media (max-width: 480px) {
+        /* .headline {
+             font-size: 16px !important;
+             line-height: 20px;
+             font-weight: 300 !important;
+             padding-bottom: 10px !important;
+             color: #ffb310;
+         }*/
+        a[x-apple-data-detectors] {
+            color: inherit !important;
+            text-decoration: none !important;
+            font-size: inherit !important;
+            font-family: inherit !important;
+            font-weight: inherit !important;
+            line-height: inherit !important;
+        }
+    }
+    /* td.tagline {
+         padding-top: 15px;
+         padding-bottom: 15px;
+         line-height: 24px;
+         color: #ffb310;
+         font-size: 16px;
+         font-weight: 500;
+     }*/
+    @media (max-width: 480px) {
+        /* .tagline {
+             font-size: 16px !important;
+             line-height: 18px;
+             font-weight: 500 !important;
+             text-align: center !important;
+         }*/
+        a[x-apple-data-detectors] {
+            color: inherit !important;
+            text-decoration: none !important;
+            font-size: inherit !important;
+            font-family: inherit !important;
+            font-weight: inherit !important;
+            line-height: inherit !important;
+        }
+    }
+    td[class='stack-column'] {
+        width: 50% !important;
+    }
+    td[class='stack-column-center'] {
+        width: 50% !important;
+        text-align: right !important;
+    }
+    td[class='stack-column-center'] {
+        text-align: right !important;
+        width: 50% !important;
+    }
+    td[class='pstack-column'] {
+        width: 50% !important;
+    }
+    td[class='pstack-column-center'] {
+        width: 50% !important;
+        text-align: right !important;
+    }
+    td[class='pstack-column-center'] {
+        text-align: right !important;
+        width: 50% !important;
+    }
+    a[x-apple-data-detectors] {
+        color: inherit !important;
+        text-decoration: none !important;
+        font-size: inherit !important;
+        font-family: inherit !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+    }
+    /* End reset */
+    @media screen and (max-width: 600px){
+
+        *[class='container'] { width: 320px !important; padding:0px !important}
+        *[class='mobile-column'] {display: block;}
+        *[class='mob-column'] {float: none !important;width: 100% !important;}
+        *[class='mobile-padding'] {padding-left:10px !important;padding-right:10px !important;}
+        *[class='hide'] {display:none !important;}
+        *[class='100p'] {width:100% !important; height:auto !important;}
+        *[class='mobile-column-blog'] {padding-bottom:20px;display:block;}
+        td[class='stack-column'],
+        td[class='stack-column-center'] {
+            display: block !important;
+            width: 100% !important;
+            direction: ltr !important;
+            padding-bottom: 20px;
+            text-align: center;
+        }
+        td[class='stack-column-center'] {
+            text-align: center !important;
+        }
+        td[class='pstack-column'],
+        td[class='pstack-column-center'] {
+            display: block !important;
+            width: 100% !important;
+            padding-bottom: 20px;
+        }
+        td[class='pstack-column-center'] {
+            text-align: center !important;
+        }
+        a[x-apple-data-detectors] {
+            color: inherit !important;
+            text-decoration: none !important;
+            font-size: inherit !important;
+            font-family: inherit !important;
+            font-weight: inherit !important;
+            line-height: inherit !important;
+        }
+    }
+    @media screen and (max-device-width: 480px){
+        *[class='mobhide'] {display:none !important;}
+        *[class='font-bump'] {font-size:16px !important;}
+        *[class='mobile-bump'] {font-size: 16px !important; line-height: 20px !important;}
+        *[class='link-bump'] {font-size:21px !important;}
+        *[class='100p-mob'] {width:100% !important; height:auto !important;}
+        td[class='stack-column'],
+        td[class='stack-column-center'] {
+            display: block !important;
+            width: 100% !important;
+            direction: ltr !important;
+        }
+        td[class='stack-column-center'] {
+            text-align: center !important;
+        }
+        td[class='sig-stack-column'],
+        td[class='sig-stack-column-center'] {
+            display: block !important;
+            width: 100% !important;
+            direction: ltr !important;
+            padding-bottom: 20px;
+        }
+        td[class='sig-stack-column-center'] {
+            text-align: center !important;
+            padding-bottom: 20px;
+        }
+        td[class='sig-pstack-column'],
+        td[class='sig-pstack-column-center'] {
+            display: block !important;
+            width: 100% !important;
+            padding-bottom: 20px;
+        }
+        td[class='sig-pstack-column-center'] {
+            text-align: center !important;
+            padding-bottom: 20px;
+        }
+        /* .tablewnew {
+             background: #ffb310;
+             text-align: center;
+             border: 15px solid #990033;
+             padding-top: 2px;
+             color: #ffffff;
+             font-family: sans-serif;
+             font-size: 26px;
+             line-height: 1px;
+             text-align: center;
+             text-decoration: none;
+             display: block;
+             border-radius: 3px;
+         }*/
+        table[class='maroonheader'], td[class='maroonheadercell'] {
+            width: 125px !important;
+            height: 20px !important;
+            font-size: 12px !important;
+            text-align: center !important;
+            font-weight: bold !important;
+            line-height: 12px !important;
+        }
+        a[class='asumaroonheaderMSO'] {
+            font-size: 12px !important;
+            text-decoration:none !important;
+            width:125px !important;
+            font-family: Arial, 'Roboto', 'Helvetica Neue', Helvetica, sans-serif!important;
+        }
+        a[class='bpbuttons'] {
+            width: 315px !important;
+            font-size: 18px !important;
+        }
+        .button-cta,
+        .button-cta * {
+            display: block !important;
+            width: 100% !important;
+            padding: 0px !important;
+            line-height: 35px !important;
+            height: auto !important;
+        }
+        .mheader,
+        .mheader * {
+            display: block !important;
+            width: 190px !important;
+            height: 30px !important;
+            font-size: 16px !important;
+            line-height: 30px !important;
+            padding: 0px !important;
+        }
+        a[x-apple-data-detectors] {
+            color: inherit !important;
+            text-decoration: none !important;
+            font-size: inherit !important;
+            font-family: inherit !important;
+            font-weight: inherit !important;
+            line-height: inherit !important;
+        }
+        /* .vib {
+             display: none;
+         }*/
+    }
+</style>
+<!--[if mso]>
+<style>
+    .button-cta td {
+        background-color: transparent;
+    }
+    .mheader td {
+        background-color: transparent;
+    }
+    .header td a:link, a:active, a:focus, a:visited {
+        color: #FFB310;
+        text-decoration: none;
+    }
+</style>
+<![endif]-->
+
+<table border="0" cellpadding="0" cellspacing="0" class="mobile-padding" style="background-color: #ffffff; margin: 0; padding: 0" width="100%" >
+    <tr>
+        <td align="center" valign="top">
+
+            <table border="0" cellpadding="0" cellspacing="0" class="100p" width="600">
+                <tr>
+                    <td nowrap="nowrap" style="display:none !important; visibility:hidden; opacity:0; color:transparent; height:0; width:0; mso-hide:all; line-height:0px; font-size:1px; text-align: left; border-collapse: separate; color:#ffffff; font-family: Arial, 'Roboto', 'Helvetica Neue', Helvetica, sans-serif; padding: 7px 0px 0px 7px;">
+
+                        <!--PRE HEADER TEXT - START-->
+                        Thank you for subscribing.
+                        <!--PRE HEADER TEXT - STOP-->
+
+                    </td>
+                </tr>
+
+                <!--ASU GOLD TEXT HEADER - START-->
+                <!-- <tr>
+                   <td colspan="2" nowrap="nowrap" class="header" style="border-collapse: separate; text-align: left; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; color: #FFB310; font-family: Arial, 'Roboto', 'Helvetica Neue', Helvetica, sans-serif; font-size: 40px; font-weight:bold; line-height: 44px; letter-spacing: -1px; text-decoration: none !important;">
+                     <a name="ASU Header Link" title="Arizona State University" href="https://asu.edu" style="color:#FFB310; text-decoration:none;"><span style="color:#FFB310;"><font color="#FFB310">Arizona State University</font></span></a>
+                   </td>
+                 </tr> -->
+                <!--------ASU GOLD TEXT HEADER END-------->
+
+            </table>
+
+            <table border="0" cellpadding="0" cellspacing="0" class="100p" width="600">
+                <tr>
+                    <td align="center" valign="top">
+                        <!--BANNER IMAGE - START-->
+                        <img class="parent_blog_homepage_logo" src="https://admission.asu.edu/sites/default/files/collegebound_designelement.png" width="150" height="150"><br />
+                        <a href="https://admission.asu.edu/parent-blog"><img src="https://admission.asu.edu/sites/default/files/emailsubscriberconfirmations_v2.png" class="100p" style="display:block;" border="0" alt="Welcome to the College Bound parent blog"></a><br />
+                        <!--BANNER IMAGE - END-->
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Wrapper table -->
+            <table border="0" cellpadding="0" cellspacing="0" class="100p" width="800">
+                <tr>
+                    <td valign="top">
+
+                        <!-- Content table -->
+                        <table class="100p" border="0" cellpadding="0" cellspacing="0">
+
+                            <tr>
+                                <td class="mobile-bump" style="border-collapse: collapse; text-align: left; font-size:16px; color:#000000; font-family: Arial, 'Roboto', 'Helvetica Neue', Helvetica, sans-serif; padding: 13px 0px 15px 0px; line-height: 18px;">{{ message.body }}</td>
+                            </tr>
+                            <tr>
+                                <td class="mobile-bump" style="border-collapse: collapse; text-align: left; font-size:16px; color:#333333; font-family: Arial, 'Roboto', 'Helvetica Neue', Helvetica, sans-serif; padding: 0px 0px 10px 0px; line-height: 20px; font-weight: 300;">
+
+                                    <!-- CONTENT COMES HERE! -->
+                                    <!-- For Outlook email client, we need to insert style="color:#903;" to <a> tag. Also, we need to insert style="margin-bottom:10px" to <p> tag. -->
+                                    <p style='margin-bottom:10px'>Welcome to the College Bound parent blog, a blog for parents of soon-to-be college students. Our purpose is to share our most useful tips and resources for preparing you and your student for and applying to college.</p>
+                                    <p style='margin-bottom:10px'>You're signed up to receive biweekly emails that will engage and excite you and your family as your student begins their journey to college — whether it’s your first, second or third time around.</p>
+                                    <p style='margin-bottom:10px'>You can also browse all topics and share content any time by visiting the College Bound blog.</p>
+                                    <p style='margin-bottom:10px'>Now you'll be able to confidently help your student plan for college.</p>
+                                    <p style='margin-bottom:10px'>Thanks for subscribing.</p><p>&nbsp;</p>
+
+                                    <p style='margin-bottom:10px; background:#FFC627; padding: 2px; width: 35%;color: #000000; font-size: 20px; text-align:center; font-weight: bold;'><a href="https://admission.asu.edu/parent-blog" style="color: #ffffff; text-decoration: none; font-weight: bold;">Check out our latest articles</a></p><br />
+
+                                    <table>
+                                        <tr>
+                                            <td style="border: 1px solid #ffffff; width: 50%; padding:5px;"><p><img src="https://admission.asu.edu/sites/default/files/goingtocollege101.jpeg" alt="Going to college 101"></p><p style="font-size:22px;">Going to College 101</p><p style="width: 85%; margin-top:35px;">Class is in session. Learn what your student should do to get into college and how you can help.</p><p style="margin-top:35px;"><a href="https://admission.asu.edu/parent-blog/preparing-college/going-college-101"><button style="background: #a30046; color: #ffffff; padding: 3px; border: none; font-size: 20px; font-weight: bold; cursor: pointer !important; ">Take me to class</button></a></p></td>
+                                            <td style="border: 1px solid #ffffff; width: 50%; padding:5px;"><p><img src="https://admission.asu.edu/sites/default/files/liveoncampus.jpg" alt="Live on campus"></p><p style="font-size:22px;">Should my student live on campus?</p><p style="width: 85%; margin-top: 35px;">Many universities recommend that students live on-campus. Make your housing decision based on research, advantages and options.</p><p style="margin-top:35px;"><a href="https://admission.asu.edu/parent-blog/preparing-college/should-my-student-live-campus"><button style="background: #a30046; color: #ffffff; padding: 3px;  border: none; font-size: 20px; font-weight:bold; cursor: pointer !important;">What should I consider?</button></a></p></td>
+                                        </tr></table>
+                                    <p>&nbsp;</p>
+
+
+                                    <!-- CONTENT ENDS -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <!-- Added custom footer -->
+                                <td align="left" valign="top" width="800" height="100" style="background:#5C6670;">
+                                    <p>&nbsp;</p>
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    </td>
+                </tr>
+
+
+            </table>
+
+        </td>
+    </tr>
+</table>

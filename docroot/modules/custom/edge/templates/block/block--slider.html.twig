@@ -1,0 +1,49 @@
+{% set classes = ['swiper', 'js-swiper', 'edge--slider'] %}
+<div{{ attributes.addClass(classes) }}>
+  <div class="swiper-wrapper">
+    {{ title_prefix }}
+    {% if label %}
+      <h2{{ title_attributes.addClass('visually-hidden') }}>{{ label }}</h2>
+    {% endif %}
+    {{ title_suffix }}
+
+    {% block content %}
+      {% for slide in content.field_slide['#items'] %}
+        {% set fields = slide.entity %}
+        {% set button = fields.field_button %}
+        {% set title = fields.field_title %}
+        {% set image = fields.field_image %}
+
+        <div class="swiper-slide edge--slider__slide">
+          {% if title %}
+            <div class="edge--slider__overlay"></div>
+          {% endif %}
+
+          {% if image %}
+            <img src="{{ file_url(image.entity.uri.value) }}" class="edge--slider__image"/>
+          {% endif %}
+
+          <div class="edge--slider__content {% if title %}has-title{% endif %} {% if button|length %}has-button{% endif %}">
+            {% if title %}
+              <div class="uds-highlighted-heading edge--slider__title">
+                <h2><span class="highlight-gold">{{ title.value }}</span></h2>
+              </div>
+            {% endif %}
+
+            {% if button|length %}
+              <div class="uds-buttons py-1">
+                <a href="{{ button.0.uri }}" class="btn btn-default btn-maroon btn edge--slider__button" target="">
+                  {{ button.0.title }}
+                </a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    {% endblock %}
+  </div>
+  <div class="swiper-button-prev" aria-label="Previous slide"></div>
+  <div class="swiper-button-next" aria-label="Next slide"></div>
+  <div class="swiper-pagination" aria-hidden="true"></div>
+  {{ attach_library('edge/edge.assets') }}
+</div>

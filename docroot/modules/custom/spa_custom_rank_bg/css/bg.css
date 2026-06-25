@@ -1,0 +1,23 @@
+.bg-rank {
+    background:url(../img/sunset-thrive-silhouette-downtown.jpg) fixed center !important;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#extra-margin-block > section > div > a {
+    margin-left: 20px;
+}
+
+#gray-bg-block > div {
+    padding-left: 10px !important;
+}
+
+#menu-with-headers span.nav-link {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    letter-spacing: -.0875rem;
+    font-weight: 700 !important;
+    text-decoration: none;
+}

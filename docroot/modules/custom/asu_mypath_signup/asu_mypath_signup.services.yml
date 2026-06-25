@@ -1,0 +1,19 @@
+services:
+  getCommunityCollegeList:
+    class: '\Drupal\asu_mypath_signup\Service\AsuCommunityCollegeList'
+  getOnlineInetrestList:
+    class: '\Drupal\asu_mypath_signup\Service\AsuOnlineInterestList'
+  getOnlineProgramList:
+    class: '\Drupal\asu_mypath_signup\Service\AsuOnlineProgramList'
+  getOnCampusCollegeProgramList:
+    class: '\Drupal\asu_mypath_signup\Service\AsuOnCampusCollegeProgramList'
+  getOnlineCollegeProgramList:
+    class: '\Drupal\asu_mypath_signup\Service\AsuOnlineCollegeProgramList'
+  getOnCampusProgramList:
+    class: '\Drupal\asu_mypath_signup\Service\AsuOnCampusProgramList'
+  getProgramList:
+    class: '\Drupal\asu_mypath_signup\Service\AsuProgramList'
+  getCollegeList:
+    class: '\Drupal\asu_mypath_signup\Service\AsuCollegeList'
+  asu_mypath_signup.http_client:
+    class: 'Drupal\Core\Http\ClientFactory'

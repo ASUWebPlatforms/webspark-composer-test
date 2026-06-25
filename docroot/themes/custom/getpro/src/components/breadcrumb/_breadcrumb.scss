@@ -1,0 +1,18 @@
+@import '../../sass/extends/breadcrumb';
+
+.block-webspark-module-asu-breadcrumb {
+  .breadcrumbs {
+  }
+  nav {
+    max-width: 1200px;
+    ol.breadcrumb {
+      padding-left: 0;
+      @media screen and (max-width: $uds-breakpoint-sm) {
+        padding-left: 20px;
+      }
+      @media screen and (max-width: $uds-breakpoint-md) {
+        padding-left: 20px;
+      }
+    }
+  }
+}

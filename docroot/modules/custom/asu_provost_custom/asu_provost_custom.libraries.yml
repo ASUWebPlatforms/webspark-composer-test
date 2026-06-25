@@ -1,0 +1,7 @@
+provostcustom-aboutstaff-library:
+  version: 1.x
+  dependencies:
+    - core/jquery
+  js:
+    js/provostcustom_aboutstaff.js: { }
+

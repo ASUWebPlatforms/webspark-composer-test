@@ -1,0 +1,73 @@
+<?php
+
+
+/**
+ * Implements hook_schema().
+ */
+function custom_maillog_schema() {
+    
+    $schema['custom_mail_log'] = [
+        'description' => 'Table to log email details.',
+        'fields' => [
+          'id' => [
+            'description' => 'Primary Key: Unique identifier for the email log.',
+            'type' => 'serial',
+            'not null' => TRUE,
+          ],
+          'uid' => [
+            'description' => 'User ID who sent the email.',
+            'type' => 'int',
+            'default' => 0,
+            'not null' => TRUE,
+            'unsigned' => TRUE,
+          ],
+          'from' => [
+            'description' => 'Sender email address.',
+            'type' => 'varchar',
+            'length' => 255,
+            'default' => '',
+            'not null' => TRUE,
+          ],
+          'to' => [
+            'description' => 'Recipient email address.',
+            'type' => 'varchar',
+            'length' => 255,
+            'default' => '',
+            'not null' => TRUE,
+          ],
+          'subject' => [
+            'description' => 'Email subject.',
+            'type' => 'varchar',
+            'length' => 255,
+            'default' => '',
+            'not null' => TRUE,
+          ],
+          'message' => [
+            'description' => 'Email Content.',
+            'type' => 'text',
+            'default' => '',
+            'not null' => TRUE,
+          ],
+          'module' => [
+            'description' => 'Module name that triggered the email.',
+            'type' => 'varchar',
+            'length' => 255,
+            'default' => '',
+            'not null' => TRUE,
+          ],
+          'created_at' => [
+            'description' => 'Timestamp when the email was logged.',
+            'type' => 'varchar',
+            'length' => 255,
+            'default' => '',
+            'not null' => TRUE,
+          ],
+        ],
+        'primary key' => ['id'],
+      ];
+
+  return $schema;
+}
+
+
+?>

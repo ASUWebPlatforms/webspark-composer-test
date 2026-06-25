@@ -1,0 +1,51 @@
+<?php
+
+use Drupal\block\Entity\Block;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Access\AccessResult;
+
+
+function restrictedmenu_preprocess_page(&$variables)
+{
+    $node = \Drupal::routeMatch()->getParameter('node');
+    if ($node instanceof NodeInterface) {
+        // getting the nid
+        $nid = $node->id();
+
+        // get entity id
+        $ids = \Drupal::entityQuery('group_relationship')
+            ->accessCheck(FALSE)
+            ->condition('entity_id', $nid)
+            ->execute();
+        // find relation of the id and using that find the group id
+        $relations = \Drupal\group\Entity\GroupRelationship::loadMultiple($ids);
+        $gids=[0 => 0];
+        foreach ($relations as $rel) {
+
+            if ($rel->getEntity()->getEntityTypeId() == 'node') {
+
+                $gids[0] = $rel->getGroup()->id();
+            }
+        }
+        // dpm($variables['page']['header']);
+        // make block visible or hidden based on the gid=14 and if its node
+        if (($node instanceof NodeInterface) && ($gids[0] == 14)) {
+
+            // Unset its placeholder block.
+            unset($variables['page']['header']['cforadix_asubrandheader']);
+            unset($variables['page']['header']['asubrandheader_3']);
+        } else {
+            unset($variables['page']['header']['asubrandheader_2']);
+        }
+        if (($node instanceof NodeInterface) && ($gids[0] == 13)) {
+
+            // Unset its placeholder block.
+            unset($variables['page']['header']['cforadix_asubrandheader']);
+            unset($variables['page']['header']['asubrandheader_2']);
+        } else {
+            unset($variables['page']['header']['asubrandheader_3']);
+        }
+    }
+}

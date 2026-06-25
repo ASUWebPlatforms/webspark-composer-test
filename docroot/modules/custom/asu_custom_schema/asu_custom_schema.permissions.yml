@@ -1,0 +1,4 @@
+manage asu node schema:
+  title: 'Manage asu node Schema.org markup'
+  description: 'Access the Schema tab on nodes to view and edit JSON-LD schema settings.'
+  restrict access: false

@@ -1,0 +1,6 @@
+name: 'ASU AEC Visit Revamp'
+type: module
+description: 'Visit Revamp related items'
+core_version_requirement: ^10 || ^11
+package: ASU
+configure: visit_revamp_config_form

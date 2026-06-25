@@ -1,0 +1,15 @@
+change_format.change:
+  path: '/change'
+  defaults:
+    _controller: 'Drupal\change_format\Controller\ChangeFormate::changeFieldValue'
+    _title: 'Hello World'
+  requirements:
+    _permission: 'access content'
+
+change_format.changeBlock:
+  path: '/changeBlock'
+  defaults:
+    _controller: 'Drupal\change_format\Controller\ChangeFormate::changeBlockFieldValue'
+    _title: 'Hello World'
+  requirements:
+    _permission: 'access content'

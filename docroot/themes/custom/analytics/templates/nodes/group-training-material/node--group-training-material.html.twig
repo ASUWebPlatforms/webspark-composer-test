@@ -1,0 +1,46 @@
+{#
+/**
+ * @file
+ * Template for a Group Training Material node.
+ */
+#}
+
+{% set classes = [
+  'node',
+  node.isPromoted() ? 'node--promoted',
+  node.isSticky() ? 'node--sticky',
+  not node.isPublished() ? 'node--unpublished',
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+  'pb-12'
+] %}
+
+{% set group = node.field_group.value ? node.field_group.entity : null %}
+{% set data = {
+  'type': node.bundle,
+  'heading': node.title.value,
+  'description': node.field_description.value,
+  'author': node.getOwner.field_name.value|default(node.getOwner.name.value),
+  'pills': [
+    { 'title': 'Data Domain', 'data': node.field_data_area|map((item) => item.entity) },
+    { 'title': 'Source System', 'data': node.field_source_system|map((item) => item.entity) },
+  ],
+  'source': node.field_url.value,
+  'group': group
+} %}
+
+<article{{ attributes.addClass(classes) }}>
+  <div class="container">
+    {{ include('@partials/heroes/hero-report.html.twig', data) }}
+
+    {% block content %}
+      {% if has_group_access(group.id.value) %}
+        {{ content }}
+      {% else %}
+        <div class="alert alert-warning" role="alert">
+          You do not have permission to view this training material.
+        </div>
+      {% endif %}
+    {% endblock %}
+  </div>
+</article>

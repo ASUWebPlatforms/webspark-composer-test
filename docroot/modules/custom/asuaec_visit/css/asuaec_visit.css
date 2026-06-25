@@ -1,0 +1,365 @@
+/* 3 dropdowns at the top */
+.sec1,
+.sec2,
+.sec3,
+.sec4,
+.sec5 {
+    margin-top: 0.3rem;
+}
+
+/* Style Day agendas */
+input[name="event"] {
+    float: left;
+    margin-top: 0.5rem;
+    margin-right: 0.3rem;
+}
+
+.views-field-field-placeholder-display-title h4 {
+    margin-top: 0;
+}
+
+.day-agenda-result > .views-element-container > div > .views-row {
+    margin-bottom: 2rem;
+}
+
+/* Style Mini calendar */
+.calendar-view-day .dots {
+    float: right;
+}
+ul.calendar-view-day__rows {
+    display: none;
+}
+
+/* ---------- Toggle switch---------- */
+ .switch {
+     position: relative;
+     display: inline-block;
+     width: 60px;
+     height: 34px;
+     flex: 0 0 60px;
+ }
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+
+#switch-selfguided input:checked + .slider {
+    background-color: #FF7F32;
+}
+#switch-selfguided input:focus + .slider {
+    box-shadow: 0 0 1px #FF7F32;
+}
+#switch-inperson input:checked + .slider {
+    background-color: #78BE20;
+}
+#switch-inperson input:focus + .slider {
+    box-shadow: 0 0 1px #78BE20;
+}
+#switch-inperson-academic input:checked + .slider {
+    background-color: #00A3E0;
+}
+#switch-inperson-academic input:focus + .slider {
+    box-shadow: 0 0 1px #00A3E0;
+}
+#switch-barrett input:checked + .slider {
+    background-color: #8C1D40;
+}
+#switch-barrett input:focus + .slider {
+    box-shadow: 0 0 1px #8C1D40;
+}
+#switch-facility input:checked + .slider {
+    background-color: #E74973;
+}
+#switch-facility input:focus + .slider {
+    box-shadow: 0 0 1px #E74973;
+}
+#switch-generic input:checked + .slider {
+    background-color: #FFC627;
+}
+#switch-generic input:focus + .slider {
+    box-shadow: 0 0 1px #FFC627;
+}
+
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+/* ---------- END OF Toggle switch---------- */
+
+/* ---------- Next/Prev code from Archana ---------- */
+.calendar-view-pager {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    background-color: var(--calendar-view-color-light);
+    border: 1px solid var(--calendar-view-color-grey);
+}
+.calendar-view-pager li{
+    list-style-type: none;
+}
+.current-btn{
+    color: #191919 !important;
+}
+.pager__previous, .pager__next{
+    cursor: : pointer;
+}
+.pager__next{
+    margin-right: 40px;
+}
+.pager__item > * {
+    padding: 1rem 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 2;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-decoration: none;
+    color: #8C1D40;
+}
+/* ---------- END OF Next/Prev code from Archana ---------- */
+
+/* -------Temporary CSS code ----------- */
+.views-row-outer {
+    margin-bottom: 40px;
+}
+
+/** Archana code for info icon on scheduler page  **/
+.tour-desc{
+   display: flex !important;
+}
+
+.custom-tooltip-description{
+    background-color: #555;
+    color: #fff;
+	position: absolute;
+    z-index: 1;
+    /*left: 25%;*/
+    margin-left: -80px;
+	padding: 10px;
+}
+
+/*@media screen and (min-width:992px){
+	.custom-tooltip-campus-description{
+		margin-left: -80px;
+	}
+}*/
+
+.custom-tooltip-campus-description{
+    background-color: #555;
+	color: #fff;
+	position: absolute;
+	z-index: 1;
+	padding: 10px;
+	/*top: 30%;*/
+	width: 50%;
+}
+.custom-tooltip-campus-description a {
+  color: #ffc627;
+  font-weight: 700;
+}
+
+.popup-close-btn{
+	float: right;
+	padding: 0px!important;
+}
+
+.custom-campus-tooltip{
+	/*float: right;*/
+	color: #8c1d40;
+	font-size: 13px;
+ }
+
+
+.campus-svg{
+	height: 1.5em !important;
+	width: 1.5em !important;
+}
+
+.custom-campus-tooltip strong{
+	font-weight: 300 !important;
+}
+
+.campus-input{
+	float: left;
+	margin-right: 12px;
+	margin-top: 5px;
+}
+
+.campus-val{
+	float:left;
+}
+
+.acad-session-div{
+	float: left;
+}
+
+.calendar-arrow{
+	font-size: 2em;
+	color: #9D9D9D;
+	cursor: pointer;
+}
+
+caption{
+	caption-side: top !important;
+}
+
+.view-id-visitd9_main_calendar_v2 > .calendar-view-pager{
+	width: 30%;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.toggle-icons{
+	display: flex;
+}
+
+/*
+.add_tours_div{
+	margin: 7px;
+}
+*/
+
+/** End of Archana's code **/
+
+/** Hide Date/time for Self-guided tout **/
+.selfguided .views-field-date__value {
+    display: none;
+}
+/** END OF Hide Date/time for Self-guided tout **/
+
+/** Hide dotts for past event **/
+.past .dots
+/*.today .dots*/
+{
+    display: none;
+}
+
+/** Styling mini-calendar **/
+
+/* Add borders */
+.table.calendar-view-month td, .table th {
+    border-right: 1px solid #dee2e6;
+    text-align: center;
+    vertical-align: middle;
+}
+.table.calendar-view-month tr {
+    border-left: 1px solid #dee2e6;
+}
+.table.calendar-view-month tr:last-child {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.dots {
+    display: flex;
+    flex-direction: column;
+}
+.dot {
+/*    height: auto;*/ /* Fix for missing dots issue for Safari */
+    height: 10px;
+    display: grid;
+    margin-bottom: 0;
+}
+@media (min-width:758px) {
+    .dot {
+/*        height: auto;*/
+        height: 10px;
+        display: flex;
+        margin-bottom: 3px;
+    }
+}
+.calendar-view-day__number {
+    font-size: 1.5rem;
+}
+.calendar-view-day__number.no-event,
+.past .calendar-view-day__number
+    /*.today .calendar-view-day__number*/
+{
+    color: #e8e8e8;
+}
+
+/* Cursor */
+.future .calendar-view-day__number.has-event,
+.today .calendar-view-day__number.has-event
+{
+    cursor: pointer;
+}
+
+/* Remove dots for Day agenda */
+.day-agenda-result .dot {
+    display: none;
+}
+
+
+/* CSS for dots on calendar */
+.dot-selfguided{
+	background: #FF7F32;
+	border-radius: 50%;
+}
+
+.dot-inperson{
+	background: #78BE20;
+	border-radius: 50%;
+}
+
+.dot-barrett{
+	background: #8C1D40;
+	border-radius: 50%;
+}
+
+.dot-facility{
+	background: #E74973;
+	border-radius: 50%;
+}
+
+.dot-generic{
+	background: #FFC627;
+	border-radius: 50%;
+}
+
+.dot-inperson-academic{
+	background: #00A3E0;
+	border-radius: 50%;
+}
+
+/* Cursor */
+html.waiting * {
+    cursor: progress;
+}

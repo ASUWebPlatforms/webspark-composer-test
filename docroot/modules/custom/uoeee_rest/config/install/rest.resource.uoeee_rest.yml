@@ -1,0 +1,9 @@
+id: public_outcomes
+plugin_id: public_outcomes
+granularity: resource
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - uoeee_auth_user

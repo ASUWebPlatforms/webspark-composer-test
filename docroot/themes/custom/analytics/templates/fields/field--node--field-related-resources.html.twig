@@ -1,0 +1,57 @@
+{% set content_types_map = {} %}
+
+{# Separate items by content type dynamically #}
+{% for item in items %}
+  {% set content_type = item.content['#node'].getType %}
+
+  {% if content_types_map[content_type] is not defined %}
+    {% set content_types_map = content_types_map|merge({(content_type): []}) %}
+  {% endif %}
+
+  {% set content_types_map = content_types_map|merge({(content_type): content_types_map[content_type]|merge([item.content])}) %}
+{% endfor %}
+
+{% set tabs = content_types_map|keys %}
+
+<div class="related-resources mt-12">
+  <h2>{{ label }}</h2>
+  <div class="mt-3">
+    <nav class="nav-tabs-scrolling">
+      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        {% for tab in tabs %}
+          <a
+            class="nav-item nav-link {{ loop.first ? 'active' }}"
+            id="{{ tab|replace({'_' : '-'})|lower }}"
+            data-bs-toggle="tab"
+            href="#nav-{{ tab|replace({'_' : '-'})|lower }}"
+            role="tab"
+            aria-controls="nav-{{ tab|replace({'_' : '-'})|lower }}"
+            aria-selected="{{ loop.first ? 'true' : 'false' }}"
+            data-ga-event="collapse"
+            data-ga-action="{{ loop.first ? 'open' : 'close' }}"
+            data-ga-name="onclick"
+            data-ga-type="click"
+            data-ga-section="{{ '' }}"
+            data-ga-region="main content"
+            data-ga-text="{{ tab|replace({'_' : '-'})|lower }}">{{ tab|replace({'_' : ' '})|title ~ 's' }}</a>
+        {% endfor %}
+      </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+      {% for tab in tabs %}
+        <div class="tab-pane fade {{ loop.first ? 'show active' }}"
+          id="nav-{{ tab|replace({'_' : '-'})|lower }}"
+          role="tabpanel"
+          aria-labelledby="nav-{{ tab|replace({'_' : '-'})|lower }}-tab">
+          <div class="row g-2">
+            {% for item in content_types_map[tab] %}
+              <div class="col-sm-12 col-lg-4">
+                {{ item }}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

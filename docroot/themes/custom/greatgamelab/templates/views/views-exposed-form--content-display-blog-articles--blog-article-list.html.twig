@@ -1,0 +1,30 @@
+{#
+/**
+ * @file
+ * Theme override for the views exposed form for blog article list.
+ */
+#}
+<div class="views-exposed-form">
+  {{ form.form_build_id }}
+  {{ form.form_token }}
+  {{ form.form_id }}
+
+  <div class="form-inline">
+    {# Ensure these are direct children of form-inline for proper flexbox behavior #}
+    {% if form.field_tags_target_id %}
+      <div class="form-item">
+        {{ form.field_tags_target_id }}
+      </div>
+    {% endif %}
+    
+    {% if form.combine %}
+      <div class="form-item">
+        {{ form.combine }}
+      </div>
+    {% endif %}
+    
+    <div class="form-actions">
+      {{ form.actions }}
+    </div>
+  </div>
+</div>

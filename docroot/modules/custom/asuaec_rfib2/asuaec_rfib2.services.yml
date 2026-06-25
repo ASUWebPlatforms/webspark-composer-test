@@ -1,0 +1,17 @@
+# This declares the plugin manager to the service container. For background
+# information on the service container, see https://www.drupal.org/node/2133171.
+# Changes here require that the cache be cleared in order to have Drupal notice
+# them.
+#services:
+#asuaec_rfi.getDegreeData:
+#  class: Drupal\asuaec_rfi\WebConfirmationPage\getDegreeData
+
+#  asuaec_transferoption.refreshdegreeform:
+#    class: Drupal\asuaec_transferoption\RefreshTransferOptionDegreeForm
+#    arguments: ['@database']
+#services:
+#  asuaec_rfi.service:
+#    class: \Drupal\asuaec_rfi\WebformHandler\RfiWebformHandler
+#    arguments: ['@messenger']
+
+

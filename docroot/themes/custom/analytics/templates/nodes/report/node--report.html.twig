@@ -1,0 +1,62 @@
+{#
+/**
+ * @file
+ * Template for a Report node.
+ */
+#}
+
+{% set classes = [
+  'node',
+  node.isPromoted() ? 'node--promoted',
+  node.isSticky() ? 'node--sticky',
+  not node.isPublished() ? 'node--unpublished',
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+  'pb-12'
+] %}
+{% set reportAuthor = node.field_created_by.value %}
+{% if reportAuthor %}
+  {% set reportAuthor = reportAuthor|split('@')|first %}
+{% else %}
+  {% set reportAuthor = 'Unknown' %}
+{% endif %}
+{% set data = {
+  'certified': node.field_certified_asset.value,
+  'type': node.bundle,
+  'heading': node.title.value,
+  'description': node.field_description.value,
+  'author': reportAuthor,
+  'pills': [
+    { 'title': 'Source System', 'data': node.field_source_system|map((item) => item.entity) },
+    { 'title': 'Enterprise', 'data': node.field_enterprise|map((item) => item.entity) },
+    { 'title': 'Data Domain', 'data': node.field_data_area|map((item) => item.entity) },
+    { 'title': 'Purpose', 'data': node.field_purpose|map((item) => item.entity) },
+    { 'title': 'Subject', 'data': node.field_subject_domain|map((item) => item.entity) },
+    { 'title': 'Level of Detail', 'data': node.field_level_of_detail|map((item) => item.entity) },
+  ],
+  'source': node.field_url.value,
+  'group': node.field_group.entity,
+} %}
+{% set report = {
+  'type': node.field_source_system.entity.label,
+  'url': node.field_url.value,
+  'embed': node.field_embedded_url.value,
+} %}
+
+{{ attach_library('analytics/reports') }}
+
+<article{{ attributes.addClass(classes) }}>
+  <div class="container">
+    {{ include('@partials/reports/report-meta.html.twig', data) }}
+  </div>
+
+  <div class="max-size-container center-container tw-mb-8">
+    {{ include('@analytics/content-report.html.twig', report) }}
+  </div>
+
+  <div class="container">
+    {% block content %}
+      {{ content|without('field_description', 'field_group', 'field_tags', 'field_source_system', 'field_data_area', 'field_certified_asset', 'field_url', 'field_enterprise', 'field_purpose', 'field_keywords', 'field_embedded_url', 'field_subject_domain', 'field_level_of_detail') }}
+    {% endblock %}
+  </div>
+</article>

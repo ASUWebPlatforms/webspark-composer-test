@@ -1,0 +1,31 @@
+{# see https://unity.web.asu.edu/@asu-design-system/bootstrap4-theme/?path=/story/components-heroes--story-hero #}
+<section class="uds-story-hero">
+  {% if image_url %}
+    <img class="hero" src="{{ image_url }}">
+  {% endif %}
+  <div class="content">
+
+    <div>
+      {% include '@renovation/headings/card-heading.twig' with {
+        html_tag : 'h2',
+        heading: heading,
+      } %}
+      <div>{{ body|raw }}</div>
+
+      {% if ctas %}
+        <div class="d-flex mb-2 mt-4">
+          {% for cta in ctas %}
+            {% include '@renovation/links/cta-link.twig' with {
+              url: cta.uri,
+              label: cta.title,
+              size: loop.first ? '' : '-sm',
+              options: cta.options,
+              color: 'maroon',
+            } %}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+</section>

@@ -1,0 +1,10 @@
+optCalculatorjs:
+  version: 1.x
+  css:
+    theme:
+      css/opt_calc.css: {}
+  js:
+    js/opt_calc.js: { }
+  dependencies:
+      - core/drupal
+      - core/once

@@ -1,0 +1,14 @@
+asu_format_advising.format_advising:
+  path: '/formatadvising'
+  defaults:
+    _form: '\Drupal\asu_format_advising\Form\FormatAdvisingForm'
+    _title: 'Format Wizard'
+  requirements:
+    _role: 'authenticated'
+asu_format_advising.settings_form:
+  path: '/admin/config/system/asu-format-advising'
+  defaults:
+    _form: '\Drupal\asu_format_advising\Form\FASettingsForm'
+    _title: 'ASU Format Advising Settings'
+  requirements:
+    _permission: 'administer site configuration'

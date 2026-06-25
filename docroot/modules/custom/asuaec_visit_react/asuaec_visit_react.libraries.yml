@@ -1,0 +1,4 @@
+visit-react-lib:
+  version: 1.201
+  js:
+    js/react-app/dist/app.bundle.js: { minified: true, preprocess: false }

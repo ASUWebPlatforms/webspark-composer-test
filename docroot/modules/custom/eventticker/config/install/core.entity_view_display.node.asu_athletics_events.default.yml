@@ -1,0 +1,175 @@
+uuid: 4724cdff-dee4-4b8e-9755-852935a31757
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.asu_athletics_events.body
+    - field.field.node.asu_athletics_events.feeds_item
+    - field.field.node.asu_athletics_events.field_event_date_and_time
+    - field.field.node.asu_athletics_events.field_event_link
+    - field.field.node.asu_athletics_events.field_location
+    - field.field.node.asu_athletics_events.field_opponent
+    - field.field.node.asu_athletics_events.layout_builder__layout
+    - node.type.asu_athletics_events
+  module:
+    - datetime_range
+    - layout_builder
+    - layout_discovery
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: true
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          5feba625-f5ef-4783-9dee-d413410b5514:
+            uuid: 5feba625-f5ef-4783-9dee-d413410b5514
+            region: content
+            configuration:
+              id: 'extra_field_block:node:asu_athletics_events:links'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 0
+            additional: {  }
+          9d118ed2-7bb1-4e12-91de-0c044fda7be1:
+            uuid: 9d118ed2-7bb1-4e12-91de-0c044fda7be1
+            region: content
+            configuration:
+              id: 'field_block:node:asu_athletics_events:body'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings: {  }
+            weight: 1
+            additional: {  }
+          3ed2a77b-af98-4679-8a09-f9c55bd71e3f:
+            uuid: 3ed2a77b-af98-4679-8a09-f9c55bd71e3f
+            region: content
+            configuration:
+              id: 'field_block:node:asu_athletics_events:field_event_date_and_time'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: daterange_default
+                label: above
+                settings:
+                  timezone_override: ''
+                  format_type: medium
+                  separator: '-'
+                third_party_settings: {  }
+            weight: 2
+            additional: {  }
+          9e48c277-3f4d-4e25-9b23-0b1a1a270fca:
+            uuid: 9e48c277-3f4d-4e25-9b23-0b1a1a270fca
+            region: content
+            configuration:
+              id: 'field_block:node:asu_athletics_events:field_opponent'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: string
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+            weight: 3
+            additional: {  }
+          f35d8ec0-3eef-428b-98ab-1728c73f739e:
+            uuid: f35d8ec0-3eef-428b-98ab-1728c73f739e
+            region: content
+            configuration:
+              id: 'field_block:node:asu_athletics_events:field_event_link'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: string
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+            weight: 4
+            additional: {  }
+          46360118-2415-4850-8c9d-48b9b7199144:
+            uuid: 46360118-2415-4850-8c9d-48b9b7199144
+            region: content
+            configuration:
+              id: 'field_block:node:asu_athletics_events:field_location'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: string
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+            weight: 5
+            additional: {  }
+        third_party_settings: {  }
+id: node.asu_athletics_events.default
+targetEntityType: node
+bundle: asu_athletics_events
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  field_event_date_and_time:
+    type: daterange_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+      separator: '-'
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  field_event_link:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 104
+    region: content
+  field_location:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 105
+    region: content
+  field_opponent:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 103
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  feeds_item: true
+  layout_builder__layout: true

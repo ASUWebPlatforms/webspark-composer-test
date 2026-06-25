@@ -1,0 +1,10 @@
+global-styling:
+  css:
+    theme:
+      css/style.css: { weight: 50 }
+  js:
+    js/mccain.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once

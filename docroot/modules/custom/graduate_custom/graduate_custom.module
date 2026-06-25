@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * @file
+ */
+
+function graduate_custom_theme($existing, $type, $theme, $path) {
+  
+  return [
+    // Ghost block to apply styles and scripts
+    'graduate_block' => [
+      'variables' => [],
+    ],
+
+    'block__inline_block__image_background_with_stats' => [
+      'template' => 'block--inline-block--image-background-with-stats',
+      'base hook' => 'block_content'
+    ],
+
+    'block__inline_block__card_arrangement_slideup' => [
+      'template' => 'block--inline-block--card-arrangement-slideup',
+      'base hook' => 'block_content'
+    ],
+
+    'paragraph__card_statistic' => [
+      'template' => 'paragraph--card-statistic',
+      'base hook' => 'paragraph'
+    ],
+
+    'paragraph__card_group_stats' => [
+      'template' => 'paragraph--card-group-stats',
+      'base hook' => 'paragraph'
+    ],
+
+    'paragraph__card_media_slideup_card' => [
+      'template' => 'paragraph--card-media-slideup-card',
+      'base hook' => 'paragraph'
+    ],
+
+    'paragraph__card_group_slideup' => [
+      'template' => 'paragraph--card-group-slideup',
+      'base hook' => 'paragraph'
+    ],
+
+    'field__node__field_student_full_name' => [
+      'template' => 'field--node--field-student-full-name',
+      'base hook' => 'field'
+    ],
+
+    'field__node__title__student_story___custom' => [
+      'template' => 'field--node--title--student-story---custom',
+      'base hook' => 'field'
+    ],
+  ];
+}
+
+function graduate_custom_preprocess_block(&$variables){
+  global $base_url;
+  $variables['base_url'] = $base_url;
+}
+
+
+/**
+ * Implements hook_page_attachments().
+ */
+function graduate_custom_page_attachments(array &$attachments) {
+  $attachments['#attached']['library'][] = 'graduate_custom/graduate';
+}
+
+/**
+ * @} End.
+ */

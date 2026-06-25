@@ -1,0 +1,21 @@
+flexslider:
+  remote: http://flexslider.woothemes.com
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/woothemes/FlexSlider/blob/master/LICENSE.md
+    gpl-compatible: true
+  js:
+    assets/js/jquery.flexslider-min.js: { minified: true }
+    assets/js/slideshow.js: {}
+  css:
+    theme:
+      assets/css/flexslider.css: {}
+  dependencies:
+    - core/drupal
+style:
+  version: VERSION
+  css:
+    theme:
+      assets/css/alumni.style.css: {}
+  dependencies:
+    - core/drupal

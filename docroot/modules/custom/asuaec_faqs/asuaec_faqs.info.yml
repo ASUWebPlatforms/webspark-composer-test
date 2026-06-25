@@ -1,0 +1,5 @@
+name: asuaec_faqs
+type: module
+description: 'ASU AEC FAQs module for FAQs related items'
+package: ASU
+core_version_requirement: ^9 || ^10 || ^11

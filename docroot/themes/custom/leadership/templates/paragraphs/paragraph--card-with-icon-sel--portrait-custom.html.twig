@@ -1,0 +1,22 @@
+<!--<div class="card-wrapper" id="card-{{ paragraph.uuid.value }}"></div>-->
+{# content|without('field_heading', 'field_body', 'field_cta', 'field_icon', 'field_custom_icon', 'field_clickable', 'field_card_link') #}
+
+{% set bgcolor = content.field_card_background|render|striptags|trim %}
+{% set cardlink = content.field_card_link|render|striptags|trim %}
+{% set iconsize = content.field_card_icon_size|render|striptags|trim %}
+<div class="card-wrapper" id="card-{{ paragraph.uuid.value }}">
+  <div class="card {% if cardlink is empty %} no-click {% else %} card-hover {% endif %} cards-components {{ bgcolor }} ">
+    <div class="card-icon {{ iconsize }}">
+      {{ content.field_card_custom_icon|render }}
+    </div>
+    <div class="card-header">
+      <h3 class="card-title">{{ content.field_heading }}</h3>
+    </div>
+    <div class="card-body">
+      <p class="card-text">{{ content.field_body }}</p>
+    </div>
+        {% if cardlink is not empty %}
+      <a href="{{ cardlink }}" class="stretched-link"></a>
+          {% endif %}
+  </div>
+</div>

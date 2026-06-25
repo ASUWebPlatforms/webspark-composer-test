@@ -1,0 +1,19 @@
+name: Asu in tucson
+type: theme
+description: ASU.edu CMS theme.
+version: 1.0.0
+base theme: renovation
+package: ASU.edu
+core_version_requirement: ^8.7.7 || ^9.0 || ^10
+libraries:
+  - renovation_asu_in_tucson/style
+regions:
+  header: Header
+  content: Content
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer
+  hidden: 'Hidden region for referenced blocks'
+components:
+  namespaces:
+    asu_edu: ./src/components

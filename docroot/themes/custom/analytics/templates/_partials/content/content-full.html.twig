@@ -1,0 +1,17 @@
+{#
+@file
+The template for full-width content.
+
+Available variables:
+- background: Background colors to apply (gray-2-bg, gray-1-bg).
+- spacing: Top and bottom spacing to apply.
+- content: Content to display.
+#}
+
+<div class="{{ background }} {{ spacing|default('tw-py-24') }}">
+  <div class="container">
+    <div class="row">
+      <div class="col">{{ content }}</div>
+    </div>
+  </div>
+</div>

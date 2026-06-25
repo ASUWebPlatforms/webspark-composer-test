@@ -1,0 +1,137 @@
+<?php
+
+/**
+ * @file
+ * Provides an example that shows how to add custom properties to Webform elements.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_webform_element_default_properties_alter().
+ */
+function datatree_element_properties_webform_element_default_properties_alter(array &$properties, array &$definition) {
+  // Add custom data property to all webform elements.
+  // Setting the custom property to an empty string makes the corresponding
+  // element defined via hook_webform_element_configuration_form_alter()
+  // automatically visible.
+  $properties['data_categories'] = '';
+  $properties['data_classification'] = '';
+  $properties['data_classification_negative'] = '';
+}
+
+/**
+ * Implements hook_webform_element_translatable_properties_alter().
+ */
+function datatree_element_properties_webform_element_translatable_properties_alter(array &$properties, array &$definition) {
+  // Make the custom data property translatable.
+  $properties[] = 'data_categories';
+  $properties[] = 'data_classification';
+  $properties[] = 'data_classification_negative';
+}
+
+/**
+ * Implements hook_webform_element_configuration_form_alter().
+ */
+function datatree_element_properties_webform_element_configuration_form_alter(&$form, FormStateInterface $form_state) {
+  // If you want add element properties to specific element type, you can use
+  // the below code to the current element's type and more.
+  /** @var Drupal\webform_ui\Form\WebformUiElementEditForm $form_object */
+  $form_object = $form_state->getFormObject();
+  $element_plugin = $form_object->getWebformElementPlugin();
+  $element_label = $element_plugin->getPluginLabel();
+  $element_type = $element_plugin->getTypeName();
+  
+  //getting parent form to check if handler is active
+  $webform = $form_state->getFormObject()->getWebform();
+  $handlers = $webform->getHandlers();
+
+  if ($handlers->has('datatree')) {
+
+    // only showing these settings on radio buttons
+    if ($element_type == 'radios') {
+      // Append custom properties details container and textfield element.
+      $t_args = [
+        '@label' => $element_label,
+        '@type' => $element_type,
+      ];
+      $form['data_properties'] = [
+        '#type' => 'details',
+        '#title' => t('Datatree properties'),
+        '#description' => t('The below custom properties are provided and managed by the datatree_element_properties.module.'),
+        '#open' => TRUE,
+        // Add custom properties after all fieldset elements, which have a
+        // weight of -20.
+        // @see \Drupal\webform\Plugin\WebformElementBase::buildConfigurationForm
+        '#weight' => -10,
+      ];
+      $form['data_properties']['data_categories'] = [
+        '#title' => 'Data tags',
+        '#description' => 'Tags you select here will be added to the webform results if YES is selected by the user. Separate multiple values with a comma.',
+        '#type' => 'webform_entity_select',
+        '#target_type' => 'taxonomy_term',
+        '#tags' => TRUE,
+        '#multiple' => TRUE,
+        '#default_value' => NULL,
+        '#selection_handler' => 'default',
+        '#selection_settings' => [
+          'target_bundles' => [
+          'taxonomy_vocab_name' => 'data_tags'
+          ]
+        ],
+        '#required' => FALSE
+      ];
+      $form['data_properties']['data_classification'] = [
+        '#title' => 'Data classification',
+        '#description' => 'If this question is tagged with a data classification above, this classification will be applied if the answer provided by the user is "YES"',
+        '#type' => 'webform_entity_select',
+        '#target_type' => 'taxonomy_term',
+        '#empty_option' => 'none',
+        '#empty_value'=> 'null',
+        '#multiple' => FALSE,
+        '#default_value' => NULL,
+        '#selection_handler' => 'default',
+        '#selection_settings' => [
+          'target_bundles' => [
+          'taxonomy_vocab_name' => 'data_classification'
+          ]
+        ],
+        '#required' => FALSE
+      ];
+      $form['data_properties']['data_classification_negative'] = [
+        '#title' => 'Data classification negative',
+        '#description' => 'Most questions DO NOT USE this field. This classification will be applied if the answer provided by the user is "NO"',
+        '#type' => 'webform_entity_select',
+        '#target_type' => 'taxonomy_term',
+        '#empty_option' => 'none',
+        '#empty_value'=> 'null',
+        '#multiple' => FALSE,
+        '#default_value' => NULL,
+        '#selection_handler' => 'default',
+        '#selection_settings' => [
+          'target_bundles' => [
+          'taxonomy_vocab_name' => 'data_classification'
+          ]
+        ],
+        '#required' => FALSE
+      ];
+    }
+  }
+
+}
+
+/**
+ * Implements hook_webform_element_alter().
+ */
+function datatree_element_properties_webform_element_alter(array &$element, FormStateInterface $form_state, array $context) {
+  // Add data-properties to the element's attributes.
+  if (!empty($element['#data_categories'])) {
+    $element['#attributes']['data-categories'] = $element['#data_categories'];
+  }
+  if (!empty($element['#data_classification'])) {
+    $element['#attributes']['data-classification'] = $element['#data_classification'];
+  }
+  if (!empty($element['#data_classification_negative'])) {
+    $element['#attributes']['data-classification-negative'] = $element['#data_classification_negative'];
+  }
+}

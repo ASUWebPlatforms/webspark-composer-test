@@ -1,0 +1,64 @@
+
+/*------------------------------------------------------------------
+Partner Logos
+--------------------------------------------------------------------*/
+
+.chs-partner-logo {
+    width: 385px;
+    height: 247px;
+    .img-fluid {
+        max-height: 100%;
+    }
+}
+
+.views-field, 
+.views-field {
+    &:focus {
+        box-shadow: none !important;
+    }
+}
+
+.ui-state-active {
+    a {
+        color: #8c1d40 !important;
+        &:link {
+            color: #8c1d40 !important;
+        }
+    }
+}
+
+.ui-state-default {
+    a {
+        color: #8c1d40 !important;
+        &:link {
+            color: #8c1d40 !important;
+        }
+    }
+}
+
+.ui-state-active {
+    background-color: #f6f6f6 !important;
+}
+
+.views-accordion-header, 
+.ui-accordion-content {
+    border: 1px solid #d0d0d0;
+    border-left: 0.5rem solid #ffc627 !important;
+    color: #000 !important;
+    background-color: #fff !important;
+}
+
+.views-accordion-header {
+    margin: 1.5rem 0 0 !important;
+}
+
+.ui-icon {
+    background-image: none !important;
+    margin-left: 1rem;
+}
+
+.views-exposed-form-advisors-chs-content--display-page {
+    .form-actions {
+        margin-top: 32px;
+    }
+}

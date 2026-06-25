@@ -1,0 +1,369 @@
+<?php
+
+use Drupal\node\Entity\Node;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_page_attachments().
+ * 
+ * Attach the AJAX library and pass node context to JavaScript.
+ */
+function sp_learningmod_page_attachments(array &$attachments)
+{
+  $attachments['#attached']['library'][] = 'sp_learningmod/ajax_state';
+
+  $route_match = \Drupal::routeMatch();
+  $node = $route_match->getParameter('node');
+
+  if ($node instanceof Node && _sp_learningmod_is_trackable_node($node)) {
+    $attachments['#attached']['drupalSettings']['sp_learningmod']['currentNodeId'] = $node->id();
+  }
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function sp_learningmod_preprocess_block(&$variables)
+{
+  $block_id = $variables['plugin_id'];
+
+  if ($block_id == 'system_main_block') {
+
+    $route_match = \Drupal::service('current_route_match');
+    $node = $route_match->getParameter('node');
+
+    if ($node instanceof Node && _sp_learningmod_should_show_banner($node)) {
+      $already_added = TRUE;
+
+      $track_nid = _sp_learningmod_is_trackable_node($node) ? $node->id() : '';
+      $variables['content']['#prefix'] = _sp_learningmod_get_banner_html($track_nid) . ($variables['content']['#prefix'] ?? '');
+      $variables['#cache']['contexts'][] = 'url.path';
+    }
+  }
+}
+
+/**
+ * Helper: Check if a node INCREMENTS the budget when visited.
+ */
+function _sp_learningmod_is_trackable_node($node)
+{
+  if (!$node instanceof Node) {
+    return FALSE;
+  }
+
+  $budget_types = ['sp_analyze_interview', 'sp_analyze_other_research', 'sp_analyze_report'];
+
+  return in_array($node->bundle(), $budget_types);
+}
+
+function _sp_learningmod_is_analyze_path()
+{
+  $current_path = \Drupal::service('path.current')->getPath();
+  $path_alias = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
+
+  $analyze_patterns = [
+    '/learning/prostitution/analyze-problem',
+    '/learning/prostitution/analyze/',
+  ];
+
+  foreach ($analyze_patterns as $pattern) {
+    if ($path_alias === $pattern || strpos($path_alias, $pattern) === 0) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+function _sp_learningmod_is_analyze_article($node)
+{
+  if (!$node instanceof Node) {
+    return FALSE;
+  }
+
+  if ($node->getType() === 'sp_article' && $node->hasField('field_type_of_sp_article')) {
+    foreach ($node->get('field_type_of_sp_article')->referencedEntities() as $term) {
+      if ($term->id() == 220) {
+        return TRUE;
+      }
+    }
+  }
+
+  return FALSE;
+}
+
+function _sp_learningmod_should_show_banner($node = NULL)
+{
+  if ($node && _sp_learningmod_is_trackable_node($node)) {
+    return TRUE;
+  }
+
+  if ($node && _sp_learningmod_is_analyze_article($node)) {
+    return TRUE;
+  }
+
+  if (_sp_learningmod_is_analyze_path()) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+function _sp_learningmod_get_banner_html($nid)
+{
+  return '
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div id="budget-banner" class="alert alert-info" data-sp-track-nid="' . $nid . '">
+                    <div class="info-container">
+                        <i class="fas fa-info-circle info-icon"></i>
+                        <div class="text-container">
+                            <div>Analyze the Problem</div>
+                            <div><strong>Budget spent:</strong></div>
+                            <div class="sp-progress-container">
+                                <div class="sp-budget-bar" data-percentage="0">
+                                    <span class="loading-indicator">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="close-btn cerrar-boton" data-bs-dismiss="alert" role="button" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>';
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function sp_learningmod_preprocess_html(&$variables)
+{
+  $user = \Drupal::currentUser();
+
+  if (in_array('sp_learningmod_user', $user->getRoles())) {
+    $variables['attributes']['class'][] = 'sp-learningmod-user-form';
+  }
+
+  $variables['#attached']['library'][] = 'sp_learningmod/ajax_state';
+  $variables['#attached']['library'][] = 'sp_learningmod/budget_banner';
+  $variables['#attached']['library'][] = 'sp_learningmod/cq_style';
+  $variables['#attached']['library'][] = 'sp_learningmod/feedback_styles';
+  $variables['#attached']['library'][] = 'sp_learningmod/map_navigation';
+}
+
+/**
+ * Implements hook_theme().
+ */
+function sp_learningmod_theme($existing, $type, $theme, $path)
+{
+  return [
+    'begin_module' => [
+      'variables' => [],
+      'template' => 'begin-module',
+    ],
+    'council_meeting_form' => [
+      'render element' => 'form',
+      'template' => 'council-meeting',
+    ],
+    'ideal_plan' => [
+      'variables' => [
+        'submitted' => NULL,
+        'title' => NULL,
+        'description' => NULL,
+        'responses' => [],
+      ],
+      'template' => 'ideal-plan',
+    ],
+    'response_analysis' => [
+      'variables' => [
+        'submitted' => NULL,
+        'title' => NULL,
+        'description' => NULL,
+        'table_header' => [],
+        'table_rows' => [],
+      ],
+      'template' => 'response-analysis',
+    ],
+    'mayors_response' => [
+      'variables' => [
+        'submitted' => NULL,
+        'planbudget' => NULL,
+        'budget_message' => NULL,
+        'responses_titles' => [],
+        'risk_message' => NULL,
+        'crimeprevent_message' => NULL,
+        'lawenforce_message' => NULL,
+        'final_message' => NULL,
+      ],
+      'template' => 'mayors-response-block',
+    ],
+    'year_later' => [
+      'variables' => [
+        'variables' => NULL,
+        'submitted' => NULL,
+        'title' => NULL,
+        'description' => NULL,
+        'table_header' => NULL,
+        'table_rows' => NULL,
+      ],
+      'template' => 'year-later',
+    ],
+    'visited_categories_block' => [
+      'variables' => [
+        'categories' => [],
+        'responses' => [],
+      ],
+      'template' => 'visited-categories-block',
+    ],
+    'responses_block' => [
+      'variables' => [
+        'items' => []
+      ],
+    ],
+    'visited_nodes_block' => [
+      'variables' => [
+        'items' => [],
+      ],
+      'template' => 'visited-nodes-block',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function sp_learningmod_form_alter(array &$form, FormStateInterface $form_state, $form_id)
+{
+  if (strpos($form_id, 'node_') === 0 && strpos($form_id, '_form') !== false) {
+    $user = \Drupal::currentUser();
+    $uid = $user->id();
+    $username = $user->getDisplayName();
+
+    $allowed_roles = ['sp_learningmod_user'];
+
+    $allowed_content_types = [
+      'sp_cq_clients_johns',
+      'sp_cq_current_response',
+      'sp_cq_drugs',
+      'sp_cq_environment',
+      'sp_cq_pimps',
+      'sp_cq_police_community_members',
+      'sp_cq_sexual_transactions',
+      'sp_cq_street_prostitutes',
+    ];
+
+    if (preg_match('/^node_(.*?)_(edit_)?form$/', $form_id, $matches)) {
+      $node_type = $matches[1];
+    } else {
+      return;
+    }
+
+    if (array_intersect($allowed_roles, $user->getRoles()) && in_array($node_type, $allowed_content_types)) {
+
+      if (isset($form) && is_array($form)) {
+        if (isset($form['title']['widget'][0]['value'])) {
+          $auto_title = "{$username}: " . ucfirst(str_replace('_', ' ', $node_type));
+          $form['title']['widget'][0]['value']['#value'] = $auto_title;
+          $form['title']['widget'][0]['value']['#default_value'] = $auto_title;
+          $form['title']['widget'][0]['value']['#type'] = 'hidden';
+          $form['title']['widget'][0]['value']['#attributes']['class'][] = 'hidden-form-field';
+        }
+
+        foreach (['field_metatag', 'revision_information'] as $hidden_field) {
+          if (isset($form[$hidden_field])) {
+            unset($form[$hidden_field]);
+          }
+        }
+
+        foreach ($form as $key => &$field) {
+          if ($key === '#title') {
+            continue;
+          }
+
+          if (isset($field['#type']) && is_array($field)) {
+            if (!str_starts_with($key, 'field_') && $key !== 'title' && $key !== 'actions') {
+              $field['#attributes']['class'][] = 'hidden-form-field';
+            }
+          }
+        }
+
+        if (isset($form['actions']['preview'])) {
+          $form['actions']['preview']['#attributes']['class'][] = 'hidden-form-field';
+        }
+
+        if (isset($form['actions']['submit'])) {
+          $form['actions']['submit']['#value'] = 'Submit';
+        }
+      }
+      $form['actions']['submit']['#submit'][] = 'sp_learningmod_redirect_after_submit';
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function sp_learningmod_preprocess_page(&$variables)
+{
+  $user = \Drupal::currentUser();
+  $allowed_roles = ['sp_learningmod_user'];
+
+  if (array_intersect($allowed_roles, $user->getRoles())) {
+    $messages = \Drupal::messenger()->all();
+
+    foreach ($messages as $type => $message_list) {
+      if ($type === 'status') {
+        \Drupal::messenger()->deleteAll($type);
+      }
+    }
+  }
+
+  if (\Drupal::routeMatch()->getRouteName() == 'sp_learningmod.council_meeting') {
+    $variables['#attached']['library'][] = 'core/drupal.ajax';
+  }
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function sp_learningmod_entity_presave(\Drupal\Core\Entity\EntityInterface $entity)
+{
+  if ($entity->getEntityTypeId() === 'user' && $entity->isNew()) {
+    $entity->addRole('sp_learningmod_user');
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function sp_learningmod_form_user_register_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id)
+{
+  if (isset($form['field_metatag'])) {
+    unset($form['field_metatag']);
+  }
+}
+
+/**
+ * Submit handler for redirect after CQ form submission.
+ */
+function sp_learningmod_redirect_after_submit($form, FormStateInterface $form_state)
+{
+  $redirect_path = '/learning/prostitution/critical-questions-worksheets';
+
+  $node = $form_state->getFormObject()->getEntity();
+
+  if ($node instanceof NodeInterface && !$form_state->hasAnyErrors()) {
+    \Drupal::logger('sp_learningmod')->notice('Node saved by %user, redirecting to %url', [
+      '%user' => \Drupal::currentUser()->getDisplayName(),
+      '%url' => $redirect_path
+    ]);
+
+    $form_state->setRedirectUrl(Url::fromUserInput($redirect_path));
+  }
+}

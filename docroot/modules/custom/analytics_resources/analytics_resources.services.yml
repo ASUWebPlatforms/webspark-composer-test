@@ -1,0 +1,20 @@
+services:
+  # Services
+  analytics_resources.resource_service:
+    class: Drupal\analytics_resources\Services\ResourceService
+
+  # Normalizers
+  analytics_resources.typed_data:
+    class: Drupal\analytics_resources\Normalizer\TypedDataNormalizer
+    tags:
+      - { name: normalizer, priority: 100 }
+  analytics_resources.normalizer.resource_metadata_node_entity:
+    class: Drupal\analytics_resources\Normalizer\ResourceMetadataNodeEntityNormalizer
+    tags:
+      - { name: normalizer, priority: 100 }
+    arguments:
+      [
+        "@entity_type.manager",
+        "@entity_type.repository",
+        "@entity_field.manager",
+      ]

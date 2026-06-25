@@ -1,0 +1,26 @@
+{% extends '@analytics/data-dictionary.html.twig' %}
+
+{% block hero %}
+  {% set data = {
+    'background': 'bg-maroon',
+    'type': node.bundle,
+    'heading': node.title.value,
+    'description': content.field_description,
+    'database': node.field_database.value,
+    'pills': [
+      { 'title': 'Data Domain', 'data': node.field_data_area|map((item) => item.entity) },
+      { 'title': 'Purpose', 'data': node.field_purpose|map((item) => item.entity) },
+      { 'title': 'Keywords', 'data': node.field_tags|map((item) => item.entity) },
+      { 'title': 'Units', 'data': node.field_unit|map((item) => item.entity) },
+    ],
+    'environment': node.field_environment.value,
+    'schema': node.field_schema.value,
+    'frequency': node.field_refresh_frequency.value,
+  } %}
+  {{ include('@analytics/hero-data.html.twig', data) }}
+{% endblock %}
+
+{% block content %}
+  <h2 class="tw-mt-0">About this Schema</h2>
+  {{ content|without('field_related_resources', 'field_related_content') }}
+{% endblock %}

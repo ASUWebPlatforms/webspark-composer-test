@@ -1,0 +1,82 @@
+table caption {
+  caption-side: inherit;
+}
+
+/* Space after "Apply" button */
+.js-form-wrapper {
+  margin-bottom: 2em;
+}
+
+/* Styling of Search result */
+@media screen and (min-width: 992px) {
+  .title-0,
+  .content-0,
+  .title-1,
+  .content-1,
+  caption,
+  tbody {
+    display: table-cell;
+  }
+  .table-responsive > .table-row {
+    display: flex !important;
+    width: 100%;
+    flex-direction: row;
+    border-bottom: solid 1px #ccc;
+  }
+  .table-responsive > .table-row  {
+    display: inherit;
+    border-bottom: none;
+    /*padding-top: 1em;*/
+  }
+  .title-0 {
+    width: 65%;
+  }
+  .content-0 {
+    width: 100%;
+  }
+  .content-0 .table-responsive > .table-row > .title-1 {
+    width: 80%;
+  }
+  .content-0 .table-responsive > .table-row > .content-1 {
+    width: 100%;
+  }
+  caption {
+    width: 60%;
+    padding: 0 !important;
+  }
+  .content-0 .table-responsive > .table-row > .content-1 tbody {
+    vertical-align: top;
+  }
+  .views-field-transferAgreementYearsUrlsYear {
+    border: 0 !important;
+    padding: 0 !important;
+  }
+  .table-responsive {
+    border-bottom: solid 1px #ccc;
+    margin-bottom: 1em;
+  }
+
+  /*.table-responsive {*/
+  /*  --table-border-color: #e5e5e5;*/
+  /*  background-color: rgb(250, 250, 250);*/
+  /*  border: 1px*/
+  /*  solid var(--table-border-color);*/
+  /*  border-collapse: collapse;*/
+  /*  padding: 5px;*/
+  /*  width: 100%;*/
+  /*  margin: 0px auto;*/
+  /*  clear: both;*/
+  /*  border-spacing: 0px;*/
+  /*}*/
+  .table-responsive > .table-row > .content-0 > .table-responsive,
+  .table-responsive > .table-row > .content-0 > .table-responsive > .table-row > .content-1 > .table-responsive
+  {
+    border: 0;
+    margin-bottom: 0;
+  }
+  .title-0,
+  .title-1 {
+    padding-right: 1em;
+  }
+
+}

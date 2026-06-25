@@ -1,0 +1,6 @@
+asu_myapps.settings:
+  title: My Apps settings
+  description: Configure settings for the My Apps module
+  route_name: asu_myapps.settings
+  parent: system.admin_config_development
+  weight: 100

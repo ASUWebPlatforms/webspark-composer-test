@@ -1,0 +1,550 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the weba11y9_migration module.
+ */
+
+use Drupal\layout_builder\Section;
+use Drupal\layout_builder\SectionComponent;
+
+/**
+ * Implements hook_install().
+ *
+ * Runs the product Layout Builder migration on fresh module install.
+ */
+function weba11y9_migration_install() {
+  return _weba11y9_migration_setup_product_layout_builder();
+}
+
+/**
+ * Migrates the Product display to Layout Builder.
+ *
+ * Creates 4 sections using layout_twocol_bootstrap_section (8/4 split):
+ * - Header: Breadcrumb + Title
+ * - Product info: Section heading + Name, Version, Category, Supplier, VPAT
+ * - Test results: Section heading + Date, Score, WCAG, Type, File, Results
+ * - Contact info: Section heading + Email, Name, Dept Email, Dept, Comments
+ *
+ * Also configures layout_builder_restrictions and removes field_group
+ * third-party settings replaced by LB sections.
+ *
+ * @return \Drupal\Core\StringTranslation\TranslatableMarkup|null
+ *   Status message or NULL on skip.
+ */
+function _weba11y9_migration_setup_product_layout_builder() {
+  // Step 1: Set Renovation as the default theme.
+  $theme_config = \Drupal::configFactory()->getEditable('system.theme');
+  if ($theme_config->get('default') !== 'renovation') {
+    // Ensure Renovation is installed before setting it as default.
+    $theme_handler = \Drupal::service('theme_installer');
+    if (!\Drupal::service('theme_handler')->themeExists('renovation')) {
+      $theme_handler->install(['renovation']);
+    }
+    $theme_config->set('default', 'renovation')->save();
+    \Drupal::service('router.builder')->rebuild();
+  }
+
+  // Step 1b: Uninstall the Access theme now that Renovation is default.
+  /** @var \Drupal\Core\Extension\ThemeInstallerInterface $theme_installer */
+  $theme_installer = \Drupal::service('theme_installer');
+  if (\Drupal::service('theme_handler')->themeExists('access')) {
+    $theme_installer->uninstall(['access']);
+  }
+
+  // Force plugin cache rebuild so the SectionHeadingBlock is available.
+  \Drupal::service('plugin.cache_clearer')->clearCachedDefinitions();
+
+  /** @var \Drupal\layout_builder\Entity\LayoutBuilderEntityViewDisplay|null $display */
+  $display = \Drupal::entityTypeManager()
+    ->getStorage('entity_view_display')
+    ->load('node.product.default');
+
+  if (!$display) {
+    return t('Error: Product default view display not found.');
+  }
+
+  // Skip if Layout Builder is already enabled (idempotent).
+  if ($display->getThirdPartySetting('layout_builder', 'enabled')) {
+    return t('Skipped: Layout Builder already enabled on product display.');
+  }
+
+  // All product fields to be placed in LB sections.
+  $field_names = [
+    'field_product_name',
+    'field_product_version',
+    'field_product_category',
+    'field_product_supplier',
+    'field_product_vpat_url',
+    'field_product_vpat_file',
+    'field_product_test_date',
+    'field_product_test_score',
+    'field_product_test_wcag',
+    'field_product_test_type',
+    'field_product_test_file',
+    'field_product_test_results',
+    'field_product_contact_email',
+    'field_product_contact_name',
+    'field_product_contact_deptemail',
+    'field_product_contact_dept',
+    'field_comments',
+  ];
+
+  // Capture current field formatter settings before modification.
+  $saved = [];
+  foreach ($field_names as $name) {
+    $component = $display->getComponent($name);
+    if ($component) {
+      $saved[$name] = $component;
+    }
+  }
+
+  // Fallback formatters for fields not currently in the view display.
+  $defaults = [
+    'field_product_name' => ['type' => 'entity_reference_label', 'settings' => ['link' => TRUE]],
+    'field_product_version' => ['type' => 'string', 'settings' => ['link_to_entity' => FALSE]],
+    'field_product_category' => ['type' => 'entity_reference_label', 'settings' => ['link' => TRUE]],
+    'field_product_supplier' => ['type' => 'string', 'settings' => ['link_to_entity' => FALSE]],
+    'field_product_vpat_url' => [
+      'type' => 'link',
+      'settings' => [
+        'trim_length' => 80,
+        'url_only' => FALSE,
+        'url_plain' => FALSE,
+        'rel' => '',
+        'target' => '',
+      ],
+    ],
+    'field_product_vpat_file' => ['type' => 'file_default', 'settings' => ['use_description_as_link_text' => TRUE]],
+    'field_product_test_date' => [
+      'type' => 'datetime_default',
+      'settings' => [
+        'timezone_override' => '',
+        'format_type' => 'medium',
+      ],
+    ],
+    'field_product_test_score' => ['type' => 'entity_reference_label', 'settings' => ['link' => TRUE]],
+    'field_product_test_wcag' => ['type' => 'string', 'settings' => ['link_to_entity' => FALSE]],
+    'field_product_test_type' => ['type' => 'list_default', 'settings' => []],
+    'field_product_test_file' => ['type' => 'file_default', 'settings' => ['use_description_as_link_text' => TRUE]],
+    'field_product_test_results' => ['type' => 'text_default', 'settings' => []],
+    'field_product_contact_email' => ['type' => 'basic_string', 'settings' => []],
+    'field_product_contact_name' => ['type' => 'string', 'settings' => ['link_to_entity' => FALSE]],
+    'field_product_contact_deptemail' => ['type' => 'basic_string', 'settings' => []],
+    'field_product_contact_dept' => ['type' => 'entity_reference_label', 'settings' => ['link' => TRUE]],
+    'field_comments' => ['type' => 'comment_default', 'settings' => ['view_mode' => 'default', 'pager_id' => 0]],
+  ];
+
+  $uuid = \Drupal::service('uuid');
+
+  // Build formatter config, preferring current settings over fallbacks.
+  $buildFormatter = function (string $field, string $label) use ($saved, $defaults): array {
+    if (isset($saved[$field])) {
+      return [
+        'type' => $saved[$field]['type'],
+        'label' => $label,
+        'settings' => $saved[$field]['settings'] ?? [],
+        'third_party_settings' => $saved[$field]['third_party_settings'] ?? [],
+      ];
+    }
+    $d = $defaults[$field] ?? ['type' => 'string', 'settings' => []];
+    return [
+      'type' => $d['type'],
+      'label' => $label,
+      'settings' => $d['settings'],
+      'third_party_settings' => [],
+    ];
+  };
+
+  // Create a field block SectionComponent.
+  $fieldBlock = function (string $field, string $block_label, string $label_pos, int $weight) use ($uuid, $buildFormatter): SectionComponent {
+    $component = new SectionComponent(
+      $uuid->generate(),
+      'first',
+      [
+        'id' => 'field_block:node:product:' . $field,
+        'label' => $block_label,
+        'label_display' => '0',
+        'provider' => 'layout_builder',
+        'context_mapping' => [
+          'entity' => 'layout_builder.entity',
+          'view_mode' => 'view_mode',
+        ],
+        'formatter' => $buildFormatter($field, $label_pos),
+      ]
+    );
+    $component->setWeight($weight);
+    return $component;
+  };
+
+  // Create a section heading block SectionComponent.
+  $headingBlock = function (string $text) use ($uuid): SectionComponent {
+    $component = new SectionComponent(
+      $uuid->generate(),
+      'first',
+      [
+        'id' => 'weba11y9_section_heading',
+        'label' => $text,
+        'label_display' => '0',
+        'provider' => 'weba11y9_migration',
+        'context_mapping' => [],
+        'heading_text' => $text,
+        'heading_level' => 'h2',
+      ]
+    );
+    $component->setWeight(0);
+    return $component;
+  };
+
+  // Two-column bootstrap layout settings with 8/4 width split,
+  // matching production's col-md-8 content / col-md-4 sidebar.
+  $sectionSettings = function (string $label): array {
+    return [
+      'label' => $label,
+      'context_mapping' => [],
+      'additional' => [
+        'classes' => [
+          'widths' => '8-4',
+          'style' => [],
+          'direction' => 'bg-top',
+          'length' => 'bg-percent-100',
+          'flex' => 'uds-flex-order-default',
+        ],
+      ],
+    ];
+  };
+
+  // ---------------------------------------------------------------
+  // Section 1: Header (Breadcrumb + Title)
+  // ---------------------------------------------------------------
+  $s1 = new Section('layout_twocol_bootstrap_section', $sectionSettings('Header'));
+
+  $breadcrumb = new SectionComponent(
+    $uuid->generate(),
+    'first',
+    [
+      'id' => 'webspark_module_asu_breadcrumb',
+      'label' => 'ASU Breadcrumb',
+      'label_display' => '0',
+      'provider' => 'webspark_module_asu_breadcrumb',
+      'context_mapping' => [],
+      'color' => 'bg-white',
+      'spacing_top' => 'spacing-top-0',
+      'spacing_bottom' => 'spacing-bottom-0',
+    ]
+  );
+  $breadcrumb->setWeight(0);
+  $s1->appendComponent($breadcrumb);
+
+  $title = new SectionComponent(
+    $uuid->generate(),
+    'first',
+    [
+      'id' => 'field_block:node:product:title',
+      'label' => 'Title',
+      'label_display' => '0',
+      'provider' => 'layout_builder',
+      'context_mapping' => [
+        'entity' => 'layout_builder.entity',
+        'view_mode' => 'view_mode',
+      ],
+      'formatter' => [
+        'type' => 'string',
+        'label' => 'hidden',
+        'settings' => ['link_to_entity' => FALSE],
+        'third_party_settings' => [],
+      ],
+    ]
+  );
+  $title->setWeight(1);
+  $s1->appendComponent($title);
+
+  // ---------------------------------------------------------------
+  // Section 2: Product info
+  // Heading (weight 0), then fields (weights 1-6).
+  // ---------------------------------------------------------------
+  $s2 = new Section('layout_twocol_bootstrap_section', $sectionSettings('Product info'));
+  $s2->appendComponent($headingBlock('Product info'));
+  $s2->appendComponent($fieldBlock('field_product_name', 'Product Name', 'inline', 1));
+  $s2->appendComponent($fieldBlock('field_product_version', 'Version', 'inline', 2));
+  $s2->appendComponent($fieldBlock('field_product_category', 'Category', 'inline', 3));
+  $s2->appendComponent($fieldBlock('field_product_supplier', 'Supplier', 'inline', 4));
+  // VPAT container: groups URL and File fields in a fieldset,
+  // matching production's <fieldset id="product-vpat-container">.
+  $vpat = new SectionComponent(
+    $uuid->generate(),
+    'first',
+    [
+      'id' => 'weba11y9_vpat_container',
+      'label' => "Supplier's VPAT or ACR",
+      'label_display' => '0',
+      'provider' => 'weba11y9_migration',
+      'context_mapping' => [
+        'entity' => 'layout_builder.entity',
+      ],
+    ]
+  );
+  $vpat->setWeight(5);
+  $s2->appendComponent($vpat);
+
+  // ---------------------------------------------------------------
+  // Section 3: Test results
+  // Heading (weight 0), then fields (weights 1-6).
+  // ---------------------------------------------------------------
+  $s3 = new Section('layout_twocol_bootstrap_section', $sectionSettings('Test results'));
+  $s3->appendComponent($headingBlock('Test results'));
+  $s3->appendComponent($fieldBlock('field_product_test_date', 'Test Date', 'inline', 1));
+  $s3->appendComponent($fieldBlock('field_product_test_score', 'Test Score', 'above', 2));
+  $s3->appendComponent($fieldBlock('field_product_test_wcag', 'WCAG Level', 'inline', 3));
+  $s3->appendComponent($fieldBlock('field_product_test_type', 'Test Type', 'above', 4));
+  $s3->appendComponent($fieldBlock('field_product_test_file', 'Test File', 'inline', 5));
+  $s3->appendComponent($fieldBlock('field_product_test_results', 'Test Results', 'above', 6));
+
+  // ---------------------------------------------------------------
+  // Section 4: Contact info
+  // Heading (weight 0), then fields (weights 1-5).
+  // ---------------------------------------------------------------
+  $s4 = new Section('layout_twocol_bootstrap_section', $sectionSettings('Contact Info'));
+  $s4->appendComponent($headingBlock('Contact Info'));
+  $s4->appendComponent($fieldBlock('field_product_contact_email', 'Contact Email', 'inline', 1));
+  $s4->appendComponent($fieldBlock('field_product_contact_name', 'Contact Name', 'inline', 2));
+  $s4->appendComponent($fieldBlock('field_product_contact_deptemail', 'Dept Email', 'inline', 3));
+  $s4->appendComponent($fieldBlock('field_product_contact_dept', 'Department', 'inline', 4));
+  $s4->appendComponent($fieldBlock('field_comments', 'Comments', 'above', 5));
+
+  // ---------------------------------------------------------------
+  // Apply Layout Builder configuration.
+  // ---------------------------------------------------------------
+
+  // Enable Layout Builder with per-node custom layouts.
+  $display->setThirdPartySetting('layout_builder', 'enabled', TRUE);
+  $display->setThirdPartySetting('layout_builder', 'allow_custom', TRUE);
+
+  // Clear any existing sections and set the new layout.
+  $display->setThirdPartySetting('layout_builder', 'sections', []);
+  $display->appendSection($s1);
+  $display->appendSection($s2);
+  $display->appendSection($s3);
+  $display->appendSection($s4);
+
+  // Configure layout builder restrictions (matching page content type pattern).
+  $display->setThirdPartySetting('layout_builder_restrictions', 'allowed_block_categories', []);
+  $display->setThirdPartySetting('layout_builder_restrictions', 'entity_view_mode_restriction', [
+    'allowed_layouts' => [
+      'onecol_full_width_section',
+      'onecol_fixed_width_section',
+      'layout_twocol_bootstrap_section',
+      'threecol_fixed_width_section',
+      'fourcol_fixed_width_section',
+    ],
+    'denylisted_blocks' => [
+      'ASU brand' => ['asu_brand_header'],
+      'ASU footer' => ['asu_footer'],
+      'Custom blocks' => ['webspark_blocks_back_to_top'],
+    ],
+    'allowlisted_blocks' => [],
+    'restricted_categories' => [],
+  ]);
+
+  // Remove field_group third-party settings (LB sections replace fieldsets).
+  foreach (array_keys($display->getThirdPartySettings('field_group')) as $group) {
+    $display->unsetThirdPartySetting('field_group', $group);
+  }
+
+  // Move product fields to hidden in the traditional display since LB
+  // section components now manage their rendering.
+  foreach ($field_names as $field_name) {
+    $display->removeComponent($field_name);
+  }
+
+  // Ensure layout_builder__layout field is hidden.
+  $display->removeComponent('layout_builder__layout');
+
+  $display->save();
+
+  return t('Layout Builder enabled on Product content type with 4 two-column (8/4) sections: Header, Product info, Test results, Contact info.');
+}
+
+/**
+ * Replace legacy Access CSS classes in node body content.
+ *
+ * Replaces fleft → float-start, fright → float-end, and callout → Bootstrap 5
+ * card component in 6 affected nodes found via DB audit.
+ *
+ * Affected nodes:
+ * - Node 1 (Home, published): fright on img
+ * - Node 43 (Vendors, published): fleft on img
+ * - Node 436 (Equidox, published): callout div
+ * - Node 147 (unpublished): fleft + callout
+ * - Node 148 (unpublished): fleft
+ * - Node 296 (unpublished): fright on img (clone of Node 1)
+ */
+function weba11y9_migration_update_10001(&$sandbox) {
+  // Define replacements: pattern => replacement.
+  // Order matters: process specific multi-class patterns before generic ones.
+  $replacements = [
+    // fright with spacing classes (Nodes 1, 296) — preserve spacing classes.
+    'class="fright img-fluid spacing-top-16 spacing-bottom-16 spacing-left-16"' =>
+      'class="float-end img-fluid spacing-top-16 spacing-bottom-16 spacing-left-16"',
+
+    // Standalone fleft (Nodes 43, 147, 148) — add margin utilities.
+    'class="fleft"' => 'class="float-start me-3 mb-3"',
+
+    // Callout div (Nodes 147, 436) — replace with Bootstrap card-like styling.
+    '<div class="callout">' =>
+      '<div class="bg-light p-3 ms-4 mb-3 float-end" style="max-width: 20em;">',
+  ];
+
+  $nids = [1, 43, 147, 148, 296, 436];
+  $updated = [];
+  $skipped = [];
+
+  foreach ($nids as $nid) {
+    /** @var \Drupal\node\Entity\Node|null $node */
+    $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+    if (!$node) {
+      $skipped[] = $nid;
+      continue;
+    }
+
+    if (!$node->hasField('body') || $node->get('body')->isEmpty()) {
+      $skipped[] = $nid;
+      continue;
+    }
+
+    $body = $node->get('body')->value;
+    $original = $body;
+
+    foreach ($replacements as $search => $replace) {
+      $body = str_replace($search, $replace, $body);
+    }
+
+    if ($body !== $original) {
+      $node->get('body')->value = $body;
+      // Preserve existing revision without creating a new one.
+      $node->setNewRevision(FALSE);
+      $node->save();
+      $updated[] = $nid;
+    }
+    else {
+      $skipped[] = $nid;
+    }
+  }
+
+  $msg = 'Updated Access CSS classes in ' . count($updated) . ' node(s): '
+    . implode(', ', $updated) . '.';
+  if (!empty($skipped)) {
+    $msg .= ' Skipped ' . count($skipped) . ' node(s): '
+      . implode(', ', $skipped) . '.';
+  }
+
+  return $msg;
+}
+
+/**
+ * Replace legacy Access CSS classes in Layout Builder inline blocks.
+ *
+ * Catches instances missed by update_10001 that live in inline block text
+ * fields (field_formatted_text) rather than node body fields.
+ *
+ * Known instance: Node 1 (Home), section 3, block revision 688 —
+ * "fright text-align-right spacing-right-24" on ASU Charter quote.
+ */
+function weba11y9_migration_update_10002(&$sandbox) {
+  $replacements = [
+    'class="fright text-align-right spacing-right-24"' =>
+      'class="float-end text-align-right spacing-right-24"',
+    'class="fright"' => 'class="float-end me-3 mb-3"',
+    'class="fleft"' => 'class="float-start me-3 mb-3"',
+    '<div class="callout">' =>
+      '<div class="bg-light p-3 ms-4 mb-3" style="max-width: 20em;">',
+  ];
+
+  // Scan all nodes that use Layout Builder.
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+  $block_storage = \Drupal::entityTypeManager()->getStorage('block_content');
+
+  $nids = $storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('layout_builder__layout', NULL, 'IS NOT NULL')
+    ->execute();
+
+  $updated_blocks = [];
+
+  foreach ($nids as $nid) {
+    $node = $storage->load($nid);
+    if (!$node || !$node->hasField('layout_builder__layout') || $node->get('layout_builder__layout')->isEmpty()) {
+      continue;
+    }
+
+    $node_changed = FALSE;
+    $sections = $node->get('layout_builder__layout')->getSections();
+
+    foreach ($sections as $section) {
+      foreach ($section->getComponents() as $component) {
+        $config = $component->get('configuration');
+        $plugin_id = $config['id'] ?? '';
+
+        if (!str_starts_with($plugin_id, 'inline_block:')) {
+          continue;
+        }
+
+        $block_revision_id = $config['block_revision_id'] ?? NULL;
+        if (!$block_revision_id) {
+          continue;
+        }
+
+        $block = $block_storage->loadRevision($block_revision_id);
+        if (!$block) {
+          continue;
+        }
+
+        // Check all text fields on the block.
+        $block_changed = FALSE;
+        foreach ($block->getFieldDefinitions() as $field_name => $def) {
+          $field_type = $def->getType();
+          if (!in_array($field_type, ['text', 'text_long', 'text_with_summary'])) {
+            continue;
+          }
+          if ($block->get($field_name)->isEmpty()) {
+            continue;
+          }
+
+          foreach ($block->get($field_name) as $item) {
+            $value = $item->value ?? '';
+            $original = $value;
+
+            foreach ($replacements as $search => $replace) {
+              $value = str_replace($search, $replace, $value);
+            }
+
+            if ($value !== $original) {
+              $item->value = $value;
+              $block_changed = TRUE;
+            }
+          }
+        }
+
+        if ($block_changed) {
+          $block->setNewRevision(FALSE);
+          $block->save();
+          $updated_blocks[] = "node $nid block rev $block_revision_id";
+          $node_changed = TRUE;
+        }
+      }
+    }
+
+    if ($node_changed) {
+      // Re-save the node to update entity cache.
+      $node->setNewRevision(FALSE);
+      $node->save();
+    }
+  }
+
+  if (empty($updated_blocks)) {
+    return 'No Layout Builder inline blocks needed CSS class updates.';
+  }
+
+  return 'Updated Access CSS classes in ' . count($updated_blocks)
+    . ' inline block(s): ' . implode('; ', $updated_blocks) . '.';
+}

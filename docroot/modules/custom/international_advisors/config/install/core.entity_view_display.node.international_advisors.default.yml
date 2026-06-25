@@ -1,0 +1,359 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.international_advisors.body
+    - field.field.node.international_advisors.field_africa_countries
+    - field.field.node.international_advisors.field_antarctica
+    - field.field.node.international_advisors.field_asian_countries
+    - field.field.node.international_advisors.field_australia
+    - field.field.node.international_advisors.field_central_america_country
+    - field.field.node.international_advisors.field_europe_countries
+    - field.field.node.international_advisors.field_intl_adv_image
+    - field.field.node.international_advisors.field_intl_appointment_link
+    - field.field.node.international_advisors.field_intl_country
+    - field.field.node.international_advisors.field_intl_email
+    - field.field.node.international_advisors.field_intl_first_name
+    - field.field.node.international_advisors.field_intl_image
+    - field.field.node.international_advisors.field_intl_last_name
+    - field.field.node.international_advisors.field_intl_phone
+    - field.field.node.international_advisors.field_middle_east_countries
+    - field.field.node.international_advisors.field_north_america_countries
+    - field.field.node.international_advisors.field_oceania_countries
+    - field.field.node.international_advisors.field_region
+    - field.field.node.international_advisors.field_south_america_country
+    - field.field.node.international_advisors.layout_builder__layout
+    - node.type.international_advisors
+  module:
+    - layout_builder
+    - layout_discovery
+    - options
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: true
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          8c1ba41a-6e51-4ed2-bc99-68a278d5031c:
+            uuid: 8c1ba41a-6e51-4ed2-bc99-68a278d5031c
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'extra_field_block:node:international_advisors:links'
+            additional: {  }
+            weight: 0
+          e51eaf16-02cd-48a3-b6e0-7d90777d1484:
+            uuid: e51eaf16-02cd-48a3-b6e0-7d90777d1484
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:international_advisors:body'
+              formatter:
+                label: hidden
+                type: text_default
+                settings: {  }
+                third_party_settings: {  }
+            additional: {  }
+            weight: 1
+          38915d8a-5840-4ef4-9f93-5bd7f3f4d70a:
+            uuid: 38915d8a-5840-4ef4-9f93-5bd7f3f4d70a
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:international_advisors:field_intl_first_name'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 2
+          f66f0b80-f76e-442e-91d9-98f300abcbf7:
+            uuid: f66f0b80-f76e-442e-91d9-98f300abcbf7
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:international_advisors:field_intl_last_name'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 3
+          81c7b207-c039-4964-9bff-c94bdb1d9de9:
+            uuid: 81c7b207-c039-4964-9bff-c94bdb1d9de9
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:international_advisors:field_region'
+              formatter:
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+                type: list_default
+            additional: {  }
+            weight: 5
+          ad865bda-964a-4acb-b97f-a6e3dd72c4cd:
+            uuid: ad865bda-964a-4acb-b97f-a6e3dd72c4cd
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:international_advisors:field_intl_country'
+              formatter:
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+                type: entity_reference_label
+            additional: {  }
+            weight: 6
+          ffc3fb60-5f38-4cb0-9cce-10248d1572e6:
+            uuid: ffc3fb60-5f38-4cb0-9cce-10248d1572e6
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:international_advisors:field_intl_email'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 7
+          a3a0d2e9-e917-4091-8568-6ecf367bb88c:
+            uuid: a3a0d2e9-e917-4091-8568-6ecf367bb88c
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:international_advisors:field_intl_phone'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 8
+          33dbea6b-a450-4e74-91bc-6df5ef022804:
+            uuid: 33dbea6b-a450-4e74-91bc-6df5ef022804
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:international_advisors:field_intl_appointment_link'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 9
+          3602f33c-b365-4f19-bd60-d9486a16ece2:
+            uuid: 3602f33c-b365-4f19-bd60-d9486a16ece2
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:international_advisors:field_intl_image'
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: default
+                  link: false
+                third_party_settings: {  }
+            additional: {  }
+            weight: 10
+          9f05c93c-ec88-4d34-99a0-ac19596d7123:
+            uuid: 9f05c93c-ec88-4d34-99a0-ac19596d7123
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:international_advisors:field_africa_countries'
+              formatter:
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+                type: entity_reference_label
+            additional: {  }
+            weight: 11
+          1b903236-4521-45b9-bfa9-be59a6da0ad7:
+            uuid: 1b903236-4521-45b9-bfa9-be59a6da0ad7
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:international_advisors:field_asian_countries'
+              formatter:
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+                type: entity_reference_label
+            additional: {  }
+            weight: 12
+          5af1746f-9b74-44d7-a2c5-05033dd5d98a:
+            uuid: 5af1746f-9b74-44d7-a2c5-05033dd5d98a
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:international_advisors:field_antarctica'
+              formatter:
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+                type: entity_reference_label
+            additional: {  }
+            weight: 13
+        third_party_settings: {  }
+id: node.international_advisors.default
+targetEntityType: node
+bundle: international_advisors
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_africa_countries:
+    weight: 111
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_antarctica:
+    weight: 113
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_asian_countries:
+    weight: 112
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_intl_appointment_link:
+    weight: 109
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_intl_country:
+    weight: 106
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_intl_email:
+    weight: 107
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_intl_first_name:
+    weight: 102
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_intl_image:
+    type: entity_reference_entity_view
+    weight: 110
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    region: content
+  field_intl_last_name:
+    weight: 103
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_intl_phone:
+    weight: 108
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_region:
+    weight: 105
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_australia: true
+  field_central_america_country: true
+  field_europe_countries: true
+  field_intl_adv_image: true
+  field_middle_east_countries: true
+  field_north_america_countries: true
+  field_oceania_countries: true
+  field_south_america_country: true
+  layout_builder__layout: true

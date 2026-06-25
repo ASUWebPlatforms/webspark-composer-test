@@ -1,0 +1,131 @@
+<?php
+
+use Drupal\Core\Database\Database;
+use Drupal\webform\Entity\WebformSubmission;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_help().
+ */
+function contact_cron_email_help($route_name, \Drupal\Core\Routing\RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.contact_cron_email':
+      return '<p>' . t('This module sends an email to Tiffany.Wardman@bios.asu.edu every time cron runs and exports results from the constant_contact webform to a CSV.') . '</p>';
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function contact_cron_email_cron() {
+    $current_day = date('w');
+
+    if ($current_day != 1) {
+      return;
+    }
+
+    // Set email details.
+    $to = 'Tiffany.Wardman@bios.asu.edu';
+    $cc = 'khala.wolffe@bios.asu.edu';
+    $module = 'contact_cron_email';
+    $key = 'cron_notification';
+    $language_code = \Drupal::languageManager()->getDefaultLanguage()->getId();
+  
+    try {
+      // Generate the absolute URL for the CSV download route.
+      $csv_download_url = Url::fromRoute('contact_cron_email.csv_download', [], ['absolute' => TRUE])->toString();
+  
+      // Prepare email content.
+      $params['subject'] = 'Contact Report';
+      $params['message'] = "These are the emails registered in the last week.\n\nYou can download the CSV file here: " . $csv_download_url;
+      $params['headers'] = [
+        'CC' => $cc,
+      ];
+  
+      // Send the email.
+      $mail_manager = \Drupal::service('plugin.manager.mail');
+      $result = $mail_manager->mail($module, $key, $to, $language_code, $params, NULL, true);
+  
+      if ($result['result'] !== true) {
+        \Drupal::logger('contact_cron_email')->error('There was a problem sending the email.');
+      } else {
+        \Drupal::logger('contact_cron_email')->notice('Cron email sent to Tiffany.Wardman@bios.asu.edu with CSV download link.');
+      }
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('contact_cron_email')->error('Failed to generate CSV download link: @message', ['@message' => $e->getMessage()]);
+    }
+}
+
+/**
+ * Implements hook_mail().
+ */
+function contact_cron_email_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'cron_notification':
+      $message['subject'] = $params['subject'];
+      $message['body'][] = $params['message'];
+      break;
+  }
+}
+
+/**
+ * Export results of the constant_contact webform to a CSV file.
+ *
+ * @return string|false
+ *   The file path of the generated CSV, or FALSE on failure.
+ */
+function contact_cron_email_export_webform_results() {
+    $webform_id = 'constant_contact';
+    $file_system = \Drupal::service('file_system');
+  
+    try {
+      // Set the file path for the CSV file.
+      $file_directory = 'public://webform_exports';
+      $file_system->prepareDirectory($file_directory, FileSystemInterface::CREATE_DIRECTORY);
+      $csv_file_path = $file_directory . '/constant_contact_results_' . date('Y-m-d_H-i-s') . '.csv';
+  
+      // Open the file for writing.
+      $handle = fopen($file_system->realpath($csv_file_path), 'w');
+      if ($handle === false) {
+        throw new \Exception('Unable to open file for writing.');
+      }
+  
+      // Fetch webform submissions.
+      $query = \Drupal::entityQuery('webform_submission')
+        ->condition('webform_id', $webform_id)
+        ->accessCheck(false); // Disable access checks explicitly.
+  
+      $submission_ids = $query->execute();
+      $submissions = WebformSubmission::loadMultiple($submission_ids);
+  
+      // Write the CSV header.
+      $header = ['Submission ID', 'Submitted At', 'Data'];
+      fputcsv($handle, $header);
+  
+      // Write each submission's data to the CSV.
+      foreach ($submissions as $submission) {
+        /** @var \Drupal\webform\Entity\WebformSubmission $submission */
+        $data = $submission->getData();
+        $row = [
+          $submission->id(),
+          date('Y-m-d H:i:s', $submission->getCreatedTime()),
+          json_encode($data), // Encode data to JSON for storage in a single column.
+        ];
+        fputcsv($handle, $row);
+      }
+  
+      // Close the file handle.
+      fclose($handle);
+  
+      \Drupal::logger('contact_cron_email')->notice('CSV file created at @path.', ['@path' => $csv_file_path]);
+  
+      return $csv_file_path;
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('contact_cron_email')->error('Failed to create CSV file: @message', ['@message' => $e->getMessage()]);
+      return false;
+    }
+  }
+  

@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Template for a block.
+ */
+#}
+{% set image = file_url(content.field_media[0]['#media'].field_media_image.entity.uri.value) %}
+{% set quotes = content.field_quote_type|render|trim|striptags %}
+{% set classes = [
+  'block',
+  'block-' ~ configuration.provider|clean_class,
+  'block-' ~ plugin_id|clean_class,
+  'uds-quote-image-background',
+  'udi-quote-custom',
+] %}
+<div{{ attributes.addClass(classes) }} style="background-image: linear-gradient(180deg, #19191900 0%, #191919c9 100%), url({{ image }});">
+
+  {{ title_prefix }}
+  {% if label %}
+    {% block label %}
+      <h2{{ title_attributes }}>{{ label }}</h2>
+    {% endblock %}
+  {% endif %}
+  {{ title_suffix }}
+  {% block content %}
+
+  <div class="uds-quote-image-background-container uds-content-align quotes{% apply spaceless %}{{ quotes }}{% endapply %}">
+    {{ content.field_testimonial_component|render }}
+  </div>
+  {% endblock %}
+</div>

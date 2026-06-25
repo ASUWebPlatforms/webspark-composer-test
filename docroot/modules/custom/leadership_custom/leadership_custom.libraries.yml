@@ -1,0 +1,7 @@
+leadership:
+  version: 1.x
+  css:
+    layout:
+      css/leadership-layout.css: {}
+    theme:
+      css/leadership-theme.css: {}

@@ -1,0 +1,5 @@
+services:
+  mymodule.my_subscriber:
+    class: '\Drupal\eventticker\EventSubscriber\FeedsSubscriber'
+    tags:
+      - { name: 'event_subscriber' }

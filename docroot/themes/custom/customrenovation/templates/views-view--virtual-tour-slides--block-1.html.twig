@@ -1,0 +1,124 @@
+{#
+/**
+ * @file
+ * Default theme implementation for main view template.
+ *
+ * Available variables:
+ * - attributes: Remaining HTML attributes for the element.
+ * - css_name: A CSS-safe version of the view name.
+ * - css_class: The user-specified classes names, if any.
+ * - header: The optional header.
+ * - footer: The optional footer.
+ * - rows: The results of the view query, if any.
+ * - empty: The content to display if there are no rows.
+ * - pager: The optional pager next/prev links to display.
+ * - exposed: Exposed widget form/info to display.
+ * - feed_icons: Optional feed icons to display.
+ * - more: An optional link to the next page of results.
+ * - title: Title of the view, only used when displaying in the admin preview.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the view title.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the view title.
+ * - attachment_before: An optional attachment view to be displayed before the
+ *   view content.
+ * - attachment_after: An optional attachment view to be displayed after the
+ *   view content.
+ * - dom_id: Unique id for every view being printed to give unique class for
+ *   JavaScript.
+ *
+ * @see template_preprocess_views_view()
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+    dom_id ? 'js-view-dom-id-' ~ dom_id,
+  ]
+%}
+<div{{ attributes.addClass(classes) }}>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        {{ title_prefix }}
+        {{ title }}
+        {{ title_suffix }}
+
+        {% if header %}
+          <header>
+            {{ header }}
+          </header>
+        {% endif %}
+        {{ exposed }}
+        {{ attachment_before }}
+<div class="owl-carousel owl-theme owl-lazy" id="owl-carousel">
+        {% if rows -%}
+          {{ rows }}
+        {% elseif empty -%}
+          {{ empty }}
+        {% endif %}
+</div>
+<div class="tour-details" style="padding:20px 10px;z-index:20;">
+
+<p class="tourtitle"><a href="https://storymaps.arcgis.com/stories/5d922c5919ba4746ad8a8a6739caa2d0" target="_blank"><span>Interactive&nbsp;</span>Building Tour</a></p>
+<p class="tourcta"><a href="https://storymaps.arcgis.com/stories/5d922c5919ba4746ad8a8a6739caa2d0" target="_blank">Click to view</a></p>
+
+</div>
+
+<style type="text/css">
+#owl-carousel {
+    margin: 72px 0 72px 0;
+}
+#owl-carousel .item img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+#owl-carousel .item .embedded-media img {
+    border: none;
+}
+</style>
+<script>
+	jQuery.noConflict();
+(function ($) {
+	$(document).ready(function () {
+		'use strict';
+
+		$(document).ready(function() {
+
+  $("#owl-carousel").owlCarousel({
+      items : 1,
+      itemsDesktop : false,
+      itemsDesktopSmall : false,
+      itemsTablet: false,
+      itemsMobile : false,
+      loop:true,
+      autoplay:true,
+      autoplayTimeout:4000,
+      autoplayHoverPause:true,
+      animateOut: 'fadeOut',
+      lazyLoad: true,
+      dots: false
+  });
+
+});
+
+	});
+})(jQuery);
+</script>
+
+        {{ attachment_after }}
+        {{ more }}
+
+        {% if footer %}
+          <footer>
+            {{ footer }}
+          </footer>
+        {% endif %}
+
+        {{ feed_icons }}
+      </div>
+    </div>
+  </div>
+</div>

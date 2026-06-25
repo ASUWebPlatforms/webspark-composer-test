@@ -1,0 +1,54 @@
+<?php
+// Use \Drupal\Core\Routing;
+use Drupal\node\Entity\Node;
+use Drupal\paragraphs\Entity\Paragraph;
+/**
+ * @file
+ */
+
+/**
+ * Implements hook_page_attachments().
+ */
+function asu_components_page_attachments(array &$attachments) {
+  // print "<pre>"; print_r($attachments); print "</pre>";
+  $current_path = \Drupal::request()->getPathInfo();
+  // print "<pre>"; print_r($parameters); print "</pre>";
+  // print "<pre>"; print_r($current_path); print "</pre>";
+  if (in_array($current_path, ['/test-page-0','/customparagraphs'])) {
+    $attachments['#attached']['library'][] = 'asu_components/components_js';
+    $attachments['#attached']['library'][] = 'asu_components/global';
+  }
+}
+
+// function asu_components_preprocess_page(array &$variables): void {
+//   $variables['#attached']['library'][] = 'asu_components/components_js';
+// }
+
+
+function new_paragraph () {
+
+  $paragraph = Paragraph::create([
+      'type' => 'animated_quote',   // paragraph type machine name
+      'field_paragraph_body' => [   // paragraph's field machine name
+          'value' => $text,                  // body field value
+          'format' => 'wysiwyg',         // body text format
+      ],
+  ]);
+
+  $paragraph->save();
+
+  $nodeData = [
+      'type' => 'page',
+      'status' => 1,
+      'title' => 'My new test page',
+      'field_paragraphs' => [  // paragraph field attached to node
+          [
+              'target_id' => $paragraph->id(),
+              'target_revision_id' => $paragraph->getRevisionId(),
+          ],
+      ],
+  ];
+
+  $entity = Node::create($nodeData);
+  $entity->save();
+}

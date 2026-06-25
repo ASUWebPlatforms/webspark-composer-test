@@ -1,0 +1,9 @@
+# Custom module library for general purposes.
+card_view_format_studlife:
+  js:
+    js/card-view-format-studlife.js: {}
+  css:
+    component:
+      css/card-view-format-studlife.css: {}
+  dependencies:
+    - core/drupalSettings

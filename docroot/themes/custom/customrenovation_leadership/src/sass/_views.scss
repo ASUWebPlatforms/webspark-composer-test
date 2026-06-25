@@ -1,0 +1,75 @@
+#views-exposed-form-participants-block-1,
+#views-exposed-form-resources-block-1,
+#views-exposed-form-library-block-1,
+#views-exposed-form-calendar-block-1 {
+  height: auto;
+
+  > div {
+    float: left;
+    padding-right: 1rem;
+    min-height: 5rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-actions {
+    float: none;
+    clear: both;
+    width: 100%;
+  }
+}
+
+#views-exposed-form-participants-block-1 {
+  > div {
+    width: 100%;
+
+    @media (min-width: 36rem) {
+      width: 50%;
+    }
+
+    @media (min-width: 48rem) {
+      width: 33%;
+    }
+
+    @media (min-width: 62rem) {
+      width: 20%;
+    }
+  }
+
+  .form-select option:disabled {
+    display: none;
+  }
+}
+
+.participants-list {
+  td.views-field-user-picture {
+    min-width: 100px;
+    padding: 0.25rem;
+  }
+}
+
+.leadership-team {
+
+  .views-row {
+    display: flex;
+    margin-bottom: 3rem;
+  }
+
+  h3 {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .views-field-user-picture {
+    margin-right: 2rem;
+    max-width: 306px;
+  }
+}
+
+
+.toolkit-list,
+.library-list,
+.leadership-event-cards {
+  .views-field-nothing {
+    height: 100%;
+  }
+}

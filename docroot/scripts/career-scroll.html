@@ -1,0 +1,155 @@
+<script src="/scripts/animate/scrollmagic/minified/ScrollMagic.min.js"></script>
+<!--<script src="/scripts/animate/scrollmagic/minified/plugins/debug.addIndicators.min.js"></script>-->
+<style>
+.box2 {
+	min-height: 400px;
+	padding-right: 100px;
+}
+.boxtext {
+	border-top: 2px solid #707070;
+}
+
+/* width */
+#goldcontainer::-webkit-scrollbar {
+width: 5px;
+}
+
+/* Track */
+#goldcontainer::-webkit-scrollbar-track {
+background: #000;
+}
+
+/* Handle */
+#goldcontainer::-webkit-scrollbar-thumb {
+background: #8C1D40;
+}
+
+/* Handle on hover */
+#goldcontainer::-webkit-scrollbar-thumb:hover {
+background: #8C1D40;
+}
+</style>
+
+<div class="spacer s1" id="sec1">
+	<div class="row box2">
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"> <i class="fas fa-university" style="font-size: 72px; float: right; margin-top: 25px;"></i> </div>
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 boxtext">
+			<h3 style="color: #8C1D40;">Our students' career journey starts before the first day of law school.</h3>
+			<p><strong>ASU Law provides you with the online Lawfit Career Assessment, which helps you identify different career paths that may be of interest.</strong></p>
+		</div>
+		<div style="text-align: center; margin-bottom: 40px;"> <a class="btn btn-maroon" href="/admission">Apply</a> </div>
+	</div>
+</div>
+<div class="spacer s1" id="sec2">
+	<div class="row box2">
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"> <i class="fas fa-handshake" style="font-size: 72px; float: right; margin-top: 25px;"></i> </div>
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 boxtext">
+			<h3 style="color: #8C1D40;">Create a foundation for career success in your first year through hands-on resources including resume reviews, interview prep and job fairs.</h3>
+			<div class="row">
+				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+					<ul class="goldlist">
+						<li>Foundations Professional Development Seminar</li>
+						<li>One-on-one counseling</li>
+						<li>Resume and cover letter review</li>
+					</ul>
+				</div>
+				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+					<ul class="goldlist">
+						<li>Online job board and directories</li>
+						<li>Pro-bono opportunities</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="spacer s1" id="sec3">
+	<div class="row box2">
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"> <i class="fas fa-user-graduate" style="font-size: 72px; float: right; margin-top: 25px;"></i> </div>
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 boxtext">
+			<h3 style="color: #8C1D40;">Gain real-world, paid and unpaid practical experience as a 2L and 3L through a variety of rewarding externship opportunities.</h3>
+			<div class="row">
+				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+					<ul class="goldlist">
+						<li>Judicial, government and public interest externships</li>
+						<li>Paid externships with for-profit entities</li>
+            <li>Domestic and international spring semester externships</li>
+					</ul>
+				</div>
+				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+					<ul class="goldlist">
+						<li>Federal advocacy and regulatory externships (in Washington, D.C.)</li>
+						<li>Internal Rule of Law and Security Program (in Washington, D.C.)</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="spacer s1" id="sec4">
+	<div class="row box2">
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"> <i class="fas fa-graduation-cap" style="font-size: 72px; float: right; margin-top: 25px;"></i> </div>
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 boxtext">
+			<h3 style="color: #8C1D40;">Keep in touch and let us know where your career is taking you and how we can help with the next steps</h3>
+			<div class="row">
+				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+					<ul class="goldlist">
+						<li>Continued career support for our alumni</li>
+					</ul>
+				</div>
+				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+					<ul class="goldlist">
+						<li>Networking and connections</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div style="text-align: center;"> <a class="btn btn-maroon" href="/alumni">Learn more about alumni</a> </div>
+	</div>
+</div>
+<script>
+	// init controller
+	var controller = new ScrollMagic.Controller({container: "#goldcontainer"});
+
+	// build scenes
+	new ScrollMagic.Scene({triggerElement: "#sec1"})
+					.setClassToggle("#high1", "navactive") // add class toggle
+					//.addIndicators() // add indicators (requires plugin)
+					.addTo(controller);
+	new ScrollMagic.Scene({triggerElement: "#sec2"})
+					.setClassToggle("#high2", "navactive") // add class toggle
+					//.addIndicators() // add indicators (requires plugin)
+					.addTo(controller);
+	new ScrollMagic.Scene({triggerElement: "#sec3"})
+					.setClassToggle("#high3", "navactive") // add class toggle
+					//.addIndicators() // add indicators (requires plugin)
+					.addTo(controller);
+	new ScrollMagic.Scene({triggerElement: "#sec4"})
+					.setClassToggle("#high4", "navactive") // add class toggle
+					//.addIndicators() // add indicators (requires plugin)
+					.addTo(controller);
+
+	//On click of menu item scroll to section INSIDE of parent element #goldcontainer
+	jQuery.fn.scrollTo = function(elem, speed) {
+    jQuery(this).animate({
+        scrollTop:  jQuery(this).scrollTop() - jQuery(this).offset().top + jQuery(elem).offset().top
+    }, speed == undefined ? 1000 : speed);
+    return this;
+	};
+
+	jQuery("#high1").click(function() {
+		jQuery("#goldcontainer").scrollTo("#sec1", 2000);
+	});
+
+	jQuery("#high2").click(function() {
+		jQuery("#goldcontainer").scrollTo("#sec2", 2000);
+	});
+
+	jQuery("#high3").click(function() {
+		jQuery("#goldcontainer").scrollTo("#sec3", 2000);
+	});
+
+	jQuery("#high4").click(function() {
+		jQuery("#goldcontainer").scrollTo("#sec4", 2000);
+	});
+</script>

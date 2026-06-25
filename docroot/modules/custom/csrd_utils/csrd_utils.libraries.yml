@@ -1,0 +1,11 @@
+csrd_utils:
+  version: 1.0.0
+  css:
+    layout:
+      src/css/csrd_utils.css: {}
+  js:
+    src/js/index.js: { }
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings

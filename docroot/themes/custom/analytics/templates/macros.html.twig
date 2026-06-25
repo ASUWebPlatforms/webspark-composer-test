@@ -1,0 +1,170 @@
+{#
+@macro Tags
+Generate a list of tags from an array of taxonomies
+
+Available variables:
+- title: The title of the list
+- entities: An array of entities
+- size: The size of the badge (sm, md)
+- color: The color of the badge (See tailwind.config.js for color classes)
+- clickable: Whether the badge should be clickable or not
+#}
+{% macro tags(title, entities, size = 'md', color = 'gray-2', clickable = false) %}
+  {% if entities and entities is not empty %}
+    {% set smBadge = 'tw-py-1.5 tw-px-2.5 tw-text-[12px]' %}
+    {% set mdBadge = 'tw-py-2.5 tw-px-4 tw-text-[14px]' %}
+
+    <div class="col-auto">
+      {% if title %}
+        <h5>{{ title }}</h5>
+      {% endif %}
+      <div class="tw-mr-1">
+        {% for item in entities %}
+          {% if clickable %}
+            <a class="btn btn-md bg-{{ color }}" href="{{ item|entity_url }}">{{ item.label }}</a>
+          {% else %}
+            <span class="badge text-bg-{{ color }} {{ size == 'md' ? mdBadge : smBadge }}">{{ item.label }}</span>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+{% endmacro tags %}
+
+{#
+@macro Report
+Display an embed with a given URL.
+The source system will dictate the embed method used.
+
+Tableau:
+- js: https://bi.arizona.edu/t/ASU/views/<group>/<report>
+- iframe: https://bi.arizona.edu/t/ASU/views/<group>/<report>?:showVizHome=no&:embed=true
+
+Report Server:
+- iframe: https://analyticsreporting.asu.edu/reports/report/<group>/<report>?rs:embed=true
+
+Available variables:
+- url: The URL of the report to embed
+- js: Whether to use the Tableau JS embeds or not
+#}
+{% macro report(url, js = true) %}
+  <div class="tw-shadow-md ratio ratio-16x9">
+    {% if js %}
+      {{ attach_library('analytics/tableau') }}
+      <tableau-viz id="tableau-viz" src="{{ url }}" width="1920" height="1080" toolbar="top"></tableau-viz>
+    {% else %}
+      <iframe src="{{ url }}" width="1920" height="1080"></iframe>
+    {% endif %}
+  </div>
+{% endmacro report %}
+
+{#
+@macro Date
+Display a date section with a title
+
+Available variables:
+- title: The title of the date section
+- date: The date to display
+#}
+{% macro date(title, date) %}
+  <div>
+    <h5 class="tw-mt-0">{{ title }}</h5>
+    {{ date }}
+  </div>
+{% endmacro date %}
+
+{#
+@macro User
+Display a user name and picture
+
+Available variables:
+- user: The user entity to display
+#}
+{% macro user(user, showName = false, linkToProfile = false) %}
+  {% set userData = showName ? user.field_name.value|default(user.name.value) : user.mail.value %}
+  <span>
+    <strong>
+      {% if linkToProfile %}
+        <a href="{{ user.path.alias }}">
+          {{ userData }}
+        </a>
+      {% else %}
+        {{ userData }}
+      {% endif %}
+    </strong>
+  </span>
+{% endmacro user %}
+
+{#
+@macro Published
+Display the author's information along with their image if available
+
+Available variables:
+- user: The user entity to display
+
+Available Twig functions:
+- time_ago: Display time since the content was published
+
+Available macros:
+- user: Display the user's name and image
+#}
+{% macro published(user) %}
+  <div class="published">
+    <strong>Published:</strong> {{ time_ago() }} by <span class="tw-text-asu-maroon">{{ _self.user(user) }}</span>
+  </div>
+{% endmacro published %}
+
+{#
+@macro Userlist
+Generate a list of users
+
+Available variables:
+- title: The title of the list
+- users: The user entities
+#}
+{% macro userlist(title, users) %}
+  {% if users and users is not empty %}
+    {% set array = [users] %}
+
+    <div class="col-sm-auto">
+      <h5>{{ title }}</h5>
+      <div>
+        {% for item in array %}
+          {{ _self.user(item) }}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+{% endmacro userlist %}
+
+{#
+@macro dataDictionaryMeta
+Show metadata for a data dictionary node.
+
+Available variables:
+- node: The node entity to display
+#}
+{% macro dataDictionaryMeta(node) %}
+  {% set databaseFieldValue = node.field_database.0.value %}
+  {% set databaseFieldLabels = {
+    'edw': 'Enterprise Data Warehouse / Redshift',
+    'audb': 'Analytics User Database',
+    'ods': 'Operational Data Store',
+    'dash': 'Data Analytics Success Hub',
+    'glossary': 'Business Glossary'
+  } %}
+  {% set databaseFieldLabel = databaseFieldLabels[databaseFieldValue] ?? databaseFieldValue %}
+  {% set schemaName = node.hasField('field_schema_name') ? node.field_schema_name.value : null %}
+  {% set schema = schemaName ?: node.field_schema.value %}
+  {% set table = node.field_table.value %}
+
+  {% if databaseFieldLabel %}
+    <span class="tw-block tw-mb-1"><strong>Database:</strong> {{ databaseFieldLabel }}</span>
+  {% endif %}
+  {% if schema %}
+    <span class="tw-block tw-mb-1"><strong>Schema:</strong> {{ schema }}</span>
+  {% endif %}
+  {% if table %}
+    <span class="tw-block tw-mb-1"><strong>Table:</strong> {{ table }}</span>
+  {% endif %}
+{% endmacro dataDictionaryMeta %}

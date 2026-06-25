@@ -1,0 +1,6 @@
+<select class="chosen-container chosen-container-multi form-control custom-select ViewsJumpMenu js-viewsJumpMenu" title="-- Select --">
+    <option>-- Select --</option>
+      {% for row in rows %}
+        <option data-url="{{ row.url }}">{{ row._entity.field_date_date[0].value|date('M,Y') }}({{ row.num_records }})</option>
+        {% endfor %}
+</select>

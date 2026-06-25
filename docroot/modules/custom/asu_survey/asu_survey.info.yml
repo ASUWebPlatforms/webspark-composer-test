@@ -1,0 +1,6 @@
+name: ASU Veterans survey quiz confirmation
+type: module
+description: 'This module provides customization of ASU veterans survey confirmation page'
+package: ASU
+dependencies: webform
+core_version_requirement: ^8.8 || ^9 || ^10

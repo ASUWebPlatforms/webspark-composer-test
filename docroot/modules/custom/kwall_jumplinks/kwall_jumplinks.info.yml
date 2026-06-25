@@ -1,0 +1,7 @@
+name: KWALL Jumplinks
+type: module
+description: 'Jumplinks - create easy dropdowns with simple lists.'
+package: custom
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+version: VERSION

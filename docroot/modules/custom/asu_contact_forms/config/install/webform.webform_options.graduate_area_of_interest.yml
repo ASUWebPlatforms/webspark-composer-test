@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: graduate_area_of_interest
+label: 'Graduate area of interest'
+category: 'Graduate form fields'
+likert: false
+options: 'test: Arts'

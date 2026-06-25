@@ -1,0 +1,20 @@
+<?php
+//use Drupal\views\ViewExecutable;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * hook_form_alter()
+ *
+ * Add JS/CSS.
+ *
+ * @param $form
+ * @param FormStateInterface $form_state
+ * @param $form_id
+ * @return array
+ */
+function asuaec_licensure_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    if (isset($form['#id']) && $form['#id'] == 'views-exposed-form-professional-licensure-block-1') {
+        // Add JS/CSS
+        $form['#attached']['library'][] = 'asuaec_licensure/licensure-library';
+    }
+}

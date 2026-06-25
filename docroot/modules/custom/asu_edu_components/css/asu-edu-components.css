@@ -1,0 +1,56 @@
+#drupal-off-canvas form .dropbutton-wrapper.dropbutton-multiple {
+  position: relative;
+}
+#drupal-off-canvas form .dropbutton-multiple .dropbutton-widget {
+  width: 10em;
+  height: auto;
+  background: none;
+}
+
+#drupal-off-canvas form .field--name-field-cta-link legend {
+  display: none;
+}
+
+.layout--three-column-homepage .row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.layout--three-column-homepage .row div.layout__region--center {
+    background-color: #FFC627;
+    padding: 0px 0px 16px 0px;
+    border: 1px solid #d0d0d0;
+}
+
+.layout--three-column-homepage .row div.layout__region--left, .layout--three-column-homepage .row div.layout__region--right {
+    background-color: #fff;
+    padding: 32px;
+    border: 1px solid #d0d0d0;
+}
+
+.layout--three-column-homepage div.layout__region--left h3, .layout--three-column-homepage div.layout__region--right h3 {
+    margin-top: 0;
+}
+
+#drupal-off-canvas tr.paragraph-type--card-links input {
+  width: 90%;
+}
+
+#drupal-off-canvas tr.paragraph-type--card-links .clearfix input {
+  width: auto;
+}
+
+/* Added for updated degree search box (WWWCMS-39), Aug 2022 */
+.key-or-int {
+  width: 100%;
+  margin: 10px auto;
+}
+
+.degree-reset {
+  float: right;
+}
+
+#edit-location--wrapper .card-body .field-prefix {
+  display: block;
+  margin-bottom: 10px;
+}

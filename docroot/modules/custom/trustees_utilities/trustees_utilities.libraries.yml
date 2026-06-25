@@ -1,0 +1,5 @@
+global-styling:
+  version: "1.3.0"
+  css:
+    theme:
+      css/styles.css: {}

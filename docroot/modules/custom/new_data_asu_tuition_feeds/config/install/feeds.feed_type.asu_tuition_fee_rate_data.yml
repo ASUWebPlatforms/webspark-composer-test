@@ -1,0 +1,134 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.asu_tuition_fee_rate_data.field_acad_year
+    - field.field.node.asu_tuition_fee_rate_data.field_enrolled_hrs
+    - field.field.node.asu_tuition_fee_rate_data.field_fee_rate
+    - field.field.node.asu_tuition_fee_rate_data.field_rate_fee_code
+    - field.field.node.asu_tuition_fee_rate_data.field_rate_fee_type
+    - field.field.node.asu_tuition_fee_rate_data.field_rate_institution
+    - field.field.node.asu_tuition_fee_rate_data.field_sterm
+    - node.type.asu_tuition_fee_rate_data
+  module:
+    - node
+id: asu_tuition_fee_rate_data
+label: 'ASU tuition fee rate data'
+description: ''
+help: ''
+import_period: -1
+fetcher: upload
+fetcher_configuration:
+  allowed_extensions: 'txt csv tsv xml opml'
+  directory: 'private://feeds'
+parser: csv
+parser_configuration:
+  delimiter: ','
+  no_headers: false
+  line_limit: 100
+processor: 'entity:node'
+processor_configuration:
+  langcode: en
+  insert_new: 1
+  update_existing: 2
+  update_non_existent: _keep
+  expire: -1
+  owner_feed_author: false
+  owner_id: 0
+  authorize: true
+  skip_hash_check: false
+  values:
+    type: asu_tuition_fee_rate_data
+custom_sources:
+  acad_year:
+    value: acad_year
+    machine_name: acad_year
+    type: csv
+    label: acad_year
+  enrlld_hrs:
+    value: enrlld_hrs
+    machine_name: enrlld_hrs
+    type: csv
+    label: enrlld_hrs
+  fee_code:
+    value: fee_code
+    machine_name: fee_code
+    type: csv
+    label: fee_code
+  fee_rate:
+    value: fee_rate
+    machine_name: fee_rate
+    type: csv
+    label: fee_rate
+  fee_type:
+    value: fee_type
+    machine_name: fee_type
+    type: csv
+    label: fee_type
+  strm:
+    value: strm
+    machine_name: strm
+    type: csv
+    label: strm
+  institution:
+    value: institution
+    machine_name: institution
+    type: csv
+    label: institution
+mappings:
+  -
+    target: field_acad_year
+    map:
+      value: acad_year
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_enrolled_hrs
+    map:
+      value: enrlld_hrs
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_rate_fee_code
+    map:
+      value: fee_code
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_fee_rate
+    map:
+      value: fee_rate
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_rate_fee_type
+    map:
+      value: fee_type
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_sterm
+    map:
+      value: strm
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: title
+    map:
+      value: fee_code
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_rate_institution
+    map:
+      value: institution
+    unique: {  }
+    settings:
+      language: null

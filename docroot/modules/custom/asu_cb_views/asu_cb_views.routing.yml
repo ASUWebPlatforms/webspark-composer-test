@@ -1,0 +1,10 @@
+asu_cb_views.myasu_cb_views_page:
+  path: '/myasu-cb/{groupn}'
+  defaults:
+    _controller: '\Drupal\asu_cb_views\Controller\viewPage::myasu_cb_views_page'
+    _title: 'XML page'
+  requirements:
+    _permission: 'access content'
+    
+    
+    

@@ -1,0 +1,10 @@
+bg:
+  version: 1.0
+  js:
+    js/script.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+  css:
+    component:
+      css/bg.css: {} 

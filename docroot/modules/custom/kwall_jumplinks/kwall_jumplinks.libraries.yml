@@ -1,0 +1,9 @@
+kwall_jumplinks:
+  version: VERSION
+  js:
+    js/kwall_jumplinks.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - core/once

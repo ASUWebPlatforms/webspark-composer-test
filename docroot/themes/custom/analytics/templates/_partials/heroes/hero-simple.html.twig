@@ -1,0 +1,40 @@
+{#
+@file
+The template for large hero.
+
+Available variables:
+- background: The background color (bg-maroon, bg-gold, bg-gray-6).
+- image: The Image object.
+  - url: The URL of the image.
+  - alt: The alt text for the image.
+- heading: The heading for the hero.
+- content: Content to display.
+#}
+
+<div class="uds-hero-sm {{ background|default('bg-gray-6') }}" style="height: 20rem;">
+  <div class="hero-overlay"></div>
+  {% if image.url %}
+    <img class="hero"
+      src="{{ image.url }}"
+      alt="{{ image.alt|default('A background Hero image.') }}"
+      width="2560"
+      height="512"
+      loading="lazy"
+      decoding="async"
+      fetchpriority="high"/>
+  {% endif %}
+
+  <h1>
+    <span class="text-white">
+      {{ heading }}
+    </span>
+  </h1>
+
+  {% if content %}
+    <div class="content">
+      <p class="text-white">
+        {{ content }}
+      </p>
+    </div>
+  {% endif %}
+</div>

@@ -1,0 +1,14 @@
+style:
+  version: VERSION
+  css:
+    theme:
+      css/style.css: {}
+  js:
+    #assets/js/renovation.script.js: {}
+    #js/datalayer.js: {}
+    js/custom.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+    - jquery_ui_tabs/tabs

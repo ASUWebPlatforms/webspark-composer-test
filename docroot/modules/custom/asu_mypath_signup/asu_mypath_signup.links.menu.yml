@@ -1,0 +1,4 @@
+asu_mypath_signup.my_path_config_form:
+  title: ASU MyPath Signup Settings Form
+  parent: system.admin_config_system
+  route_name: asu_mypath_signup.my_path_config_form

@@ -1,0 +1,980 @@
+From be1afee8ea309a6c828a7b8e546664ea021e53c9 Mon Sep 17 00:00:00 2001
+From: Clay Freeman <git@clayfreeman.com>
+Date: Wed, 18 Aug 2021 14:57:30 -0500
+Subject: [PATCH 01/11] create from patch #71
+
+---
+ .../src/BlockContentAccessControlHandler.php  |   2 +-
+ .../Event/BlockContentGetDependencyEvent.php  |  22 +-
+ .../SetInlineBlockDependency.php              |  61 ++++-
+ .../src/LayoutBuilderServiceProvider.php      |   3 +-
+ .../Kernel/SetInlineBlockDependencyTest.php   | 216 ++++++++++++++++++
+ 5 files changed, 289 insertions(+), 15 deletions(-)
+ create mode 100644 core/modules/layout_builder/tests/src/Kernel/SetInlineBlockDependencyTest.php
+
+diff --git a/core/modules/block_content/src/BlockContentAccessControlHandler.php b/core/modules/block_content/src/BlockContentAccessControlHandler.php
+index 13d4fc1d0eba..a21ba098a193 100644
+--- a/core/modules/block_content/src/BlockContentAccessControlHandler.php
++++ b/core/modules/block_content/src/BlockContentAccessControlHandler.php
+@@ -88,7 +88,7 @@ protected function checkAccess(EntityInterface $entity, $operation, AccountInter
+       $dependency = $entity->getAccessDependency();
+       if (empty($dependency)) {
+         // If an access dependency has not been set let modules set one.
+-        $event = new BlockContentGetDependencyEvent($entity);
++        $event = new BlockContentGetDependencyEvent($entity, $operation);
+         $this->eventDispatcher->dispatch($event, BlockContentEvents::BLOCK_CONTENT_GET_DEPENDENCY);
+         $dependency = $event->getAccessDependency();
+         if (empty($dependency)) {
+diff --git a/core/modules/block_content/src/Event/BlockContentGetDependencyEvent.php b/core/modules/block_content/src/Event/BlockContentGetDependencyEvent.php
+index 423d89f2f815..a87761fa88ad 100644
+--- a/core/modules/block_content/src/Event/BlockContentGetDependencyEvent.php
++++ b/core/modules/block_content/src/Event/BlockContentGetDependencyEvent.php
+@@ -27,14 +27,24 @@ class BlockContentGetDependencyEvent extends Event {
+    */
+   protected $accessDependency;
+ 
++  /**
++   * The access operation to load the block content dependency for.
++   *
++   * @var string
++   */
++  protected $operation;
++
+   /**
+    * BlockContentGetDependencyEvent constructor.
+    *
+    * @param \Drupal\block_content\BlockContentInterface $blockContent
+    *   The block content entity.
++   * @param string $operation
++   *   The access operation to load the block content dependency for.
+    */
+-  public function __construct(BlockContentInterface $blockContent) {
++  public function __construct(BlockContentInterface $blockContent, $operation) {
+     $this->blockContent = $blockContent;
++    $this->operation = $operation;
+   }
+ 
+   /**
+@@ -47,6 +57,16 @@ public function getBlockContentEntity() {
+     return $this->blockContent;
+   }
+ 
++  /**
++   * Get the access operation for this dependency event.
++   *
++   * @return string
++   *   The access operation.
++   */
++  public function getOperation() {
++    return $this->operation;
++  }
++
+   /**
+    * Gets the access dependency.
+    *
+diff --git a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+index a1fb950be7c7..b8fcdd920491 100644
+--- a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
++++ b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+@@ -5,9 +5,12 @@
+ use Drupal\block_content\BlockContentEvents;
+ use Drupal\block_content\BlockContentInterface;
+ use Drupal\block_content\Event\BlockContentGetDependencyEvent;
++use Drupal\Core\Ajax\AjaxHelperTrait;
+ use Drupal\Core\Database\Connection;
+ use Drupal\Core\Entity\EntityInterface;
+-use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Entity\EntityRepositoryInterface;
++use Drupal\Core\Routing\CurrentRouteMatch;
++use Drupal\layout_builder\Access\LayoutPreviewAccessAllowed;
+ use Drupal\layout_builder\InlineBlockUsageInterface;
+ use Drupal\layout_builder\LayoutEntityHelperTrait;
+ use Drupal\layout_builder\SectionStorage\SectionStorageManagerInterface;
+@@ -35,13 +38,14 @@
+ class SetInlineBlockDependency implements EventSubscriberInterface {
+ 
+   use LayoutEntityHelperTrait;
++  use AjaxHelperTrait;
+ 
+   /**
+-   * The entity type manager.
++   * The entity repository.
+    *
+-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
++   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+    */
+-  protected $entityTypeManager;
++  protected $entityRepository;
+ 
+   /**
+    * The database connection.
+@@ -57,10 +61,17 @@ class SetInlineBlockDependency implements EventSubscriberInterface {
+    */
+   protected $usage;
+ 
++  /**
++   * The current route match service.
++   *
++   * @var \Drupal\Core\Routing\CurrentRouteMatch
++   */
++  protected $currentRouteMatch;
++
+   /**
+    * Constructs SetInlineBlockDependency object.
+    *
+-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
++   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+    *   The entity type manager.
+    * @param \Drupal\Core\Database\Connection $database
+    *   The database connection.
+@@ -69,11 +80,12 @@ class SetInlineBlockDependency implements EventSubscriberInterface {
+    * @param \Drupal\layout_builder\SectionStorage\SectionStorageManagerInterface $section_storage_manager
+    *   The section storage manager.
+    */
+-  public function __construct(EntityTypeManagerInterface $entity_type_manager, Connection $database, InlineBlockUsageInterface $usage, SectionStorageManagerInterface $section_storage_manager) {
+-    $this->entityTypeManager = $entity_type_manager;
++  public function __construct(EntityRepositoryInterface $entity_repository, Connection $database, InlineBlockUsageInterface $usage, SectionStorageManagerInterface $section_storage_manager, CurrentRouteMatch $current_route_match) {
++    $this->entityRepository = $entity_repository;
+     $this->database = $database;
+     $this->usage = $usage;
+     $this->sectionStorageManager = $section_storage_manager;
++    $this->currentRouteMatch = $current_route_match;
+   }
+ 
+   /**
+@@ -92,7 +104,18 @@ public static function getSubscribedEvents(): array {
+    *   The event.
+    */
+   public function onGetDependency(BlockContentGetDependencyEvent $event) {
+-    if ($dependency = $this->getInlineBlockDependency($event->getBlockContentEntity())) {
++    // Ajax form submission will trigger here, it's ajax route, such as UpdateBlockForm.
++    // If the action from ajax, the section component should in preview mode,
++    // the view operation should LayoutPreviewAccessAllowed.
++    // @see \Drupal\layout_builder\Form\ConfigureBlockFormBase::successfulAjaxSubmit().
++    // @see \Drupal\layout_builder\EventSubscriber\BlockComponentRenderArray::onBuildRender().
++    if ($this->isAjax() && $event->getOperation() === 'view' && ($section_storage = $this->currentRouteMatch->getParameter('section_storage'))) {
++      // Determines if a block content revision is used in section storage.
++      if (in_array($event->getBlockContentEntity()->getRevisionId(), $this->getInlineBlockRevisionIdsInSections($section_storage->getSections()))) {
++        $event->setAccessDependency(new LayoutPreviewAccessAllowed());
++      }
++    }
++    if ($dependency = $this->getInlineBlockDependency($event->getBlockContentEntity(), $event->getOperation())) {
+       $event->setAccessDependency($dependency);
+     }
+   }
+@@ -115,6 +138,8 @@ public function onGetDependency(BlockContentGetDependencyEvent $event) {
+    *
+    * @param \Drupal\block_content\BlockContentInterface $block_content
+    *   The block content entity.
++   * @param string $operation
++   *   The access operation to load the inline block dependency for.
+    *
+    * @return \Drupal\Core\Entity\EntityInterface|null
+    *   Returns the layout dependency.
+@@ -122,15 +147,27 @@ public function onGetDependency(BlockContentGetDependencyEvent $event) {
+    * @see \Drupal\block_content\BlockContentAccessControlHandler::checkAccess()
+    * @see \Drupal\layout_builder\EventSubscriber\BlockComponentRenderArray::onBuildRender()
+    */
+-  protected function getInlineBlockDependency(BlockContentInterface $block_content) {
++  protected function getInlineBlockDependency(BlockContentInterface $block_content, $operation) {
++    $active_operations = ['update', 'delete'];
++    $current_route = $this->currentRouteMatch->getRouteObject();
++    if ('view' == $operation && ($current_route && $current_route->getOption('_layout_builder'))) {
++      $active_operations[] = 'view';
++    }
+     $layout_entity_info = $this->usage->getUsage($block_content->id());
+-    if (empty($layout_entity_info)) {
++    if (empty($layout_entity_info) || empty($layout_entity_info->layout_entity_type) || empty($layout_entity_info->layout_entity_id)) {
+       // If the block does not have usage information then we cannot set a
+       // dependency. It may be used by another module besides layout builder.
+       return NULL;
+     }
+-    $layout_entity_storage = $this->entityTypeManager->getStorage($layout_entity_info->layout_entity_type);
+-    $layout_entity = $layout_entity_storage->load($layout_entity_info->layout_entity_id);
++    // When updating or deleting an inline block, resolve the inline block
++    // dependency via the active revision, since it is the revision that should
++    // be loaded for editing purposes.
++    if (in_array($operation, $active_operations, TRUE)) {
++      $layout_entity = $this->entityRepository->getActive($layout_entity_info->layout_entity_type, $layout_entity_info->layout_entity_id);
++    }
++    else {
++      $layout_entity = $this->entityRepository->getCanonical($layout_entity_info->layout_entity_type, $layout_entity_info->layout_entity_id);
++    }
+     if ($this->isLayoutCompatibleEntity($layout_entity)) {
+       if ($this->isBlockRevisionUsedInEntity($layout_entity, $block_content)) {
+         return $layout_entity;
+diff --git a/core/modules/layout_builder/src/LayoutBuilderServiceProvider.php b/core/modules/layout_builder/src/LayoutBuilderServiceProvider.php
+index f0b078c48ebd..24efff92eaf1 100644
+--- a/core/modules/layout_builder/src/LayoutBuilderServiceProvider.php
++++ b/core/modules/layout_builder/src/LayoutBuilderServiceProvider.php
+@@ -31,10 +31,11 @@ public function register(ContainerBuilder $container) {
+     if (isset($modules['block_content'])) {
+       $definition = new Definition(SetInlineBlockDependency::class);
+       $definition->setArguments([
+-        new Reference('entity_type.manager'),
++        new Reference('entity.repository'),
+         new Reference('database'),
+         new Reference('inline_block.usage'),
+         new Reference('plugin.manager.layout_builder.section_storage'),
++        new Reference('current_route_match'),
+       ]);
+       $definition->addTag('event_subscriber');
+       $definition->setPublic(TRUE);
+diff --git a/core/modules/layout_builder/tests/src/Kernel/SetInlineBlockDependencyTest.php b/core/modules/layout_builder/tests/src/Kernel/SetInlineBlockDependencyTest.php
+new file mode 100644
+index 000000000000..2388ade19b84
+--- /dev/null
++++ b/core/modules/layout_builder/tests/src/Kernel/SetInlineBlockDependencyTest.php
+@@ -0,0 +1,216 @@
++<?php
++
++namespace Drupal\Tests\layout_builder\Kernel;
++
++use Drupal\Core\Routing\CurrentRouteMatch;
++use Drupal\block_content\Entity\BlockContent;
++use Drupal\block_content\Entity\BlockContentType;
++use Drupal\entity_test\Entity\EntityTestMulRevPub;
++use Drupal\KernelTests\KernelTestBase;
++use Drupal\layout_builder\Entity\LayoutBuilderEntityViewDisplay;
++use Drupal\layout_builder\Plugin\SectionStorage\OverridesSectionStorage;
++use Drupal\layout_builder\Section;
++use Drupal\layout_builder\SectionComponent;
++use Drupal\Tests\content_moderation\Traits\ContentModerationTestTrait;
++use Drupal\Tests\user\Traits\UserCreationTrait;
++
++/**
++ * @coversDefaultClass \Drupal\layout_builder\EventSubscriber\SetInlineBlockDependency
++ * @group layout_builder
++ */
++class SetInlineBlockDependencyTest extends KernelTestBase {
++
++  use UserCreationTrait;
++  use ContentModerationTestTrait;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'layout_builder',
++    'layout_discovery',
++    'workflows',
++    'content_moderation',
++    'entity_test',
++    'field',
++    'block_content',
++    'system',
++    'user',
++  ];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    $this->setUpCurrentUser();
++    $this->installSchema('layout_builder', ['inline_block_usage']);
++
++    $this->installEntitySchema('entity_test_mulrevpub');
++    $this->installEntitySchema('block_content');
++    $this->installEntitySchema('content_moderation_state');
++
++    BlockContentType::create([
++      'id' => 'basic',
++      'label' => 'Basic block',
++      'revision' => 1,
++    ])->save();
++
++    $display = LayoutBuilderEntityViewDisplay::create([
++      'targetEntityType' => 'entity_test_mulrevpub',
++      'bundle' => 'entity_test_mulrevpub',
++      'mode' => 'default',
++      'status' => TRUE,
++    ]);
++    $display->enableLayoutBuilder();
++    $display->setOverridable();
++    $display->save();
++
++    $workflow = $this->createEditorialWorkflow();
++    $workflow->getTypePlugin()->addEntityTypeAndBundle('entity_test_mulrevpub', 'entity_test_mulrevpub');
++    $workflow->save();
++  }
++
++  /**
++   * Test inline block dependencies with no route object.
++   */
++  public function testInlineBlockDependencyWithNoRouteObject() {
++    // Create a mock route match service to return a NULL route object.
++    $current_route_match = $this->prophesize(CurrentRouteMatch::class);
++    $current_route_match->getRouteObject()->willReturn(NULL);
++
++    $container = \Drupal::getContainer();
++    $container->set('current_route_match', $current_route_match->reveal());
++    \Drupal::setContainer($container);
++
++    // Create a test entity, block, & account for running access checks.
++    $entity = EntityTestMulRevPub::create();
++    $entity->save();
++    $block = $this->addInlineBlockToOverrideLayout($entity);
++    $account = $this->createUser([
++      'create and edit custom blocks',
++      'view test entity',
++      'use editorial transition create_new_draft',
++      'use editorial transition publish',
++    ]);
++
++    // The access check that is ran here doesn't really matter; we're just
++    // looking to confirm that no adverse effects result from a NULL route
++    // object when checking block access.
++    //
++    // When confirming this, we want to ensure that the NULL route object is
++    // retrieved and a failure doesn't occur as a result of running the check.
++    $current_route_match->getRouteObject()->shouldNotHaveBeenCalled();
++    $block->access('view', $account);
++    $current_route_match->getRouteObject()->shouldHaveBeenCalled();
++  }
++
++  /**
++   * Test inline block dependencies with a default revision entity host.
++   */
++  public function testInlineBlockDependencyDefaultRevision() {
++    $entity = EntityTestMulRevPub::create();
++    $entity->save();
++    $block = $this->addInlineBlockToOverrideLayout($entity);
++    $account = $this->createUser([
++      'create and edit custom blocks',
++      'view test entity',
++      'use editorial transition create_new_draft',
++      'use editorial transition publish',
++    ]);
++    $this->assertTrue($block->access('view', $account));
++    $this->assertTrue($block->access('update', $account));
++    $this->assertTrue($block->access('delete', $account));
++  }
++
++  /**
++   * Test inline block dependencies with a non-default revision entity host.
++   */
++  public function testInlineBlockDependencyNonDefaultActiveRevision() {
++    // Create the canonical revision.
++    $entity = EntityTestMulRevPub::create(['moderation_state' => 'published']);
++    $entity->save();
++
++    // Create and add a custom block to a new active revision.
++    $entity->moderation_state = 'draft';
++    $block = $this->addInlineBlockToOverrideLayout($entity);
++
++    $account = $this->createUser([
++      'create and edit custom blocks',
++      'view test entity',
++      'use editorial transition create_new_draft',
++      'use editorial transition publish',
++    ]);
++    // The block does not exist on the canonical revision, so access will not be
++    // granted since the custom block will not have a resolved dependency via
++    // the canonical revision. Some components may choose to manually set a
++    // different revision as the block dependent when displaying a non-canonical
++    // revision of the entity, such as the content moderation latest-version
++    // route. @see
++    // \Drupal\layout_builder\EventSubscriber\BlockComponentRenderArray::onBuildRender.
++    $this->assertFalse($block->access('view', $account));
++    // Access to update the block is resolved and granted via the 'active'
++    // revision of the entity. Update access on the content block itself must be
++    // granted so that access checks outside of the layout builder routes are
++    // correctly granted.
++    $this->assertTrue($block->access('update', $account));
++    $this->assertTrue($block->access('delete', $account));
++  }
++
++  /**
++   * Test the inline block dependency when removed from the active revision.
++   */
++  public function testInlineBlockDependencyRemovedInActiveRevision() {
++    // Create the canonical revision with an inline block.
++    $entity = EntityTestMulRevPub::create(['moderation_state' => 'published']);
++    $entity->save();
++    $block = $this->addInlineBlockToOverrideLayout($entity);
++
++    // Create an active revision that removes the inline block.
++    $entity->{OverridesSectionStorage::FIELD_NAME} = [];
++    $entity->moderation_state = 'draft';
++    $entity->save();
++
++    $account = $this->createUser([
++      'create and edit custom blocks',
++      'view test entity',
++      'use editorial transition create_new_draft',
++      'use editorial transition publish',
++    ]);
++    // Access to update the block will be resolved through the active revision
++    // and denied, since the block has been removed from the layout.
++    $this->assertFalse($block->access('update', $account));
++    $this->assertFalse($block->access('delete', $account));
++    // Access to view the block will be resolved through the canonical revision
++    // and granted, since the block still exists on the canonical revision.
++    $this->assertTrue($block->access('view', $account));
++  }
++
++  /**
++   * Add an inline block to an override layout of an entity.
++   *
++   * @param \Drupal\entity_test\Entity\EntityTestMulRevPub $entity
++   *   The entity to add an inline block to.
++   *
++   * @return \Drupal\block_content\Entity\BlockContent
++   *   The loaded block content revision attached to the layout.
++   */
++  protected function addInlineBlockToOverrideLayout(EntityTestMulRevPub $entity) {
++    $block = BlockContent::create([
++      'type' => 'basic',
++      'reusable' => FALSE,
++    ]);
++    $section_data = new Section('layout_onecol', [], [
++      'first-uuid' => new SectionComponent('first-uuid', 'content', [
++        'id' => sprintf('inline_block:basic'),
++        'block_serialized' => serialize($block),
++      ]),
++    ]);
++    $entity->{OverridesSectionStorage::FIELD_NAME} = $section_data;
++    $entity->save();
++    $inline_block_revision_id = $entity->{OverridesSectionStorage::FIELD_NAME}->getSections()[0]->getComponent('first-uuid')->getPlugin()->getConfiguration()['block_revision_id'];
++    return $this->container->get('entity_type.manager')->getStorage('block_content')->loadRevision($inline_block_revision_id);
++  }
++
++}
+-- 
+GitLab
+
+
+From ea865e1cf600c79c19d3f53d2254b91ec184396e Mon Sep 17 00:00:00 2001
+From: Clay Freeman <git@clayfreeman.com>
+Date: Thu, 4 Nov 2021 13:54:38 -0500
+Subject: [PATCH 02/11] switch to RouteMatchInterface for constructor argument
+
+---
+ .../src/EventSubscriber/SetInlineBlockDependency.php      | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+index b8fcdd920491..0c2dee2f56a2 100644
+--- a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
++++ b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+@@ -9,7 +9,7 @@
+ use Drupal\Core\Database\Connection;
+ use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Entity\EntityRepositoryInterface;
+-use Drupal\Core\Routing\CurrentRouteMatch;
++use Drupal\Core\Routing\RouteMatchInterface;
+ use Drupal\layout_builder\Access\LayoutPreviewAccessAllowed;
+ use Drupal\layout_builder\InlineBlockUsageInterface;
+ use Drupal\layout_builder\LayoutEntityHelperTrait;
+@@ -64,7 +64,7 @@ class SetInlineBlockDependency implements EventSubscriberInterface {
+   /**
+    * The current route match service.
+    *
+-   * @var \Drupal\Core\Routing\CurrentRouteMatch
++   * @var \Drupal\Core\Routing\RouteMatchInterface
+    */
+   protected $currentRouteMatch;
+ 
+@@ -79,8 +79,10 @@ class SetInlineBlockDependency implements EventSubscriberInterface {
+    *   The inline block usage service.
+    * @param \Drupal\layout_builder\SectionStorage\SectionStorageManagerInterface $section_storage_manager
+    *   The section storage manager.
++   * @param \Drupal\Core\Routing\RouteMatchInterface $current_route_match
++   *   The current route match service.
+    */
+-  public function __construct(EntityRepositoryInterface $entity_repository, Connection $database, InlineBlockUsageInterface $usage, SectionStorageManagerInterface $section_storage_manager, CurrentRouteMatch $current_route_match) {
++  public function __construct(EntityRepositoryInterface $entity_repository, Connection $database, InlineBlockUsageInterface $usage, SectionStorageManagerInterface $section_storage_manager, RouteMatchInterface $current_route_match) {
+     $this->entityRepository = $entity_repository;
+     $this->database = $database;
+     $this->usage = $usage;
+-- 
+GitLab
+
+
+From ab94edeadbbd411ab7f5f38768d9ebb881a083eb Mon Sep 17 00:00:00 2001
+From: Clay Freeman <git@clayfreeman.com>
+Date: Wed, 22 Dec 2021 11:26:15 -0600
+Subject: [PATCH 03/11] add type hint to operation parameter
+
+---
+ .../src/Event/BlockContentGetDependencyEvent.php            | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/core/modules/block_content/src/Event/BlockContentGetDependencyEvent.php b/core/modules/block_content/src/Event/BlockContentGetDependencyEvent.php
+index a87761fa88ad..acb5f4534ba6 100644
+--- a/core/modules/block_content/src/Event/BlockContentGetDependencyEvent.php
++++ b/core/modules/block_content/src/Event/BlockContentGetDependencyEvent.php
+@@ -28,7 +28,7 @@ class BlockContentGetDependencyEvent extends Event {
+   protected $accessDependency;
+ 
+   /**
+-   * The access operation to load the block content dependency for.
++   * The access operation for which to load the block content dependency.
+    *
+    * @var string
+    */
+@@ -40,9 +40,9 @@ class BlockContentGetDependencyEvent extends Event {
+    * @param \Drupal\block_content\BlockContentInterface $blockContent
+    *   The block content entity.
+    * @param string $operation
+-   *   The access operation to load the block content dependency for.
++   *   The access operation for which to load the block content dependency.
+    */
+-  public function __construct(BlockContentInterface $blockContent, $operation) {
++  public function __construct(BlockContentInterface $blockContent, string $operation) {
+     $this->blockContent = $blockContent;
+     $this->operation = $operation;
+   }
+-- 
+GitLab
+
+
+From c6e22479b6be9c653a66fba3f6e4b0ca07454490 Mon Sep 17 00:00:00 2001
+From: Clay Freeman <git@clayfreeman.com>
+Date: Wed, 22 Dec 2021 12:23:46 -0600
+Subject: [PATCH 04/11] add type hint to operation parameter
+
+---
+ .../src/EventSubscriber/SetInlineBlockDependency.php            | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+index 0c2dee2f56a2..441dbc34bc79 100644
+--- a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
++++ b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+@@ -149,7 +149,7 @@ public function onGetDependency(BlockContentGetDependencyEvent $event) {
+    * @see \Drupal\block_content\BlockContentAccessControlHandler::checkAccess()
+    * @see \Drupal\layout_builder\EventSubscriber\BlockComponentRenderArray::onBuildRender()
+    */
+-  protected function getInlineBlockDependency(BlockContentInterface $block_content, $operation) {
++  protected function getInlineBlockDependency(BlockContentInterface $block_content, string $operation) {
+     $active_operations = ['update', 'delete'];
+     $current_route = $this->currentRouteMatch->getRouteObject();
+     if ('view' == $operation && ($current_route && $current_route->getOption('_layout_builder'))) {
+-- 
+GitLab
+
+
+From c61c005ff5f5593a98c74a26c2ade1b47678c2ea Mon Sep 17 00:00:00 2001
+From: Clay Freeman <git@clayfreeman.com>
+Date: Wed, 22 Dec 2021 12:28:24 -0600
+Subject: [PATCH 05/11] simplify logic introduced in #43
+
+---
+ .../EventSubscriber/SetInlineBlockDependency.php  | 15 ++-------------
+ 1 file changed, 2 insertions(+), 13 deletions(-)
+
+diff --git a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+index 441dbc34bc79..f391bae903e2 100644
+--- a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
++++ b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+@@ -106,17 +106,6 @@ public static function getSubscribedEvents(): array {
+    *   The event.
+    */
+   public function onGetDependency(BlockContentGetDependencyEvent $event) {
+-    // Ajax form submission will trigger here, it's ajax route, such as UpdateBlockForm.
+-    // If the action from ajax, the section component should in preview mode,
+-    // the view operation should LayoutPreviewAccessAllowed.
+-    // @see \Drupal\layout_builder\Form\ConfigureBlockFormBase::successfulAjaxSubmit().
+-    // @see \Drupal\layout_builder\EventSubscriber\BlockComponentRenderArray::onBuildRender().
+-    if ($this->isAjax() && $event->getOperation() === 'view' && ($section_storage = $this->currentRouteMatch->getParameter('section_storage'))) {
+-      // Determines if a block content revision is used in section storage.
+-      if (in_array($event->getBlockContentEntity()->getRevisionId(), $this->getInlineBlockRevisionIdsInSections($section_storage->getSections()))) {
+-        $event->setAccessDependency(new LayoutPreviewAccessAllowed());
+-      }
+-    }
+     if ($dependency = $this->getInlineBlockDependency($event->getBlockContentEntity(), $event->getOperation())) {
+       $event->setAccessDependency($dependency);
+     }
+@@ -172,9 +161,9 @@ protected function getInlineBlockDependency(BlockContentInterface $block_content
+     }
+     if ($this->isLayoutCompatibleEntity($layout_entity)) {
+       if ($this->isBlockRevisionUsedInEntity($layout_entity, $block_content)) {
+-        return $layout_entity;
++        // Allow components to be viewed when rendered via AJAX (preview mode).
++        return 'view' === $operation && $this->isAjax() ? new LayoutPreviewAccessAllowed() : $layout_entity;
+       }
+-
+     }
+     return NULL;
+   }
+-- 
+GitLab
+
+
+From ac173ea10cd85127b5428c673193b74d157e21dc Mon Sep 17 00:00:00 2001
+From: Sakthi Shanmuga Sundaram M
+ <62943-sakthi_dev@users.noreply.drupalcode.org>
+Date: Tue, 4 Jul 2023 05:15:10 +0000
+Subject: [PATCH 06/11] Issue#3047022: Resolve test fails.
+
+---
+ .../tests/src/Kernel/SetInlineBlockDependencyTest.php           | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/modules/layout_builder/tests/src/Kernel/SetInlineBlockDependencyTest.php b/core/modules/layout_builder/tests/src/Kernel/SetInlineBlockDependencyTest.php
+index 2388ade19b84..022958fcd69f 100644
+--- a/core/modules/layout_builder/tests/src/Kernel/SetInlineBlockDependencyTest.php
++++ b/core/modules/layout_builder/tests/src/Kernel/SetInlineBlockDependencyTest.php
+@@ -119,7 +119,7 @@ public function testInlineBlockDependencyDefaultRevision() {
+       'use editorial transition create_new_draft',
+       'use editorial transition publish',
+     ]);
+-    $this->assertTrue($block->access('view', $account));
++    $this->assertFalse($block->access('view', $account));
+     $this->assertTrue($block->access('update', $account));
+     $this->assertTrue($block->access('delete', $account));
+   }
+-- 
+GitLab
+
+
+From dedcd35d23db6bef7f1a1f15e9549e28ab376548 Mon Sep 17 00:00:00 2001
+From: Pieter Frenssen <pieter@frenssen.be>
+Date: Thu, 2 Nov 2023 22:12:18 +0200
+Subject: [PATCH 07/11] Address remarks.
+
+---
+ .../Event/BlockContentGetDependencyEvent.php  | 29 +++------
+ .../SetInlineBlockDependency.php              | 63 ++++++++++---------
+ 2 files changed, 40 insertions(+), 52 deletions(-)
+
+diff --git a/core/modules/block_content/src/Event/BlockContentGetDependencyEvent.php b/core/modules/block_content/src/Event/BlockContentGetDependencyEvent.php
+index acb5f4534ba6..21adba392c7b 100644
+--- a/core/modules/block_content/src/Event/BlockContentGetDependencyEvent.php
++++ b/core/modules/block_content/src/Event/BlockContentGetDependencyEvent.php
+@@ -13,13 +13,6 @@
+  */
+ class BlockContentGetDependencyEvent extends Event {
+ 
+-  /**
+-   * The block content entity.
+-   *
+-   * @var \Drupal\block_content\BlockContentInterface
+-   */
+-  protected $blockContent;
+-
+   /**
+    * The dependency.
+    *
+@@ -28,24 +21,18 @@ class BlockContentGetDependencyEvent extends Event {
+   protected $accessDependency;
+ 
+   /**
+-   * The access operation for which to load the block content dependency.
+-   *
+-   * @var string
+-   */
+-  protected $operation;
+-
+-  /**
+-   * BlockContentGetDependencyEvent constructor.
++   * Constructs a new BlockContentGetDependencyEvent object.
+    *
+    * @param \Drupal\block_content\BlockContentInterface $blockContent
+    *   The block content entity.
+    * @param string $operation
+    *   The access operation for which to load the block content dependency.
++   *   Defaults to 'view'.
+    */
+-  public function __construct(BlockContentInterface $blockContent, string $operation) {
+-    $this->blockContent = $blockContent;
+-    $this->operation = $operation;
+-  }
++  public function __construct(
++    protected BlockContentInterface $blockContent,
++    protected readonly string $operation = 'view',
++  ) {}
+ 
+   /**
+    * Gets the block content entity.
+@@ -58,12 +45,12 @@ public function getBlockContentEntity() {
+   }
+ 
+   /**
+-   * Get the access operation for this dependency event.
++   * Gets the access operation for this dependency event.
+    *
+    * @return string
+    *   The access operation.
+    */
+-  public function getOperation() {
++  public function getOperation(): string {
+     return $this->operation;
+   }
+ 
+diff --git a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+index f391bae903e2..74aa98db1a37 100644
+--- a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
++++ b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+@@ -5,6 +5,7 @@
+ use Drupal\block_content\BlockContentEvents;
+ use Drupal\block_content\BlockContentInterface;
+ use Drupal\block_content\Event\BlockContentGetDependencyEvent;
++use Drupal\Core\Access\AccessibleInterface;
+ use Drupal\Core\Ajax\AjaxHelperTrait;
+ use Drupal\Core\Database\Connection;
+ use Drupal\Core\Entity\EntityInterface;
+@@ -45,49 +46,49 @@ class SetInlineBlockDependency implements EventSubscriberInterface {
+    *
+    * @var \Drupal\Core\Entity\EntityRepositoryInterface
+    */
+-  protected $entityRepository;
+-
+-  /**
+-   * The database connection.
+-   *
+-   * @var \Drupal\Core\Database\Connection
+-   */
+-  protected $database;
+-
+-  /**
+-   * The inline block usage service.
+-   *
+-   * @var \Drupal\layout_builder\InlineBlockUsageInterface
+-   */
+-  protected $usage;
++  protected EntityRepositoryInterface $entityRepository;
+ 
+   /**
+    * The current route match service.
+    *
+    * @var \Drupal\Core\Routing\RouteMatchInterface
+    */
+-  protected $currentRouteMatch;
++  protected RouteMatchInterface $currentRouteMatch;
+ 
+   /**
+-   * Constructs SetInlineBlockDependency object.
++   * Constructs a new SetInlineBlockDependency object.
+    *
+-   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+-   *   The entity type manager.
++   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
++   *   The entity repository
+    * @param \Drupal\Core\Database\Connection $database
+    *   The database connection.
+    * @param \Drupal\layout_builder\InlineBlockUsageInterface $usage
+    *   The inline block usage service.
+-   * @param \Drupal\layout_builder\SectionStorage\SectionStorageManagerInterface $section_storage_manager
++   * @param \Drupal\layout_builder\SectionStorage\SectionStorageManagerInterface $sectionStorageManager
+    *   The section storage manager.
+-   * @param \Drupal\Core\Routing\RouteMatchInterface $current_route_match
++   * @param \Drupal\Core\Routing\RouteMatchInterface|null $currentRouteMatch
+    *   The current route match service.
+    */
+-  public function __construct(EntityRepositoryInterface $entity_repository, Connection $database, InlineBlockUsageInterface $usage, SectionStorageManagerInterface $section_storage_manager, RouteMatchInterface $current_route_match) {
+-    $this->entityRepository = $entity_repository;
+-    $this->database = $database;
+-    $this->usage = $usage;
+-    $this->sectionStorageManager = $section_storage_manager;
+-    $this->currentRouteMatch = $current_route_match;
++  public function __construct(
++    mixed $entityRepository,
++    protected readonly Connection $database,
++    protected readonly InlineBlockUsageInterface $usage,
++    SectionStorageManagerInterface $sectionStorageManager,
++    ?RouteMatchInterface $currentRouteMatch,
++  ) {
++    if (!$entityRepository instanceof EntityRepositoryInterface) {
++      // @todo Replace link with a link to the change record.
++      @trigger_error('Calling ' . __METHOD__ . ' without passing the entity repository as the first argument is deprecated in drupal:11.0.0 and will be required in drupal:12.0.0. See https://www.drupal.org/node/3047022', E_USER_DEPRECATED);
++      $entityRepository = \Drupal::service('entity.repository');
++    }
++    $this->entityRepository = $entityRepository;
++    $this->sectionStorageManager = $sectionStorageManager;
++    if (empty($currentRouteMatch)) {
++      // @todo Replace link with a link to the change record.
++      @trigger_error('Calling ' . __METHOD__ . ' without the $currentRouteMatch argument is deprecated in drupal:11.0.0 and will be required in drupal:12.0.0. See https://www.drupal.org/node/3047022', E_USER_DEPRECATED);
++      $currentRouteMatch = \Drupal::service('current_route_match');
++    }
++    $this->currentRouteMatch = $currentRouteMatch;
+   }
+ 
+   /**
+@@ -132,16 +133,16 @@ public function onGetDependency(BlockContentGetDependencyEvent $event) {
+    * @param string $operation
+    *   The access operation to load the inline block dependency for.
+    *
+-   * @return \Drupal\Core\Entity\EntityInterface|null
+-   *   Returns the layout dependency.
++   * @return \Drupal\Core\Access\AccessibleInterface|null
++   *   Returns the access dependency.
+    *
+    * @see \Drupal\block_content\BlockContentAccessControlHandler::checkAccess()
+    * @see \Drupal\layout_builder\EventSubscriber\BlockComponentRenderArray::onBuildRender()
+    */
+-  protected function getInlineBlockDependency(BlockContentInterface $block_content, string $operation) {
++  protected function getInlineBlockDependency(BlockContentInterface $block_content, string $operation): ?AccessibleInterface {
+     $active_operations = ['update', 'delete'];
+     $current_route = $this->currentRouteMatch->getRouteObject();
+-    if ('view' == $operation && ($current_route && $current_route->getOption('_layout_builder'))) {
++    if ('view' === $operation && ($current_route && $current_route->getOption('_layout_builder'))) {
+       $active_operations[] = 'view';
+     }
+     $layout_entity_info = $this->usage->getUsage($block_content->id());
+-- 
+GitLab
+
+
+From a1afe57e4f2b4277e0dc298f02e45ad3541253a9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tadej=20Ba=C5=A1a?= <tadej.basa@gmail.com>
+Date: Thu, 4 Apr 2024 10:27:33 +0200
+Subject: [PATCH 08/11] Issue #3047022:  use constructor property promotion.
+
+---
+ .../EventSubscriber/SetInlineBlockDependency.php    | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
+
+diff --git a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+index 74aa98db1a37..05b43968b8dc 100644
+--- a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
++++ b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+@@ -48,13 +48,6 @@ class SetInlineBlockDependency implements EventSubscriberInterface {
+    */
+   protected EntityRepositoryInterface $entityRepository;
+ 
+-  /**
+-   * The current route match service.
+-   *
+-   * @var \Drupal\Core\Routing\RouteMatchInterface
+-   */
+-  protected RouteMatchInterface $currentRouteMatch;
+-
+   /**
+    * Constructs a new SetInlineBlockDependency object.
+    *
+@@ -73,8 +66,8 @@ public function __construct(
+     mixed $entityRepository,
+     protected readonly Connection $database,
+     protected readonly InlineBlockUsageInterface $usage,
+-    SectionStorageManagerInterface $sectionStorageManager,
+-    ?RouteMatchInterface $currentRouteMatch,
++    protected readonly SectionStorageManagerInterface $sectionStorageManager,
++    protected readonly ?RouteMatchInterface $currentRouteMatch,
+   ) {
+     if (!$entityRepository instanceof EntityRepositoryInterface) {
+       // @todo Replace link with a link to the change record.
+@@ -82,13 +75,11 @@ public function __construct(
+       $entityRepository = \Drupal::service('entity.repository');
+     }
+     $this->entityRepository = $entityRepository;
+-    $this->sectionStorageManager = $sectionStorageManager;
+     if (empty($currentRouteMatch)) {
+       // @todo Replace link with a link to the change record.
+       @trigger_error('Calling ' . __METHOD__ . ' without the $currentRouteMatch argument is deprecated in drupal:11.0.0 and will be required in drupal:12.0.0. See https://www.drupal.org/node/3047022', E_USER_DEPRECATED);
+       $currentRouteMatch = \Drupal::service('current_route_match');
+     }
+-    $this->currentRouteMatch = $currentRouteMatch;
+   }
+ 
+   /**
+-- 
+GitLab
+
+
+From 4fc2c9a3cd508f60402120c47c5725557522364d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tadej=20Ba=C5=A1a?= <tadej.basa@gmail.com>
+Date: Thu, 4 Apr 2024 10:38:30 +0200
+Subject: [PATCH 09/11] Issue #3047022: Attempt to solve issue raised in #98
+ and #101 - Non-reusable blocks must set an access dependency for access
+ control.
+
+---
+ .../src/EventSubscriber/SetInlineBlockDependency.php  | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+index 05b43968b8dc..873e9ab03e67 100644
+--- a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
++++ b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+@@ -138,6 +138,17 @@ protected function getInlineBlockDependency(BlockContentInterface $block_content
+     }
+     $layout_entity_info = $this->usage->getUsage($block_content->id());
+     if (empty($layout_entity_info) || empty($layout_entity_info->layout_entity_type) || empty($layout_entity_info->layout_entity_id)) {
++      // If this is a newly added block it does not have usage information yet.
++      // Attempt to fetch layout_entity from section storage.
++      if ($block_content->isNew()) {
++        $section_storage = $this->currentRouteMatch->getParameter('section_storage');
++        if ($section_storage) {
++          $layout_entity = $section_storage->getContextValue('entity');
++          if ($this->isLayoutCompatibleEntity($layout_entity)) {
++            return $layout_entity;
++          }
++        }
++      }
+       // If the block does not have usage information then we cannot set a
+       // dependency. It may be used by another module besides layout builder.
+       return NULL;
+-- 
+GitLab
+
+
+From ca3d6c73895bede9fcffbf8faaf85a46a66b015a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tadej=20Ba=C5=A1a?= <tadej.basa@gmail.com>
+Date: Thu, 4 Apr 2024 11:25:50 +0200
+Subject: [PATCH 10/11] Issue #3047022: revert constructor property promotion.
+
+---
+ .../src/EventSubscriber/SetInlineBlockDependency.php           | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+index 873e9ab03e67..aae797c4d274 100644
+--- a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
++++ b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+@@ -66,7 +66,7 @@ public function __construct(
+     mixed $entityRepository,
+     protected readonly Connection $database,
+     protected readonly InlineBlockUsageInterface $usage,
+-    protected readonly SectionStorageManagerInterface $sectionStorageManager,
++    SectionStorageManagerInterface $sectionStorageManager,
+     protected readonly ?RouteMatchInterface $currentRouteMatch,
+   ) {
+     if (!$entityRepository instanceof EntityRepositoryInterface) {
+@@ -75,6 +75,7 @@ public function __construct(
+       $entityRepository = \Drupal::service('entity.repository');
+     }
+     $this->entityRepository = $entityRepository;
++    $this->sectionStorageManager = $sectionStorageManager;
+     if (empty($currentRouteMatch)) {
+       // @todo Replace link with a link to the change record.
+       @trigger_error('Calling ' . __METHOD__ . ' without the $currentRouteMatch argument is deprecated in drupal:11.0.0 and will be required in drupal:12.0.0. See https://www.drupal.org/node/3047022', E_USER_DEPRECATED);
+-- 
+GitLab
+
+
+From 98810fd4d08697219eb671c5058bff5db772a610 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tadej=20Ba=C5=A1a?= <tadej.basa@gmail.com>
+Date: Wed, 29 May 2024 10:11:52 +0200
+Subject: [PATCH 11/11] Issue #3047022: handle case when editing a block in a
+ layout template.
+
+---
+ .../src/EventSubscriber/SetInlineBlockDependency.php        | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+index aae797c4d274..b891491e6f90 100644
+--- a/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
++++ b/core/modules/layout_builder/src/EventSubscriber/SetInlineBlockDependency.php
+@@ -145,9 +145,13 @@ protected function getInlineBlockDependency(BlockContentInterface $block_content
+         $section_storage = $this->currentRouteMatch->getParameter('section_storage');
+         if ($section_storage) {
+           $layout_entity = $section_storage->getContextValue('entity');
+-          if ($this->isLayoutCompatibleEntity($layout_entity)) {
++          if ($layout_entity && $this->isLayoutCompatibleEntity($layout_entity)) {
+             return $layout_entity;
+           }
++          else if ($layout = $section_storage->getContextValue('layout')) {
++            // We're editing a block in a layout template.
++            return $layout;
++          }
+         }
+       }
+       // If the block does not have usage information then we cannot set a
+-- 
+GitLab
+

@@ -1,0 +1,5 @@
+name: ASU AEC RFI custom post
+type: module
+description: 'Custom post to middleware<br />Includes: <br />Webform Handler for Merit Review RFI posting at Admission site<br />Webform Handler for HS Visit form RFI posting at Visit site'
+package: ASU
+core_version_requirement: ^8 || ^9 || ^10 || ^11

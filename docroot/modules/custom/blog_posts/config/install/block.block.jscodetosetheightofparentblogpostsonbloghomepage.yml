@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:a6875212-0555-4ccb-9af5-3a5477659fc4'
+  module:
+    - block_content
+    - system
+  theme:
+    - renovation
+id: jscodetosetheightofparentblogpostsonbloghomepage
+theme: renovation
+region: footer
+weight: -3
+provider: null
+plugin: 'block_content:a6875212-0555-4ccb-9af5-3a5477659fc4'
+settings:
+  id: 'block_content:a6875212-0555-4ccb-9af5-3a5477659fc4'
+  label: 'JS code to set height of parent blog posts on blog home page'
+  provider: block_content
+  label_display: '0'
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    pages: "/parent-blog\r\n/parent-blog/financial"
+    negate: false

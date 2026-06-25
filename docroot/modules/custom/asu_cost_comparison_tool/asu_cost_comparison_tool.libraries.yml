@@ -1,0 +1,29 @@
+react_cost_tool:
+  version: 1.x
+  js:
+    #js/react/dist/app.bundle.js: {  minified: true, external: true, preprocess: false }
+    #js/react/dist/runtime.bundle.js:
+    #  preprocess: false
+    js/react/dist/main.bundle.js:
+      preprocess: false
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery
+  css:
+    theme:
+      css/react_app_styles.css: { weight: 9999 }
+
+loan_proration_tool:
+  version: 1.x
+  js:
+    js/react/dist/loans/bundle.js:
+      minified: true
+      preprocess: false
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery
+  # css:
+  #   theme:
+  #     js/react/css/loan_proration_form_style.css: { weight: 9999 }

@@ -1,0 +1,5 @@
+# ignore Node modules
+/node_modules/
+
+# ignore phpstorm .idea files
+/.idea/

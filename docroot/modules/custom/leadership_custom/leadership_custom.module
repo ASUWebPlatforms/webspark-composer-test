@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ */
+
+function leadership_custom_theme() {
+  
+return array(
+    'leaderboard_block' => array(
+      'variables' => [],
+    ),
+    'resource_filter_block' => array(
+      'variables' => [],
+    ),
+  );
+}
+
+function leadership_custom_preprocess_block(&$variables){
+  global $base_url;
+  $variables['base_url'] = $base_url;
+}
+
+/**
+ * @} End.
+ */

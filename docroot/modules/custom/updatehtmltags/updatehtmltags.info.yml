@@ -1,0 +1,7 @@
+name: Update HTML Table Tag
+type: module
+description: 'update html tags in the body field'
+package: custom
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+version: VERSION

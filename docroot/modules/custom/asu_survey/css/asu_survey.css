@@ -1,0 +1,19 @@
+.right-float{
+	float: right !important;
+}
+
+.left-float{
+	float: left !important;
+}
+
+.survey_result_next_page_button{
+	font-weight: bold;
+	cursor: pointer !important;
+	font-size: 18px;
+}
+
+#please_wait{
+	width: 30%;
+    margin-right: auto;
+    margin-left: auto;
+}

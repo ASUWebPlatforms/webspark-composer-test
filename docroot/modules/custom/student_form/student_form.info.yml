@@ -1,0 +1,7 @@
+name: 'Custom Student Form Module'
+type: module
+description: 'Provides a custom form with name and acknowledgment fields.'
+core_version_requirement: ^10
+package: Custom
+dependencies:
+  - drupal:system

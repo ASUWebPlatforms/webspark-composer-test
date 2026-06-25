@@ -1,0 +1,5 @@
+asu_masterform_posting.fields_admin_settings:
+  title: 'Master form posting'
+  route_name: asu_masterform_posting.fields_admin_settings
+  base_route: entity.webform.canonical
+  weight: 30

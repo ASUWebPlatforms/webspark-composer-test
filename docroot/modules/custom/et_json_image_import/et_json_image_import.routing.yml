@@ -1,0 +1,7 @@
+et_json_image_import.settings:
+  path: '/admin/config/system/settings/et_json_image_import'
+  defaults:
+    _title: 'Settings'
+    _form: 'Drupal\et_json_image_import\Form\SettingsForm'
+  requirements:
+    _permission: 'administer site configuration'

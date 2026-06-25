@@ -1,0 +1,11 @@
+global-styling:
+  css:
+    theme:
+      css/style.css: {}
+
+unibuddy-embed:
+  version: 1.0.0
+  js:
+    https://cdn.unibuddy.co/unibuddy-iframe.js: { type: external, attributes: { async: true } }
+  dependencies:
+    - core/drupal

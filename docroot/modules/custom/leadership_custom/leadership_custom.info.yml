@@ -1,0 +1,10 @@
+name: Leadership Custom Features
+type: module
+description: Enables custom website features and styles
+package: 'Custom Modules'
+core_version_requirement: ^9 || ^10
+version: '2.5.0'
+configure: leadership_custom.configuration_form
+dependencies:
+  - drupal:block
+  - twig_tweak:twig_tweak

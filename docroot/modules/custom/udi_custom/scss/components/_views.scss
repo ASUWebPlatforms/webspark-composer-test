@@ -1,0 +1,75 @@
+
+/*------------------------------------------------------------------
+Basic Card Utilities
+--------------------------------------------------------------------*/
+
+.form-item {
+  margin-right: 1.25rem;
+}
+
+form {
+  &.views-exposed-form {
+    display: flex;
+    .form-group {
+      margin: 0 2rem 2rem 0;
+      .custom-select {
+        border-radius: 0;
+      }
+    }
+    .form-actions {
+      margin: 1.5rem 0 2rem 0;
+      .btn-primary {
+        color: #212529;
+        background-color: #ffc627;
+        border-color: #ffc627;
+      }
+    }
+  }
+}
+
+/*------------------------------------------------------------------
+ Experts/Fellows
+--------------------------------------------------------------------*/
+
+.experts-section {
+  .experts {
+    &--teaser {
+      margin-bottom: 1rem;
+    }
+  }
+}
+.uds-person-profile {
+  .person {
+    margin-left: -1rem;
+    padding-right: 1rem;
+  }
+}
+
+
+/*------------------------------------------------------------------
+Resources Exposed Forms
+--------------------------------------------------------------------*/
+
+.design-resources-block-filtered {
+  .views-exposed-form {
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 1rem;
+    .js-form-item {
+      &:first-child {
+        width: 100%;
+        input {
+          width: 50%;
+        }
+      }
+    }
+    .js-form-item {
+      &:not(:first-child) {
+        flex: 1;
+      }
+    }
+    .form-actions {
+      width: 100%;
+    }
+  }
+}

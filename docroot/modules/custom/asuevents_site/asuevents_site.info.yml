@@ -1,0 +1,7 @@
+name: 'ASU Events Site'
+type: module
+description: 'Custom code for the D9 ASU Events site.'
+package: 'ASU Events Site'
+core_version_requirement: ^9 || ^10
+dependencies:
+  - drupal:views

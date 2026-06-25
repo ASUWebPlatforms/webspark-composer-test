@@ -1,0 +1,44 @@
+{#
+@file
+The template for the user profile sidebar.
+
+Available variables:
+- user: The user object for the current User.
+#}
+
+{% set user = current_user() %}
+{% set userName = user.field_name.value|default(user.name.value) %}
+
+<style>
+  .analytics-menu-block--nav-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 100%;
+    background-color: #FFC627;
+    opacity: 0;
+  }
+
+  .analytics-menu-block--nav-item:hover::before,
+  .analytics-menu-block--nav-item.active::before {
+    opacity: 1;
+  }
+
+  .analytics-menu-block--nav-item.active {
+    background-color: #fafafa;
+  }
+</style>
+
+<div class="tw-space-y-4">
+  {# User block #}
+  {# Removing for now, doesnt really make sense #}
+  {# <div class="tw-border tw-border-[#d0d0d0] tw-border-solid tw-bg-white tw-p-6 tw-flex tw-flex-col tw-justify-center">
+    <p class="h3 tw-my-0 tw-text-center">{{ userName }}</p>
+  </div> #}
+
+  {{ drupal_menu('my-dashboard') }}
+  {{ drupal_menu('access-permissions') }}
+  {{ drupal_menu('resource-management') }}
+</div>

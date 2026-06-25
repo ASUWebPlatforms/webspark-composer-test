@@ -1,0 +1,97 @@
+# Custom module library for general purposes.
+asu_edu_components:
+  css:
+    component:
+      css/asu-edu-components.css: {}
+  js:
+    js/asu-edu-components.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+
+
+glide.glidejs:
+  remote: https://github.com/glidejs/glide
+  version: 3.4.1
+  license:
+    name: MIT
+    url: https://github.com/glidejs/glide/blob/master/LICENSE
+    gpl-compatible: true
+  js:
+    https://unpkg.com/@glidejs/glide@3.4.1/dist/glide.min.js: { type: external, minified: true }
+
+chartjs.chartjs:
+  remote: https://github.com/chartjs/Chart.js
+  version: 3.2.0
+  license:
+    name: MIT
+    url: https://github.com/chartjs/Chart.js/blob/master/LICENSE.md
+    gpl-compatible: true
+  js:
+    https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js: { type: external, minified: true }
+
+clas_news:
+  css:
+    component:
+      css/clas_news.css: {}
+  js:
+    js/clas_news_react.min.js: { minified: true }
+
+facebook.react:
+  remote: https://github.com/facebook/react/
+  version: 17.0.2
+  header: true
+  license:
+    name: MIT
+    url: https://github.com/facebook/react/blob/master/LICENSE
+    gpl-compatible: true
+  js:
+    https://unpkg.com/react@17/umd/react.production.min.js: { type: external, minified: true, crossorigin: anonymous }
+
+facebook.react-dom:
+  remote: https://github.com/facebook/react/
+  version: 17.0.2
+  header: true
+  license:
+    name: MIT
+    url: https://github.com/facebook/react/blob/master/LICENSE
+    gpl-compatible: true
+  js:
+    https://unpkg.com/react-dom@17/umd/react-dom.production.min.js: { type: external, minified: true, crossorigin: anonymous }
+
+luckyorange-cali:
+  header: true
+  js:
+    https://tools.luckyorange.com/core/lo.js?site-id=a4a9ebc2: { type: external, minified: true }
+
+luckyorange:
+  header: true
+  js:
+    https://tools.luckyorange.com/core/lo.js?site-id=d07239d7: { type: external, minified: true }
+
+salesforce.liveagent:
+  js:
+    https://c.la4-c2-ia5.salesforceliveagent.com/content/g/js/52.0/deployment.js: { type: external, minified: true }
+
+liveagent-button:
+  js:
+    js/liveagent-button.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+
+liveagent-functionality:
+  header: true
+  js:
+    js/liveagent-functionality.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+
+stories_excellence:
+  css:
+    component:
+      css/stories-excellence.css: {}

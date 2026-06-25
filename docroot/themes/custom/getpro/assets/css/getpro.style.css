@@ -1,0 +1,85 @@
+/*
+ Returns max width + element centering wrapped with CSS selectors
+ @param (list) elements - CSS selector identifiers (must include class or ID identifiers at the
+                          front of strings)
+ */
+/*
+ Returns base CSS for applying maximum width and centering to an element
+ */
+/* ========================================================================
+ * ASU Web Standards: bootstrap-asu.css v0.0.1
+ * ========================================================================
+ * Copyright 2020 ASU
+ * ======================================================================== */
+:focus {
+  outline: 0;
+  box-shadow: 0 0 8px #00baff !important;
+}
+
+.custom-select {
+  border-radius: 0;
+}
+
+form.views-exposed-form {
+  margin-bottom: 1rem;
+}
+form.views-exposed-form .form-control,
+form.views-exposed-form .custom-select {
+  display: initial;
+  padding: 0.25rem 1rem 0.5rem;
+}
+form.views-exposed-form .form-group {
+  display: inline-block;
+}
+form.views-exposed-form .form-group.form-item {
+  margin-right: 1.5rem;
+}
+form.views-exposed-form .form-group.form-item label {
+  display: block;
+}
+form.views-exposed-form input[name=field_keywords_target_id] {
+  max-width: 200px;
+}
+form.views-exposed-form #edit-actions {
+  display: inline-block;
+}
+
+/*
+ Returns max width + element centering wrapped with CSS selectors
+ @param (list) elements - CSS selector identifiers (must include class or ID identifiers at the
+                          front of strings)
+ */
+/*
+ Returns base CSS for applying maximum width and centering to an element
+ */
+.page__content > .views-element-container {
+  margin: 0 auto;
+  max-width: 1224px;
+}
+
+/*
+.page__content {
+  .local-news--full {
+    .layout__region > .block { // separate byline, article date, news_image, etc.
+      margin: 1rem 0;
+    }
+  }
+}
+*/
+.fp--view--news--header {
+  display: inline-flex;
+  justify-content: flex-end;
+}
+
+.view--news--top {
+  padding-top: 2rem;
+}
+
+.view--news--cards {
+  padding-bottom: 3rem;
+}
+
+/** Engage table fix **/
+.uds-table.cmmc-table tr {
+  vertical-align: top;
+}

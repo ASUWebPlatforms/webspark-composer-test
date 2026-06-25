@@ -1,0 +1,36 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ *
+ * @ingroup themeable
+ */
+#}
+{% set counter = 0 %}
+{% for row in rows %}
+  {%
+    set row_classes = [
+      default_row_class ? 'views-row',
+    ]
+  %}
+  {% set loop_id = view.style_plugin.getField(loop.index0, 'tid') %}
+  {% set active = '' %}
+  {% if counter == 0 %}
+    {% set active = ' active' %}
+  {% endif %}
+  <li class="nav-item">
+  <button href="#category-{{ loop_id }}" id="category-tab-{{ loop_id }}" aria-controls="category-{{ loop_id }}" class="nav-link{{ active }}" data-toggle="tab" role="tab">{{ row.content }}</button>
+  </li>
+  {% set counter = counter + 1 %}
+{% endfor %}

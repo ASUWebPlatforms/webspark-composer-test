@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: transfer_california_institutions
+label: 'Transfer California Institutions'
+category: ''
+likert: false
+options: |-
+  'Academy of Art University': 'Academy of Art University'
+  'Barstow College': 'Barstow College'

@@ -1,0 +1,12 @@
+.network-white .aventri-block iframe,
+.network-black .aventri-block iframe,
+.morse-code-white .aventri-block iframe,
+.morse-code-black .aventri-block iframe,
+.topo-white .aventri-block iframe,
+.topo-black .aventri-block iframe,
+.gray-7-bg .aventri-block iframe{
+  background-color: #fff;
+}
+.widget-spacer.clearfix {
+  display: none;
+}

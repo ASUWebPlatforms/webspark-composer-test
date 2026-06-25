@@ -1,0 +1,24 @@
+services:
+  logger.channel.asuaec_asulocal:
+    parent: logger.channel_base
+    arguments: ['asu_local_degrees']
+
+  asuaec_asulocal.client:
+    class: Drupal\asuaec_asulocal\Service\AsuProgramsClient
+    arguments:
+      - '@http_client'
+      - '@cache.default'
+      - '@config.factory'
+      - '@logger.factory'
+
+  asuaec_asulocal.degrees_card_builder:
+    class: Drupal\asuaec_asulocal\Service\DegreesCardBuilder
+    arguments:
+      - '@asuaec_asulocal.client'
+      - '@logger.channel.asuaec_asulocal'
+
+  asuaec_asulocal.degree_resolver:
+    class: Drupal\asuaec_asulocal\Service\DegreeResolver
+    arguments:
+      - '@asuaec_asulocal.client'
+      - '@logger.channel.asuaec_asulocal'

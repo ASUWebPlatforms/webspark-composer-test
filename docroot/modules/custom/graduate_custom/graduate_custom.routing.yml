@@ -1,0 +1,9 @@
+graduate_custom.configuration_form:
+  path: 'admin/config/system/configuration/graduate_custom'
+  defaults:
+    _form: '\Drupal\graduate_custom\Form\GraduateCustomSettingsForm'
+    _title: 'Graduate Custom Features Configuration'
+  requirements:
+    _permission: 'administer graduate_custom'
+  options:
+    _admin_route: TRUE

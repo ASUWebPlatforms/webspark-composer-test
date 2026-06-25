@@ -1,0 +1,137 @@
+{#
+/**
+ * @file
+ * Template for a Node.
+ */
+#}
+{%
+    set classes = [
+    'node',
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    node.bundle|clean_class,
+    node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+]
+%}
+
+
+{{ drupal_block('views_exposed_filter_block:faqs-page_4') }}
+{{ drupal_view('content', 'page_4') }}
+
+<style type="text/css">
+
+#content1
+{
+    display:none;
+}
+
+#content2
+{
+    display:none;
+}
+#content3
+{
+    display:none;
+}
+#content4
+{
+    display:none;
+}
+
+#content5
+{
+    display:none;
+}
+
+
+
+#toggle5:checked ~ #content5 
+{
+   display: block;
+    
+}
+
+
+
+ #toggle1:checked ~ #content1
+{
+   display: block;
+    background-color: #fff;
+    padding: 48px;
+    border: 1px solid #e8e8e8;
+}
+
+#toggle2:checked ~ #content2
+{
+  display: block;
+    background-color: #fff;
+    padding: 48px;
+    border: 1px solid #e8e8e8;
+}
+#toggle3:checked ~ #content3
+{
+  display: block;
+    background-color: #fff;
+    padding: 48px;
+    border: 1px solid #e8e8e8;
+}
+#toggle4:checked ~ #content4
+{
+  display: block;
+    background-color: #fff;
+    padding: 48px;
+    border: 1px solid #e8e8e8;
+}
+
+#toggle1::after{
+    content: "\a";
+    white-space: pre;
+}
+
+.coabgimg {
+background-image: url(https://tuition.asu.edu/sites/default/files/2022-07/coa-default.jpg);
+height:350px;
+background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;}
+  
+  @media (max-width: 768px) { 
+.coabgimg {
+background-image: url(/sites/default/files/2022-06/coa-mobile.jpg
+);
+height:500px;
+background-position: center;
+  background-repeat: no-repeat;
+  background-size: auto;
+  position: relative;}
+  }
+
+@media screen and (min-width: 600px)  {
+        .mobile-break { display: none; }
+    }
+</style>
+ <input type=radio id="toggle1" name="toggle">  Undergraduate&nbsp;&nbsp;<br class="mobile-break">
+ <input type=radio id="toggle2" name="toggle"> Graduate&nbsp;&nbsp;<br class="mobile-break">
+<input type=radio id="toggle3" name="toggle"> Online undergraduate&nbsp;&nbsp;<br class="mobile-break">
+ <input type=radio id="toggle4" name="toggle"> Online graduate<br class="mobile-break">
+<input type=radio id="toggle5" name="toggle" style="display:none;" checked> 
+<br><br>
+<span id="content5" class="coabgimg">&nbsp;</span>
+
+<span id="content1"><h2>Undergraduate student cost of attendance</h2><p class="pt-3">Find out your cost of attendance as an undergraduate student by choosing the selections below that apply to you.</p>{{ drupal_view('cost_of_attendance', 'block_1') }}</span>
+
+
+<span id="content2"><h2>Graduate student cost of attendance</h2><p class="pt-3">Find out your cost of attendance as a graduate student by choosing the selections below that apply to you.</p>{{ drupal_view('cost_of_attendance', 'block_3') }}
+</span>
+<span id="content3"><h2>Online undergraduate student cost of attendance</h2><p class="pt-3">Find out your cost of attendance as an online student by choosing the selections below that apply to you.</p>{{ drupal_view('cost_of_attendance', 'block_5') }}
+</span>
+  
+  <span id="content4"><h2>Online graduate student cost of attendance</h2><p class="pt-3">Find out your cost of attendance as an online graduate student by choosing the selections below that apply to you.</p>{{ drupal_view('cost_of_attendance', 'block_6') }}
+</span>
+  
+  
+
+
+

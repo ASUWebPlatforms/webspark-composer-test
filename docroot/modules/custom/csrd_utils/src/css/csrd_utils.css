@@ -1,0 +1,292 @@
+/* Code needed for product pop up and form*/
+
+.csrd-product-summary > .views-row {
+  padding: 16px;
+  border: solid 1px #d0d0d0;
+}
+
+.csrd-product-summary > .views-row .form-select {
+  width: auto;
+}
+
+.csrd-product-summary > .views-row .form-number {
+  width: 20%;
+}
+
+.field-gallery-wrapper {
+  padding: 20px;
+}
+
+.featured-item-container {
+  background-color: #fff;
+}
+
+.featured-item-border-left {
+  border: solid 1px #d0d0d0;
+  padding: 16px 32px !important;
+}
+
+.featured-item-price {
+  padding-top: 1rem;
+}
+
+#views-exposed-form-store-block-1 > .card {
+  border: none !important;
+}
+
+.form-checkboxes.bef-checkboxes.form--inline > div {
+  margin-right: 1rem;
+}
+
+.product-description-label {
+  margin-top: 32px;
+}
+
+.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.product-information.ui-dialog-buttons {
+  z-index: 9999 !important;
+  width: 80vw !important;
+}
+
+#drupal-modal .csrd-product-summary > .views-row {
+  border: none;
+}
+
+.overlay-img-product {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.5s ease;
+}
+
+.container-image-product:hover .overlay-img-product {
+  display: block;
+  background: rgba(0, 0, 0, .3);
+}
+
+.button-img-product {
+  position: absolute;
+  width: 100%;
+  left:0;
+  text-align: center;
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+
+.button-img-product a {
+  padding: 12px 48px;
+  text-align: center;
+  z-index: 1;
+}
+
+.container-image-product:hover .button-img-product {
+  opacity: 1;
+}
+
+div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.product-information.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div > button {
+  color: #212529 !important;
+  background-color: #ffc627 !important;
+  border-color: #ffc627 !important;
+}
+
+.url-product-container {
+  height: 0px;
+  width: 1px;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.pop-up-shirts, .pop-up-drinks, .pop-up-image-container{
+  float: right;
+  width: 50%;
+  padding: 1rem;
+}
+
+.pop-up-image-container > img:first-child {
+  display: initial !important;
+  margin-top: 2rem;
+}
+
+.product-details-link > a{
+  color: #8c1d40 !important;
+}
+
+#drupal-modal div.block-webspark-module-asu-breadcrumb,
+.pop-up-image-container > img,
+#drupal-modal .product-description,
+#drupal-modal .product-author,
+.non-popup-form input.close-modal,
+.non-popup-form div.product-details-link {
+  display: none;
+}
+
+#drupal-modal div.product-details-link {
+  display: initial;
+}
+
+.ui-dialog-title {
+  visibility: hidden;
+}
+
+.is-disabled {
+  pointer-events: none;
+  cursor: not-allowed !important;
+  opacity: .5;
+}
+
+/* CSS For cart and order summary View */
+
+.cart-product-row {
+  width: 85%;
+  margin: 0 auto;
+}
+
+.cart-product-row-item {
+  padding: 5%;
+  border: 1px solid #D0D0D0;
+}
+
+.cart-view .views-view-grid {
+  width: 65%;
+  min-height: 100vh;
+  float: left;
+}
+
+.image-cart-item {
+  text-align: center;
+}
+
+.image-cart-item img {
+  margin: 1rem auto;
+}
+
+.quantity-cart-item div {
+  width: 25%;
+}
+
+.total-cart-item {
+  margin: 1rem auto;
+  text-align: right;
+}
+
+.summary-price-container {
+  width: 100%;
+  text-align: right;
+}
+
+.cart-view #edit-coupon-redemption,
+.cart-view #edit-actions {
+  float: left;
+  width: 30%;
+  border-left: 1px solid #D0D0D0;
+  border-right: 1px solid #D0D0D0;
+  border-collapse: collapse;
+  border-top: none;
+  padding: 2rem;
+}
+
+.cart-view #edit-actions {
+  border-bottom: 1px solid #D0D0D0;
+  padding-bottom: 3rem;
+}
+
+/* Css Review Summary View */
+
+.cart-view form .summary-view-element {
+  width: 30%;
+  float: left;
+  border: 1px solid #D0D0D0;
+  border-collapse: collapse;
+  border-bottom: none;
+  padding: 0rem 2rem;
+}
+
+.cart-view form .order-summary-title {
+  border-bottom: none;
+}
+
+.cart-view form .summary-view-container {
+  border-top: none;
+}
+
+.cart-view form .summary-view-container thead {
+  background-color: transparent !important;
+}
+
+.cart-view form .summary-view-container td,
+.cart-view form .summary-view-container th {
+  border: none !important;
+}
+
+.cart-view form .summary-view-container .summary-order-items-total {
+  padding: 2rem .75rem;
+  border-top: 1px solid #707070;
+}
+
+.cart-view form .summary-view-container .shipping-caption {
+  padding: 2rem .75rem;
+  color: #484848;
+}
+
+.cart-view form .summary-view-container footer [data-drupal-selector="order-total-summary"] > div > div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.glide__bullets > button:first-child {
+  margin-left: 0rem !important;
+}
+
+#edit-purchased-entity-0-attributes > .js-form-type-select > label {
+  width: 100%;
+}
+
+.btn-gold-forced {
+  color: #212529 !important;
+  background-color: #ffc627 !important;
+  border-color: #ffc627 !important;
+}
+
+.commerce-order-item-add-to-cart-form > div > div > div label {
+  width: 100%;
+}
+
+.btn-maroon {
+  color: #fff !important; 
+}
+
+/* Media for cart/summary view */
+
+@media screen and (max-width: 769px) {
+  .cart-view form .summary-view-element,
+  .cart-view #edit-coupon-redemption,
+  .cart-view #edit-actions,
+  .cart-view .views-view-grid {
+    width: 100%;
+  }
+
+  .cart-view form .summary-view-element,
+  .cart-view #edit-coupon-redemption,
+  .cart-view #edit-actions {
+    border: none;
+  }
+
+  .total-cart-item {
+    text-align: left;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .cart-view .views-view-grid {
+    min-height: 150vh;
+  }
+}
+
+/* Media for store view */
+
+@media screen and (max-width: 769px) {
+  .csrd-product-summary > .views-row .form-number {
+    width: auto;
+  }
+}

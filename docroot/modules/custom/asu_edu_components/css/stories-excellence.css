@@ -1,0 +1,6 @@
+.field--name-field-card-link,
+.field--name-field-link,
+.field--name-field-cta-secondary,
+.field--name-field-clickable {
+  display: none;
+}

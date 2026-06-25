@@ -1,0 +1,4 @@
+administer asu newcollege custom tokens:
+  title: 'Administer ASU New College Custom Tokens'
+  description: 'Create, edit, and delete custom tokens.'
+  restrict access: true

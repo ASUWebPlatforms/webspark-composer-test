@@ -1,0 +1,9 @@
+exportDatajs:
+  version: 1.x
+  js:
+    js/asu_courses_export.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - core/once

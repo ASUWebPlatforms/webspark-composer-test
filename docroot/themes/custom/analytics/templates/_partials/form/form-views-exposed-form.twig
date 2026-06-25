@@ -1,0 +1,82 @@
+{#
+/**
+ * @file
+ * Template for a 'form' element.
+ *
+ * Available variables
+ * - attributes: A list of HTML attributes for the wrapper element.
+ * - children: The child elements of the form.
+ *
+ * @see template_preprocess_form()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% set classes = [
+  'form',
+  'uds-form',
+  is_inline ? 'form-inline',
+]|merge(utility_classes ? utility_classes : []) %}
+
+<style>
+  .form-filter-wrapper > * + *:not(.form-actions) {
+    border-top: 1px solid #e5e5e5 !important;
+  }
+
+  .form-filter-wrapper .form-check {
+    padding-left: 20px !important;
+  }
+
+  .form-filter-wrapper .form-actions {
+    padding: 16px 0;
+  }
+
+  .form-filter-wrapper button {
+    box-shadow: none !important;
+  }
+
+  .form-filter-wrapper .form-checkboxes {
+    padding-top: 1px;
+  }
+
+  .form.uds-form input[type="submit"],
+  .form.uds-form input[type="reset"] {
+    padding: 0.5rem 1rem !important;
+  }
+</style>
+
+<form{{ attributes.addClass(classes) }}>
+  <div class="form-filter-wrapper">
+    {{ children }}
+  </div>
+</form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Set the first item to show
+    const collapseElements = document.querySelectorAll('.views-exposed-form .collapse');
+
+    if (collapseElements.length > 0) {
+      setTimeout(function() {
+        const parentElement = collapseElements[0].parentElement;
+        const buttonElement = parentElement.children[0];
+        const svgElements = buttonElement.querySelectorAll('.js-fa-icon');
+
+        collapseElements[0].classList.add('show');
+        svgElements.forEach(element => {
+          element.classList.toggle('tw-hidden');
+        });
+      }, 250);
+    }
+
+    // Toggle the icon
+    document.querySelectorAll('.js-collapse-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        button.querySelectorAll('.js-fa-icon').forEach(element => {
+          element.classList.toggle('tw-hidden');
+        });
+      });
+    });
+  });
+</script>

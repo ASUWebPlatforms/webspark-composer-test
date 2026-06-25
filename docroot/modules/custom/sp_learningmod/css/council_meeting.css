@@ -1,0 +1,35 @@
+.council-meeting-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.council-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.question-tracker {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #a6192e;
+}
+
+.exit-link {
+  margin-top: 20px;
+}
+
+.exit-link a {
+  color: #a6192e;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.exit-link a:hover {
+  text-decoration: underline;
+}

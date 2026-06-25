@@ -1,0 +1,18 @@
+name: chs
+type: theme
+description: This is a CHS sub theme of the webspark theme renovation
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+# Defines the base theme
+base theme: renovation
+
+libraries:
+  - chs/global-styling
+
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer

@@ -1,0 +1,35 @@
+asu_quiz.admin_settings:
+    path: '/admin/config/content/persona_quiz'
+    defaults:
+      _form: '\Drupal\asu_quiz\Form\PersonaQuizSettingsForm'
+      _title: 'Persona quiz confirmation page content form'
+    requirements:
+      _permission: 'administer asu_quiz'
+      
+asu_quiz.persona_form_settings:
+    path: '/admin/config/content/persona_quiz/form_options'
+    defaults:
+      _form: '\Drupal\asu_quiz\Form\PersonaOptionsForm'
+      _title: 'Persona quiz webform persona type options'
+    requirements:
+      _permission: 'administer asu_quiz'
+
+asu_quiz.quiz_confirm_page:
+  path: '/quiz/confirmation/{web_id}/{sid}'
+  defaults:
+    _controller: '\Drupal\asu_quiz\Controller\QuizConfirmController::quiz_confirm_page'
+    _title: Quiz confirmation page
+  requirements:
+    _permission: 'access content'
+
+asu_quiz.libraries_admin_settings:
+  path: '/admin/config/content/custom-libraries'
+  defaults:
+    _form: '\Drupal\asu_quiz\Form\CustomLibrariesSettingsForm'
+    _title: Set custom libraries for pages
+  requirements:
+    _permission: 'administer asu_quiz'
+
+    
+    
+    

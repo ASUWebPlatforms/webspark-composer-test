@@ -1,0 +1,9 @@
+name: ASU AEC RFI D9 - Version B2 direct post
+type: module
+description: 'Includes Main RFI related tasks - Version B2 direct post'
+package: ASU
+core_version_requirement: ^9 || ^10 || ^11
+dependencies:
+  - webform
+  - asuaec_webform_optionsdata
+configure: asuaec_rfib2_directpost.asuaec_rfib2_directpost_settings

@@ -1,0 +1,33 @@
+asu_digital_book.admin_settings:
+  title: 'Digital view book settings'
+  description: 'Administer ASU Tuition content'
+  route_name: asu_digital_book.admin_settings
+  base_route: asu_digital_book.admin_settings
+
+asu_digital_book.learning:
+  title: 'Learning module'
+  description: 'Administer Learning module content'
+  route_name: asu_digital_book.learning
+  base_route: asu_digital_book.admin_settings
+  Weight: 100  
+
+asu_digital_book.customize:
+  title: 'Customize module'
+  description: 'Administer Customize module content'
+  route_name: asu_digital_book.customize
+  base_route: asu_digital_book.admin_settings
+  Weight: 200 
+
+asu_digital_book.invest:
+  title: 'Invest module'
+  description: 'Administer Invest module content'
+  route_name: asu_digital_book.invest
+  base_route: asu_digital_book.admin_settings
+  Weight: 300  
+
+asu_digital_book.rfi:
+  title: 'RFI page settings'
+  description: 'Administer RFI page content'
+  route_name: asu_digital_book.rfi
+  base_route: asu_digital_book.admin_settings
+  Weight: 300

@@ -1,0 +1,22 @@
+<div class="uds-hero uds-hero-{{ size }}"
+     style="background-image: linear-gradient(180deg, #19191900 0%, #191919c9 100%), url({{ hero_background }});">
+  <div class="container uds-hero-container">
+    {# Sub Heading #}
+    {% if sub_heading is not empty %}
+      <h3 class="heading heading-one col-md-8"><span class="highlight highlight-black">{{ sub_heading }}</span></h3>
+    {% endif %}
+    {# Headings Template #}
+    {% include '@renovation/headings/heading-highlighted.twig' with {
+      html_tag : 'h1',
+      heading: heading,
+      highlight: heading_background,
+    } %}
+    {% if size != 'sm' %}
+      <div class="uds-hero-text col-sm-12 col-md-7">
+        <p>{{ hero_body|raw }}</p>
+        {# Button link template #}
+        {{ cta_btn }}
+      </div>
+    {% endif %}
+  </div>
+</div>

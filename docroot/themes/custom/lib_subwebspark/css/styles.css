@@ -1,0 +1,33 @@
+/*Site search box*/
+.site-search {
+    margin-top: 1rem;
+}
+.site-search.uds-form .form-group {
+    margin-right: 1.5rem;
+    margin-bottom: 0;
+}
+/*This is needed to make the search box fill the div*/
+.site-search #edit-terms, 
+.site-search #edit-terms--2  {
+    height: 100%;
+    min-height: 50px;
+}
+
+/*puts the spacing back once the search button drops below the search field on mobile*/
+@media (max-width: 767px) {
+    .site-search.uds-form .form-group {
+        margin-bottom: 1rem;
+    }
+}
+/*Changing to 2rem b/c Renovation WS 2.13.1 has a custom value of 1rem on input field, which causes the text on buttons to not center*/
+.views-exposed-form form.uds-form .form-submit, #edit-submit-search {
+    padding-left: 2rem !important;
+}
+.callout, pre {
+    padding: 10px;
+    background-color: var(--bs-gray-2);
+    border: 1px solid var(--bs-gray-4);
+}
+
+/*Reset 404 container to full width*/
+.error404 .container-page-404 {width: 100%;}

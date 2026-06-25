@@ -1,0 +1,197 @@
+<?php
+
+/**
+ * @file
+ * Module hooks for the weba11y9_migration module.
+ */
+
+/**
+ * Implements hook_theme().
+ *
+ * Registers the product field template so Drupal discovers it from this
+ * module's templates/ directory. Renovation's generic field.html.twig strips
+ * all labels; this more-specific template restores them for product nodes.
+ */
+function weba11y9_migration_theme() {
+  return [
+    'field__node__product' => [
+      'template' => 'field--node--product',
+      'base hook' => 'field',
+    ],
+    'page__webform_course_audit' => [
+      'template' => 'page--webform-course-audit',
+      'base hook' => 'page',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_node().
+ *
+ * Attaches scoped CSS libraries to nodes based on bundle type.
+ */
+function weba11y9_migration_preprocess_node(&$variables) {
+  $bundle = $variables['node']->bundle();
+
+  // All node types get page-specific styles.
+  $variables['#attached']['library'][] = 'weba11y9_migration/page-specific';
+
+  switch ($bundle) {
+    case 'product':
+      $variables['#attached']['library'][] = 'weba11y9_migration/product-layout';
+      break;
+
+    case 'conference':
+    case 'session':
+      $variables['#attached']['library'][] = 'weba11y9_migration/conference';
+      break;
+  }
+}
+
+/**
+ * Implements hook_preprocess_html().
+ *
+ * Adds the 'search' body class on search pages so Access CSS selectors
+ * that target .search continue to work after the theme switch.
+ */
+function weba11y9_migration_preprocess_html(&$variables) {
+  // AAE-144: Add 'front' body class on the front page so .front .pb-5 in
+  // front-page.css has higher specificity than Bootstrap's .pb-5.
+  if (\Drupal::service('path.matcher')->isFrontPage()) {
+    $variables['attributes']['class'][] = 'front';
+  }
+
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if (str_starts_with($route_name ?? '', 'search.view')) {
+    $variables['attributes']['class'][] = 'search';
+  }
+
+  // Add body classes for webform-specific pages.
+  $webform = \Drupal::routeMatch()->getParameter('webform');
+  if ($webform) {
+    $webform_id = is_string($webform) ? $webform : $webform->id();
+    $is_submission_view = str_starts_with($route_name ?? '', 'entity.webform.user.submission')
+      && !str_contains($route_name ?? '', '.edit');
+    // course_audit class goes on <main> via page template, not on <body>.
+    $class_map = [
+      'web_audit' => $is_submission_view ? 'web-audit-report' : 'web-audit-form',
+    ];
+    if (isset($class_map[$webform_id])) {
+      $variables['attributes']['class'][] = $class_map[$webform_id];
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_page().
+ *
+ * Injects the hardcoded <h1> page title on webform pages to match the Access
+ * theme. The Renovation Page Title block does not render on webform routes,
+ * so we prepend the title directly into the content region.
+ */
+function weba11y9_migration_preprocess_page(&$variables) {
+  $route_name = \Drupal::routeMatch()->getRouteName() ?? '';
+  if (!str_starts_with($route_name, 'entity.webform')) {
+    return;
+  }
+  $webform = \Drupal::routeMatch()->getParameter('webform');
+  $webform_id = $webform ? (is_string($webform) ? $webform : $webform->id()) : '';
+
+  // Inject hardcoded <h1> for web_audit pages.
+  if ($webform_id === 'web_audit') {
+    $variables['page']['content']['weba11y9_page_title'] = [
+      '#markup' => '<h1>ASU DIY Web Accessibility Audit</h1>',
+      '#weight' => -100,
+    ];
+  }
+
+  // Pass the main element class for course_audit pages (used by page template).
+  if ($webform_id === 'course_audit') {
+    $is_edit = str_contains($route_name, '.edit');
+    $variables['weba11y9_main_class'] = $is_edit ? 'course-form' : 'course-report';
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_page_alter().
+ *
+ * Adds a custom page template suggestion for course_audit webform routes
+ * to match the Access theme's stripped-down DOM structure.
+ */
+function weba11y9_migration_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  $route_name = \Drupal::routeMatch()->getRouteName() ?? '';
+  if (str_starts_with($route_name, 'entity.webform')) {
+    $webform = \Drupal::routeMatch()->getParameter('webform');
+    $webform_id = $webform ? (is_string($webform) ? $webform : $webform->id()) : '';
+    if ($webform_id === 'course_audit') {
+      $suggestions[] = 'page__webform_course_audit';
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for the layout_builder_tabs "tabs" layout.
+ *
+ * The Access theme's tabs.html.twig wrapped the layout in
+ * <div id="audit-tabs" class="layout__fixed-width"> > .container > .row > .col-12.
+ * Renovation uses the default template without that wrapper.  Adding the
+ * Bootstrap "container" class to the existing attributes replicates the
+ * responsive max-width / centering the Access wrapper provided.
+ */
+function weba11y9_migration_preprocess_tabs(&$variables) {
+  // Only modify layout_builder_tabs output (has a "tabs" region),
+  // not Drupal's local-task tabs.
+  if (!isset($variables['content']['tabs'])) {
+    return;
+  }
+  $variables['attributes']['class'][] = 'container';
+  $variables['attributes']['id'] = 'audit-tabs';
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ *
+ * Attaches scoped bridge CSS libraries based on page context. Each library
+ * only loads on pages that actually need it.
+ */
+function weba11y9_migration_page_attachments_alter(array &$attachments) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  $is_front = \Drupal::service('path.matcher')->isFrontPage();
+  $is_search = str_starts_with($route_name ?? '', 'search.view');
+  $is_webform = str_starts_with($route_name ?? '', 'entity.webform_submission.')
+    || str_starts_with($route_name ?? '', 'entity.webform.user.submission')
+    || str_starts_with($route_name ?? '', 'entity.webform.canonical');
+  $is_node = ($route_name === 'entity.node.canonical');
+
+  // Navigation: all pages (global, small).
+  $attachments['#attached']['library'][] = 'weba11y9_migration/navigation';
+
+  // Content utilities: front page, nodes, webforms, and search.
+  if ($is_front || $is_node || $is_webform || $is_search) {
+    $attachments['#attached']['library'][] = 'weba11y9_migration/content-utilities';
+  }
+
+  // Front page only.
+  if ($is_front) {
+    $attachments['#attached']['library'][] = 'weba11y9_migration/front-page';
+  }
+
+  // Search pages only.
+  if ($is_search) {
+    $attachments['#attached']['library'][] = 'weba11y9_migration/search';
+  }
+
+  // Webform pages only (includes JS for audit section.div_only replacement).
+  if ($is_webform) {
+    $attachments['#attached']['library'][] = 'weba11y9_migration/webform-audit';
+  }
+
+  // Content Page nodes using layout_builder_tabs (e.g. /testing/audit) need
+  // the same tab and audit styling that webform pages get.
+  if ($is_node) {
+    $node = \Drupal::routeMatch()->getParameter('node');
+    if ($node && $node->bundle() === 'content_page') {
+      $attachments['#attached']['library'][] = 'weba11y9_migration/webform-audit';
+    }
+  }
+}

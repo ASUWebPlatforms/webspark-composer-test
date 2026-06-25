@@ -1,0 +1,133 @@
+asu_tuition.search_form:
+  path: "/tuition-search"
+  defaults:
+    _form: '\Drupal\asu_tuition\Form\AsuTuitionSearchPage'
+    _title: "ASU Tuition search page"
+  requirements:
+    _permission: "access content"
+  options:
+    no_cache: TRUE
+
+asu_tuition.result_page:
+  path: "/tuition/results"
+  defaults:
+    _controller: '\Drupal\asu_tuition\Controller\AsuTuitionResultPage::result_page'
+    _title: "ASU Tuition Estimator"
+  requirements:
+    _permission: "access content"
+
+asu_tuition.result_json_page:
+  path: "/tuition/results/json"
+  defaults:
+    _controller: '\Drupal\asu_tuition\Controller\AsuTuitionResultJsonPage::result_json_page'
+    _title: "ASU Tuition Estimator Json"
+  requirements:
+    _permission: "access content"
+
+asu_tuition.data_page:
+  path: "/admin/tuition/table/asu_tuition_acad_career"
+  defaults:
+    _controller: '\Drupal\asu_tuition\Controller\AsuTuitionAdminPage::data_page'
+    _title: "ASU Tuition Estimator Table Data"
+  requirements:
+    _permission: "administer asu tuition"
+
+asu_tuition.admin_settings:
+  path: "/admin/config/content/tuition"
+  defaults:
+    _form: '\Drupal\asu_tuition\Form\AsuTuitionAdminSettingsForm'
+    _title: "ASU tuition estimator"
+    _link_id: "asu_tuition.admin_settings"
+    _description: "Configure ASU tuition estimator settings."
+  requirements:
+    _permission: "administer asu tuition"
+
+#asu_tuition.admin_table_settings:
+# path: "/admin/config/content/tuition/table"
+#defaults:
+# _form: '\Drupal\asu_tuition\Form\AsuTuitionAdminTablesSettingsForm'
+#_title: "ASU tuition estimator tables"
+#_link_id: "asu_tuition.admin_table_settings"
+#_description: "Configure ASU tuition estimator settings."
+#requirements:
+# _permission: "administer asu tuition"
+
+asu_tuition.admin_all_tables:
+  path: "/admin/config/content/tuition/tables"
+  defaults:
+    _form: '\Drupal\asu_tuition\Form\AsuTuitionAdminAllTablesForm'
+    _title: "ASU tuition estimator tables"
+    _link_id: "asu_tuition.admin_all_tables"
+    _description: "Configure ASU tuition estimator settings."
+  requirements:
+    _permission: "administer asu tuition"
+
+asu_tuition.admin_each_table_settings:
+  path: "/admin/config/content/tuition/tables/{table_name}"
+  defaults:
+    _form: '\Drupal\asu_tuition\Form\AsuTuitionAdminEachTableSettingsForm'
+    _title: "Tuition tables"
+    _link_id: "asu_tuition.admin_each_table_settings"
+    _description: "Configure ASU tuition estimator settings."
+  requirements:
+    _permission: "administer asu tuition"
+
+asu_tuition.admin_table_edit_settings:
+  path: "/admin/config/content/tuition/tables/{table_name_value}/add"
+  defaults:
+    _form: '\Drupal\asu_tuition\Form\AsuTuitionAdminEditTablesSettingsForm'
+    _title: "Add data"
+    _link_id: "asu_tuition.admin_table_edit_settings"
+    _description: "Add new rows to tables."
+  requirements:
+    _permission: "administer asu tuition"
+
+asu_tuition.admin_table_query_tables:
+  path: "/admin/config/content/tuition/tables/{table_name_value}/query"
+  defaults:
+    _form: '\Drupal\asu_tuition\Form\AsuTuitionQueryTablesForm'
+    _title: "Query tables"
+    _link_id: "asu_tuition.admin_table_query_tables"
+    _description: "Query existing rows in tables."
+  requirements:
+    _custom_access: '\Drupal\asu_tuition\Access\AsuTuitionQueryAccessCheck::CustomQueriesAccess'
+    # _permission: "administer asu tuition"
+
+asu_tuition.admin_table_data_insert:
+  path: "/admin/config/content/tuition/tables/{table_name_value}/insert"
+  defaults:
+    _form: '\Drupal\asu_tuition\Form\AsuTuitionDataInputForm'
+    _title: "Data input"
+    _link_id: "asu_tuition.admin_table_data_insert"
+    _description: "Data input form."
+  requirements:
+    _custom_access: '\Drupal\asu_tuition\Access\AsuTuitionQueryAccessCheck::CustomQueriesAccess'
+    # _permission: "administer asu tuition"
+
+asu_tuition.result_api_page:
+  path: "/tuition/js/get-results"
+  defaults:
+    _controller: '\Drupal\asu_tuition\Controller\AsuTuitionResultJsonApiPage::result_api_page'
+    _title: "ASU Tuition Estimator Json API"
+    _cache:
+      contexts: ["url.path", "user.roles"]
+      tags: ["tuition_custom_tag"]
+      max-age: 3600 # Cache for 1 hour
+  requirements:
+    _permission: "access content"
+
+asu_tuition.result_api_results_page:
+  path: "/tuition/js/get-settings"
+  defaults:
+    _controller: '\Drupal\asu_tuition\Controller\AsuTuitionResultJsonSettingsApiPage::result_api_results_page'
+    _title: "ASU Tuition Estimator Json Results"
+  requirements:
+    _permission: "access content"
+
+asu_tuition.download_backup:
+  path: '/admin/tuition/backup/download/{filename}'
+  defaults:
+    _controller: '\Drupal\asu_tuition\Controller\BackupController::download'
+  requirements:
+    _permission: 'administer site configuration'
+

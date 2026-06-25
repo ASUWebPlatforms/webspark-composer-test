@@ -1,0 +1,333 @@
+<?php
+
+use Drupal\Component\Datetime\DateTimePlus;
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\field\Entity\FieldStorageConfig;
+//use Drupal\Core\Database\Connection;
+//use Drupal\Core\Routing\RouteMatchInterface;
+//use Drupal\views\Plugin\views\style\StylePluginBase;
+//use Drupal\views\Views;
+//use \Drupal\views\Plugin\views\cache\CachePluginBase;
+//use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\views\ViewExecutable;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_alter().
+ */
+function asuaec_adminpanel_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+    if ($form_id == 'eventinstance_visit_event_edit_form' ||
+        $form_id == 'eventinstance_visit_event_form' ||
+        $form_id == 'eventinstance_barrett_edit_form' ||
+        $form_id == 'eventinstance_barrett_form'
+    ) { // Event instance edit page
+        $form['#attached']['library'] = [
+            'asuaec_adminpanel/asuaec-adminpanel-library',
+        ];
+    }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function asuaec_adminpanel_views_pre_render(ViewExecutable $view) {
+    if (isset($view) && (($view->storage->id() == 'admin_panel') || ($view->storage->id() == 'additional_tour_registrants') || ($view->storage->id() == 'admin_panel_v2') )) { // Adminpanel view page
+        $view->element['#attached']['library'][] = 'asuaec_adminpanel/asuaec-adminpanel-library';
+    }
+}
+
+/**
+ * @param ViewExecutable $view
+ *
+ * Implements hook_views_post_execute().
+ *
+ * Insert value in placeholder in Admin panel View.
+ * - Display table of number of registrants, number of guests, and total number of registrants.
+ */
+function asuaec_adminpanel_views_post_execute(\Drupal\views\ViewExecutable $view) {
+
+    if (isset($view) && (($view->storage->id() == 'admin_panel') || ($view->storage->id() == 'admin_panel_v2')) ) {
+
+        // Clear cache
+        \Drupal::service('cache.render')->invalidateAll();
+
+        $x = 0;
+        foreach($view->result as $key => $rr){
+
+//            ksm($key, "key");
+//            if($x == 0) {
+//                ksm($rr);
+//            }
+
+            // Get Parent id (Event series ID)
+            $eventseries_id = $rr->eventseries_field_data_eventinstance_field_data_id; // 18
+
+            // Get Original date/time formatted in 2023-05-17T15:00:00.
+            // NOTE: Original time is time only field.
+            $original_datetime_formatted = _get_original_datetime_formatted($rr, $eventseries_id);
+
+            $numofreg_array = _get_registrant_count_returns_array($eventseries_id, null, null, $original_datetime_formatted);
+//                ksm($numofreg_array, "$numofreg_array");
+
+            // Get Event ID
+            $dateonly = _get_dateonly($rr);
+            $timestamp_for_eventid = _get_timestamp_for_eventid2($eventseries_id, $dateonly);
+            $event_id = $eventseries_id . '-' . $timestamp_for_eventid;
+
+            // Build output for Number of registrants
+            $table_html = "<div class='row'>";
+            $table_html .= "<div class='col-6'><a target='_blank' href='/admin/registrants/" . $event_id . "'>Students</a></div><div class='col-6'>" . $numofreg_array['students'] . "</div>";
+            $table_html .= "</div>";
+            $table_html .= "<div class='row'>";
+            $table_html .= "<div class='col-6'>Guests</div><div class='col-6'>" . $numofreg_array['guests'] . "</div>";
+            $table_html .= "</div>";
+            $table_html .= "<div class='row'>";
+            $table_html .= "<div class='col-6'>Total</div><div class='col-6'>" . $numofreg_array['total'] . "</div>";
+            $table_html .= "</div>";
+
+            $output = new FormattableMarkup($table_html, []);
+            $rr->_entity->set('field_placeholder_num_of_reg', $output);
+
+            // Event ID
+            $output_eventid = new FormattableMarkup($event_id, []);
+            $rr->_entity->set('field_placeholder_for_event_id', $output_eventid); //<-- This worked!
+
+            $x++;
+        } // END OF foreach($view->result as $key => $rr)
+    } // END OF if ($view->id() == 'visitd9_day_agenda')
+
+
+//    if (isset($view) && ($view->storage->id() == 'admin_panel_calendar_additional_tour2')) {
+//
+//        // Clear cache
+//        \Drupal::service('cache.render')->invalidateAll();
+//
+//        $x = 0;
+//        foreach($view->result as $key => $rr){
+//
+////            ksm($key, "key");
+////            if($x == 0) {
+////                ksm($rr);
+////            }
+//
+//            // Get Parent id (Event series ID)
+//            $eventseries_id = $rr->eventseries_field_data_eventinstance_field_data_id; // 18
+//
+//            // Get Original date/time formatted in 2023-05-17T15:00:00.
+//            // NOTE: Original time is time only field.
+//            $original_datetime_formatted = _get_original_datetime_formatted($rr, $eventseries_id);
+//
+//            $numofreg_array = _get_registrant_count_returns_array_addtour($eventseries_id, null, null, $original_datetime_formatted);
+////                ksm($numofreg_array, "$numofreg_array");
+//
+//            // Get Event ID
+//            $dateonly = _get_dateonly($rr);
+//            $timestamp_for_eventid = _get_timestamp_for_eventid2($eventseries_id, $dateonly);
+//            $event_id = $eventseries_id . '-' . $timestamp_for_eventid;
+//
+//            // Build output for Number of registrants
+//            $table_html = "<div class='row'>";
+//            $table_html .= "<div class='col-6'><a target='_blank' href='/admin/registrants/" . $event_id . "'>Students</a></div><div class='col-6'>" . $numofreg_array['students'] . "</div>";
+//            $table_html .= "</div>";
+//            $table_html .= "<div class='row'>";
+//            $table_html .= "<div class='col-6'>Guests</div><div class='col-6'>" . $numofreg_array['guests'] . "</div>";
+//            $table_html .= "</div>";
+//            $table_html .= "<div class='row'>";
+//            $table_html .= "<div class='col-6'>Total</div><div class='col-6'>" . $numofreg_array['total'] . "</div>";
+//            $table_html .= "</div>";
+//
+//            $output = new FormattableMarkup($table_html, []);
+//            $rr->_entity->set('field_placeholder_num_of_reg', $output);
+//
+//            // Event ID
+//            $output_eventid = new FormattableMarkup($event_id, []);
+//            $rr->_entity->set('field_placeholder_for_event_id', $output_eventid); //<-- This worked!
+//
+//
+//            $x++;
+//        } // END OF foreach($view->result as $key => $rr)
+//    } // END OF if ($view->id() == 'visitd9_day_agenda')
+
+
+    return $view;
+
+} // END OF function asuaec_visit_views_pre_render()
+
+
+
+function _get_dateonly($rr) {
+    $date = $rr->_entity->get('date')->getValue()['0']['value']; //2023-08-10T15:00:00
+//    $date_obj = DateTime::createFromFormat("Y-m-d\TH:i:s", $date, new DateTimeZone('UTC'));
+    // Take date part of the event date/time. Example: 2023-08-10
+    $dateonly = substr($date, 0, 10); // 2023-08-10
+    return $dateonly;
+}
+
+function _get_original_datetime_formatted($rr, $eventseries_id) {
+    // Get actual event datetime timestamp
+    $dateonly = _get_dateonly($rr);
+    $timestamp_for_eventid = _get_timestamp_for_eventid2($eventseries_id, $dateonly);
+
+    // Now, change $timestamp_for_eventid to 2023-08-10T15:00:00 format
+
+    // Create Date obj from timestamp
+    // For America/Phoenix
+    $date_obj_phx = DateTimePlus::createFromTimestamp($timestamp_for_eventid);
+    $date_obj_phx->setTimeZone(new DateTimeZone('America/Phoenix'));
+    $original_datetime_formatted = $date_obj_phx->format("Y-m-d\TH:i:s");
+    return $original_datetime_formatted;
+}
+
+
+/**
+ * @param $variables
+ * @param $theindex
+ * @param $eventseries_id
+ * @param $event_start_date in 2023-05-17T15:00:00 format. It is in UTC.
+ *
+ * Count how many people are registared including guests.
+ *
+ * Returns $registrant_count_array:
+ * - Students
+ * - Guests
+ * - Total
+ * Returns [] if registrant_count is not set at all.
+ *
+ * Modified _get_registrant_count() in asuaec_visit.module to return array.
+ */
+function _get_registrant_count_returns_array($eventseries_id, $variables = null, $theindex = null, $event_start_date = null) {
+
+    // Get start date
+    // When $variables and $theindex is null, $event_start_date should be passed.
+    if(!is_null($variables)) {
+        $event_date_array = $variables['rows'][$theindex]['content']['#row']->_entity->get('date')->getValue();
+        $event_start_date = $event_date_array[0]['value']; // in 2023-05-17T15:00:00 format in UTC.
+    }
+
+    // Get timestamp of actual tour
+    $date_obj_actualtour = DateTime::createFromFormat("Y-m-d\TH:i:s", $event_start_date, new DateTimeZone('UTC'));
+    $start_timestamp_actualtour = $date_obj_actualtour->getTimestamp();
+
+    // Get date only of the actual tour in Phoenix time --- Added on 6/23/2023.
+    $date_obj_actualtour->setTimeZone(new DateTimeZone('America/Phoenix'));
+    $dateonly_actualtour = $date_obj_actualtour->format('Y-m-d');
+//    ksm($dateonly_actualtour, "dateonly_actualtour - Phoenix time");
+
+    // Get timestamp that we use for Event ID
+    // NOTES: Added Time only field in Event series. For the timestamp that we use for Event ID, calculate the timestamp using the date that was clicked and the Time only field value.
+    $timestamp_for_eventid = _get_timestamp_for_eventid($eventseries_id, $dateonly_actualtour, $start_timestamp_actualtour);
+//    ksm($timestamp_for_eventid, "timestamp_for_eventid - _get_registrant_count()");
+
+    // The event id is: (Event series entity id)-(timestamp using the Time only field).
+    $event_id = $eventseries_id . '-' . $timestamp_for_eventid;
+//    ksm($event_id, "event id"); // 1-1684335600
+
+    // DB access
+    $nodeStorage = \Drupal::entityTypeManager()->getStorage('node');
+    $ids = $nodeStorage->getQuery()
+		->accessCheck(TRUE)
+        ->condition('type', 'student_registered_visits') // type = bundle id (machine name)
+        ->condition('field_student_event_id', $event_id, '=')
+        ->execute();
+
+    $student_registered_nodes = $nodeStorage->loadMultiple($ids);
+//    ksm($student_registered_nodes, "student_registered_nodes");
+    // Registrant count
+    $registrant_count = sizeof($student_registered_nodes);
+//    ksm($registrant_count, "registrant_count new");
+
+    // Guest count
+    $guest_count = 0;
+    foreach ($student_registered_nodes as $nid => $node) {
+        $field_student_guests_array = $node->get('field_student_guests')->getValue();
+//        ksm($field_student_guests_array, "field_student_guests");
+        if(sizeof($field_student_guests_array) > 0) {
+            $field_student_guests = $node->get('field_student_guests')->getValue()[0]['value'];
+            $guest_count = $guest_count + $field_student_guests;
+        }
+    }
+    // Put together registrant count and guest count
+    $registrant_count_total = $registrant_count + $guest_count;
+    $registrant_count_array = [];
+    $registrant_count_array['students'] = $registrant_count;
+    $registrant_count_array['guests'] = $guest_count;
+    $registrant_count_array['total'] = $registrant_count_total;
+
+    return $registrant_count_array;
+}
+
+
+/**
+ * @param $eventseries_id
+ * @param $dateonly // date only ex. 2023-05-03 or 20230503 in Phoenix time. Date that was clicked.
+ * @param $timestamp_actualtour
+ * @return int|mixed
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ *
+ * Helping function
+ * Return timestamp that we can use for event id which we calculate using the Time only field in Event series entity.
+ * If Original time only field is empty, if $timestamp_actualtour is passed, it will use $timestamp_actualtour.
+ * If Original time only field is empty, if $timestamp_actualtour is not passed, it will return ''.
+ *
+ * Exact same function as the _get_timestamp_for_eventid() from asuaec_visit.module.
+ */
+function _get_timestamp_for_eventid2($eventseries_id, $dateonly, $timestamp_actualtour = '') {
+    $ret_value = '';
+    // Load the Event series entity
+    $entity_type_eventseries = 'eventseries';
+    $entity_id_eventseries = $eventseries_id;
+    $entity_eventseries  = \Drupal::entityTypeManager()->getStorage($entity_type_eventseries)->load($entity_id_eventseries);
+
+    // Get Time only field value from Event series entity
+    $timeonly = _getValueOfEvent2($entity_eventseries, 'field_start_time_for_eventid', null);
+//    ksm($timeonly, "timeonly timestamp"); // 36000
+//    ksm($dateonly, "dateonly"); // 2023-06-27   Y-m-d
+
+    // dateonly - If it comes in as YYYYmmdd
+
+    if($timeonly != '') {
+
+        // Get the timestamp for the date at 0 o'clock.
+        if(strpos($dateonly, '-') == false) {
+            $date_obj = DateTime::createFromFormat("Ymd\TH:i:s", $dateonly . 'T00:00:00', new DateTimeZone('America/Phoenix'));
+        } else {
+            $date_obj = DateTime::createFromFormat("Y-m-d\TH:i:s", $dateonly . 'T00:00:00', new DateTimeZone('America/Phoenix'));
+        }
+        $timestamp_at0oclock = $date_obj->getTimestamp();
+//        ksm($timestamp_at0oclock, "timestamp_at0oclock");
+        // Combine timestamp value at 0 o'clock and Time only field value
+        $timestamp_for_eventid = $timestamp_at0oclock + intval($timeonly);
+//        ksm($timestamp_for_eventid, "timestamp_for_eventid");
+//        ksm($timestamp_actualtour, "start timestamp for actual event");
+        $ret_value = $timestamp_for_eventid;
+
+    } else {
+        $ret_value = $timestamp_actualtour;
+    }
+    return $ret_value;
+}
+
+
+/**
+ * @param $entity_eventseries
+ * @param $field_name
+ * @param null $overwrite_field_name
+ * @return mixed|string
+ *
+ * Helping function
+ * Get field value from Event Series entity
+ *
+ * Exact same function as the _getValueOfEvent() from asuaec_visit.module.
+ */
+function _getValueOfEvent2($entity_eventseries, $field_name, $overwrite_field_name = null) { // $overwrite_field_name is a boolean field.
+    $ret_value = '';
+    $temp_array = $entity_eventseries->get($field_name)->getValue();
+    if(sizeof($temp_array) > 0){
+        $ret_value = $temp_array[0]['value'];
+    } else {
+        $ret_value = '';
+    }
+    return $ret_value;
+}

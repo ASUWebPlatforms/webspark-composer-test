@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: asu_us_state_name
+label: 'ASU US state name'
+category: ASU
+likert: false
+options: ''

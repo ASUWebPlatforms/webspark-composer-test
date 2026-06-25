@@ -1,0 +1,10 @@
+name: Isearch webspark
+type: module
+description: Enables custom website features and styles
+package: 'Custom Modules'
+core_version_requirement: ^8.8 || ^9 || ^10
+version: '2.0.0'
+configure: graduate_custom.configuration_form
+dependencies:
+  - drupal:block
+  - twig_tweak:twig_tweak

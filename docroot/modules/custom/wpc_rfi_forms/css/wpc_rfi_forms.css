@@ -1,0 +1,5 @@
+
+.wpc-rfi-forms-programs-program-form .field--name-user-id,
+.wpc-rfi-forms-sources-leadsource-form .field--name-user-id {
+  display: none;
+}

@@ -1,0 +1,10 @@
+<div class="card-statistic card-wrapper" id="card-{{ paragraph.uuid.value }}">
+  <div class="card-wrapper-inner">
+    <div class="card-statistic--header">
+      {{ content.field_heading|render|striptags|trim }}
+    </div>
+    <div class="card-statistic--body">
+      {{ content.field_body|render }}
+    </div>
+  </div>
+</div>

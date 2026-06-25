@@ -1,0 +1,13 @@
+rfi-library:
+  version: 1.x
+  js:
+    js/asuaec_rfi.js: {}
+    js/asuaec_enterpriseclientid.js: {}
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+    - core/drupalSettings
+  css:
+    theme:
+      css/asuaec_rfi.css: {}

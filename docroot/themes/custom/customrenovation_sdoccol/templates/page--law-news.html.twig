@@ -1,0 +1,112 @@
+{#
+/**
+ * @file
+ * Template for the main page.
+ */
+#}
+<div class="page page-wrapper-webspark">
+  <main class="pt-5 pb-5">
+    {% if page.header %}
+      <div class="container">
+        {{ page.header }}
+      </div>
+    {% endif %}
+
+    {% if page.pre_content %}
+      <div class="page__pre-content">
+        <div class="container">
+          {{ page.pre_content }}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if page.content %}
+      <div id="skip-to-content" class="page__content container">
+      <!-- Law News Content -->
+
+				<div class="row">
+          <div class="col-md-8 col-md-pull-4 pad-left-md">
+						{{ page.content }}
+					</div>
+					<!-- Empty for offset -->
+					<div class="col-md-4 col-md-push-8 pad-bot-sm">
+	        </div>
+				</div>
+
+      </div>
+    {% endif %}
+
+  </main>
+
+  {% if page.footer %}
+    <footer class="page__footer" id="asu-footer" role="contentinfo">
+      {{ page.footer }}
+    </footer>
+  {% endif %}
+</div>
+
+<style>
+.container {
+    width: auto;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.tag.asu-news.block a {
+    background: #000000;
+    text-decoration: none;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    padding: 0 0.5em;
+    display: inline-block;
+    font-size: 18px;
+    line-height: 30px;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.pad-top-xl {
+    padding-top: 48px;
+}
+
+.container {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+.space-top-0 {
+    margin-top: 0;
+}
+hr {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    border: 0;
+    border-top: 1px solid #b7b7b7;
+}
+hr {
+    box-sizing: content-box;
+    height: 0;
+}
+.asu-publish-date {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 10px 0 20px;
+    clear: both;
+    display: block;
+}
+
+h2, .h2 {
+    font-size: 40px;
+}
+
+p {
+    margin: 1em 0;
+    font-weight: 400 !important;
+    line-height: 24px !important;
+    max-width: 800px;
+}
+</style>

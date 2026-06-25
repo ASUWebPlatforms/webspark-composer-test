@@ -1,0 +1,210 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.senator_spotlight.body
+    - field.field.node.senator_spotlight.feeds_item
+    - field.field.node.senator_spotlight.field_academic_unit
+    - field.field.node.senator_spotlight.field_academic_year
+    - field.field.node.senator_spotlight.field_asu_affiliated_questions
+    - field.field.node.senator_spotlight.field_asu_search_profile
+    - field.field.node.senator_spotlight.field_campus
+    - field.field.node.senator_spotlight.field_first_name
+    - field.field.node.senator_spotlight.field_image
+    - field.field.node.senator_spotlight.field_last_name
+    - field.field.node.senator_spotlight.field_month
+    - field.field.node.senator_spotlight.field_professional_title
+    - field.field.node.senator_spotlight.field_school_or_department
+    - field.field.node.senator_spotlight.field_senate_affiliated_question
+    - field.field.node.senator_spotlight.field_senate_year
+    - field.field.node.senator_spotlight.layout_builder__layout
+    - image.style.thumbnail
+    - node.type.senator_spotlight
+  module:
+    - image
+    - link
+    - path
+    - text
+id: node.senator_spotlight.default
+targetEntityType: node
+bundle: senator_spotlight
+mode: default
+content:
+  body:
+    type: text_textarea_with_summary
+    weight: 20
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  created:
+    type: datetime_timestamp
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_academic_unit:
+    type: entity_reference_autocomplete
+    weight: 17
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_academic_year:
+    type: options_select
+    weight: 11
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_asu_affiliated_questions:
+    type: text_textarea_with_summary
+    weight: 21
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  field_asu_search_profile:
+    type: link_default
+    weight: 15
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_campus:
+    type: options_buttons
+    weight: 18
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_first_name:
+    type: string_textfield
+    weight: 9
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_image:
+    type: image_image
+    weight: 19
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_last_name:
+    type: string_textfield
+    weight: 10
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_month:
+    type: options_buttons
+    weight: 13
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_professional_title:
+    type: string_textfield
+    weight: 14
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_school_or_department:
+    type: string_textfield
+    weight: 16
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_senate_affiliated_question:
+    type: text_textarea_with_summary
+    weight: 22
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  field_senate_year:
+    type: string_textfield
+    weight: 12
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  promote:
+    type: boolean_checkbox
+    weight: 4
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 8
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  sticky:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  url_redirects:
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  feeds_item: true
+  layout_builder__layout: true

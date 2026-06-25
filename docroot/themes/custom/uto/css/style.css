@@ -1,0 +1,136 @@
+/* Remove gutters from UTO homepage card arrangement */
+.uto-home-cards .uds-card-arrangement>.uds-card-arrangement-card-container.auto-arrangement {
+  row-gap: 0;
+}
+
+.uto-home-cards .uds-card-arrangement>.uds-card-arrangement-card-container {
+  -moz-column-gap: 0;
+  column-gap: 0;
+}
+
+.uto-home-cards .card {
+  border: 0;
+}
+
+.uto-home-cards .card-img-top {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.uds-card-arrangement .card-img-top img, .uto-news-cards .card-img-top img {
+  aspect-ratio: 2;
+  --card-img-top-height: 12.5rem;
+  height: var(--card-img-top-height);
+  max-width: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+/* Legacy styles from D7 */
+.btn-primary, .btn-primary:hover {
+  color: #fff;
+  background-color: #8c1d40;
+  border-color: #8c1d40;
+}
+
+/* Leadership Cards */
+.uto-leadership-cards .card-img-top,
+.uto-leadership-cards .card-img-top img {
+  height: 23.875rem;
+}
+@media (max-width: 991.98px) {
+  .uto-leadership-cards .card-img-top,
+  .uto-leadership-cards .card-img-top img {
+    height: 19.1rem;
+  }
+}
+
+/* Newsroom custom card styles */
+
+.card-event-details.newsroom {
+  flex-grow: 0;
+}
+
+/* Custom Table fix for images/icons in tables */
+.uds-table:not(.uds-table-fixed) table tr :nth-child(n+1) img {
+  max-width: 50%;
+}
+
+/* Custom Border Colors */
+hr.copy-divider.maroon {
+  background-color: #812841;
+}
+hr.copy-divider.green {
+  background-color: #88BB42;
+}
+hr.copy-divider.orange {
+  background-color: #EF8546;
+}
+hr.copy-divider.blue {
+  background-color: #46A2DB;
+}
+hr.copy-divider.gray {
+  background-color: #484848;
+}
+
+/** Engage table fix **/
+.uds-table.engage-table tr {
+  vertical-align: top;
+}
+
+/** author styles **/
+.authorContainer {
+  display: inline-flex;
+}
+
+/** border fix for tech bytes **/
+.card-story>div:first-of-type:not(.card-image-content, .card-header),
+.card-story:not(.card.card-foldable)>div:first-of-type:not(.card-image-content, .card-header) {
+  padding: 0;
+  flex-grow: 1;
+}
+
+/** Allowing 4 column layouts with buttons to be equally-sized **/
+.four-columns a.btn{
+  font-size: .875rem;
+  padding: 0.5rem 1rem;
+}
+
+[data-title="Our Vision"] ~ .uds-image-overlap {
+  grid-template-rows: 4.5rem .8fr 4.5rem;
+}
+
+.uds-card-arrangement.giving-back .card .card-buttons .card-button a.btn {
+  max-width: 100%!important;
+  white-space: normal!important;
+}
+.uds-card-arrangement.giving-back {
+  margin-bottom: 48px!important;
+}
+
+/** Article page text alignment **/
+
+@media(min-width:1224px) {
+  .article .layout__fixed-width .center-container.max-size-container {
+    max-width:1224px;
+    padding: 0 114.078px;
+    }
+}
+
+  /* .article .layout__fixed-width .center-container.max-size-container .container {
+
+
+  } */
+
+/** custom blockquote style that doesn't interfere with uds blockquote style **/
+blockquote:not(.uds-blockquote blockquote),
+.ck blockquote:not(.uds-blockquote blockquote) {
+  margin-left: 0px;
+  border-left: .5rem solid #d0d0d0;
+  padding-left: 15px;
+}
+
+/** fix card header z-index in view **/
+.card.card-story .card-header {
+  z-index: 1;
+}

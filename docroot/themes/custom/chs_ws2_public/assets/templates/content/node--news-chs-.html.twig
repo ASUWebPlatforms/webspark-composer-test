@@ -1,0 +1,47 @@
+{#
+/**
+ * @file
+ * Template for a Node.
+ */
+#}
+{%
+  set classes = [
+  'node',
+  node.isPromoted() ? 'node--promoted',
+  node.isSticky() ? 'node--sticky',
+  not node.isPublished() ? 'node--unpublished',
+  'col-xs-12', 
+  'col-sm-10', 
+  'col-sm-offset-1',
+]
+%}
+{% set date = node.createdtime|format_date('article_date') %}
+<section itemprop="articleBody">
+  <div class="container news-article-heading news-article pad-top-xl spacing-bottom-96">
+    <div class="row">
+      <!-- Main Content -->
+      <article{{ attributes.addClass(classes) }}>
+      {{ title_prefix }}
+      {{ title_suffix }}
+      {% block content %}
+        <h1>{{ label }}</h1>
+
+        <hr class="space-top-0">
+        <div class="row news-article-headingbody space-bot-lg">
+          <div class="col-xs-12 col-sm-10 col-sm-offset-1 space-bot-sm">
+            <div class="asu-publish-date">{{ date }}</div>
+            <div class="content-body">
+            ​​{% if content.field_media|render is not empty %} 
+            <div class="image-with-caption image-with-caption-border-right image-with-caption-float-left" itemscope="" itemtype="http://schema.org/ImageObject">
+             {{ content.field_media|render }}
+            </div>
+            {% endif %}
+            {{ content.body }}
+            </div>
+          </div>
+        </div>
+      {% endblock %}
+      </article>
+    </div>
+  </div>
+</section>

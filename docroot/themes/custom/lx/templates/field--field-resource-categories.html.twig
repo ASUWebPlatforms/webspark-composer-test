@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Template for the page title.
+ */
+#}
+
+<ul style="list-style-type: none;" {{ attributes }}>
+  {% for item in items %}
+    <li><i class="far fa-check-circle" aria-hidden="true"></i> {{ item.content }}</li>
+  {% endfor %}
+</ul>

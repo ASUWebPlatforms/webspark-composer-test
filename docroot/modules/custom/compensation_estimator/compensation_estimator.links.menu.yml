@@ -1,0 +1,11 @@
+compensation_estimator.calform:
+  title: 'Compensation Estimator'
+  description: 'Compensation Estimator'
+  route_name: compensation_estimator.calform
+
+compensation_estimator.adminform:
+  title: 'Compensation Estimator'
+  description: 'Compensation Estimator Configuration'
+  parent: system.admin_config
+  menu_name: Compensation Estimator
+  route_name: compensation_estimator.admin_settings

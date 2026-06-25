@@ -1,0 +1,7 @@
+name: CKEditor Media Amp
+type: module
+description: Adding mediaamp videos in ckeditor video plugin
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+version: VERSION
+package: CKEditor

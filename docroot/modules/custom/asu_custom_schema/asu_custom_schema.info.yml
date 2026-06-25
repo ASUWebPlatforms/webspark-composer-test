@@ -1,0 +1,8 @@
+name: 'ASU Node Schema'
+type: module
+description: 'Adds a per-node Schema.org JSON-LD tab with token support and auto-generation.'
+package: ASU
+core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:node
+  - drupal:token

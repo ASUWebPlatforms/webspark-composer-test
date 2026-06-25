@@ -1,0 +1,17 @@
+global:
+  css:
+    theme:
+      css/asu_components.css: {}
+  js:
+    js/asu_components.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+components_js:
+  version: 1.x
+  js:
+    js/highlight_components.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

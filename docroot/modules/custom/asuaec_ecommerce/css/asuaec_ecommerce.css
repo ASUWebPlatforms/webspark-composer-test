@@ -1,0 +1,4 @@
+/* Hide "Finalize shipment" and "Cancel shipment" links */
+#edit-actions--2 {
+    display: none;
+}

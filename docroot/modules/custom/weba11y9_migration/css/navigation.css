@@ -1,0 +1,78 @@
+/**
+ * @file navigation.css
+ * BRIDGE CSS — Primary menu, sidebar, and anchor link navigation overrides.
+ * Extracted from the legacy Access theme.
+ * These classes are referenced in database content. Remove as TSS team
+ * migrates content to Webspark-native components.
+ * See: WEBA11Y9_MIGRATION_TICKETS.md (Tickets S1, S2)
+ * @todo Remove after content migration is complete.
+ */
+
+/* Primary menu subheaders */
+.header-main ul.nav-list li.navlink {
+	max-width: 100% !important;
+}
+
+.header-main ul.nav-list li.navlink > a {
+    padding: 0.4rem 0px;
+}
+.nav-list .dropdown-container li.nav-button {
+  margin: 0.75em 0 1.5em 0;
+}
+.nav-list .dropdown-container li.nav-button a.button-dark:hover,
+.nav-list .dropdown-container li.nav-button a.button-dark:focus {
+  background-color: #ccc !important;
+}
+.nav-list .dropdown-container li.nav-button a {
+  font-size: 1.1rem;
+}
+.nav-list .dropdown-container li.nav-button::marker {
+  color: transparent;
+}
+.nav-list .dropdown-container ul .nav-link a {
+  margin: 0.65rem 0 !important;
+  line-height: 1.15rem !important;
+}
+.nav-list .header-dropdown-3 > .dropdown-container ul h3.ul-heading {
+  margin: 0.5rem 0 0 0 !important;
+}
+.header-main ul.nav-list a[href=""],
+.sidebar span.nav-link {
+  font-size: 1.5rem;
+  letter-spacing: -0.035em;
+  font-weight: bold;
+  opacity: 1;
+  cursor: default;
+  margin: 1rem 0 0.75rem 0 !important;
+}
+.header-main ul.nav-list a[href=""]:hover,
+.header-main ul.nav-list a[href=""]:focus,
+.sidebar span.nav-link:hover,
+.sidebar span.nav-link:focus {
+  color: #000 !important;
+  text-decoration: none !important;
+  outline: 0 none !important;
+  border: 0 none !important;
+}
+@media (min-width: 993px) {
+	.header-main div.header-dropdown-1.dropdown:not(.mega) .menu-column {
+    min-width: 19rem !important;
+	}
+}
+.sidebar .nav-link {
+  padding: 0.65rem 0.5rem;
+}
+/* Fixing anchor links */
+:target:before {
+  content:"";
+  display:block;
+  height:105px; /* adjust to match your fixed header height*/
+  margin:-105px 0 0; /* negative of fixed header height */
+}
+/* removing this WS2 style - capping too many words that shouldn't be */
+.css-1m90toe .navlink > a.nav-item,
+.css-1m90toe .navicon > a.nav-item,
+.css-1m90toe .navbutton > a.nav-item,
+.css-1m90toe nav.header-nav .navlist > li > a {
+  text-transform: none !important;
+}

@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_rate_institution
+    - node.type.asu_tuition_fee_rate_data
+id: node.asu_tuition_fee_rate_data.field_rate_institution
+field_name: field_rate_institution
+entity_type: node
+bundle: asu_tuition_fee_rate_data
+label: Institution
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

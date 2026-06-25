@@ -1,0 +1,13 @@
+gp_dataquiz_handler.settings:
+  type: config_object
+  label: 'GP Data Quiz settings'
+  mapping:
+    end_states_taxonomy:
+      type: select
+      label: 'End States Taxonomy'
+      description: 'Choose a vocabulary to use for End States.'
+    transaction_type_taxonomy:
+      type: select
+      label: 'Transaction Type Taxonomy'
+      description: 'Choose a vocabulary to use for Transaction Type.'
+

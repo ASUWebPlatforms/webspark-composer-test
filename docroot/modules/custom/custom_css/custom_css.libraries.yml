@@ -1,0 +1,6 @@
+my_custom_css:
+  css:
+    layout:
+      css/mycss.css: {}
+  dependencies:
+    - core/drupal

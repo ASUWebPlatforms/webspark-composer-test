@@ -1,0 +1,7 @@
+asuaec_tuition_calendar.controllerpage:
+  path: '/asuaec_tuition_calendar/controller'
+  defaults:
+    _controller: '\Drupal\asuaec_tuition_calendar\Controller\TuitionCalendarSectionControllerPage::tuitionBillingCalendarView'
+    _title: 'Tuition and Billing Calendar'
+  requirements:
+    _permission: 'access content'

@@ -1,0 +1,5 @@
+name: Change Format
+type: module
+package: custom
+core_version_requirement: ^9 || ^10
+version: VERSION

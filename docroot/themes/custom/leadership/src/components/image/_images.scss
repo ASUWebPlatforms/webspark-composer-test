@@ -1,0 +1,25 @@
+@import '../../sass/extends/images';
+
+.uds-img {
+  /* Add margin to bottom of image with boxshadow.*/
+  &.uds-img-drop-shadow {
+    margin-bottom: 1em;
+  }
+}
+
+/* Apply border to embedded image. */
+.embedded-media {
+  max-width: 100% !important;
+  img {
+    border: 1px solid $uds-color-base-gray-3;
+    max-width: 100% !important;
+    height: auto;
+  }
+}
+
+/* Figcaption Overrides CKeditor. */
+.caption-drupal-media {
+  img {
+    border: 1px solid $uds-color-base-gray-3;
+  }
+}

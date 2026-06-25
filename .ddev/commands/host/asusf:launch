@@ -1,0 +1,99 @@
+#!/bin/bash
+##
+## Usage: asusf:launch sitename
+## Description: Open a locally-pulled Stack site in the default web browser.
+## Example: `ddev asusf:launch admissionasu`
+##
+## This command launches a specific site in your default web browser.
+##
+## Arguments:
+##   sitename: The name of the site to launch. This will be used to construct
+##             the URL in the format `https://sitename.asu.ddev.site`.
+##
+## Examples:
+##   ddev asusf:launch admissionasu
+##     - Opens `https://admissionasu.asu.ddev.site` in your default browser.
+##
+## Requirements:
+##   - The script supports macOS, Linux, and Windows operating systems.
+##   - A valid sitename must be provided as an argument.
+##
+
+set -eu -o pipefail
+
+# Define color codes
+RED='\033[0;31m'
+RED_BG='\033[41m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+function show_help() {
+  sed -n 's/^##//p' ${0}
+}
+
+while :; do
+  case ${1:-} in
+  -h | -\? | --help)
+    show_help
+    exit
+    ;;
+  --) # End of all options.
+    shift
+    break
+    ;;
+  -?*)
+    printf 'WARN: Unknown option (ignored): %s\n' "$1" >&2
+    ;;
+  *) # Default case: No more options, so break out of the loop.
+    break ;;
+  esac
+
+  shift
+done
+
+
+function launch() {
+  if [ "${DDEV_PROJECT_STATUS}" != "running" ]; then
+    echo "Project ${DDEV_PROJECT} is not running, starting it"
+    ddev start
+    start_exit_code=$?
+    if [ $start_exit_code -ne 0 ]; then
+      exit $start_exit_code
+    fi
+  fi
+  if [ $# -ne 1 ]; then
+    echo -e "${RED}[error]${NC} Please provide exactly one sitename as an argument."
+    echo -e "Usage: ddev asusf:launch sitename"
+    exit 1
+  fi
+
+  local sitename=$1
+
+  # Validate sitename (alphanumeric and hyphens only)
+  if [[ ! "$sitename" =~ ^[a-zA-Z0-9-]+$ ]]; then
+    echo -e "${RED}[error]${NC} Invalid sitename. Only alphanumeric characters and hyphens are allowed."
+    exit 1
+  fi
+
+  local drushdir="drush/sites"
+  # open the alias file with the same name as the sitename
+  local alias_file="${drushdir}/${sitename}.site.yml"
+  # Parse the alias file to get the uri for local development
+  local url
+  url="https://$(grep -m 1 -oE 'uri:\s+.*' "${alias_file}" | awk '{print $2}' | tr -d '\r\n')" || {
+    echo -e "${RED_BG}[error]${RED} Failed to locate a drush alias file for ${sitename}. Please generate it first."
+    exit 1
+  }
+
+  echo -e "${GREEN}[info]${NC} Launching ${url} in your default browser..."
+
+  # Detect and open the URL in the default browser
+  case "$(uname -s)" in
+    Linux*)   command -v xdg-open >/dev/null && xdg-open "${url}" || echo -e "${RED}[error]${NC} xdg-open not found." ;;
+    Darwin*)  command -v open >/dev/null && open "${url}" || echo -e "${RED}[error]${NC} open not found." ;;
+    CYGWIN*|MINGW*|MSYS*) start "${url}" ;;
+    *)        echo -e "${RED}[error]${NC} Unsupported operating system." ;;
+  esac
+}
+
+launch "$@"

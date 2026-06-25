@@ -1,0 +1,6 @@
+name: ASU Webform Encryption
+type: module
+description: 'Encrypts webform fields values in URL.'
+package: ASU
+dependencies: webform
+core_version_requirement: ^8.8 || ^9 || ^10

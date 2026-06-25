@@ -1,0 +1,33 @@
+.team-view {
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .views-row {
+    width: 17rem;
+    margin: 0 1rem 1rem 0;
+
+    @media screen and (max-width: $uds-breakpoint-md) {
+      margin: 0 auto 1rem;
+    }
+  }
+
+  .views-field-field-headshot img {
+    border-radius: 50%;
+  }
+
+  .views-field-title {
+    font-weight: bold;
+    margin: 1rem 0;
+  }
+}
+
+.team-block-1-wrapper {
+  margin-top: 6rem;
+}
+
+.team-header-wrapper {
+  font-size: 1.5rem;
+}

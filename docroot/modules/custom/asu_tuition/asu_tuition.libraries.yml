@@ -1,0 +1,39 @@
+tuitionSearchPage:
+  version: 1.1
+  js:
+    js/asu_tuition.js: {}
+  css:
+    theme:
+       css/asu_tuition.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+    - core/jquery.once
+
+tuitionResultPage:
+  version: 1.x
+  css:
+    theme:
+       css/asu_tuition.css: {}
+  js:
+    js/asu_tuition.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+    - core/jquery.once
+    - core/drupal
+
+tuitionAdminPage:
+  version: 1.x
+  css:
+    theme:
+       css/asu_tuition_admin.css: {}
+  #js:
+  #  js/asu_tuition_admin.js: {}
+  #dependencies:
+  #  - core/drupal
+  #  - core/jquery
+  #  - core/drupalStates
+  #  - core/jquery.once
+  #  - core/drupalSettings
+

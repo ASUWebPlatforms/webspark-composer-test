@@ -1,0 +1,429 @@
+langcode: en
+status: open
+dependencies: {  }
+open: null
+close: null
+weight: 0
+uid: 5
+template: false
+archive: false
+id: subscribe_to_the_college_bound_b
+title: 'Subscribe to the College Bound Blog'
+description: ''
+category: ''
+elements: |-
+  parent_first_name:
+    '#type': textfield
+    '#title': 'Parent first name'
+    '#required': true
+  parent_last_name:
+    '#type': textfield
+    '#title': 'Parent last name'
+    '#required': true
+  parent_email_address:
+    '#type': email
+    '#title': 'Parent email address'
+    '#placeholder': 'Enter email'
+    '#required': true
+    '#default_value': '[current-page:query:newsletter_email]'
+  country:
+    '#type': select
+    '#title': Country
+    '#options': country_names
+    '#required': true
+    '#states':
+      visible:
+        ':input[name="country"]':
+          value: 'United States'
+    '#default_value': 'United States'
+  zip_code:
+    '#type': textfield
+    '#title': 'Zip code'
+    '#required': true
+  postal_code:
+    '#type': textfield
+    '#title': 'Postal code'
+    '#required': true
+    '#states':
+      visible:
+        ':input[name="country"]':
+          '!value': 'United States'
+  my_student_will_graduate_from_high_school_in:
+    '#type': select
+    '#title': 'My student will graduate from high school in'
+    '#options':
+      2207: '2021'
+      2217: '2022'
+      2227: '2023'
+      2237: '2024'
+      2247: '2025 and beyond'
+    '#required': true
+  form_location:
+    '#type': hidden
+    '#title': 'Form location'
+    '#default_value': '[current-page:query:loc]'
+  i_m_reading_this_blog_to_learn_more_about_c:
+    '#type': checkboxes
+    '#title': 'I’m reading this blog to learn more about:'
+    '#options':
+      academic: 'Helping my student figure out what to study in college'
+      financial: 'Figuring out how to pay for college'
+      'college prep': 'Helping my student be prepared to succeed in college'
+      'college life': 'What life at college will be like for my student'
+      1: 'The college admission process'
+      2: 'Attending ASU'
+  from:
+    '#type': hidden
+    '#title': From
+    '#default_value': '[current-page:query:from]'
+  street_address:
+    '#type': textfield
+    '#title': 'Street address'
+    '#required': true
+    '#states':
+      visible:
+        - ':input[name="form_location"]':
+            empty: true
+        - or
+        - ':input[name="form_location"]':
+            value: menu
+  phone_number:
+    '#type': textfield
+    '#title': 'Phone number'
+    '#states':
+      visible:
+        - ':input[name="form_location"]':
+            empty: true
+        - or
+        - ':input[name="form_location"]':
+            value: menu
+  parent_birth_year:
+    '#type': textfield
+    '#title': 'Parent birth year'
+    '#required': true
+    '#states':
+      visible:
+        - ':input[name="form_location"]':
+            empty: true
+        - or
+        - ':input[name="form_location"]':
+            value: menu
+  occupation:
+    '#type': textfield
+    '#title': Occupation
+    '#states':
+      visible:
+        - ':input[name="form_location"]':
+            empty: true
+        - or
+        - ':input[name="form_location"]':
+            value: menu
+  spouse_name:
+    '#type': textfield
+    '#title': 'Spouse name'
+    '#states':
+      visible:
+        - ':input[name="form_location"]':
+            empty: true
+        - or
+        - ':input[name="form_location"]':
+            value: menu
+  student_information_:
+    '#type': fieldset
+    '#title': 'Student information:'
+    first_name:
+      '#type': textfield
+      '#title': 'First name'
+      '#required': true
+    last_name:
+      '#type': textfield
+      '#title': 'Last name'
+      '#required': true
+    st_email_address:
+      '#type': email
+      '#title': 'Email address'
+      '#required': true
+    date_of_birth:
+      '#type': date
+      '#title': 'Date of birth'
+      '#required': true
+    my_student_is_a_:
+      '#type': select
+      '#title': 'My student is a:'
+      '#options':
+        1: 'First-year freshman'
+        6: 'Transfer student'
+        17: 'Graduate student'
+      '#required': true
+    is_your_student_a_citizen_of_a_country_outside_of_the_us_:
+      '#type': radios
+      '#title': 'Is your student a citizen of a country outside of the US?'
+      '#options':
+        'Yes': 'Yes'
+        'No': 'No'
+      '#required': true
+  processed_text:
+    '#type': processed_text
+    '#text': |
+      <style type="text/css">/* GDPR consent text */
+      	.ol-list {
+      		list-style: none; 
+      		counter-reset: li;
+      		padding-left: 15px;
+      	}
+      	.ol-list li::before {
+      		content: counter(li); 
+      		color: #000;
+      		font-weight: bold;
+      		display: inline-block; 
+      		width: 1em;
+      		margin-left: -1em;
+      		background-color: #FFC627;
+      		text-align: center;
+      		float: left;
+      		margin-right: 10px;
+      	}	
+      	.ol-list li {
+      		counter-increment: li;
+      		margin-bottom: 5px;
+      	}
+      	.consent {
+      		width: 90%;
+      		/*display: inline-block;*/
+      	}
+         
+      ol{
+         list-style-type: none !important;
+      }
+      </style>
+      <p><strong>By completing and submitting your information to ASU, you consent to:</strong></p>
+
+      <ol class="ol-list">
+      	<li>
+      	<div class="consent">ASU using this information to contact you regarding information as you request.</div>
+      	</li>
+      	<li>
+      	<div class="consent">the terms of <a href="https://www.asu.edu/privacy/">ASU's Privacy Statement</a>.</div>
+      	</li>
+      	<li>
+      	<div class="consent">If you are in the European Union or another country or state that has adopted the GDPR (General Data Protection Regulation) or similar privacy protection, please also read the <a href="https://www.asu.edu/privacy#european-union-supplement">ASU European Supplement to ASU's Privacy Statement</a>.</div>
+      	</li>
+      </ol>
+    '#format': full_html
+css: ''
+javascript: ''
+settings:
+  ajax: false
+  ajax_scroll_top: form
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: ''
+  page_confirm_path: ''
+  page_theme_name: ''
+  form_title: source_entity_webform
+  form_submit_once: false
+  form_exception_message: ''
+  form_open_message: ''
+  form_close_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_disable_remote_addr: false
+  form_convert_anonymous: false
+  form_prepopulate: true
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_reset: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: true
+  form_required: false
+  form_unsaved: false
+  form_disable_back: false
+  form_submit_back: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
+  submission_label: ''
+  submission_log: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: false
+  wizard_auto_forward: true
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: true
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  preview: 0
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: page
+  confirmation_title: ''
+  confirmation_message: ''
+  confirmation_url: ''
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  token_delete: false
+  serial_disabled: false
+access:
+  create:
+    roles:
+      - anonymous
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers:
+  email:
+    id: email
+    label: Email
+    notes: ''
+    handler_id: email
+    status: true
+    conditions: {  }
+    weight: 0
+    settings:
+      states:
+        - completed
+      to_mail: '[webform_submission:values:parent_email_address:raw]'
+      to_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      from_mail: collegebound@asu.edu
+      from_options: {  }
+      from_name: 'College Bound'
+      subject: 'Welcome to the College Bound blog'
+      body: "Hi {{ data.parent_first_name }},\r\n"
+      excluded_elements: {  }
+      ignore_access: true
+      exclude_empty: false
+      exclude_empty_checkbox: false
+      exclude_attachments: false
+      html: true
+      attachments: false
+      twig: true
+      debug: true
+      reply_to: ''
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      theme_name: custom_webspark_theme
+      parameters: {  }
+variants: {  }

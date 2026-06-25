@@ -1,0 +1,7 @@
+gp_dataquiz_handler.settings:
+  path: '/admin/config/system/gp_dataquiz_handler'
+  defaults:
+    _form: '\Drupal\gp_dataquiz_handler\Form\GpDataQuizSettingsForm'
+    _title: 'GP Data Quiz Handler Settings'
+  requirements:
+    _permission: 'administer site configuration'

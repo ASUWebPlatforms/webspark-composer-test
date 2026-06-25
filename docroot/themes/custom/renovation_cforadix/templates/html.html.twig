@@ -1,0 +1,83 @@
+{#
+/**
+ * @file
+ * Default theme implementation for the basic structure of a single Drupal page.
+ *
+ * Variables:
+ * - logged_in: A flag indicating if user is logged in.
+ * - root_path: The root path of the current page (e.g., node, admin, user).
+ * - node_type: The content type for the current node, if the page is a node.
+ * - head_title: List of text elements that make up the head_title variable.
+ *   May contain one or more of the following:
+ *   - title: The title of the page.
+ *   - name: The name of the site.
+ *   - slogan: The slogan of the site.
+ * - page_top: Initial rendered markup. This should be printed before 'page'.
+ * - page: The rendered page markup.
+ * - page_bottom: Closing rendered markup. This variable should be printed after
+ *   'page'.
+ * - db_offline: A flag indicating if the database is offline.
+ * - placeholder_token: The token for generating head, css, js and js-bottom
+ *   placeholders.
+ *
+ * @see template_preprocess_html()
+ *
+ * @ingroup themeable
+ */
+#}
+<!DOCTYPE html>
+<html{{html_attributes}}>
+  <head>
+    <head-placeholder token="{{ placeholder_token }}">
+    <title>{{ head_title|safe_join(' | ') }}</title>
+    <css-placeholder token="{{ placeholder_token }}">
+    <js-placeholder token="{{ placeholder_token }}">
+    {# Google Tag Manager for tracking click events #}
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-5PJWNB5');</script>
+    {# End of Google Tag Manager #}
+
+    <script async="" src="//www.googletagmanager.com/gtm.js?id=GTM-KDWN8Z"></script>
+    <script async="" src="https://www.google-analytics.com/analytics.js"></script>
+    {%  set base_url = url('<front>')  %}
+    <script alt="fontawesome-lib" src="{{ base_url }}libraries/fontawesome/js/all.min.js" ></script>
+    <script defer src="/profiles/contrib/webspark/themes/renovation/js/asuawesome.js"></script>
+    <script type="text/javascript">
+      /*<![CDATA[*/
+      (function() {
+        var sz = document.createElement('script'); sz.type = 'text/javascript'; sz.async = true;
+        sz.src = '//siteimproveanalytics.com/js/siteanalyze_6158688.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sz, s);
+      })();
+      /*]]>*/
+    </script>
+  </head>
+  <body{{attributes}}>
+  <!-- Google Tag Manager ASU Universal-->
+  <noscript>
+    <iframe src="//www.googletagmanager.com/ns.html?id=GTM-KDWN8Z"
+            height="0" width="0" style="display:none;visibility:hidden" aria-hidden="true"></iframe>
+  </noscript>
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KDWN8Z');
+  </script>
+  <!-- End Google Tag Manager ASU Universal -->
+    {% if logged_in and user.hasPermission('Use the toolbar') %}
+      <a href="#skip-to-content" class="sr-only sr-only-focusable">
+        {{ 'Skip to main content'|t }}
+      </a>
+    {% endif %}
+    {{ page_top }}
+    {{ page }}
+    {{ page_bottom }}
+    <js-bottom-placeholder token="{{ placeholder_token }}">
+  </body>
+</html>
+

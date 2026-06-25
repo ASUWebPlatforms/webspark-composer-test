@@ -1,0 +1,13 @@
+<div class="chapter_contact">
+    {% if content.field_chapter_contact_name|render is not empty %}
+          {% if content.field_contact_email|render is not empty %}
+           <p class="mb-1"> <strong> <a href="mailto:{{ content.field_contact_email.0['#context'].value }}">{{ content.field_chapter_contact_name.0['#context'].value }}</a> </strong> </p>
+          {% else %}
+            <p class="mb-1"> <strong> {{ content.field_chapter_contact_name.0['#context'].value }}</strong> </p>
+          {% endif %}
+
+    {% endif %}
+    {% if content.field_contact_position|render is not empty %}
+        <p> {{ content.field_contact_position.0['#context'].value }} </p>
+    {% endif %}
+</div>

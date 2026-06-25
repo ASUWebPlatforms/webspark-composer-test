@@ -1,0 +1,23 @@
+{# NOTE: UDS has two sets of markup for Breadcrumbs, for the BIOS site, this breadcrumb template is being used for the sub-sites only  #}
+<section class="{{ bg_color }} {{ spacing_top }} {{ spacing_bottom }}">
+  <nav class="uds-content-align" aria-label="breadcrumbs">
+    {% if links is not empty %}
+      <ol class="breadcrumb">
+        {% for link in links %}
+          {# Check if the text of the current link matches specific values. #}
+          {% if link.text in ['oleander', 'bats', 'risk', 'bios-scope', 'coral', 'databytes', 'magic', 'tudorhill'] %}
+            {# Set custom text for the link by appending ' Home' to the existing text. #}
+            {% set custom_text = link.text ~ ' Home' %}
+          {% else %}
+            {% set custom_text = link.text %}
+          {% endif %}
+          {% if link.text != 'Home' %}
+          <li class="breadcrumb-item">
+            <a href="{{ link.url }}">{{ custom_text }}</a>
+          </li>
+          {% endif %}
+        {% endfor %}
+      </ol>
+    {% endif %}
+  </nav>
+</section>

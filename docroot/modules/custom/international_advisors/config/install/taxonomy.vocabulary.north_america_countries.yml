@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'North America countries'
+vid: north_america_countries
+description: ''
+weight: 0

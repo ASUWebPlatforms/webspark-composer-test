@@ -1,0 +1,9 @@
+<?php 
+
+/**
+* Implements hook_page_attachments().
+*/
+
+function eoss_forms_custom_style_page_attachments(array &$attachments) {
+  $attachments['#attached']['library'][] = 'eoss_forms_custom_style/styling';
+}

@@ -1,0 +1,77 @@
+{#
+/**
+ * @file
+ * Default theme implementation for a view template to display a list of rows.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the container.
+ * - rows: A list of rows for this list.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's contents.
+ * - title: The title of this group of rows. May be empty.
+ * - list: @todo.
+ *   - type: Starting tag will be either a ul or ol.
+ *   - attributes: HTML attributes for the list element.
+ *
+ * @see template_preprocess_views_view_list()
+ *
+ * @ingroup themeable
+ */
+#}
+{% if attributes -%}
+  <div{{ attributes }}>
+{% endif %}
+  {% if title %}
+    <h3>{{ title }}</h3>
+  {% endif %}
+
+  <{{ list.type }}{{ list.attributes }}>
+
+    {% for row in rows %}
+      {% set campus, venue, evdate, evtime, evimage, info, evlink, alt_title = 
+          row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ name_1 }}'],
+          row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_event_location_title }}'],
+          row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_event_date_value_2 }}'],
+          row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_event_date_end_value }}'],
+          row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_asu_events_event_image }}'],
+          row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ title }}'],
+          row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ view_node }}'],
+          row.content['#row']._entity.title[0].value %}
+
+      <a href="{{ evlink }}" title="{{ alt_title }}">
+        <li{{ row.attributes }}>
+          <div class="event-list-date">
+            <span class="field-content">{{ evdate }}</span>
+          </div>
+          <div class="views-field views-field-title">
+            <span class="field-content">{{ info }}
+            <div>
+            {# adding logic for campus and venue display #}
+            {% if campus or venue %}
+              <i class="fas fa-map-marker-alt"></i> 
+                {% if venue and campus %}
+                  <strong>{{ venue }}</strong>, {{ campus }}
+                {% elseif venue %}
+                  <strong>{{ venue }}</strong>
+                {% elseif campus %}
+                  {{ campus }}
+                {% endif %}
+            {% endif %}
+
+            </div>
+
+            </span>
+          </div>
+
+          <div class="views-field views-field-field-asu-events-event-image">
+            <div class="field-content">{{ evimage }}</div>
+          </div>
+
+        </li></a>
+    {% endfor %}
+
+  </{{ list.type }}>
+
+{% if attributes -%}
+  </div>
+{% endif %}

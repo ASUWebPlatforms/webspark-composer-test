@@ -1,0 +1,124 @@
+.hbspt-form fieldset {
+  width: 100%;
+  max-width: none!important;
+}
+.hbspt-form .hs-form-field {
+  margin: 0 0 2rem;
+}
+.hbspt-form .hs-form-field input {
+  width: 100%;
+  border: 1px solid #747474;
+  color: #191919;
+  appearance: none;
+  background-clip: padding-box;
+  border-radius: 0;
+  display: block;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: .5rem!important;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+.hbspt-form .hs-form-field label {
+  position: relative;
+}
+.hbspt-form .hs-form-field label {
+  font-size: 1rem;
+  margin: 0 0.5em 0.5rem 1.5rem;
+}
+.hbspt-form .hs-form-field input:focus, .hbspt-form .hs-form-field select:focus {
+  border-color: #191919;
+  box-shadow: 0 0 0 1px #191919 !important;
+}
+.hbspt-form .hs-richtext {
+  margin: 0 0.5em 0.5rem;
+}
+.hbspt-form fieldset.form-columns-2 .hs-form-field {
+  width: 49%!important;
+}
+.hbspt-form .hs-form-field legend {
+  font-size: 0.85rem;
+  margin: 0 0.5em 0.5rem;
+}
+.hbspt-form .hs-form-field select {
+  --bs-form-select-bg-img: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3E%3C/svg%3E");
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-position: right .5rem center;
+  background-repeat: no-repeat;
+  background-size: 16px 12px;
+  background-image: var(--bs-form-select-bg-img);
+  border: 1px solid #747474;
+  border-radius: 0;
+  color: #191919;
+  display: block;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: .5rem 1.5rem .5rem .5rem;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  width: 100%;
+}
+.hbspt-form .hs-form-field .input {
+  margin: 0 0.5em;
+}
+.hbspt-form .inputs-list {
+  list-style-type: none;
+  padding: 0;
+}
+.hbspt-form .hs-button {
+  background: #8c1d40;
+  color: #fff;
+  padding: 1rem 2rem;
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: 400rem;
+  border: 2px solid #8c1d40;
+}
+.hbspt-form .hs-form-required {
+  position: absolute;
+  left: -10px;
+  top: -4px;
+  color: transparent;
+}
+.hbspt-form .hs-form-required::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background-color: #8c1d40;
+  border: 1px solid #8c1d40;
+  border-radius: 50%;
+  position: absolute;
+  left: -5px;
+  top: 50%;
+  z-index: 999;
+  display: block;
+}
+.hbspt-form .hs-error-msgs {
+  display: none;
+}
+.hbspt-form input.error, .hbspt-form input.invalid, .hbspt-form select.error, .hbspt-form select.invalid {
+  border: solid #b72a2a;
+  border-width: 1px 1px 8px;
+}
+.hbspt-form input[type="checkbox"] {
+  margin-top: 0.25rem;
+  margin-right: 0.5rem;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  color: #191919;
+}
+.hbspt-form .hs-input:checked[type="checkbox"] {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23191919' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3E%3C/svg%3E")
+}
+label.hs-form-booleancheckbox-display {
+  display: block;
+}
+@media screen and (max-width: 768px) {
+  .hbspt-form fieldset.form-columns-2 .hs-form-field {
+    width: 100%!important;
+  }
+}
+

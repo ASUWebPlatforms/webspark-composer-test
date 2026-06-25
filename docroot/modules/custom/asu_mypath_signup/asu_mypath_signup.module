@@ -1,0 +1,26 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+
+/*function asu_mypath_signup_library_info_alter(&$libraries, $delta) {
+  
+  $module_path = \Drupal::moduleHandler()->getModule('asu_mypath_signup')->getPath();	
+  $react_path = '/'.$module_path.'/js/react'; 
+  //ksm($react_path);	
+  ksm($libraries);
+  foreach ($libraries as &$library) {
+	//ksm($library);  
+    if (isset($library['js']) && strpos($library['source'], $react_path) === 0) {
+     // $library['#process'] = []; 
+    }
+  }
+}*/
+
+/*function asu_mypath_signup_page_attachments_alter(array &$attachments) {
+	$domain = 'https://' . $_SERVER['HTTP_HOST'];
+    $attachments['#attached']['http_header'][] = [
+        'X-Content-Security-Policy' => "script-src $domain;",
+    ];
+}*/

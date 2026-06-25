@@ -1,0 +1,7 @@
+{% if content %}
+  <div{{ attributes }}>
+    <div {{ region_attributes.content.addClass('layout__region', 'layout__region--content', 'card-tags') }}>
+      {{ content.content }}
+    </div>
+  </div>
+{% endif %}

@@ -1,0 +1,315 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.asu_tuition_fee_code_data.body
+    - field.field.node.asu_tuition_fee_code_data.feeds_item
+    - field.field.node.asu_tuition_fee_code_data.field_acad_career
+    - field.field.node.asu_tuition_fee_code_data.field_acad_prog
+    - field.field.node.asu_tuition_fee_code_data.field_base_term
+    - field.field.node.asu_tuition_fee_code_data.field_campus
+    - field.field.node.asu_tuition_fee_code_data.field_code_description
+    - field.field.node.asu_tuition_fee_code_data.field_code_residency
+    - field.field.node.asu_tuition_fee_code_data.field_fee_code
+    - field.field.node.asu_tuition_fee_code_data.field_fee_type
+    - field.field.node.asu_tuition_fee_code_data.field_institution
+    - field.field.node.asu_tuition_fee_code_data.field_notes
+    - field.field.node.asu_tuition_fee_code_data.layout_builder__layout
+    - node.type.asu_tuition_fee_code_data
+  module:
+    - layout_builder
+    - layout_discovery
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: true
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          f524ef23-74ab-4d9f-a452-a080c9914acb:
+            uuid: f524ef23-74ab-4d9f-a452-a080c9914acb
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'extra_field_block:node:asu_tuition_fee_code_data:links'
+            additional: {  }
+            weight: 0
+          822fa43a-4ba8-4353-bb52-c82b0c352177:
+            uuid: 822fa43a-4ba8-4353-bb52-c82b0c352177
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_code_data:body'
+              formatter:
+                label: hidden
+                type: text_default
+                settings: {  }
+                third_party_settings: {  }
+            additional: {  }
+            weight: 1
+          c76c46fe-bdb0-4ffc-9401-b6dd98e508a8:
+            uuid: c76c46fe-bdb0-4ffc-9401-b6dd98e508a8
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_code_data:field_institution'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 2
+          7beabcd1-6612-46cb-8259-31f6ac979cbd:
+            uuid: 7beabcd1-6612-46cb-8259-31f6ac979cbd
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_code_data:field_fee_code'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 3
+          10cb5fc8-dce6-473d-83bd-30f22e7f47a0:
+            uuid: 10cb5fc8-dce6-473d-83bd-30f22e7f47a0
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_code_data:field_code_description'
+              formatter:
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+                type: basic_string
+            additional: {  }
+            weight: 4
+          a3217c13-ce57-47f6-8f78-b614d9570198:
+            uuid: a3217c13-ce57-47f6-8f78-b614d9570198
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_code_data:field_fee_type'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 5
+          6755175c-e5cb-426f-bcfc-5e8ddf225d97:
+            uuid: 6755175c-e5cb-426f-bcfc-5e8ddf225d97
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_code_data:field_campus'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 6
+          b5467827-34a9-4083-a323-cd71be1c21c9:
+            uuid: b5467827-34a9-4083-a323-cd71be1c21c9
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_code_data:field_code_residency'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 7
+          6f2907a4-7762-4ebc-a2b9-1441afe3fbd2:
+            uuid: 6f2907a4-7762-4ebc-a2b9-1441afe3fbd2
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_code_data:field_acad_career'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 8
+          b9d1d16f-7c65-4b0c-be31-3120a0075ffc:
+            uuid: b9d1d16f-7c65-4b0c-be31-3120a0075ffc
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_code_data:field_acad_prog'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 9
+          d71f8be1-edcb-4f27-a6d5-5c0d2a925e43:
+            uuid: d71f8be1-edcb-4f27-a6d5-5c0d2a925e43
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_code_data:field_base_term'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 10
+          f139b512-64a0-46fc-a6e3-873eab0875a9:
+            uuid: f139b512-64a0-46fc-a6e3-873eab0875a9
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_code_data:field_notes'
+              formatter:
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+                type: basic_string
+            additional: {  }
+            weight: 11
+        third_party_settings: {  }
+id: node.asu_tuition_fee_code_data.default
+targetEntityType: node
+bundle: asu_tuition_fee_code_data
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_acad_career:
+    weight: 108
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_acad_prog:
+    weight: 109
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_base_term:
+    weight: 110
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_campus:
+    weight: 106
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_code_description:
+    weight: 104
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+  field_code_residency:
+    weight: 107
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_fee_code:
+    weight: 103
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_fee_type:
+    weight: 105
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_institution:
+    weight: 102
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_notes:
+    weight: 111
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  feeds_item: true
+  layout_builder__layout: true

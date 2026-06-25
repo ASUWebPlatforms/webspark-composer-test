@@ -1,0 +1,5 @@
+name: asu_provost_custom
+type: module
+description: 'Provost custom module for miscellaneous items'
+package: ASU
+core_version_requirement: '^8 || ^9 || ^10'

@@ -1,0 +1,85 @@
+asu_cost_comparison_tool.admin_settings:
+    path: '/admin/config/content/cost_comparison_tool_settings'
+    defaults:
+      _form: '\Drupal\asu_cost_comparison_tool\Form\costDefaultValuesForm'
+      _title: 'Cost comparison tool default settings'
+    requirements:
+      _permission: 'administer site configuration'
+
+asu_cost_comparison_tool.api_endpoint:
+    path: '/api/cost-comparison-tool'
+    defaults:
+      _controller: '\Drupal\asu_cost_comparison_tool\Controller\ApiController::webformSubmit'
+      _title: 'Cost Comparison Tool API Endpoint'
+    requirements:
+      _permission: 'access content'
+
+asu_cost_comparison_tool.user_data_endpoint:
+    path: '/api/cost-comparison-tool/user-data'
+    defaults:
+      _controller: '\Drupal\asu_cost_comparison_tool\Controller\ApiController::getUserData'
+      _title: 'Cost Comparison Tool User Data Endpoint'
+    requirements:
+      _permission: 'access content'
+
+asu_cost_comparison_tool.user_submissions_endpoint:
+    path: '/api/cost-comparison-tool/get-user-submission'
+    defaults:
+      _controller: '\Drupal\asu_cost_comparison_tool\Controller\ApiController::getUserSubmission'
+      _title: 'Cost Comparison Tool User Submission Endpoint'
+    requirements:
+      _permission: 'access content'
+
+asu_cost_comparison_tool.email_update_endpoint:
+    path: '/api/cost-comparison-tool/email-update/{sid}'
+    defaults:
+      _controller: '\Drupal\asu_cost_comparison_tool\Controller\ApiController::emailUpdate'
+      _title: 'Cost Comparison Tool Email Update Endpoint'
+    requirements:
+      _permission: 'access content'
+
+asu_cost_comparison_tool.claimSubmission:
+    path: '/api/cost-comparison-tool/claim/{sid}'
+    defaults:
+      _controller: '\Drupal\asu_cost_comparison_tool\Controller\ApiController::claimSubmission'
+      _title: 'Cost Comparison Tool Claim Submission Endpoint'
+    requirements:
+      _permission: 'access content'
+
+asu_cost_comparison_tool.loan_admin_settings:
+    path: '/admin/config/content/loan_proration_form_settings'
+    defaults:
+      _form: '\Drupal\asu_cost_comparison_tool\Form\LoanProrationSettingsForm'
+      _title: 'Loan proration form default settings'
+    requirements:
+      _permission: 'administer site configuration'
+
+asu_cost_comparison_tool.college_list:
+    path: '/api/loan-proration/college-list/{campus}/{acad_career}'
+    defaults:
+      _controller: '\Drupal\asu_cost_comparison_tool\Controller\LoanCollegeProgramList::getCollegeList'
+      _title: 'Loan Tool College List Endpoint'
+    requirements:
+      _permission: 'access content'
+
+asu_cost_comparison_tool.program_list:
+    path: '/api/loan-proration/program-list/{resident}/{campus}/{acad_career}/{acad_prog}/{acad_year}'
+    defaults:
+      _controller: '\Drupal\asu_cost_comparison_tool\Controller\LoanCollegeProgramList::getProgramOptions'
+      _title: 'Loan Tool Program List Endpoint'
+    requirements:
+      _permission: 'access content'
+# asu_cost_comparison_tool.csrf_token:
+#   path: '/api/asu_cost_comparison_tool/csrf-token/{sid}'
+#   defaults:
+#     _controller: '\Drupal\asu_cost_comparison_tool\Controller\ApiController::token'
+#   requirements:
+#     _permission: 'access content'
+
+# asu_cost_comparison_tool.csrf_token_submit:
+#   path: '/api/asu_cost_comparison_tool/csrf-token/submit'
+#   defaults:
+#     _controller: '\Drupal\asu_cost_comparison_tool\Controller\ApiController::tokenSubmit'
+#   requirements:
+#     _permission: 'access content'
+    

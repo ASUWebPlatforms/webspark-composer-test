@@ -1,0 +1,22 @@
+// Description: ASU Enterprise Design System - added Jan 23, 2024 for subtheme
+@import "node_modules/@asu/unity-bootstrap-theme/src/scss/custom-asu-variables";
+
+// Base
+@import 'base/index';
+
+// Components
+@import 'components/index'; 
+
+// Layouts
+@import 'layouts/index';
+
+// Custom theme components
+@import '../components/animated-content-sections/animated-content-sections';
+@import '../components/cards/cards'; 
+@import '../components/carousels/carousels';
+@import '../components/compound/compound'; 
+@import '../components/future-students/future-students';
+@import '../components/image-parallax/image-parallax';
+@import '../components/quotes/animated-quote';
+@import '../components/stories-excellence/stories-excellence';
+@import '../components/navigation/navigation'; 

@@ -1,0 +1,7 @@
+# Main theme library.
+global-styling:
+  css:
+    theme:
+      css/style.css: {}
+  js:
+    js/asuevents_theme.js: {}

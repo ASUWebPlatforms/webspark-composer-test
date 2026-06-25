@@ -1,0 +1,30 @@
+{{ attach_library('asu_alumni/style') }}
+
+<div{{ attributes.addClass(classes) }}>
+  <div class="paragraph__column">
+    <h3>
+      Leadership and contact
+    </h3>
+    <div>
+      <div class="mainContact">
+        {% if content.field_leadership_name|render is not empty %}
+          {% if content.field_leadership_email|render is not empty %}
+            <strong>
+              <a href="mailto:{{ content.field_leadership_email.0['#context'].value }}">{{ content.field_leadership_name.0['#text'] }}</a>
+            </strong>
+          {% else %}
+            <h5 class="field-name">{{ content.field_leadership_name.0['#context'].value }}</h5>
+          {% endif %}
+        {% endif %}
+        {% if content.field_main_contact_subcontent|render is not empty %}
+          <p class="field-subcontent mt-1">{{ content.field_main_contact_subcontent.0['#context'].value }}</p>
+        {% endif %}
+      </div>
+      {% if content.field_contacts|render is not empty %}
+        <div class="subHeadings mt-2">
+          {{ content|without('field_leadership_name', 'field_main_contact_subcontent', 'field_leadership_email') }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

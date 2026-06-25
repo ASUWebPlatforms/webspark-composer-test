@@ -1,0 +1,35 @@
+{#
+@file
+The template for report content.
+
+Available variables:
+- spacing: The spacing class for the report content.
+- access: Boolean. If the user has access to the report.
+- url: The URL for the report.
+
+Available macros:
+- report: Generate markup for the report embed.
+#}
+
+{% from '@analytics/macros.html.twig' import report %}
+
+{% set modal = {
+  'id': 'report-modal',
+  'title': node.title.value,
+} %}
+
+<div class="{{ report.spacing|default('tw-py-8') }}">
+  {% if has_group_access(node.field_group.entity.id.value) %}
+    <div id="report-embed">
+      {% if report.type == 'Tableau Server' %}
+        {{ report(report.url) }}
+      {% else %}
+        {{ report(report.embed, false) }}
+      {% endif %}
+    </div>
+    {{ include('@analytics/fullscreen-modal.html.twig', modal, with_context = false) }}
+  {% else %}
+    {{ include('@analytics/report-access-denied.html.twig') }}
+    {{ include('@analytics/access-request-modal.twig') }}
+  {% endif %}
+</div>

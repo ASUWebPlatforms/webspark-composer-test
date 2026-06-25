@@ -1,0 +1,41 @@
+{#
+/**
+ * @file
+ * Template for download sections that appear in the right sidebar of Apps.
+ *
+ * We receive the current domain because the field for the download link is a
+ * Drupal Link field type. As this site needs to pass through different
+ * environments for testing, the value would need to be updated in the database
+ * for each environment for proper testing. A potential long term solution is
+ * change those fields to be Text fields, but that would destroy the current
+ * data. For now, we will determine if the download link needs to hit the EDNA
+ * service (contains 'checkAccess'), and if so, we manually build the proper
+ * URL. This way, we ensure the proper functionality regardless of environment.
+ *
+ * Available variables:
+ * - nid: The Node ID
+ * - domain: The domain of the current website
+ * - box: The type of software to be downloaded
+ * - instructions: The softare download instructions
+ * - link: The download link for the software
+ * - title: The title of the software
+ */
+#}
+
+{% if 'checkAccess' in link %}
+  {% set link = domain ~ '/ednaquery/checkAccess/' ~ nid %}
+{% endif %}
+
+<div class="instructions-box border border-primary px-3 py-2 mb-3">
+  <h3>
+    {% if box == 'Asu Owned' %}
+      ASU Owned
+    {% else %}
+      {{ box }}
+    {% endif %}
+  </h3>
+
+  <p>{{ instructions }}</p>
+
+  <p><a class="btn btn-primary box-button" href="{{ link }}">{{ title }}</a></p>
+</div>

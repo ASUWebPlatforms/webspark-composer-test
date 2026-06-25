@@ -1,0 +1,90 @@
+artifacts.artifacts:
+  path: '/artifacts'
+  defaults:
+    _controller: '\Drupal\artifacts\Controller\artifactsController::artifacts_load'
+    _title: 'Artifacts Review Overview'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+artifacts.projects:
+  path: '/artifacts/projects'
+  defaults:
+    _controller: '\Drupal\artifacts\Controller\artifactsController::artifacts_load'
+    _title: 'Artifacts Review Projects'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+artifacts.review:
+  path: '/artifacts/review'
+  defaults:
+    _controller: '\Drupal\artifacts\Controller\artifactsController::artifacts_load'
+    _title: 'Artifacts Juried Review'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+artifacts.course:
+  path: '/artifacts/course'
+  defaults:
+    _controller: '\Drupal\artifacts\Controller\artifactsController::artifacts_load'
+    _title: 'Artifacts Review Course'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+artifacts.examine:
+  path: '/artifacts/php/examine'
+  defaults:
+    _controller: '\Drupal\artifacts\Controller\artifactsController::artifacts_load'
+    _title: 'Artifacts Review Examine'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+
+
+artifacts.getloaded:
+  path: '/artifacts/php/getloaded'
+  defaults:
+    _controller: '\Drupal\artifacts\Controller\artifactsController::artifacts_loaded'
+    _title: 'Artifacts Review Get Names of All loaded files'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+artifacts.sync:
+  path: '/artifacts/php/sync'
+  defaults:
+    _controller: '\Drupal\artifacts\Controller\artifactsController::artifacts_sync'
+    _title: 'Artifacts Review Sync Project'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+artifacts.next:
+  path: '/artifacts/php/next/{process}/{artifact_id}'
+  defaults:
+    _controller: '\Drupal\artifacts\Controller\artifactsController::artifacts_next'
+    _title: 'Artifacts Review Next'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+artifacts.getsubmit:
+  path: '/artifacts/php/getsubmit/{process}/{artifact_id}'
+  defaults:
+    _controller: '\Drupal\artifacts\Controller\artifactsController::artifacts_getSubmit'
+    _title: 'Artifacts Review Get Submitted Review'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+
+
+artifacts.post:
+  path: '/artifacts/php/post'
+  defaults:
+    _controller: '\Drupal\artifacts\Controller\artifactsController::artifacts_post'
+    _title: 'Artifacts Review - post'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+artifacts.filepost:
+  path: '/artifacts/php/filepost'
+  defaults:
+    _controller: '\Drupal\artifacts\Controller\artifactsController::artifacts_fileupload'
+    _title: 'Artifacts Review - File Post'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+
+
+# artifacts.fileremove:
+#   path: '/artifacts/php/fileremove'
+#   defaults:
+#     _controller: '\Drupal\artifacts\Controller\artifactsController::artifacts_fileremove'
+#     _title: 'Artifacts Review - File Remove'
+#   requirements: 
+#     _user_is_logged_in: 'TRUE'

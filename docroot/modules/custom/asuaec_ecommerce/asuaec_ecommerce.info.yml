@@ -1,0 +1,5 @@
+name: asuaec_ecommerce
+type: module
+description: 'ASU AEC custom module for Ecommerce related items'
+package: ASU
+core_version_requirement: ^9 || ^10 || ^11

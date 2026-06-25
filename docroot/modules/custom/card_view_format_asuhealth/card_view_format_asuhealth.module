@@ -1,0 +1,99 @@
+<?php
+use Drupal\Component\Utility\Html;
+use Symfony\Component\Validator\Constraints\IsNull;
+
+/**
+ * @file
+ * Primary module hooks for Card View Format module.
+ */
+
+
+ /**
+ * Prepares variables for card view format templates.
+ *
+ * Default template: views-view-card-view-format.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - view: A View object.
+ */
+
+
+/**
+ * Implements hook_theme().
+ */
+// function card_view_format_asuhealth_theme($existing, $type, $theme, $path) {
+//     return array(
+//       'card_view_format_asuhealth' => array(
+//         'file' => 'card_view_format_asuhealth.theme.inc',
+//       ),
+//     );
+// }
+
+
+
+/**
+ * Theme for card_view_format_asuhealth views.
+ * This file is largely copied from template_preprocess_views_view_unformatted, with some additions.
+ */
+
+function template_preprocess_views_view_card_view_format_asuhealth(&$variables) {
+  $view = $variables['view'];
+  $rows = $variables['rows'];
+  $style = $view->style_plugin;
+  $options = $style->options;
+
+  $variables['default_row_class'] = !empty($options['default_row_class']);
+  foreach ($rows as $id => $row) {
+    $variables['rows'][$id] = [];
+    $variables['rows'][$id]['content'] = $row;
+    $variables['rows'][$id]['attributes'] = new Attribute();
+    if ($row_class = $view->style_plugin->getRowClass($id)) {
+      $variables['rows'][$id]['attributes']->addClass($row_class);
+    }
+  }
+
+  $options = $variables['view']->style_plugin->options;
+  $variables['options'] = $options;
+
+  $view = $variables['view'];
+  $rows = $variables['rows'];
+  $style = $view->style_plugin;
+  $options = $style->options;
+
+}
+
+/**
+ * Implements hook_theme().
+ */
+function card_view_format_asuhealth_theme() {
+  return [
+    'field__field_degree_tags' => [
+      'template' => 'field--field-degree-tags',
+      'base hook' => 'field'
+    ],
+    'field__field_degree_campuses_offered' => [
+      'template' => 'field--field-degree-campuses-offered',
+      'base hook' => 'field'
+    ],
+    'field__field_degree_app_link' => [
+      'template' => 'field--field-degree-app-link',
+      'base hook' => 'field'
+    ],
+  ];
+}
+
+function card_view_format_asuhealth_preprocess_field__field_degree_campuses_offered(&$variables) {
+  $unique_items = [];
+  $seen_titles = [];
+
+  foreach ($variables['items'] as $item) {
+    $title = $item['content']['#title'] ?? '';
+    if (!in_array($title, $seen_titles, true)) {
+      $seen_titles[] = $title;
+      $unique_items[] = $item;
+    }
+  }
+
+  $variables['items'] = $unique_items;
+}

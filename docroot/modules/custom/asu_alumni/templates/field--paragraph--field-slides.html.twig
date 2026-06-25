@@ -1,0 +1,25 @@
+{{ attach_library('asu_alumni/flexslider') }}
+{{ attach_library('asu_alumni/style') }}
+
+<div class="image-slideshow">
+    <ul id="simpleSlider" class="slides">
+        {% for item in items %}
+         <li>
+            {{ item.content }}
+            <div class="itemContent">
+                {{ item.content['#item'].alt }}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+<div id="navContainer">
+</div>
+<div id="navButtons">
+	<div id="simpleSliderPrevious" class="sliderNav">
+        <span class="fas fa-chevron-left icon fa-lg"></span>
+    </div>
+	<div id="simpleSliderNext" class="sliderNav">
+        <span class="fas fa-chevron-right icon fa-lg"></span>
+    </div>
+</div>

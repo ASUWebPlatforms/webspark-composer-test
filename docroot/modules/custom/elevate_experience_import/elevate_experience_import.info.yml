@@ -1,0 +1,9 @@
+name: Elevate Experience Import
+type: module
+description: 'Cleans and normalises the monthly Experience CSV feeds (skips section rows, normalises classification values to canonical taxonomy terms, strips link prefixes).'
+package: Elevate
+core_version_requirement: ^9 || ^10
+dependencies:
+  - feeds:feeds
+  - feeds_tamper:feeds_tamper
+  - flag:flag

@@ -1,0 +1,10 @@
+asuaec_visit_revamp.settings:
+  type: config_object
+  label: 'Visit Revamp Settings'
+  mapping:
+    post_url_prod:
+      type: string
+      label: 'Production Post URL'
+    post_url_dev:
+      type: string
+      label: 'Development Post URL'

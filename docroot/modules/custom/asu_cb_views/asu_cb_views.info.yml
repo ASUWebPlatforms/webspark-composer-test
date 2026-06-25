@@ -1,0 +1,5 @@
+name: ASU college box
+type: module
+description: 'Provides a View display style that renders a list of year and month links to content in reverse chronological order.'
+package: ASU
+core_version_requirement: ^8.8 || ^9 || ^10

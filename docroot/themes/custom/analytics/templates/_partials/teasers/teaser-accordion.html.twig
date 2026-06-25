@@ -1,0 +1,59 @@
+{#
+@file
+The template for the accordion teaser.
+This template assumes an accordion with a single accordion item.
+
+Available variables:
+- isGroupMember: A boolean indicating if the user is a member of the group. This is set from analytics_preprocess_group().
+- id: The id of the accordion.
+- contentID: The id of the accordion content.
+- title: The title of the accordion.
+- subtitle: The subtitle of the accordion.
+- content: The content of the accordion.
+#}
+
+{% set id = id|default('accordion-' ~ random()) %}
+{% set contentID = contentID|default('accordion-item-' ~ random()) %}
+
+<div class="accordion tw-space-y-3">
+  <div class="accordion-item">
+    <div class="accordion-header">
+      <h3>
+        <a id="{{ id|default('') }}"
+          class="collapsed"
+          data-bs-toggle="collapse"
+          data-bs-target="#{{ contentID }}"
+          href="#{{ contentID }}"
+          role="button"
+          aria-expanded="false"
+          aria-controls="{{ contentID }}"
+          data-ga="{{ title }}"
+          data-ga-name="onclick"
+          data-ga-event="collapse"
+          data-ga-type="click"
+          data-ga-region="main content"
+          data-ga-section="default">
+          <div class="tw-flex tw-items-baseline">
+            {{ title }}
+            {% if isGroupMember %}
+              <span class="tw-ml-1 tw-text-sm tw-font-light tw-text-asu-maroon">{{ isGroupPowerUser ? 'Power User' : 'Member' }}</span>
+            {% endif %}
+          </div>
+          <div>
+            {% if subtitle %}
+              <span class="tw-font-light tw-text-[#747474] tw-text-base">{{ subtitle }}</span>
+            {% endif %}
+            <span class="fas fa-chevron-up"></span>
+          </div>
+        </a>
+      </h3>
+    </div>
+    <div id="{{ contentID }}"
+      class="collapse accordion-body"
+      aria-labelledby="{{ id }}"
+      data-bs-parent="">
+      <p>{{ content }}</p>
+      <a class="btn btn-maroon btn-md" href="{{ group|entity_url }}" class="">Visit group</a>
+    </div>
+  </div>
+</div>

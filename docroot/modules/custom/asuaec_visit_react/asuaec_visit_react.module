@@ -1,0 +1,14 @@
+<?php
+use Drupal\Core\Session\AccountInterface;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function asuaec_visit_react_page_attachments(array &$attachments) {
+  $current_user = \Drupal::currentUser();
+
+  // Only do this for logged-in users
+  if ($current_user->isAuthenticated()) {
+    $attachments['#attached']['drupalSettings']['asuaec_visit_react']['userRoles'] = $current_user->getRoles();
+  }
+}

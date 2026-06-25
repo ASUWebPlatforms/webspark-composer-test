@@ -1,0 +1,163 @@
+.sdaContainer {
+  overflow: hidden;
+  position: relative;
+}
+.sdaEvent span {
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+.sdaEvent {
+  padding: 10px;
+  min-height: 180px!important;
+}
+.sdaEvent:focus {
+  outline: none !important;
+  box-shadow: none!important
+}
+.sdaEvent:focus .sdaEventInner {
+  outline: none!important;
+  box-shadow: 0px 0px 0px 2px #fff, 0px 0px 0px 4px #191919 !important;
+}
+.tickerThemeWrapper.light .sdaEvent span {
+  color: #191919;
+}
+.tickerThemeWrapper.dark .sdaEvent span {
+  color: #fff;
+}
+.sdaTitle {
+  font-weight: bold;
+}
+.tickerThemeWrapper.light .sdaEvent .sdaTitle {
+  background-color:#ffc627;
+  padding: 0px 5px;
+}
+.tickerThemeWrapper.dark .sdaEvent .sdaTitle {
+  background-color:#ffc627;
+  padding: 0px 5px;
+  color: #191919;
+}
+.sdaInner {
+  display: flex;
+  max-height: 180px;
+  border-right: 1px solid #e8e8e8;
+  border-left: 1px solid #e8e8e8;
+  margin: 0px 55px;
+}
+.tickerThemeWrapper.light .sdaEvent svg {
+  color: #8c1d40;
+}
+.tickerThemeWrapper.dark .sdaEvent svg {
+  color: #ffc627;
+}
+.sdaOuter {
+  border-bottom: 20px solid #ffc627;
+  margin-right: 0!important;
+  margin-left: 0!important;
+}
+.sdaEventInner {
+  display: flex;
+  flex-direction: column;
+}
+.slick-arrow {
+  color: #191919!important;
+  background-color: #e8e8e8!important;
+  border: 1px solid #d0d0d0;
+  border-radius: 50%;
+  height: 40px!important;
+  width: 40px!important;
+  font-size: unset!important;
+}
+.slick-arrow::before {
+  content:""!important;
+}
+.slick-prev {
+  left: -50px!important;
+}
+.slick-next {
+  right: -50px!important;
+}
+.slick-active {
+  border-right: 1px solid #e8e8e8;
+  box-sizing: border-box
+}
+.slick-track > .slick-active:last-of-type {
+  border-right: none;
+}
+.sdaCTAInner {
+  display: flex;
+  flex-direction: column;
+  margin-left: 24px;
+}
+.sdaCTAInner .btn {
+  margin-bottom: 12px;
+}
+.sdaCTAInner .sdaLink {
+  margin-bottom: 12px;
+}
+/** dark theme **/
+.tickerThemeWrapper.dark .sdaCTAInner .sdaTicket{
+  color: #fff;
+}
+.tickerThemeWrapper.dark .sdaCTAInner .btn {
+  background-color: #ffc627;
+  color: #191919;
+}
+.tickerThemeWrapper.dark .sdaCTAInner .h3 .highlight-gold {
+  background: #e8e8e8;
+  box-shadow: -.15em 0 0 #e8e8e8,.15em 0 0 #e8e8e8;
+}
+.tickerThemeWrapper.dark .sdaOuter {
+  background-color: #191919;
+}
+/** gray theme **/
+.tickerThemeWrapper.gray .sdaCTAInner .sdaTicket{
+  color: #191919;
+}
+.tickerThemeWrapper.gray .sdaCTAInner .btn {
+  background-color: #8c1d40;
+  color: #fff;
+  border-color: #8c1d40;
+}
+.tickerThemeWrapper.gray .sdaCTAInner svg {
+  color: #191919;
+}
+.tickerThemeWrapper.gray .sdaCTAInner .h3 .highlight-gold {
+  background: #e8e8e8;
+  box-shadow: -.15em 0 0 #e8e8e8,.15em 0 0 #e8e8e8;
+  color: #191919;
+}
+.tickerThemeWrapper.gray .sdaOuter {
+  background-color: #fafafa;
+  border-bottom: 20px solid #e8e8e8;
+}
+.tickerThemeWrapper.gray .sdaEvent svg {
+  color: #8c1d40;
+}
+.tickerThemeWrapper.gray .sdaEvent span {
+  color: #191919;
+}
+.tickerThemeWrapper.gray .sdaEvent .sdaTitle {
+  background-color: #e8e8e8;
+  padding: 0px 5px;
+  color: #191919;
+}
+.tickerThemeWrapper {
+  max-width: 100%;
+  display: block;
+}
+
+#slickPlaypause {
+  position: absolute;
+  right: 18px;
+  bottom: 20px;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  border: 0;
+  background-color: #e8e8e8 !important;
+}
+@media screen and (max-width: 1289px) {
+  .sdaEvent span {
+    font-size: 10px;
+  }
+}

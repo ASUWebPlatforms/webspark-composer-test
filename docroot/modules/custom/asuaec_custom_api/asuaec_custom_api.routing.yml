@@ -1,0 +1,8 @@
+asuaec_custom_api.webform_submission-interest:
+  path: '/custom-api/webform-submission-interest/{sid}'
+  defaults:
+    _controller: '\Drupal\asuaec_custom_api\Controller\WebformSubmissionController::getSubmissionInterestOnly'
+    _title: 'Webform Submission API'
+  requirements:
+    _permission: 'access content'
+  methods: [GET]

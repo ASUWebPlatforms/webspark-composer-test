@@ -1,0 +1,33 @@
+{#
+@file
+The template for the toggle content.
+As the content can be anything, this template should be used as a parent template.
+The content should be added via the "content" block in the child template.
+See: https://twig.symfony.com/doc/3.x/tags/extends.html
+
+Available variables:
+- id: A unique ID.
+- buttonText: The text for the button.
+
+Available blocks:
+- content: The content to be toggled.
+#}
+
+{% set id = id|default(random()) %}
+
+<div class="content-toggle">
+  <div class="collapse show" id="collapse-{{ id }}">
+    {% block content %}{% endblock %}
+    <hr class="tw-my-0">
+  </div>
+  <button
+    class="tw-border-0 tw-bg-gray tw-text-xs tw-leading-none tw-p-2"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#collapse-{{ id }}"
+    aria-expanded="false"
+    aria-controls="collapse-{{ id }}">
+    {{ buttonText|default('Toggle Details') }}
+    <i class="fas fa-chevron-up"></i>
+  </button>
+</div>

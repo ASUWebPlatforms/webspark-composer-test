@@ -1,0 +1,23 @@
+tracking.tracking:
+  path: '/tracking/{project}'
+  defaults:
+    _controller: '\Drupal\tracking\Controller\TrackingController::tracking_load'
+    _title: 'Participant Tracking'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+
+tracking.sync:
+  path: '/tracking/php/sync/{project}'
+  defaults:
+    _controller: '\Drupal\tracking\Controller\TrackingController::tracking_sync'
+    _title: 'Participant Tracking - sync participants'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+
+tracking.ask:
+  path: '/tracking/php/ask/{project}'
+  defaults:
+    _controller: '\Drupal\tracking\Controller\TrackingController::tracking_ask'
+    _title: 'Participant ASK Item responses'
+  requirements: 
+    _user_is_logged_in: 'TRUE'

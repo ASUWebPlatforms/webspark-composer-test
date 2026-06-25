@@ -1,0 +1,22 @@
+.mayor-response-block {
+  background: #f8f9fa;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 700px;
+  margin: auto;
+  text-align: center;
+}
+
+.mayor-message h2 {
+  color: #333;
+}
+
+.continue-button {
+  margin-top: 15px;
+}
+
+.continue-button a {
+  padding: 10px 15px;
+  font-size: 16px;
+}

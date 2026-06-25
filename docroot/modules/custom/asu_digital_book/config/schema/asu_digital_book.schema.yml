@@ -1,0 +1,178 @@
+asu_digital_book.admin_settings:
+  type: config_object
+  label: 'ASU Digital Book Admin Settings'
+  mapping:
+    passion_intro:
+      type: mapping
+      label: 'Passion Intro Settings'
+      mapping:
+        what_to_do_with_life:
+          type: mapping
+          label: 'What to do with life'
+          mapping:
+            value:
+              type: text
+              label: 'Value'
+        do_you_know_what_you_want_to_do:
+          type: mapping
+          label: 'So do you know what you want to do question animation'
+          mapping:
+            value:
+              type: text
+              label: 'Value'
+        know_what_to_do:
+          type: mapping
+          label: 'Whats your why options?'
+          mapping:
+            i_know: 
+              type: mapping
+              label: 'I know what to do option content'
+              mapping:
+                value:
+                  type: text
+                  label: 'Value'
+            have_ideas_but_not_sure:
+              type: mapping
+              label: 'I have an idea but not sure yet'
+              mapping:
+                value:
+                  type: text
+                  label: 'Value'
+            have_ideas_but_one:
+              type: mapping
+              label: 'And its Ok to change your mind along the way content'
+              mapping:
+                value:
+                  type: text
+                  label: 'Value'
+            have_ideas_but_two:
+              type: mapping
+              label: 'Stats content'
+              mapping:
+                value:
+                  type: text
+                  label: 'Value'
+            have_ideas_but_three:
+              type: mapping
+              label: 'Its your time to discover what you love content'
+              mapping:
+                value:
+                  type: text
+                  label: 'Value'
+            have_ideas_but_four:
+              type: mapping
+              label: 'Sometimes the process is not linear'
+              mapping:
+                value:
+                  type: text
+                  label: 'Value'
+            have_ideas_but_five:
+              type: mapping
+              label: 'Reasons people goto college'
+              mapping:
+                value:
+                  type: text
+                  label: 'Value'
+            whats_your_why:
+              type: mapping
+              label: 'whats your why question animation'
+              mapping:
+                value:
+                  type: text
+                  label: 'Value'
+    learning:
+      type: mapping
+      label: 'Learning modality content'
+      mapping:
+        hero:
+          type: mapping
+          label: 'Learning modality hero'
+          mapping:
+            value:
+              type: text
+              label: 'Value'
+        learning_video:
+          type: mapping
+          label: 'Learning video content'
+          mapping:
+            value:
+              type: text
+              label: 'Value'
+        whats_next_option:
+          type: mapping
+          label: 'Whats next options'
+          mapping:
+            associate_degree: 
+              type: mapping
+              label: 'Associates degree option content'
+              mapping:
+                value:
+                  type: text
+                  label: 'Value'
+            bachelors_degree: 
+              type: mapping
+              label: 'Bachelors degree option content'
+              mapping:
+                value:
+                  type: text
+                  label: 'Value'
+            advanced_degree: 
+              type: mapping
+              label: 'Advanced degree option content'
+              mapping:
+                value:
+                  type: text
+                  label: 'Value'
+        asu_is_an_excellent:
+          type: mapping
+          label: 'ASU is an excellent place to achieve your goals content'
+          mapping:
+            value:
+              type: text
+              label: 'Value'
+        ranking:
+          type: mapping
+          label: 'ASU ranking content'
+          mapping:
+            value:
+              type: text
+              label: 'Value'
+        military_affiliate:
+          type: mapping
+          label: 'Militray affiliate content'
+          mapping:
+            value:
+              type: text
+              label: 'Value'
+        excellent_teaching:
+          type: mapping
+          label: 'Excellent teaching content'
+          mapping:
+            value:
+              type: text
+              label: 'Value'
+        student_faculty_ratio:
+          type: mapping
+          label: 'Student to faculty ratio content'
+          mapping:
+            value:
+              type: text
+              label: 'Value'
+        what_do_you_want_to_study:
+          type: mapping
+          label: 'What do you want to study content'
+          mapping:
+            value:
+              type: text
+              label: 'Value'
+        no_matter_what_you_choose:
+          type: mapping
+          label: 'No matter what you choose content'
+          mapping:
+            value:
+              type: text
+              label: 'Value'       
+
+
+        
+        

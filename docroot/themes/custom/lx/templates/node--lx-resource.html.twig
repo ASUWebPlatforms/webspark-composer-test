@@ -1,0 +1,164 @@
+{#
+/**
+ * @file
+ * @file
+ * Template for the page title.
+ */
+#}
+
+<style>
+
+@media screen and (min-width: 0px) and (max-width: 580px) {
+  img {
+    height: 380px;
+    width: 580px;
+  }
+  .main-content {
+    flex-direction: column-reverse;
+    min-width: 200px;
+  }
+  .categorization {
+    flex: 1;
+  }
+  .text-content {
+    flex: 1;
+  }
+}
+
+.logo {
+  height: 0 rem !important; 
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: -1;
+}
+img {
+  background: linear-gradient(to bottom black, black);
+}
+
+#xkit {
+  position: absolute;
+  top: 60%;
+  left: 30%;
+  background-color: white;
+  color: black;
+}
+
+#intro {
+  position: absolute;
+  top: 63%;
+  left: 30%;
+  background-color: black;
+  color: white;
+}
+
+#intro-text {
+  text-align: justify;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: row;
+}
+
+.text-content {
+  flex: 70%;
+  padding: 20px;
+}
+
+.categorization {
+  flex: 30%;
+  margin-left: 60px;
+}
+
+.button {
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+  padding: 2px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.no-spaces {
+  margin: 3px;
+  display: inline-block;
+}
+
+.spaces {
+  margin: 30px;
+  display: inline-block;
+}
+
+#no-space1 {
+  margin: 0px;
+}
+
+#button1 {
+  display: inline;
+}
+
+.demo {
+  list-style-type: none;
+}
+
+.istyle {
+  list-style-type: none;
+}
+
+@media screen and (min-width: 0px) and (max-width: 480px) {
+  .main-content {
+    flex-direction: column-reverse;
+    min-width: 200px;
+  }
+  .categorization {
+    flex: 1;
+  }
+  .text-content {
+    flex: 1;
+  }
+}        
+</style>
+
+    <div class="uds-hero-sm logo">
+        {# <img class="hero" src="https://brandguide.asu.edu/sites/default/files/2021-07/210527-BrandGuide-Banner-ElementsoftheBrand.jpg" alt="logo" style="width: 100%;"> #}
+        {% if content.field_page_image[0] is empty %}
+            <img class="hero" src="{{ node.field_page_image[0].value }}" alt="logox" style="width: 100%;">
+        {% else %}
+            <img class="hero" src="{{ file_url(content.field_page_image[0]['#markup']) }}" alt="logoy" style="width: 100%;">
+        {% endif %}
+        <div role="doc-subtitle"> <span class="highlight-white">{{ content.field_resource_type }}</span> 
+        </div>
+      <h1><span class="highlight-gold">{{ node.label }}</span></h1>
+   
+    </div>
+
+
+    <div class="layout__fixed-width">
+        <div class="container">
+            <div class="layout__region layout__region--first">
+                <div class="spacing-top-48 spacing-bottom-48 block block-layout-builder block-inline-blocktext-content clearfix">
+
+                    <div class="main-content"> 
+                        
+                        <div class="lx-resource-page-content">
+                            {{ content.field_page_content }}
+                        </div>
+                    
+                        <div class="categorization"> 
+                            <div> <h3>Type</h3> 
+                                {{ content.field_resource_categories }}
+                            </div> 
+                            <div> <h3>Tools</h3>
+                                {{ content.field_resource_tools }}
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

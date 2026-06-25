@@ -1,0 +1,64 @@
+<?php
+
+/**
+ * @file
+ * asu_alumni Paragraphs module file.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function asu_alumni_theme($existing, $type, $theme, $path) {
+  return [
+    'paragraph__leadership_and_contact' => [
+      'base hook' => 'paragraph',
+    ],
+    'paragraph__chapter_contact' => [
+      'base hook' => 'paragraph',
+    ],
+    'paragraph__chapter_cards' => [
+      'base hook' => 'paragraph', 
+    ],
+    'paragraph__slideshow' => [
+      'base hook' => 'paragraph',
+    ],
+    'paragraph__social_media' => [
+      'base hook' => 'paragraph',
+    ],
+    'field__paragraph__field_slides' => [
+      'base hook' => 'field',
+    ],
+    'field__paragraph__field_left_cards' => [
+      'base hook' => 'field',
+    ],
+    'field__paragraph__field_right_card' => [
+      'base hook' => 'field',
+    ],
+    'field__node__field_social_media__chapter' => [
+      'base hook' => 'field',
+    ],
+    'block__chapter_sidebar_block' => [
+      'base hook' => 'block',
+    ],
+    'field__media__chapter_card' => [
+      'base hook' => 'field',
+    ],
+    'field__field_chapter_hero' => [
+      'base hook' => 'field',
+    ],
+    'views_view__united_states_chapters' => [
+      'base hook' => 'views_view',
+    ],
+    'views_view__international_chapters' => [
+      'base hook' => 'views_view',
+    ],
+    'views_view__academic_chapters' => [
+      'base hook' => 'views_view',
+    ],
+    'views_view__special_interest_chapters' => [
+      'base hook' => 'views_view',
+    ],
+  ];
+}

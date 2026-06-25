@@ -1,0 +1,9 @@
+services:
+  newsletter_breadcrumb.breadcrumb:
+    class: Drupal\newsletter_breadcrumb\Breadcrumb\NewsletterBreadcrumbBuilder
+    tags:
+      - { name: breadcrumb_builder, priority: 100 }  
+  newsroom_breadcrumb.breadcrumb:
+    class: Drupal\newsletter_breadcrumb\Breadcrumb\NewsroomBreadcrumbBuilder
+    tags:
+      - { name: breadcrumb_builder }

@@ -1,0 +1,20 @@
+name: 'Access Theme'
+type: theme
+description: 'Access theme based on webspark'
+core_version_requirement: ^10
+package: Custom
+
+# Define base theme
+base theme: renovation
+
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer
+
+# Specify libraries and stylesheets
+libraries:
+  - access_theme/global-styling

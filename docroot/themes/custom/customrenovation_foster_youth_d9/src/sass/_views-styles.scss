@@ -1,0 +1,16 @@
+/* Fix views pager */
+.views-element-container nav.pager {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.views-element-container nav.pager ul {
+  list-style: none;
+  display: inline-flex;
+  padding: 0;
+}
+
+.views-element-container nav.pager li {
+  padding: 1rem;
+}

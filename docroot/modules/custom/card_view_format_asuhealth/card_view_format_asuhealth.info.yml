@@ -1,0 +1,7 @@
+name: Card View Format ASU Health
+type: module
+description: Provides a view format that is a 4 column card collection
+package: Views
+core_version_requirement: ^9 || ^10
+dependencies:
+  - drupal:views

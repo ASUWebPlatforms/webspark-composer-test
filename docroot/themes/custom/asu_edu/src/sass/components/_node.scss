@@ -1,0 +1,92 @@
+// @import '../../../../webspark/renovation/src/sass/renovation.style.scss';
+
+body.asu-emergency-updates {
+
+  .block-inline-blockbanner {
+    margin-bottom: $uds-size-spacing-6;
+
+    & > div {
+      background-color: #cc2f2f;
+      color: $uds-color-base-white;
+    }
+
+    #banner-close {
+      display: none;
+    }
+
+    h3 {
+      font-size: $uds-size-font-xxl;
+    }
+  }
+
+  .emergency-update-post--full {
+    padding: $uds-size-spacing-6 0 $uds-size-spacing-6;
+
+    font-size: $uds-size-font-medium;
+
+    h1 {
+      font-size: $uds-size-font-xl;
+      margin: $uds-size-spacing-2 0;
+      letter-spacing: inherit;
+      line-height: inherit;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .ec-toggle-link {
+      margin-top: $uds-size-spacing-4;
+      display: block;
+      font-size: $uds-size-font-medium;
+    }
+
+    border-bottom: 1px #d0d0d0 solid;
+  }
+
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    .block-inline-blockbanner {
+      .banner {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .block-inline-blocktext-content {
+      h2 {
+        margin-bottom: $uds-size-spacing-4;
+      }
+    }
+
+    .emergency-update-post--full {
+
+      .expand-collapse {
+        padding-right: $uds-size-spacing-4;
+      }
+    }
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    .emergency-update-post--full {
+      margin-left: $uds-size-spacing-4;
+      margin-right: $uds-size-spacing-4;
+
+      img {
+        margin-left: 0;
+      }
+
+      .ec-toggle-link {
+        margin-bottom: $uds-size-spacing-3;
+      }
+    }
+
+    .formatted-text {
+      .btn-dark {
+        margin-left: 0;
+        margin-top: $uds-size-spacing-2;
+      }
+    }
+
+  }
+
+}

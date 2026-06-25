@@ -1,0 +1,36 @@
+{%
+set classes = [
+dom_id ? 'js-view-dom-id-' ~ dom_id,
+]
+%}
+<div{{ attributes.addClass(classes) }}>
+    {{ title_prefix }}
+    {{ title }}
+    {{ title_suffix }}
+
+{% if logged_in %}
+
+
+<div class="resource-filters">
+    {{ exposed }}
+    {% if header %}{{ header }}{% endif %}
+</div>
+    {{ attachment_before }}
+
+<div class="resource-results d-flex flex-row flex-sm-row flex-column align-items-stretch flex-wrap">
+    {{ rows }}
+</div>
+    {{ empty }}
+    {{ pager }}
+    {{ attachment_after }}
+    {{ more }}
+
+    {% if footer %}
+        <footer>
+            {{ footer }}
+        </footer>
+    {% endif %}
+
+</div>
+
+{% endif %}

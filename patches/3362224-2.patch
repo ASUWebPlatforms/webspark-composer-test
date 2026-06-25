@@ -1,0 +1,19 @@
+diff --git a/src/RecentlyReadService.php b/src/RecentlyReadService.php
+index 8b6542a..9465811 100644
+--- a/src/RecentlyReadService.php
++++ b/src/RecentlyReadService.php
+@@ -156,12 +156,14 @@ class RecentlyReadService implements RecentlyReadServiceInterface {
+     if ($user_id != 0) {
+       $records = $this->recentlyReadStorage->getQuery()
+         ->condition('user_id', $user_id)
++        ->accessCheck(TRUE)
+         ->sort('created', 'DESC')
+         ->execute();
+     }
+     else {
+       $records = $this->recentlyReadStorage->getQuery()
+         ->condition('session_id', session_id())
++        ->accessCheck(TRUE)
+         ->sort('created', 'DESC')
+         ->execute();
+     }

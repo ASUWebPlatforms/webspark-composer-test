@@ -1,0 +1,7 @@
+asu_resend_email.resend_confirm_email:
+  path: '/resend_confirm_email/{nid}'
+  defaults:
+    _form: '\Drupal\asu_resend_email\Form\EmailForm'
+    _title: 'Resend confirmation email'
+  requirements:
+    _permission: 'administer site configuration'

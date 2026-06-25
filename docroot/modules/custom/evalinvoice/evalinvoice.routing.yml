@@ -1,0 +1,24 @@
+evalinvoice.evalinvoice:
+  path: '/monthly-invoices'
+  defaults:
+    _controller: '\Drupal\evalinvoice\Controller\EvalInvoiceController::evalInvoiceLoad'
+    _title: 'Program Evaluation Monthly Invoices'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+evalinvoice.evalmonth:
+  path: '/invoices-month'
+  defaults:
+    _controller: '\Drupal\evalinvoice\Controller\EvalInvoiceController::evalMonthLoad'
+    _title: 'Program Evaluation Month-Year Invoice'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+evalinvoice.details:
+  path: '/invoice-details'
+  defaults:
+    _controller: '\Drupal\evalinvoice\Controller\EvalInvoiceController::detailsLoad'
+    _title: 'Invoice Details'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+

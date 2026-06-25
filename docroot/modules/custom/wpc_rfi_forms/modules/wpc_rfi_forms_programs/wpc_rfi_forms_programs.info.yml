@@ -1,0 +1,7 @@
+name: WPC RFI Forms - Programs
+type: module
+description: Provides a custom content type for managing programs submitted through forms 
+package: 'WPC Custom'
+core_version_requirement: ^8.8 || ^9 || ^10
+version: '1.0.0'
+configure: wpc_rfi_forms_programs.program_settings

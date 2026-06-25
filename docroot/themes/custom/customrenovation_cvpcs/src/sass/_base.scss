@@ -1,0 +1,117 @@
+/* Fix btn-primary issue */
+.btn-primary {
+  background-color: $maroon;
+  color: $white;
+  a {
+    color: $white;
+    text-decoration: none;
+  }
+}
+
+.btn-primary:hover {
+  color: $white;
+  background-color: $maroon;
+  border-color: $maroon;
+}
+
+/* remove extra padding from nested containers */
+.container {
+  .container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* fix pagination alignment to be centered */
+.pagination {
+  justify-content: center;
+}
+
+/* fix image carousel bullet on black bg */
+.glide__bullet--active {
+  border: 1px solid #d0d0d0 !important;
+}
+
+.goldbg {
+  background-color: $gold;
+}
+
+/* Size degree programs overview grid */
+.degreeprograms .row .col-lg-6 img {
+  width: auto;
+  display: block;
+  margin: 0;
+  clear: both;
+}
+.degreeprograms .row .col-lg-6 {
+  margin-bottom: 3px;
+  margin-top: 3px;
+}
+.degreeprograms .row .col-lg-6 {
+  padding: 25px
+}
+
+@media only screen and (min-width: 992px) {
+  .bottom-row {
+    border-top:5px dotted #000
+  }
+
+  .degreeprograms .row .col-lg-6 {
+    border-right: 5px dotted #000
+  }
+  .degreeprograms .row .col-lg-6 img {
+    height: 70px;
+    width: auto
+  }
+
+  .degreeprograms .row {
+    display: flex;
+    flex-direction: row
+  }
+
+  .degreeprograms .row .col-lg-6 p {
+    clear: both;
+    max-width: 300px
+  }
+  .degreeprograms {
+    margin-bottom: 48px;
+  }
+}
+
+.degreeprograms .row .col-lg-6:last-child {
+  border-right: none;
+  padding-right: 0px
+}
+
+.degreeprograms .row .col-lg-6 {
+  margin-bottom: 3px;
+  margin-top: 3px
+}
+.firstyear.svg, .transferstudents.svg, .graduatestudents.svg, .veterans.svg {
+  height: 80px;
+}
+
+/* fix ranking comparison text bg and wrap */
+.rcontbox p {
+  font-size: 0.875rem;
+  line-height: 1.43rem;
+  letter-spacing: -.01rem;
+}
+
+.rcontbox p span.highlight-black {
+  box-shadow: 0.3em 0 0 #191919,0.3em 0 0 #191919;
+  background: #191919;
+  color: #ffc627;
+  padding: 5px;
+  padding-left: 0px;
+  box-shadow: -5px 0 0 #000;
+}
+
+.rcontbox p span[class^=highlight-] {
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+div.rank div.school {
+  margin-bottom: 5px;
+}

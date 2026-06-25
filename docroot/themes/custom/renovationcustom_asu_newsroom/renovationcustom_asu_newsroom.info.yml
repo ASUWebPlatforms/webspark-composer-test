@@ -1,0 +1,15 @@
+name: renovationcustom_asu_newsroom
+type: theme
+description: 'A subtheme based on the ASU Webspark 2 theme Renovation for ASU NewsRoom'
+core_version_requirement: ^8 || ^9 || ^10
+libraries:
+  - renovationcustom_asu_newsroom/global-styling
+
+base theme: renovation
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer

@@ -1,0 +1,37 @@
+{% extends '@renovation/node/node.twig' %}
+
+{% from '@analytics/macros.html.twig' import tags %}
+{% from '@analytics/macros.html.twig' import date %}
+
+{% block content %}
+  {% set data = {
+    'size': 'sm',
+    'heading': node.title.value,
+  } %}
+  {{ include('@analytics/hero-image.html.twig', data, with_context = false) }}
+
+  <div class="tw-py-24">
+    <div class="container">
+      <div class="row gy-3">
+        <div class="col-sm-12 col-lg-8">
+          {{ content.body }}
+          {% if node.field_event_link.uri %}
+            <div class="tw-mt-8">
+              <hr class="copy-divider"/>
+              <p>For more information, please visit:</p>
+              <a href="{{ node.field_event_link.uri }}" role="button" class="btn btn-md btn-maroon">
+                {{ node.field_event_link.title }}
+              </a>
+            </div>
+          {% endif %}
+        </div>
+        <div class="col-sm-12 col-lg-4 tw-space-y-4 ">
+          {{ date('Event Start', content.field_start_day) }}
+          {{ date('Event End', content.field_end_day) }}
+          {{ tags('Event Category', node.field_event_category|map((item) => item.entity)) }}
+          {{ tags('Event Tags', node.field_event_tags|map((item) => item.entity)) }}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

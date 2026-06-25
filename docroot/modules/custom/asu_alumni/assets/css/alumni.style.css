@@ -1,0 +1,291 @@
+/* simpleSlider and contact styles */
+div.image-slideshow {
+    position: relative;
+    max-width:600px;
+}
+
+#simpleSlider {
+    width: 100%;
+    height:400px;
+}
+
+/* styles for each item */
+#simpleSlider li {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display:none;
+    width: 100%;
+    max-width:100%;
+    height: 400px;
+}
+div#navContainer, div#navButtons {
+    max-width:600px;
+}
+div#simpleSliderNav {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    column-gap: 12px;
+}
+/* Styling for the navigation items, this can also be anything we want, but I am using circles */
+.simpleSliderNavItem {
+	height:16px; 
+	width:16px; 
+	background:#ccc;
+	border-radius:8px;
+	cursor:pointer;
+}
+/* styles for the active nav item */
+.simpleSliderNavItem.active {
+	background:#191919;
+}
+
+/* display the first item */
+#simpleSlider li:first-child {
+    display:block;
+}
+
+#simpleSlider li img {
+    height:400px;
+    width: 100%;
+    object-fit: cover;
+}
+
+div#navButtons {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    column-gap: 24px;
+}
+#navButtons div.sliderNav {
+    background: #E8E8E8 0% 0% no-repeat padding-box;
+    border: 1px solid #D0D0D0;
+    height:56px;
+    width:56px;
+    border-radius:50%;
+    text-align: center;
+    line-height: 56px;
+    cursor:pointer;
+    user-select: none;
+}
+
+.itemContent {
+    position: absolute;
+    bottom: 0;
+    background: rgba(0,0,0,.5);
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    color: #fff;
+}
+/* End Slider */
+div.content-sidebar {
+    max-width: 500px;
+}
+.content-sidebar img {
+    max-width:100%;
+}
+
+.content-sidebar p {
+    font-size: 1.10rem;
+}
+
+div.background-gold {
+    background: #ffc627;
+}
+
+div.chapter-cards-container {
+    background-color: #fafafa;
+    padding-top:15px;
+    padding-bottom:15px;
+}
+
+div.chapter-card-left {
+    background:#fff;
+    padding: 0;
+    padding-bottom: 10px;
+}
+div.chapter-card-left p {
+    font-size: 1.15rem;
+}
+div.chapter-card-left p, div.chapter-card-left h4 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+div.chapter-card-right img {
+    float:left;
+}
+
+div.chapter-card-right p {
+    float:right;
+    margin-top:15px;
+}
+
+.subHeadings {
+    display:flex;
+    row-gap: 1rem;
+    column-gap: 15px;
+    flex-wrap: wrap;
+}
+div.chapter_contact {
+    flex: 1 0 21%;
+}
+
+/*
+    Social Media
+*/
+
+div.social_icon {
+    width:38px;
+    height:38px;
+    background:#8C1D40;
+    border-radius:10px;
+    color: #fff;
+    line-height: 42px;
+    text-align: center;
+}
+
+div.social_icon .icon {
+    text-indent:-99999px;
+}
+
+
+/*
+
+Bottom Cards
+
+*/
+
+div.topCards {
+    display: flex;
+    column-gap: 24px;
+}
+
+div.topCard {
+    width: 285px;
+    background: #fff;
+    padding-bottom: 20px;
+}
+div.cardText p:last-child {
+    margin:0;
+}
+div.topCard img {
+    width: 100%;
+}
+
+div.bottomCard {
+    display:flex;
+    column-gap:16px;
+}
+
+div.bottomCard > div, div.bottomCard div.contextual {
+    display:flex;
+    flex-direction: column;
+    column-gap:16px;
+}
+
+div.bottomCard div.cardText a{
+    color:#fff;
+}
+
+div.fullscreen-img img {
+    width:100%;
+    max-height: 450px;
+    max-width: 870px;
+    object-fit: cover;
+    object-position: center center;
+}
+div.flexRow {
+    display:flex;
+    column-gap:12px;
+}
+
+/* 
+    Search Results
+
+*/
+
+div.searchResults div.searchResult {
+    display: flex;
+    column-gap: 24px;
+    margin-top:40px;
+}
+
+div.searchResult .searchResultTest > a {
+    font-size: 20px;
+    color: #000;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+div.searchResult div.searchResultSocial {
+    display: flex;
+    column-gap: 6px;
+    margin-top:16px;
+    margin-bottom:16px;
+}
+
+div.searchResult div.searchResultSocial div.social_icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    line-height: 20px;
+    font-size: 9px;
+}
+@media (max-width: 767px) {
+    div.searchRows {
+        flex-direction: column-reverse;
+    }
+
+    div.searchResults div.searchResult {
+        row-gap: 16px;
+        flex-direction: column;
+    }
+
+    div.searchResult .searchResultImage > img {
+        width:100%;
+    }
+
+    /*
+        Chapters
+    */
+    div.chapter_contact {
+        flex: 1 0 47%;
+    }
+
+    div.topCards {
+        flex-direction: column;
+        row-gap: 24px;
+    }
+
+    div.topCard {
+        width:100%;
+    }
+
+    div.cardsContainer {
+        width: 100%;
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    div.bottomCard {
+        flex-direction: column;
+    }
+    div.bottomCard img {
+        width:100%;
+    }
+
+    #simpleSlider, #simpleSlider li, #simpleSlider li img {
+        height: initial;
+        aspect-ratio: 16 / 9;
+    }
+}
+
+@media (max-width: 974px) {
+    div.searchResult .searchResultImage > img {
+        width:215px;
+        max-width: initial;
+    }
+}

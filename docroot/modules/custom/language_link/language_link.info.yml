@@ -1,0 +1,6 @@
+name: 'Languages link'
+description: 'Provides a custom front page link for translations.'
+package: Other
+type: module
+core_version_requirement: ^8 || ^9 || ^10
+version: '1.0'

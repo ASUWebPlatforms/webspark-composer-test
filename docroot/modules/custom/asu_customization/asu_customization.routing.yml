@@ -1,0 +1,7 @@
+asu_customization.admin_settings:
+    path: '/admin/config/content/courseEmailsettings'
+    defaults:
+      _form: '\Drupal\asu_customization\Form\courseEmailSettingsForm'
+      _title: 'Courses email content'
+    requirements:
+      _permission: 'administer asu_customization'

@@ -1,0 +1,11 @@
+hr.copy-divider {
+    width: 114px;
+}
+
+.extra-lead {
+    font-size: 30px;
+
+    @media (min-width: 992px) {
+        font-size: 80px;
+    }
+}

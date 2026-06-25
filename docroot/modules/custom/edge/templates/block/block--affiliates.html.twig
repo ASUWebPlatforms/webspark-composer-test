@@ -1,0 +1,27 @@
+<div class="container nogutter">
+  <div class="row">
+    {% if nodes is not empty %}
+      {% for node in nodes %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          {% set media = node.field_media.entity.field_media_image.entity %}
+          {% set url = node.field_link.uri.value %}
+          {% if url %}
+            <a href="{{ url }}" title="{{ node.title.value }}">
+              <img src="{{ file_url(media.uri.value) }}"
+                alt="{{ node.title.value }}"
+                class="img-fluid mb-2" />
+            </a>
+          {% else %}
+            <img src="{{ file_url(media.uri.value) }}"
+              alt="{{ node.title.value }}"
+              class="img-fluid mb-2" />
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>
+        {{ 'No nodes found.'|t }}
+      </p>
+    {% endif %}
+  </div>
+</div>

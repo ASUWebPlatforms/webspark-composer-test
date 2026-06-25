@@ -1,0 +1,26 @@
+{#
+@file
+My Content template.
+#}
+
+{% set currentUser = current_user() %}
+{% set data = {
+  'name': currentUser.field_name.value|default(currentUser.name.value),
+  'title': currentUser.field_job_title.value,
+  'email': currentUser.mail.value,
+} %}
+
+<div class="my-content">
+  <div class="container tw-py-24">
+    <div class="row">
+      <div class="col-sm-12 col-lg-3">
+        {{ include('@analytics/sidebar-user.html.twig') }}
+      </div>
+      <div class="col-sm-12 col-lg-9">
+        {{ drupal_view('global_search', 'global_search_block') }}
+        {{ drupal_view('content_recent', 'recently_read_block') }}
+        {{ drupal_view('favorite_entities', 'my_favorite_entities_block') }}
+      </div>
+    </div>
+  </div>
+</div>

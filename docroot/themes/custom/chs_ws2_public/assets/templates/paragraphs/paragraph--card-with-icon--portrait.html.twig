@@ -1,0 +1,24 @@
+{% set linkval = paragraph.field_cta.entity.field_cta_link.0.url %}
+
+<div class="card-wrapper" id="card-{{ paragraph.uuid.value }}">
+
+	<div class="card cards-components {% if linkval is not empty %} card-hover {% endif %}​">
+	        ​​{% if content.field_icon|render is not empty %} 
+		<i class="{{ content.field_icon[0]['#icons'][0]['#style'] }} {{ content.field_icon[0]['#icons'][0]['#name'] }}  fa-2x card-icon-top"></i>
+		  {% endif %}
+          {{ heading }}
+		<div class="card-header">
+			<h3 class="card-title">{{ content.field_heading|render|striptags|trim }}</h3>
+		</div>
+        ​​{% if content.field_body|render is not empty %} 
+        <div class="card-body">
+			<div>
+				{{ content.field_body|render }}
+			</div>
+		</div>
+        {% endif %}
+		{% if linkval is not empty %}
+		<a class="stretched-link" href="{{ linkval }}"></a>
+​		{% endif %}
+	</div>
+</div>

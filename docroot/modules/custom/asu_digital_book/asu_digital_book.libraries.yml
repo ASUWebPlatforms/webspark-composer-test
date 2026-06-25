@@ -1,0 +1,11 @@
+digital-lib:
+  version: 1.x
+  js:
+      js/react/dist/app.bundle.js: {  minified: true, external: true, preprocess: false }
+      #js/react/*.js: { preprocess: FALSE }
+  dependencies:
+      - core/jquery
+      - core/drupal
+      - core/jquery.once
+
+     

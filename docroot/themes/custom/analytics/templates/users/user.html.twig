@@ -1,0 +1,48 @@
+{#
+/**
+ * @file
+ * Template for a user view.
+ */
+#}
+
+{% set classes = [
+  'user',
+  'user--' ~ view_mode|clean_class,
+] %}
+{% set userName = user.field_name.value|default(user.name.value) %}
+{% set data = {
+  'name': userName,
+  'title': user.field_job_title.value,
+  'email': user.mail.value,
+} %}
+
+<article{{ attributes.addClass(classes) }}>
+  {{ include('@analytics/hero-user.html.twig', data) }}
+
+  <div class="tw-py-8">
+    <div class="container tw-space-y-16">
+      <div>
+        <h2>Published Content</h2>
+        <p>Content published by {{ userName }}.</p>
+        <div class="tw-mt-8">
+          {{ drupal_view('user_published_content', 'block_1') }}
+        </div>
+      </div>
+      <div>
+        <h2>Favorites</h2>
+        <p>Content favortied by {{ userName }}.</p>
+        <div class="tw-mt-8">
+          {{ drupal_view('favorite_entities', 'others_favorite_entities_block') }}
+        </div>
+      </div>
+      {# TODO: Figure out how to get this part to work #}
+      {# <div>
+        <h2>Groups</h2>
+        <p>The groups that {{ userName }} belongs to.</p>
+        <div class="tw-mt-8">
+          {{ drupal_view('groups_and_group_content', 'block_1') }}
+        </div>
+      </div> #}
+    </div>
+  </div>
+</article>

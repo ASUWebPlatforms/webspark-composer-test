@@ -1,0 +1,4 @@
+{% for item in items %}
+  {% set zebra = cycle(['bg-light', ''], loop.index0) %}
+  <div{{ item.attributes.addClass('field--item', zebra) }} >{{ item.content }}</div>
+{% endfor %}

@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - unibuddy_block
+id: unibuddy_block
+theme: renovation-global-launch
+region: content
+weight: 0
+provider: unibuddy_block
+plugin: unibuddy_block
+settings:
+  label: 'Unibuddy embed'
+  label_display: false
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context: null
+  user_role:
+    id: user_role
+    roles: {  }
+    negate: false
+    context: null
+third_party_settings: {  }

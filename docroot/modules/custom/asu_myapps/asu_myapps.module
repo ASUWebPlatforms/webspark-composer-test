@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * Bypass the CSRF token check for the MyApps application edit form.
+ *
+ * @param $form
+ * @param $form_state
+ * @param $form_id
+ * @return void
+ */
+function asu_myapps_form_alter(&$form, &$form_state, $form_id): void
+{
+  $config = Drupal::config('asu_myapps.settings');
+
+  if ($config->get('asu_myapps_disable_csrf')) {
+    if ($form_id == 'node_application_edit_form') {
+      unset($form['#token']);
+    }
+  }
+}

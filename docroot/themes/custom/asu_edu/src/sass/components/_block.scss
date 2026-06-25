@@ -1,0 +1,471 @@
+.block-inline-blockevents {
+  img {
+    height: 100%;
+  }
+
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    .col-xl-3 {
+      flex: 0 0 41.67%;
+      max-width: 41.67%;
+    }
+
+    .col-xl-9 {
+      flex: 0 0 58.33%;
+      max-width: 58.33%;
+    }
+  }
+}
+
+.block--asu-edu-degree-ratings-future {
+  .col-12 {
+    padding: 0;
+    border: 1px $uds-color-base-gray-4 solid;
+  }
+
+  .layout__region--left, .layout__region--right {
+    padding: 32px;
+
+    h3 {
+      margin-top: 0;
+    }
+  }
+
+}
+
+.block-inline-blockasu-edu-news-events {
+  h2 {
+    margin-top: 0;
+  }
+
+  h3.card-heading {
+    margin-top: 0;
+  }
+
+  .card-event-icons {
+    width: 50%;
+  }
+}
+
+.image-carousel {
+  grid-area: carousel;
+  overflow: hidden;
+  height: 100%;
+  background-color: $uds-color-base-gold;
+
+  .asucms-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $uds-color-base-gold;
+
+    img {
+      width: 100%;
+      height: auto;
+      max-width: 500px;
+      background-size: cover;
+    }
+  }
+
+  .link-section {
+    position: absolute;
+    bottom: 20px;
+    right: 5%;
+  }
+
+  /* glide.core.css (Unmodified) */
+  .glide {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .glide * {
+    box-sizing: inherit;
+  }
+
+  .glide__track {
+    overflow: hidden;
+  }
+
+  .glide__slides {
+    width: 100%;
+    position: relative;
+    list-style: none;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    touch-action: pan-Y;
+    overflow: hidden;
+    padding: 0;
+    margin-bottom: 0;
+    white-space: nowrap;
+    display: flex;
+    flex-wrap: nowrap;
+    will-change: transform;
+  }
+
+  .glide__slides--dragging {
+    user-select: none;
+  }
+
+  .glide__slide {
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+    white-space: normal;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .glide__slide a {
+    user-select: none;
+    -webkit-user-drag: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
+  .glide__arrows {
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+
+  .glide__bullets {
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+
+  .glide--rtl {
+    direction: rtl;
+  }
+
+  /* glide.theme.css (Modified) */
+  .glide__arrow {
+    position: absolute;
+    display: block;
+    bottom: -8px;
+    width: 48px;
+    height: 48px;
+    z-index: 2;
+    color: #191919;
+    text-transform: uppercase;
+    padding: 0 12px;
+    background-color: #fff;
+    border: 1px solid #d0d0d0;
+    border-radius: 50%;
+    box-shadow: 0 0.25em 0.5em 0 rgba(0, 0, 0, 0.1);
+    text-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.1);
+    opacity: 1;
+    cursor: pointer;
+    transition: opacity 150ms ease, border 300ms ease-in-out;
+    transform: translateY(-50%);
+    line-height: 1;
+  }
+
+  .glide__arrow:focus {
+    box-shadow: none !important;
+  }
+
+  .glide__arrow--left {
+    left: calc(5% + 24px);
+  }
+
+  .glide__arrow--right {
+    left: calc(5% + 24px + 48px + 16px);
+  }
+
+  .glide__arrow--disabled {
+    opacity: 0.33;
+  }
+
+  .glide--swipeable {
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+  }
+
+  .glide--dragging {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+  }
+}
+
+.links-text-block {
+  a {
+    display: block;
+    margin-bottom: 1em;
+  }
+}
+
+.block-inline-blockasu-edu-content-image-left {
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    .uds-image-overlap {
+      .content-wrapper {
+        padding: $uds-size-spacing-3;
+      }
+    }
+  }
+}
+
+.spacing-top-minus-164 {
+  margin-top: -164px;
+}
+
+.block-inline-blockcontent-image {
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    h3 {
+      font-size: 2rem;
+      margin-top: 0;
+    }
+  }
+
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    .uds-image-overlap {
+      .content-wrapper {
+        padding: $uds-size-spacing-5;
+      }
+    }
+
+    h3 {
+      font-size: 2.5rem;
+      margin-top: 0;
+      line-height: calc(100% + .12em);
+    }
+  }
+}
+
+.block-inline-blocktext-with-background .text-content {
+  border: 1px solid #d0d0d0;
+  padding: 48px;
+}
+
+.clas-news-react-base[data-view="Cards"] {
+  .feed-header-section {
+    display: none;
+  }
+}
+
+.gray-7-bg.bg-top.bg-percent-50 {
+  .feed-header-section {
+    .feed-header-title {
+      color: #fff;
+    }
+  }
+}
+
+.block-inline-blockcard-and-image {
+  .uds-card-and-image {
+    background-size: 0, cover;
+    background-position: center, center;
+
+    .card:not(.card.card-foldable) > div:first-of-type:not(.card-image-content) {
+      padding-top: $uds-size-spacing-2;
+      padding-bottom: $uds-size-spacing-2;
+    }
+  }
+}
+
+.block-inline-blocktext-with-background {
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    margin-bottom: $uds-size-spacing-6;
+
+    .text-content.bg {
+      padding: $uds-size-spacing-4;
+    }
+  }
+}
+
+.block-inline-blockgrid-links {
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    margin-bottom: $uds-size-spacing-6;
+    padding-top: $uds-size-spacing-4;
+  }
+}
+
+.block-inline-blocktext-content {
+  .collegeunit {
+    font-size: $uds-size-font-large;
+  }
+}
+
+.testimonial-carousel-container {
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    padding-top: $uds-size-spacing-6;
+
+    .glide:not(.glide.image-gallery) .glide__bullets {
+      display: block;
+      text-align: center;
+    }
+
+    .uds-blockquote {
+      blockquote {
+        margin: 0 $uds-size-spacing-2;
+      }
+    }
+
+    .glide__arrows {
+      padding-bottom: $uds-size-spacing-4;
+    }
+  }
+
+}
+
+.block-inline-blockgallery {
+  .glide {
+    &.image-gallery {
+      figcaption {
+        font-size: $uds-size-font-medium;
+        padding: 0;
+
+        p {
+          margin: 0;
+        }
+
+        h3 {
+          font-size: $uds-size-font-medium;
+          margin: 0;
+          line-height: $uds-size-spacing-3;
+        }
+
+        h3 + div {
+          height: auto !important;
+        }
+      }
+
+      .image-gallery-action-area[data-has-content=true] {
+        .uds-caption-text {
+          padding: 0;
+          margin: $uds-size-spacing-4;
+
+          div {
+            height: auto !important;
+
+            a {
+              color: #8c1d40;
+            }
+          }
+        }
+
+        @media screen and (max-width: $uds-grid-container-max-width-lg) {
+          .uds-caption-text {
+            margin: $uds-size-spacing-3;
+          }
+        }
+      }
+
+      .image-navigator {
+        .image-navigator-images {
+          .navigation-slider {
+            .glide__bullets {
+              .bullet-image-container:focus {
+                box-shadow: 0px 0px 0px 2px #ffffff,
+                0px 0px 0px 4px #191919 !important;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.block-inline-blocknews {
+  .clas-news-react-base[data-view="Cards"] {
+    .card-img-top {
+      border-radius: 0;
+    }
+
+    .news-feed {
+      .card {
+        .card-header {
+          padding-left: $uds-size-spacing-4;
+          padding-right: $uds-size-spacing-4;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    .clas-news-react-base[data-view="Carousel"] {
+      padding-top: $uds-size-spacing-6;
+    }
+  }
+}
+
+.block--asufooter {
+  #endorsed-footer {
+    #social-media {
+      .nav-link {
+        &:first-child {
+          padding-left: $uds-size-spacing-2;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    #endorsed-footer {
+      #social-media {
+        .nav-link {
+          &:first-child {
+            padding-left: 0;
+          }
+        }
+      }
+    }
+
+    #footer-innovation {
+      .footer-innovation-links {
+        flex-direction: column-reverse;
+
+        .img-link {
+          order: 1;
+        }
+      }
+    }
+  }
+
+}
+
+.block-inline-blockaccordion {
+  .card-foldable {
+    .card-header {
+      h4 {
+        a {
+          .svg-inline--fa {
+            align-self: unset;
+          }
+        }
+      }
+    }
+
+    & > div:last-child {
+      padding-bottom: $uds-size-spacing-2;
+    }
+  }
+
+  .card-body {
+    padding: $uds-size-spacing-4;
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    .card-body {
+      padding: $uds-size-spacing-3;
+    }
+  }
+}
+
+.block--asu-edu-asubrandheader {
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    .navbar-container {
+      a {
+        display: none;
+      }
+    }
+  }
+
+}

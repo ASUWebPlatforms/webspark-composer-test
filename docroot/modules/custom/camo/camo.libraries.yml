@@ -1,0 +1,9 @@
+camo-app:
+    version: 1.0
+    js:
+      camo-app/dist/camo.js: { preprocess: false  }
+    css:
+      component:
+        camo-app/dist/camo.css: { }
+    dependencies:
+      - core/drupalSettings

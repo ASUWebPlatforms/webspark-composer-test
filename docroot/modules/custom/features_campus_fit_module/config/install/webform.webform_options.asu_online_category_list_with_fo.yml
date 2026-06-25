@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies: {  }
+id: asu_online_category_list_with_fo
+label: 'ASU Online category list with font icons'
+category: ASU
+likert: false
+options: |-
+  'Art and design-14q': '<i class="fas fa-pencil-ruler"></i> Art and design'
+  Business-14q: '<i class="fas fa-briefcase"></i> Business'
+  'Communication and digital media-14q': '<i class="fas fa-comments"></i> Communication and digital media'
+  'Computer science and technology-14q': '<i class="fas fa-code"></i> Computer science and technology'
+  Education-14q: '<i class="fas fa-chalkboard-teacher"></i> Education'
+  Engineering-14q: '<i class="fas fa-cog"></i> Engineering'
+  'Geographical sciences and urban planning-14q': '<i class="fas fa-map"></i> Geographical sciences and urban planning'
+  'Health and wellness-14q': '<i class="fas fa-heartbeat"></i> Health and wellness'
+  History-14q: '<i class="fas fa-landmark"></i> History'
+  Humanities-14q: '<i class="fas fa-book"></i> Humanities'
+  'Information technology-14q': '<i class="fas fa-desktop"></i> Information technology'
+  'Law, criminal justice and public service-14q': '<i class="fas fa-balance-scale"></i> Law, criminal justice and public service'
+  Language-14q: '<i class="fas fa-globe"></i> Language'
+  'Liberal arts-14q': '<i class="fas fa-book"></i> Liberal arts'
+  Management-14q: '<i class="fas fa-network-wired"></i> Management'
+  Nursing-14q: '<i class="fas fa-stethoscope"></i> Nursing'
+  Nutrition-14q: '<i class="fas fa-carrot"></i> Nutrition'
+  Psychology-14q: '<i class="fas fa-brain"></i> Psychology'
+  Science-14q: '<i class="fas fa-microscope"></i> Science'
+  'Social sciences-14q': '<i class="fas fa-users"></i> Social and behavioral sciences'
+  STEM-14q: '<i class="fas fa-square-root-alt"></i> STEM'
+  Sustainability-14q: '<i class="fas fa-globe-americas"></i> Sustainability'
+  'I''m not sure, exploratory-14q': '<i class="fas fa-question-circle"></i>I''m not sure, exploratory'

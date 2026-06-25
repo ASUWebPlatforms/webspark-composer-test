@@ -1,0 +1,328 @@
+/**
+ * @file front-page.css
+ * BRIDGE CSS — Front page hero, quicklinks, events, facts, and video styles.
+ * Extracted from the legacy Access theme.
+ * These classes are referenced in database content. Remove as TSS team
+ * migrates content to Webspark-native components.
+ * See: WEBA11Y9_MIGRATION_TICKETS.md (Tickets S1, S2)
+ * @todo Remove after content migration is complete.
+ */
+
+/* AAE-144: Scope with .front for higher specificity than Bootstrap's .pb-5. */
+.front .pb-5,
+.front .pt-5 {
+  padding-bottom: 0rem!important;
+}
+
+/* Frontpage hero */
+div[class^=uds-hero] .hero-overlay {
+  background-image: linear-gradient(180deg,rgba(25,25,25,0),rgb(25 25 25 / 3%));
+}
+#front-hero .uds-hero-md h1,
+#front-hero div[class^=uds-hero] .content,
+#front-hero div[class^=uds-hero] a.btn {
+  position: relative;
+}
+#front-hero h1 span.highlight-white {
+  box-shadow: none;
+  background: transparent;
+  left: 20em;
+}
+#front-hero div[class^=uds-hero]:after {
+  opacity: 0.1;
+}
+#front-hero div[class^=uds-hero] .content .text-white,
+#front-hero .uds-hero-md h1.text-white {
+  color: #191919!important;
+}
+div[class^=uds-hero] {
+  margin: 0 auto;
+}
+
+@media (min-width: 320px) {
+  div.uds-hero-md {
+    height: 11rem;
+  }
+  #front-hero .uds-hero-md h1.text-white,
+  #front-hero .uds-hero-md h1 {
+    font-size: 1.1rem;
+    letter-spacing: -.04rem;
+    top: -1rem;
+    left: 8rem;
+    inline-size: 11em;
+    line-height: 1.25em;
+  }
+  #front-hero div[class^=uds-hero] a.btn {
+    display: none;
+  }
+}
+@media (min-width: 400px) {
+  #front-hero .uds-hero-md h1 {
+    top: -1rem;
+    left: 7rem;
+  }
+}
+@media (min-width: 480px) {
+  div.uds-hero-md {
+    height: 13rem;
+  }
+  #front-hero .uds-hero-md h1.text-white,
+  #front-hero .uds-hero-md h1 {
+    font-size: 1.45rem;
+    letter-spacing: -.04rem;
+    top: -2rem;
+    left: 12rem;
+  }
+  #front-hero div[class^=uds-hero] .content {
+    display: none;
+  }
+}
+@media (min-width: 620px) {
+  div.uds-hero-md {
+    height: 15rem;
+  }
+  #front-hero .uds-hero-md h1.text-white,
+  #front-hero .uds-hero-md h1 {
+    font-size: 1.65rem;
+    top: -3rem;
+    left: 14rem;
+  }
+}
+@media (min-width: 768px) {
+  div.uds-hero-md {
+    height: 19rem;
+  }
+  #front-hero .uds-hero-md h1.text-white,
+  #front-hero .uds-hero-md h1 {
+    font-size: 1.75rem;
+    top: -2rem;
+    left: 13rem;
+    inline-size: auto;
+  }
+  #front-hero div[class^=uds-hero] .content {
+    display: block;
+    top: 2rem;
+    left: 13rem;
+    font-size: 0.9rem;
+  }
+  #front-hero div[class^=uds-hero] a.btn {
+    display: block;
+    top: 1.5rem;
+    left: 13rem;
+  }
+  #front-hero .uds-hero-md p {
+    max-width: 400px;
+  }
+}
+
+@media (min-width: 992px) {
+  div.uds-hero-md {
+    height: 21rem;
+  }
+  #front-hero div[class^=uds-hero] .btn-row,
+  #front-hero div[class^=uds-hero] .content,
+  #front-hero div[class^=uds-hero] [role=doc-subtitle],
+  #front-hero div[class^=uds-hero] a.btn,
+  #front-hero div[class^=uds-hero] a.uds-modal-close-btn,
+  #front-hero div[class^=uds-hero] h1 {
+    max-width: calc(940px - 4%);
+  }
+  #front-hero .uds-hero-md h1.text-white,
+  #front-hero .uds-hero-md h1 {
+    top: -2rem;
+    left: 19rem;
+    font-size: 2.5rem;
+    letter-spacing: -.14rem;
+    color: #191919!important;
+  }
+  #front-hero div[class^=uds-hero] .content {
+    top: 0;
+    left: 19.5rem;
+    font-size: 1.15rem;
+  }
+  #front-hero div[class^=uds-hero] a.btn {
+    top: 0rem;
+    left: 19.5rem;
+  }
+  #front-hero .uds-hero-md p {
+    max-width: 600px;
+  }
+}
+
+/* Fix AAE-143: Disable scale hover transform on the hero CTA button.
+ * The Unity Bootstrap theme's transform:scale(1.05) on .btn:hover causes a
+ * hover feedback loop (jitter) because the element boundary shifts relative
+ * to the cursor. Disabling the transform stops the jiggle. */
+#front-hero div[class^=uds-hero] a.btn:hover,
+#front-hero div[class^=uds-hero] a.uds-modal-close-btn:hover {
+  transform: none;
+}
+
+@media (min-width: 1260px) {
+  div.uds-hero-md {
+    height: 29rem;
+  }
+  #front-hero div[class^=uds-hero] .btn-row,
+  #front-hero div[class^=uds-hero] [role=doc-subtitle],
+  #front-hero div[class^=uds-hero] a.btn,
+  #front-hero div[class^=uds-hero] a.uds-modal-close-btn,
+  #front-hero div[class^=uds-hero] h1 {
+    max-width: calc(1200px - 4%);
+  }
+  #front-hero .uds-hero-md h1.text-white,
+  #front-hero .uds-hero-md h1  {
+    top: -7rem;
+    left: 28.5rem;
+    font-size: 3rem;
+  }
+  #front-hero div[class^=uds-hero] .content {
+    max-width: calc(1200px - 50%);
+    top: -3rem;
+    left: 26rem;
+    font-size: 1.25rem;
+  }
+  #front-hero div[class^=uds-hero] a.btn {
+    top: -3em;
+    left: 26rem;
+  }
+}
+
+/* Front quicklinks */
+#quicklinks ul {
+  padding: 2em 0;
+}
+#quicklinks li {
+  display: block;
+  text-align: left;
+  vertical-align: middle;
+  width: 100%;
+  font-weight: bold;
+  line-height: 2em;
+}
+#quicklinks .quicklink-image  {
+  display: inline-block;
+  background-size: cover;
+  width: 30px;
+  height: 30px;
+  margin: 0 0.5em 0 auto;
+}
+#quicklinks .what .quicklink-image  {
+  background-image: url(/sites/default/files/inline-images/link-what.png);
+}
+#quicklinks .best .quicklink-image {
+  background-image: url(/sites/default/files/inline-images/link-best.png);
+}
+#quicklinks .train .quicklink-image {
+  background-image: url(/sites/default/files/inline-images/link-train.png);
+}
+#quicklinks .audit .quicklink-image {
+  background-image: url(/sites/default/files/inline-images/link-audit.png);
+}
+#quicklinks .vendors .quicklink-image {
+  background-image: url(/sites/default/files/inline-images/link-vendors.png);
+}
+#quicklinks .problem .quicklink-image {
+  background-image: url(/sites/default/files/inline-images/link-problem.png);
+}
+@media (min-width: 992px) {
+  #quicklinks li {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    width: 15%;
+    padding: 0 1em;
+    line-height: 1.3em;
+  }
+  #quicklinks .quicklink-image  {
+    display: block;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+  }
+}
+
+/* Front accessibility benefits everyone banner */
+#a11y-benefits .uds-card-and-image-container {
+    max-width: 410px;
+}
+#a11y-benefits .card-header,
+#a11y-benefits .uds-card-and-image-container .card .card-header {
+  padding-bottom: 0 !important;
+}
+#a11y-benefits .uds-card-and-image .card-body p {
+    margin: 1rem 0 0 0;
+}
+
+/* Front events */
+.a11y-events {
+	padding: 2em 0;
+}
+.a11y-events h2 {
+	margin-bottom: 0.5em;
+}
+
+/* Front a11y facts */
+#a11yfacts {
+  padding: 2em 0;
+}
+@media (max-width: 768px) {
+  #a11yfacts {
+    display: none;
+  }
+}
+#a11yfacts ul {
+  padding-left: 0;
+}
+#a11yfacts li {
+  width: 24%;
+  margin: 0;
+  padding: 0;
+}
+#a11yfacts li span {
+  display: block;
+  width: 180px;
+  margin: 0 1em;
+  text-align: center;
+  line-height: 1.2em;
+}
+#a11yfacts li img {
+  padding-bottom: 1em;
+}
+
+/* Front President's video */
+@media (min-width: 360px) {
+  #pres-video .uds-blockquote {
+    padding: 0;
+    font-size: 1rem;
+  }
+  #pres-video .uds-blockquote svg {
+    width: 1.5rem;
+  }
+  #pres-video .uds-video-container {
+    margin-bottom: 2rem;
+  }
+}
+@media (min-width: 576px) {
+  #pres-video .col-sm-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+@media (min-width: 768px) {
+  #pres-video .col-sm-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+  #pres-video .uds-video-container {
+    margin: 2rem 0;
+  }
+}
+@media (min-width: 992px) {
+  #pres-video .uds-blockquote {
+    font-size: 1.25rem;
+    padding: 2rem;
+  }
+  #pres-video .uds-blockquote svg {
+    width: 2.5rem;
+  }
+}

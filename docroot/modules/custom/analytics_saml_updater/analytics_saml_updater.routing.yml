@@ -1,0 +1,7 @@
+analytics_saml_updater.settings:
+  path: admin/config/analytics_saml_updater/settings
+  defaults:
+    _controller: \Drupal\analytics_saml_updater\Controller\AnalyticsSamlUpdaterController::settings
+    _title: Configure the Analytics SAML Updater module
+  requirements:
+    _role: administrator

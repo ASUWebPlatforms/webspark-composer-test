@@ -1,0 +1,11 @@
+name: 'Layout Builder API'
+description: 'Custom API endpoints for Layout Builder content'
+type: module
+core_version_requirement: ^9 || ^10
+package: 'Custom'
+dependencies:
+  - drupal:rest
+  - drupal:serialization
+  - drupal:layout_builder
+  - drupal:block_content
+  - drupal:node

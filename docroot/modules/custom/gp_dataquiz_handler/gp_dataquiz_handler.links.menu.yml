@@ -1,0 +1,5 @@
+gp_dataquiz_handler.settings:
+  title: 'GP Data Quiz Settings'
+  description: 'Configure settings for the GP Data Quiz module.'
+  route_name: gp_dataquiz_handler.settings
+  parent: system.admin_config_system

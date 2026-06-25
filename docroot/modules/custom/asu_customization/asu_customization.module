@@ -1,0 +1,751 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Component\Utility\SafeMarkup;
+use Drupal\Component\Utility\Html;
+use Drupal\paragraphs\Entity\Paragraph;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Render\Renderer;
+use Drupal\views\Views;
+use Drupal\node\NodeInterface;
+use Drupal\node\Entity\Node;
+use Drupal\file\Entity\File;
+use Drupal\image\Entity\ImageStyle;
+use Drupal\file\Entity;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\views\ViewExecutable;
+use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Alter webform elements.
+ *
+ * @param array $element
+ *   The webform element.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ * @param array $context
+ *   An associative array containing the following key-value pairs:
+ *   - form: The form structure to which elements is being attached.
+ */
+
+
+/** Implementation of hook_webform_options_alter to alter predefined webform options **/
+function asu_customization_form_alter(&$form, FormStateInterface $form_state, $form_id){
+	//$connection = \Drupal::database();
+	$database = \Drupal::database();
+	
+	//code to validate user email after account creation
+	if ($form_id === 'user_register_form') {
+    	// Add custom validation
+    	$form['#validate'][] = 'custom_user_email_validate';
+  	}
+	
+	//code to change high school drop down list values in search views
+	if($form_id == "views_exposed_form"){
+		$nids = array();
+		$view = $form_state->get('view');
+		if ($view->id() == 'courses') {
+			\Drupal::service('page_cache_kill_switch')->trigger();
+			if($view->getDisplay()->display['id'] != "data_export_1"){
+			
+			//ksm($nids);
+				$nid_query = $database->select("node", "n")
+						->fields("n",['nid'])
+						->condition("type","course_competency_new","=")
+						->execute()
+						->fetchAll();
+				$field_name = 'field_high_school_value';
+				$multiple = TRUE;
+				foreach($nid_query as $nid_result){
+						$nids[$nid_result->nid] = $nid_result->nid;
+				}		
+
+				foreach($nids as $key => $nid){
+
+					$intnid = intval($nid);
+					$query1 = $database->select('node__field_high_school', 'nfs')
+						->fields('nfs',['field_high_school_value'])
+						->condition('entity_id', $intnid, '=')
+						->execute()
+						->fetchAll();	
+
+
+					foreach($query1 as $hsresults1){
+						$nh1 = $hsresults1->field_high_school_value;
+						//ksm($nh1);
+						$hschoollist[$nh1] =  $nh1;
+
+					}
+				 }
+				 $hs_view_list = array();
+				 $hs_view_list = array_unique($hschoollist);
+				 asort($hs_view_list);
+
+				$form[$field_name] = array(
+					'#type' => 'select2', // Converting to select list
+					//'#options' => array(0 => t('<any>'), 20 => '*', 40 => '**', 60 => '***', 80 => '****', 100 => '*****'), // your options/array
+					'#options' => $hs_view_list,	
+					'#default_value' => 0,
+					'#title' => t('High school'),
+					'#multiple' => $multiple,
+				  );
+					return $form;
+			}
+		
+		}
+		
+	} /*** End of exposed view form ***/
+	
+	//code to adjust high school drop in content type edit page based on state field value
+	if($form_id == "node_course_competency_new_edit_form"){
+		
+		$node_state = $form['field_school_state']['widget']['#default_value'][0];
+		$hs_names = array();
+		if(!empty($node_state)){
+			
+			$query = $database->select('node__field_school_state', 'fss')
+			->fields('fss',['entity_id'])
+			->condition('field_school_state_value',$node_state,'=')
+			->execute()
+			->fetchAll();
+			foreach($query as $results){
+				$state_nids[] = $results->entity_id;
+
+			}
+			//ksm($state_nids);
+			$hs_query = $database->select('node__field_high_school', 'fhs')
+			->fields('fhs',['field_high_school_value'])
+			->condition('entity_id',$state_nids,'IN')
+			->execute()
+			->fetchAll();
+			foreach($hs_query as $hs_results){
+				$hs_node_names[$hs_results->field_high_school_value] = $hs_results->field_high_school_value;
+
+			}
+			
+			$query4 = $database->select('asu_course_hs_data','afs')
+				->fields('afs',['hs_name'])
+				->condition('hs_state_code',$node_state,'=')
+				->execute()
+				->fetchAll();
+			foreach($query4 as $query_results4){
+				$hs_table_names[$query_results4->hs_name] = $query_results4->hs_name;
+
+			}
+			$hs_all_names = $hs_node_names + $hs_table_names;
+			$hs_names = array_unique($hs_all_names);
+		}
+		else{
+			$hs_nid_query = $database->select("node", "n")
+					->fields("n",['nid'])
+					->condition("type","course_competency_new","=")
+					->execute()
+					->fetchAll();
+			foreach($hs_nid_query as $hs_nid_result){
+					$hsnids[$hs_nid_result->nid] = $hs_nid_result->nid;
+			}
+			foreach($hsnids as $hskey => $hsnid){
+					
+				$hsintnid = intval($hsnid);
+				$hsquery1 = $database->select('node__field_high_school', 'nfs')
+					->fields('nfs',['field_high_school_value'])
+					->condition('entity_id', $hsintnid, '=')
+					->execute()
+					->fetchAll();	
+			
+
+				foreach($hsquery1 as $hs_results1){
+					$hsnh1 = $hs_results1->field_high_school_value;
+					//ksm($nh1);
+					$hs_schoollist[$hsnh1] =  $hsnh1;
+
+				}
+			 }
+			 $hs_names = array_unique($hs_schoollist);
+		}
+		
+		
+		if(!empty($hs_names)){
+				asort($hs_names);
+				//$hs_names = array('Hamilton' => 'hamilton');
+				$form['field_high_school']['widget']['#options'] = $hs_names;
+		}
+		
+	}
+	
+	//update dropdowns of HS, Distrcit from cntent type
+	if($form_id == "webform_submission_course_competency_form_node_16_add_form"){
+		//ksm($form);
+		$form['elements']['school_information']['please_enter_your_district_information']['us_district_hs_group']['#prefix'] = '<div id="course-us-hs-district">';
+		$form['elements']['school_information']['please_enter_your_district_information']['us_district_hs_group']['#suffix'] = '</div>';
+		
+		$form['elements']['school_information']['please_enter_your_district_information']['us_district_hs_group']['district']['#validated'] = TRUE;
+		
+		$form['elements']['school_information']['please_enter_your_district_information']['us_district_hs_group']['high_school_1']['#validated'] = TRUE;
+		
+		
+		$form['elements']['school_information']['please_enter_your_district_information']['us_district_hs_group']['us_high_school']['#validated'] = TRUE;
+		
+		
+		/** add ajax functionality to dynamically update district drop down options based on selected state **/
+	    $form['elements']['school_information']['please_enter_your_district_information']['state']['#ajax'] = [
+		      'event' => 'change',
+			  'callback' => 'updateDistrictDropDown',
+			  'wrapper' => 'course-us-hs-district',
+			  'disable-refocus' => true
+			
+	    ];
+		
+		return $form;
+	}
+}
+
+/**
+ * Custom validation callback.
+ */
+function custom_user_email_validate($form, FormStateInterface $form_state) {
+  $email = $form_state->getValue('mail'); // Get the email input
+  
+  if (preg_match('/\.site$/i', $email)) {
+    $form_state->setErrorByName('mail', t('Please enter valid email address'));
+  }
+}
+
+/** funtion to fill up district dropdown **/
+function updateDistrictDropDown(array $form, FormStateInterface $form_state){	
+		$form_state->setRebuild(true);
+		//ksm($form_state);
+		$state_value = $form_state->getValue('state');
+		//$hs_name = array('Hamilton high school'=>'Hamilton high school','Basis chandler'=>'Basis chandler');
+		$dis_query = \Drupal::database();
+		$dis_name = array();
+		$hs_name = array();
+		$hs_name_list = array();
+		$dis_name_list = array();
+
+		$st_query = $dis_query->select('node__field_school_state','fss')
+			->fields('fss',['entity_id'])
+			->condition('field_school_state_value',$state_value,'=')
+			->execute()
+			->fetchAll();
+
+		foreach($st_query as $st_result){
+			$st_nids[$st_result->entity_id] = $st_result->entity_id;
+		}
+
+		$query = $dis_query->select('node__field_district', 'achs')
+			->fields('achs',['field_district_value'])
+			->condition('entity_id',$st_nids,'IN')
+			->execute()
+			->fetchAll();
+
+		foreach($query as $results){
+			$dis_name[$results->field_district_value] = $results->field_district_value;
+		}
+
+		$hs_query = $dis_query->select('node__field_high_school', 'fhs')
+			->fields('fhs',['field_high_school_value','entity_id'])
+			->condition('entity_id',$st_nids,'IN')
+			->execute()
+			->fetchAll();
+	
+		foreach($hs_query as $hs_results){
+			$hs_name_list[$hs_results->field_high_school_value] = $hs_results->field_high_school_value;
+		}
+		$hs_name = array_unique($hs_name_list);	
+	    asort($hs_name);
+		asort($dis_name);
+		if(sizeof($dis_name) <= 1){
+			$dis_name_list = array('Not listed' => 'Not listed');
+			$dis_list = array_merge(array('' => 'Select district'), $dis_name_list);
+		}
+		else{
+			$dis_name_list = $dis_name;
+			$dis_list = array_merge(array('' => 'Select district','Not listed' => 'Not listed'), $dis_name_list);
+		}
+		//$dis_list = array_merge(array('Not listed' => 'Not listed'), $dis_name);
+		//ksm(sizeof($dis_list));
+		//$dis_list_array = array_merge(array('Not listed' => 'Not listed'), $dis_name);
+		$hs_list = array_merge(array('' => 'Select high school','Not listed' => 'Not listed'), $hs_name);
+	    //array_push($hs_name, array('None' => 'Select high school','Not listed' => 'Not listed'));
+	
+	    $form['elements']['school_information']['please_enter_your_district_information']['us_district_hs_group']['high_school_1']['#options'] = $hs_list;
+	    $form['elements']['school_information']['please_enter_your_district_information']['us_district_hs_group']['district']['#options'] = $dis_list;
+		$form['elements']['school_information']['please_enter_your_district_information']['us_district_hs_group']['us_high_school']['#options'] = $hs_list;
+	    // ksm($form['elements']['school_information']['please_enter_your_district_information']['us_district_hs_group']['high_school_1']);
+		return $form['elements']['school_information']['please_enter_your_district_information']['us_district_hs_group']; 
+  
+}
+
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+/*function asu_customization_node_insert(Node $node) {
+	if ($node->bundle() == 'course_competency_new') {
+		//dataAction($node,'insert');
+		$neeeds_approval =   $node->get('field_needs_data_approval')->getValue(); 
+		$title = $node->getTitle();
+		if(!empty($neeeds_approval)){
+			sendApprovalRequiredEmail($node,$title);
+		}
+	}
+	
+}*/
+
+function asu_customization_node_update(Node $node) {
+	if ($node->bundle() == 'course_competency_new') {
+	 	$title = $node->getTitle();
+		$name = $node->get('field_first_name')->value;
+		$email = $node->get('field_e_mail')->value;
+		//approved field change
+		$approve_initial_value = $node->original->get('field_approved_field')->value;
+		$approve_updated_value = $node->get('field_approved_field')->value;
+		if(($approve_updated_value != $approve_initial_value)){
+			  if(($approve_updated_value == "Yes")){
+				  $terms = $node->get('field_course_code_0')->referencedEntities();
+				  foreach ($terms as $grant_type) {
+					  $labels = $grant_type->label();
+				  }
+		      	  $decision = "approved";
+				  sendContentUpdateEmail($node, $title, $name, $labels, $decision, $email);
+				}
+		}
+		else{
+			
+		}
+		//denied field change
+		$denid_initial_value = $node->original->get('field_denied')->value;
+		$denied_updated_value = $node->get('field_denied')->value;
+		if(($denied_updated_value != $denid_initial_value) && $denied_updated_value == "Yes"){
+			$decision = "denied";
+			sendContentUpdateEmail($node, $title, $name, $labels, $decision, $email);
+		}
+		
+		//deferred value
+		$deferred_initial_value = $node->original->get('field_deferred')->value;
+		$deferred_updated_value = $node->get('field_deferred')->value;
+		//ksm($deferred_updated_value);
+		//ksm($deferred_initial_value);
+		if(($deferred_updated_value != $deferred_initial_value) && $deferred_updated_value == "Yes"){
+			$decision = "deferred";
+			sendContentUpdateEmail($node, $title, $name, $labels, $decision, $email);
+		}
+		
+		//committee value
+		$committee_initial_value = $node->original->get('field_committee_review')->value;
+		$committee_updated_value = $node->get('field_committee_review')->value;
+		//ksm($committee_initial_value);
+		//ksm($committee_updated_value);
+		if(($committee_updated_value != $committee_initial_value) && $committee_updated_value == "Yes"){
+			$decision = "committee";
+			sendContentUpdateEmail($node, $title, $name, $labels, $decision, $email);
+		}
+    }
+	
+}
+
+function sendContentUpdateEmail($node, $title, $first_name, $code_label, $decision, $email){
+	
+		$mailManager = \Drupal::service('plugin.manager.mail');
+		$domain = $_SERVER['HTTP_HOST'];
+		$site = "https://$domain";
+		$nid = $node->id();
+	    $node_link = "$site/node/$nid";
+		$approved = array();
+	    if($decision == "approved"){
+			$subject = "$title has been approved";
+			$approved_data = array();
+			$terms = $node->get('field_course_code_0')->referencedEntities();
+			foreach ($terms as $term) {
+				$parent_data = \Drupal\taxonomy\Entity\Term::load($term->parent->target_id)->get('name')->value;
+				$approved_data[$parent_data] = $term->getName();
+			}
+			foreach($approved_data as $key => $code){
+				$approved[] = $key." > ".$code."<br />";
+			}
+			$approved_code = implode('', $approved);
+			$content = "<p>$first_name</p><p>Thank you for submitting a course to <a href='https://courseapproval.asu.edu'>courseapproval.asu.edu</a>. Your course has been approved.</p>";
+			$content .= "<p>Course name: <a href='$node_link'>$title</a> <br />";
+			$content .= "Approved as: $approved_code</p>";
+			$content .= "<p>We reserve the right to re-evaluate courses if we find the content of the current course description does not match the previously approved course</p>";
+			$content .= "<p>If you have any questions, please email <a href='mailto:courseapproval@asu.edu'>courseapproval@asu.edu</a>.</p>"; 
+			$content .= "<p>Arizona State University | Northern Arizona University | University of Arizona</p>";
+			$to_email_address = $email;
+		}
+		if($decision == "denied"){
+			$subject = "$title has been denied";
+			$new_dec_reason = $node->get('field_denied_reason')->value;
+			if(!empty($new_dec_reason)){
+				$denied_reason = "Reason denied: $new_dec_reason</p>";
+			}
+			else{
+				$denied_reason = "</p>";
+			}
+			$content = "<p>$first_name</p><p>Thank you for submitting a course to <a href='https://courseapproval.asu.edu'>courseapproval.asu.edu</a>. Unfortunately, your course has been denied.</p>";
+			$content .= "<p>Course name: <a href='$node_link'>$title</a> <br />";
+			$content .= $denied_reason;
+			$content .= "<p>If you have any questions, please email <a href='mailto:courseapproval@asu.edu'>courseapproval@asu.edu</a>.</p>"; 
+			$content .= "<p>Arizona State University | Northern Arizona University | University of Arizona</p>";
+			$to_email_address = $email;
+		}
+		if($decision == "deferred"){
+			$subject = "$title has been deferred";
+			$content = "<p>$first_name</p><p>Thank you for submitting a course to <a href='https://courseapproval.asu.edu'>courseapproval.asu.edu</a>. Your course has been deferred until we receive additional information.</p>";
+			$content .= "<p>Course name: <a href='$node_link'>$title</a> <br />";
+			$c_deferred_reason = $node->get('field_deferred_reason')->value;
+			if(!empty($c_deferred_reason)){
+				$deferred_reason = "Reason deferred: $c_deferred_reason</p>";
+			}
+			else{
+				$deferred_reason = "</p>";
+			}
+			$content .= $deferred_reason;
+			$content .= "<p>If you have additional information on the course that should be considered, please <a href='https://courseapproval.asu.edu/submit-course'>re-submit</a> the course to the Course Approval website with the additional information included in the new submission. For questions, please email <a href='mailto:courseapproval@asu.edu'>courseapproval@asu.edu</a>.</p>"; 
+			$content .= "<p>Arizona State University | Northern Arizona University | University of Arizona</p>";
+			$to_email_address = $email;
+
+		}
+		if($decision == "committee"){
+			
+			$subject = "$title is under committee review";
+			$content = "<p>$first_name</p><p>Thank you for submitting a course to <a href='https://courseapproval.asu.edu'>courseapproval.asu.edu</a>. Your course is currently under committee review.</p>";
+			$content .= "<p>Course name: <a href='$node_link'>$title</a></p>";
+			$content .= "<p>Arizona State University, Northern Arizona University and University of Arizona committee members are reviewing your course. Please allow an additional two to four weeks for the committee to review the course.</p>";
+			$content .= "<p>If you have any questions, please email <a href='mailto:courseapproval@asu.edu'>courseapproval@asu.edu</a>.</p>";
+			$content .= "<p>Arizona State University | Northern Arizona University | University of Arizona</p>";
+			$to_email_address = $email;
+			sendCommitteeEmailToAdmins($node_link, $title);
+		}
+		
+		//ksm($content);
+		 $module = 'asu_customization';
+		 $key = 'send_course_email';
+		 //$to_email_address = "avannela@gmail.com";
+		 $params['message'] = $content;
+		 $params['subject'] = $subject;
+	     $params['from_address'] = "courseapproval@asu.edu";
+		 $langcode = \Drupal::currentUser()->getPreferredLangcode();
+		 $send = true;
+	  	 $result = $mailManager->mail($module, $key, $email, $langcode, $params, NULL, $send);
+	     //ksm($result);
+}
+
+
+function sendCommitteeEmailToAdmins($node_link,$title){
+	$mailManager = \Drupal::service('plugin.manager.mail');
+	$content = "<p>A new course has been submitted to <a href='https://courseapproval.ws.asu.edu'>courseapproval.asu.edu</a> is now in committee review.</p>";
+	$config = \Drupal::config('asu_customization.admin_settings');
+	$admin_email = $config->get('admin_email_ids');
+	 
+	//$admin_email = "avannela@gmail.com";
+	$content .=  "<p>Course name: <a href='$node_link'>$title</a></p>";
+	$content  .= "<p>Please review this course within two to four weeks.</p>";
+	$module = 'asu_customization';
+	$key = 'send_course_email';
+	$to_email_address = $admin_email;
+	$params['message'] = $content;
+	$params['subject'] = "$title course is in committee review";
+	$params['from_address'] = "courseapproval@asu.edu";
+	$langcode = \Drupal::currentUser()->getPreferredLangcode();
+	$send = true;
+	$result = $mailManager->mail($module, $key, $to_email_address, $langcode, $params, NULL, $send);
+}
+
+/*function sendApprovalRequiredEmail($node, $title){
+	$mailManager = \Drupal::service('plugin.manager.mail');
+	$domain = $_SERVER['HTTP_HOST'];
+	$site = "https://$domain";
+	$nid = $node->id();
+	$node_link = "$site/node/$nid";
+	$config = \Drupal::config('asu_customization.admin_settings');
+	$admin_email = $config->get('admin_email_ids');
+	//$admin_email = "avannela@gmail.com";
+	$content = "<p>A new course has been submitted with custom highschool/district name <a href='https://courseapproval.ws.asu.edu'>courseapproval.asu.edu</a>, please review and make the edits and save the course.</p>";
+	$content .=  "<p>Course name: <a href='$node_link'>$title</a></p>";
+	$content  .= "<p>Please review this course within two to four weeks.</p>";
+	$module = 'asu_customization';
+	$key = 'send_course_email';
+	$to_email_address = $admin_email;
+	$params['message'] = $content;
+	$params['subject'] = "$title has been submitted for editing";
+	$params['from_address'] = "courseapproval@asu.edu";
+	$langcode = \Drupal::currentUser()->getPreferredLangcode();
+	$send = true;
+	$result = $mailManager->mail($module, $key, $to_email_address, $langcode, $params, NULL, $send);
+	
+}*/
+
+
+
+//function dataAction($node){
+function asu_customization_node_presave(NodeInterface $node) {
+	//\Drupal::logger('$node')->notice('<pre>' . print_r($node, TRUE) . '</pre>');
+    if ($node->bundle() == 'course_competency_new') {
+		
+		$id = $node->id();
+		$temp_distrcit = !empty($node->get('field_temporary_district'))?$node->get('field_temporary_district')->value:''; 
+		$temp_hs = !empty($node->get('field_temporary_high_school'))?$node->get('field_temporary_high_school')->value:''; 
+		$temp_new_country = !empty($node->get('field_temporary_country'))?$node->get('field_temporary_country')->value:''; 
+		if(!empty($temp_distrcit) || (!empty($temp_hs)) || (!empty($temp_new_country))){
+			$temp_new_hs = array();
+			$temp_new_hs[] = $node->get('field_temporary_high_school')->value; 
+			$state_check = $node->get('field_school_state');
+			$state = !empty($state_check) ? $node->field_school_state->value:'';
+			$city_check = $node->get('field_school_city_import');
+			$city = !empty($city_check) ? $node->get('field_school_city_import')->value:'';
+			$hs_name_check = $node->get('field_high_school');
+			$hs_name = !empty($hs_name_check) ? $node->get('field_high_school')->value:'';
+			$district_check = $node->get('field_district');
+			$district = !empty($district_check) ? $node->get('field_district')->value:'';
+			$connection = \Drupal::database();
+			$all_temp_hs = $node->get('field_temporary_high_school')->getValue();
+			foreach($all_temp_hs as $temp_hs_value_each){
+				$multi_temp_value[] = $temp_hs_value_each['value'];
+		    }
+				
+			if(($node->original->field_needs_data_approval->value != $node->field_needs_data_approval->value) && ($node->original->field_needs_data_approval->value == "Yes")){
+				//country changes
+				if(!empty($temp_country)){
+					$temp_country = $node->original->get('field_temporary_country')->getValue(); 
+					$new_term = Term::create([
+					  'vid' => 'Country',
+					  'name' => $temp_new_country,
+					]);
+					$tid = $new_term->id();
+					$new_term->enforceIsNew();
+					$new_term->save();
+					//$termId = \Drupal::entityQuery("taxonomy_term")->condition("vid", "vocab_name")->condition("Country", $temp_new_country)->execute();
+					$node->set('field_choose_country',$tid);
+					$node->set('field_temporary_country','');
+				}
+				
+			   //High school update
+				//ksm($temp_new_hs);
+				//\Drupal::logger('$temp_new_hs')->notice('<pre>' . print_r($temp_new_hs, TRUE) . '</pre>');
+
+				if(!empty($temp_new_hs)){
+					$temp_changed_hs = $node->original->get('field_temporary_high_school')->getValue(); 
+					//\Drupal::logger('$temp_changed_hs')->notice('<pre>' . print_r($temp_changed_hs, TRUE) . '</pre>');
+
+					//ksm($temp_changed_hs);
+					if($temp_changed_hs != $temp_hs){ //if there is change in the temporary school anme value, save it to asu_course_hs_data table
+						
+						if(!empty($state)){
+							$st_query = $connection->select('asu_webform_fields_hs', 'awfh')
+										->fields('awfh',['hs_state_code','hs_state_name'])
+										->condition('hs_state_code',$state,'=')
+										->execute()
+										->fetchAll();
+							foreach($st_query as $st_results){
+									$state_name = $st_results->hs_state_name;
+
+							}
+						}
+						else{
+							$state_name = '';
+						}
+
+						foreach($multi_temp_value as $temp_hs_value){
+							$un_id = $id.'-'.$temp_hs_value;
+							//ksm($un_id);
+							$check_nid = $connection->select('asu_course_hs_data', 'chd')
+								->fields('chd',['hs_id'])
+								//->condition('hs_id',$un_id,'=')
+								->condition('hs_name',$temp_hs_value,'=')
+								->condition('hs_state_code',$state,'=')
+								->execute()
+								->fetchAll();
+							//ksm($check_nid);
+							if (!$check_nid) {
+								//insert temp high school value into asu in the node_course_hs_data table to be used for high school dropdown
+
+								$data = $connection->insert('asu_course_hs_data')
+								  ->fields(['hs_id', 'hs_state_code', 'hs_state_name', 'hs_city', 'hs_name', 'hs_district'])
+								  ->values([
+									'hs_id' => $un_id,
+									'hs_state_code' => $state,
+									'hs_state_name' => $state_name,
+									'hs_city' => $city,
+									'hs_name' => $temp_hs_value,
+									'hs_district' => $district   
+
+								  ])
+								  ->execute();
+							}
+							else{
+								//ksm($state_name);
+								$data = $connection->update('asu_course_hs_data')
+								  ->fields([
+									'hs_id' => $un_id,
+									'hs_state_code' => $state,
+									'hs_state_name' => $state_name,
+									'hs_city' => $city,
+									'hs_name' => $temp_hs_value,
+									'hs_district' => $district   
+								  ])
+								  ->condition('hs_id',$un_id,'=')		
+								  ->execute();
+							}
+						}
+					}
+					
+						//insert temp high school value into high school field
+						$already_hs = array();
+						$all_hs = array();
+						$already_hs = !empty($node->get('field_high_school'))?$node->get('field_high_school')->getValue():'';
+						//$all_hs = array_merge($already_hs,$temp_new_hs);
+						$all_hs = array_merge($already_hs,$multi_temp_value);
+						$node->set('field_high_school',$all_hs);
+						$node->set('field_temporary_high_school','');
+						$node_status = 1;
+						$node->set('status',$node_status);
+						
+					//}	
+						
+					
+					
+				}
+				if(!empty($temp_distrcit)){
+					if(($temp_distrcit != $temp_original_distrcit)){
+						$temp_original_distrcit = $node->original->get('field_temporary_district')->getValue(); 
+						$node->set('field_district',$temp_original_distrcit);
+						$node->set('field_temporary_district','');
+
+					}
+				}
+				
+			} 
+		}
+		
+	}
+	
+}
+
+
+
+function asu_customization_state(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+    $database = \Drupal::database();
+	$state_list = array();
+   
+	$query = $database->select('asu_webform_fields_hs', 'wfh')
+		->fields('wfh',['hs_state_code','hs_state_name'])
+		->execute()
+		->fetchAll();
+	
+    foreach($query as $results){
+		 $state_list[$results->hs_state_code] = $results->hs_state_name;
+		
+    }
+   
+	 //$district_list = array_merge(array('All' => '- Any -'), $district_list);
+	asort($state_list);
+    return array_unique($state_list);
+}
+
+function asu_customization_city(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+    $database = \Drupal::database();
+	$city_list = array();
+	$city_list2 = array();
+    $query = $database->select('asu_course_hs_data', 'awfh')
+		->fields('awfh',['hs_city'])
+		->execute()
+		->fetchAll();
+	
+	$query2 =  $database->select('node__field_school_city_import','nfsc')
+		->fields('nfsc',['field_school_city_import_value'])
+		->execute()
+		->fetchAll();
+	
+    foreach($query as $results){
+		 $city_list[$results->hs_city] = $results->hs_city;
+		
+    }
+	
+	foreach($query2 as $cityresults2){
+		$city_list2[$cityresults2->field_school_city_import_value] =  $cityresults2->field_school_city_import_value;
+		
+	}
+   
+	$all_city_list = $city_list+$city_list2;
+	//$all_city_list = $city_list;
+	asort($all_city_list);
+	 //$district_list = array_merge(array('All' => '- Any -'), $district_list);
+	// $all_city_list = array('Chandler' => 'Chandler');
+    return array_unique($all_city_list);
+}
+
+function asu_customization_hs(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+    $database = \Drupal::database();
+   /* $query1 = $database->select('node__field_high_school_import', 'nfs')
+		->fields('nfs',['field_high_school_import_value'])
+		->execute()
+		->fetchAll();*/
+		
+	
+	$query3 = $database->select('node__field_high_school', 'nhs')
+		->fields('nhs',['field_high_school_value'])
+		->execute()
+		->fetchAll();
+	
+	$query4 = $database->select('asu_course_hs_data','afs')
+		->fields('afs',['hs_name'])
+		->execute()
+		->fetchAll();
+	
+		
+		
+	$hslist1 = array();
+	$hslist2 = array();
+	$hslist3 = array();
+	
+   /* foreach($query1 as $hsresults1){
+        $nh1 = $hsresults1->field_high_school_import_value;
+		$hslist1[$nh1] =  $nh1;
+		
+	}*/
+	
+	foreach($query3 as $hsresults3){
+		$nh3 = $hsresults3->field_high_school_value;
+		$hslist3[$nh3] =  $nh3;
+		
+	}
+	
+    foreach($query4 as $hsresults4){
+		$nh4 = $hsresults4->hs_name;
+		$hslist4[$nh4] =  $nh4;
+		
+	};
+		
+	//$hs_list = $hslist1+$hslist2+$hslist3+$hslist4;
+	$hs_list = $hslist3+$hslist4;
+	asort($hs_list);
+    return array_unique($hs_list);
+}
+
+
+/**
+ * Implements hook_mail() to send confirmation email.
+ */
+function asu_customization_mail($key, &$message, $params) {
+    $options = array(
+        'langcode' => $message['langcode'],
+    );
+    switch ($key) {
+        case 'send_course_email':
+            //$message['from'] = \Drupal::config('system.site')->get('mail');
+			$message['from'] = "courseapproval@asu.edu";
+            $message['subject'] = t('@subject', ['@subject' => $params['subject']], $options);
+            $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed; delsp=yes'; // Needed this to display images.
+            $message['body'][] = $params['message'];
+			$message['reply-to'] = "courseapproval@asu.edu";
+            break;
+    }
+}

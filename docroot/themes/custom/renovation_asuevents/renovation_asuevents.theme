@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the ASU Events subtheme.
+ */
+
+// Truncate the event title field - core views rewrite not working for this
+function renovation_asuevents_preprocess_views_view_field(&$variables) {
+  $view = $variables['view'];
+  if(($view->id() == 'events_grid') && ($view->current_display == 'block_1')) {
+    if($variables['field']->field == 'title') {
+      $trunc = $variables['field']->getValue($variables['row']);
+      $output = strlen($trunc) > 44 ? substr($trunc,0,44)."..." : $trunc;
+      $variables['output'] = $output;
+    }
+  }
+}

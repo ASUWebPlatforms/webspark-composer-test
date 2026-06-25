@@ -1,0 +1,112 @@
+:root {
+
+  --ASUmaroon: 140,29,64;
+  --ASUgold: 255,198,39;
+  --ASUorange: 255,127,50;
+  --ASUgray: 92,102,112;
+  --ASUcopper: 159,105,75;
+  --ASUgreen: 120,190,32;
+  --ASUblue: 0,163,224;
+
+  --gradientText: #000000;
+  --gradientBoundary: #000000;
+
+  --gradientTop: #ffffff;
+  --gradientMid: #dce2df;
+  --gradientBot: #dce2df;
+  --gradient: var(--gradientTop), var(--gradientMid)80%, var(--gradientBot);
+
+  --gradientMaroon: var(--gradientTop), var(--gradientMid)80%, var(--gradientBot);
+  --gradientGold: var(--gradientTop), var(--gradientMid)80%, var(--gradientBot);
+
+  --colorHover: #4FA9E6;
+  --colorActive: #AAAAC9;
+  --colorContrast: #5959ff;
+  --blockBoundary: #000000;
+
+  --blockBorder: .25em solid var(--blockBoundary);
+  --tableBorder: .1em solid var(--blockBoundary);
+
+}
+
+
+.asugold { color: rgb(var(--ASUgold)); }
+.asumaroon { color: rgb(var(--ASUmaroon)); }
+.asucopper { color: rgb(var(--ASUcopper)); }
+.asugreen { color: rgb(var(--ASUgreen)); }
+.asublue { color: rgb(var(--ASUblue)); }
+.asugray { color: rgb(var(--ASUgray)); }
+
+.asugold-bg { background-color: rgba(var(--ASUgold)); }
+.asugold-bg-3 { background-color: rgba(var(--ASUgold), .3); }
+.asumaroon-bg { background-color: rgb(var(--ASUmaroon)); }
+.asumaroon-bg-3 { background-color: rgba(var(--ASUmaroon), .3); }
+.asucopper-bg { background-color: rgb(var(--ASUcopper)) }
+.asucopper-bg-3 { background-color: rgba(var(--ASUcopper), .3); }
+.asugreen-bg { background-color: rgb(var(--ASUgreen)); }
+.asugray-bg { background-color: rgb(var(--ASUgray)); }
+.asublue-bg { background-color: rgb(var(--ASUblue)); }
+
+.colblack { color: black; }
+.displayNone { display: none !important ;}
+.displayInline { display: inline-block; }
+.displayBlock { display: block; }
+.buttonclear { border: none; background-color: transparent; }
+
+.buttonclear:focus .buttonBound:focus { outline:0; }
+.em-5 { font-size: .5em; }
+.em-7 { font-size: .7em; } .em-8 { font-size: .8em; }  .em-1-2 { font-size: 1.2em; } .em-1-5 { font-size: 1.5em; }  .em-2-5 { font-size: 2.5em; } 
+.wem-1 {width: 1em; } .wem-2 {width: 2em; } .wem-6 {width: 6em; } .wem-7 {width: 7em; } .wem-8 {width: 8em; } .wem-9 {width: 9em; } .wem-10 {width: 10em; }  .wem-15 {width: 15em; }
+.wd-90 {width: 90%; } .wd-10 {width: 10%; }
+.centered {text-align: center; } .textleft {text-align: left !important; }
+.text-top {vertical-align: text-top; }
+.righted {float: right }
+.op-l { opacity: 5%; } .op-lm { opacity: 10%; } .op-m { opacity: 20%; }
+.op-mh { opacity: 30%; } .op-h { opacity: 40%; }
+
+.centered {text-align: center; }
+.lefted {text-align: left; }
+.righted {text-align: right; }
+
+.tooltipdiv {
+	text-align: center;
+	/* Position the tooltip text - see examples below! */
+	z-index:20;
+  }
+  .tooltiptext {
+	padding: .15em 1em .5em 1em ;
+	border-radius: 6px;
+  }
+  .tooltiptri {
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid ;
+	margin-bottom: -1.25px;
+  	margin: auto;
+  }
+  
+
+  /* KeyFrame Spinner Animation https://stephanwagner.me/only-css-loading-spinner*/
+  @-webkit-keyframes spinner {
+	  to {transform: rotate(360deg);}
+  }
+  @keyframes spinner {
+	  to {transform: rotate(360deg);}
+  }
+  
+  .spinner:before {
+    content: '';
+    box-sizing: border-box;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 10px solid rgba(var(--ASUgold), 1);
+    border-top-color: rgba(var(--ASUmaroon), 1);
+    animation: spinner .6s linear infinite;
+    position: absolute;
+  }
+  

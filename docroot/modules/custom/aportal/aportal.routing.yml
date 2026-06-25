@@ -1,0 +1,173 @@
+aportal.aportal:
+  path: '/aportal'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::aportalLoad'
+    _title: 'Assessment Portal'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.planedit:
+  path: '/aportal/plan-edit/{college}/{department}/{acadplan}'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::aportalLoad'
+    _title: 'Assessment Portal'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.reportedit:
+  path: '/aportal/report-edit/{college}/{department}/{acadplan}'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::aportalLoad'
+    _title: 'Assessment Portal'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.planview:
+  path: '/aportal/plan-view/{college}/{department}/{acadplan}'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::aportalLoad'
+    _title: 'Assessment Portal'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.reportview:
+  path: '/aportal/report-view/{college}/{department}/{acadplan}'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::aportalLoad'
+    _title: 'Assessment Portal'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.print:
+  path: '/aportal/print/{page}/{college}/{department}/{acadplan}'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::aportalLoad'
+    _title: 'Assessment Portal'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.edit:
+  path: '/aportal/php/edit/{page}/{acadplan}'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::assessmentEdit'
+    _title: 'Assessment Portal - Edit Pages'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.post:
+  path: '/aportal/php/post'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::assessmentPost'
+    _title: 'Assessment Portal - Post'
+  methods: [POST]
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.batch:
+  path: '/aportal/php/batch'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::assessmentBatch'
+    _title: 'Assessment Portal - Batch Edits'
+  methods: [POST]
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.unit:
+  path: '/aportal/php/info/{department}/{college}'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::assessmentUnit'
+    _title: 'Assessment Portal - Unit Info'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.plantoreport:
+  path: '/aportal/php/plantoreport/{acadplan}'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::assessmentPlanToReport'
+    _title: 'Assessment Portal - Assessment Plan to Report Form'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.public:
+  path: '/aportal/php/public/{acadplan}'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::assessmentPublic'
+    _title: 'Assessment Portal - Public Outcomes'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.over:
+  path: '/aportal/php/over'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::assessmentOverview'
+    _title: 'Assessment Portal - Sync for Overview Page'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.reporting:
+  path: '/aportal/php/reporting/{department}/{college}'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::assessmentReporting'
+    _title: 'Assessment Portal - Reporting Data'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.planning:
+  path: '/aportal/php/planning/{department}/{college}'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::assessmentPlanElements'
+    _title: 'Assessment Portal - Plan Elements'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.satriggers:
+  path: '/aportal/php/satriggers'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::assessmentSaTriggers'
+    _title: 'Assessment Portal - Download SA Triggers'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.filepost:
+  path: '/aportal/php/filepost'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::assessmentFileUpload'
+    _title: 'Assessment Portal - File Post'
+  methods: [POST]
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.fileremove:
+  path: '/aportal/php/fileremove'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::assessmentFileRemove'
+    _title: 'Assessment Portal - File Remove'
+  methods: [POST]
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _format: json
+
+aportal.getsubmit:
+  path: '/aportal/php/pa_review_getsubmit/{project}/{aid}/{len}'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::paReviewGetSubmit'
+    _title: 'Assessment Portal - Getting Review Submits'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.submitnewprogram:
+  path: '/submit-new-program'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::submitNewProgram'
+    _title: 'Assessment Portal - Submit New Program'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+aportal.requestform:
+  path: '/aportal/php/requestform'
+  defaults:
+    _controller: '\Drupal\aportal\Controller\AportalController::requestForm'
+    _title: 'Assessment Portal - Request Form'
+  methods: [POST]
+  requirements:
+    _user_is_logged_in: 'TRUE'

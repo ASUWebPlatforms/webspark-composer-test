@@ -1,0 +1,283 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.fssd.field_fsd_authorize
+    - field.field.node.fssd.field_fsd_city
+    - field.field.node.fssd.field_fsd_email
+    - field.field.node.fssd.field_fsd_first_name
+    - field.field.node.fssd.field_fsd_last_name
+    - field.field.node.fssd.field_fsd_major
+    - field.field.node.fssd.field_fsd_street_address
+    - field.field.node.fssd.field_fsd_tagged_sm
+    - field.field.node.fssd.field_fsd_upload_image
+    - field.field.node.fssd.field_fsd_zip
+    - field.field.node.fssd.field_instagram_handle_fsd
+    - field.field.node.fssd.field_model_release
+    - field.field.node.fssd.field_snapchat_handle_fsd
+    - field.field.node.fssd.field_state
+    - field.field.node.fssd.field_twitter_handle_fsd
+    - node.type.fssd
+  module:
+    - feeds_tamper
+    - node
+third_party_settings:
+  feeds_tamper:
+    tampers:
+      79a90ff6-aa05-4cca-bed4-957426d34f00:
+        separator: ', '
+        limit: null
+        plugin: explode
+        source: model_release
+        weight: 0
+        label: Explode
+        uuid: 79a90ff6-aa05-4cca-bed4-957426d34f00
+id: fssd_feed_type
+label: 'FSSD feed type'
+description: ''
+help: ''
+import_period: -1
+fetcher: upload
+fetcher_configuration:
+  allowed_extensions: 'txt csv tsv xml opml'
+  directory: 'private://feeds'
+parser: csv
+parser_configuration:
+  delimiter: ','
+  no_headers: false
+  line_limit: 100
+processor: 'entity:node'
+processor_configuration:
+  langcode: en
+  insert_new: 1
+  update_existing: 2
+  update_non_existent: _keep
+  expire: -1
+  owner_feed_author: false
+  owner_id: 0
+  authorize: true
+  skip_hash_check: false
+  values:
+    type: fssd
+custom_sources:
+  title:
+    value: Title
+    machine_name: title
+    type: csv
+    label: Title
+  first_name:
+    value: 'First name'
+    machine_name: first_name
+    type: csv
+    label: 'First name'
+  last_name:
+    value: 'Last name'
+    machine_name: last_name
+    type: csv
+    label: 'Last name'
+  email:
+    value: Email
+    machine_name: email
+    type: csv
+    label: Email
+  street_address:
+    value: 'Street address'
+    machine_name: street_address
+    type: csv
+    label: 'Street address'
+  city:
+    value: City
+    machine_name: city
+    type: csv
+    label: City
+  state:
+    value: State
+    machine_name: state
+    type: csv
+    label: State
+  zip:
+    value: Zip
+    machine_name: zip
+    type: csv
+    label: Zip
+  major:
+    value: Major
+    machine_name: major
+    type: csv
+    label: Major
+  upload_image:
+    value: 'Upload image'
+    machine_name: upload_image
+    type: csv
+    label: 'Upload image'
+  i_authorize_the_use_of_this_image_on_social_media_sites:
+    value: 'I authorize the use of this image on social media sites'
+    machine_name: i_authorize_the_use_of_this_image_on_social_media_sites
+    type: csv
+    label: 'I authorize the use of this image on social media sites'
+  do_you_want_to_be_tagged_on_twitter_or_instagram_if_your_photo_i:
+    value: 'Do you want to be tagged on Twitter or Instagram if your photo is highlighted?'
+    machine_name: do_you_want_to_be_tagged_on_twitter_or_instagram_if_your_photo_i
+    type: csv
+    label: 'Do you want to be tagged on Twitter or Instagram if your photo is highlighted?'
+  twitter_handle_:
+    value: 'Twitter handle @'
+    machine_name: twitter_handle_
+    type: csv
+    label: 'Twitter handle @'
+  instagram_handle_:
+    value: 'Instagram handle @'
+    machine_name: instagram_handle_
+    type: csv
+    label: 'Instagram handle @'
+  snapchat_handle_:
+    value: 'Snapchat handle @'
+    machine_name: snapchat_handle_
+    type: csv
+    label: 'Snapchat handle @'
+  upload_video:
+    value: 'Upload video'
+    machine_name: upload_video
+    type: csv
+    label: 'Upload video'
+  model_release:
+    value: 'Model release'
+    machine_name: model_release
+    type: csv
+    label: 'Model release'
+  image_alt_text:
+    value: 'Image alt text'
+    machine_name: image_alt_text
+    type: csv
+    label: 'Image alt text'
+  image_title:
+    value: 'Image title'
+    machine_name: image_title
+    type: csv
+    label: 'Image title'
+  nid:
+    value: Nid
+    machine_name: nid
+    type: csv
+    label: Nid
+mappings:
+  -
+    target: title
+    map:
+      value: title
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_fsd_first_name
+    map:
+      value: first_name
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_fsd_last_name
+    map:
+      value: last_name
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_fsd_email
+    map:
+      value: email
+    unique: {  }
+    settings:
+      language: null
+      defuse: false
+  -
+    target: field_fsd_street_address
+    map:
+      value: street_address
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_fsd_city
+    map:
+      value: city
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_state
+    map:
+      value: state
+    settings:
+      language: null
+  -
+    target: field_fsd_zip
+    map:
+      value: zip
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_fsd_major
+    map:
+      value: major
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_fsd_upload_image
+    map:
+      target_id: upload_image
+      alt: image_alt_text
+      title: image_title
+    settings:
+      existing: 2
+      language: null
+      reference_by: filename
+      autocreate: false
+  -
+    target: field_fsd_authorize
+    map:
+      value: i_authorize_the_use_of_this_image_on_social_media_sites
+    settings:
+      language: null
+  -
+    target: field_fsd_tagged_sm
+    map:
+      value: do_you_want_to_be_tagged_on_twitter_or_instagram_if_your_photo_i
+    settings:
+      language: null
+  -
+    target: field_twitter_handle_fsd
+    map:
+      value: twitter_handle_
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_instagram_handle_fsd
+    map:
+      value: instagram_handle_
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_snapchat_handle_fsd
+    map:
+      value: snapchat_handle_
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_model_release
+    map:
+      value: model_release
+    settings:
+      language: null
+  -
+    target: nid
+    map:
+      value: nid
+    unique:
+      value: '1'
+    settings: {  }

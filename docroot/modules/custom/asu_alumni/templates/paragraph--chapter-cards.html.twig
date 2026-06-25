@@ -1,0 +1,36 @@
+{{ attach_library('asu_alumni/style') }}
+<div class="pt-2 pb-2 mt-3 chapter-cards-container">
+    <div class="container">
+        <div class="row">
+            <div class="col-8 cardsContainer">
+                <h2>
+                    <span class="highlight-gold">
+                        {{ content.field_heading_left.0['#context'].value }}
+                    </span>
+                </h2>
+                <div class="topCards">
+                    <div class="topCardOne topCard border">
+                        {{ content.field_left_cards.0 }}
+                    </div>
+
+                    <div class="topCardTwo topCard border">
+                        {{ content.field_left_cards.1 }}
+                    </div>
+                </div> 
+                <h2 class="pt-7">
+                    <span class="highlight-gold">
+                        {{ content.field_heading_right.0['#context'].value }}
+                    </span>
+                </h2>
+                <div class="bottomCard">
+                    <div class="cardimage">
+                        {{ content.field_bottom_card_image }}
+                    </div>
+                    <div class="p-2 cardText">
+                        {{ content.field_bottom_card_text }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

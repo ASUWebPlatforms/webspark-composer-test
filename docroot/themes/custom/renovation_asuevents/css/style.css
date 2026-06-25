@@ -1,0 +1,620 @@
+/*
+ *  ASU Events sub theme CSS
+ *
+ */
+
+/* Change focus to black, not blue */
+:focus {
+  outline: 2px solid #000;
+  box-shadow: none!important;
+  z-index: 999;
+}
+/* remove rounded corners */
+.card-header:first-child {
+  border-radius: initial;
+}
+
+/*
+ * adding negative margin to fix space btwn header and content
+ * note: this is currently part of renovation, so it may need to be
+ * removed with future updates
+ */
+.block.block--asuevents-theme-mainpagecontent {
+  margin-top: -6px;
+}
+/* reset padding */
+.card-header {
+  padding: 0.75rem 1.25rem;
+}
+.hide-feature {
+  display: none;
+}
+/* Search box */
+.uds-hero-md .form-item-searchtext-hero {
+  z-index: 999;
+  width: 660px;
+  background: #fff;
+  padding: 1.5rem 2rem 2rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+}
+.uds-hero-md .form-item-searchtext-hero label {
+  grid-column: 1/3;
+  grid-row: 1;
+}
+input#edit-searchtext--hero {
+  max-width: 385px;
+  grid-column: 1/3;
+}
+input#start-search {
+  margin-left: 35px;
+  margin-top: -5px;
+}
+input#edit-submit-events-grid {
+  margin-bottom: 23px;
+}
+input#edit-reset {
+  display: block;
+  border: none;
+  background: none;
+  color: maroon;
+  padding: 0;
+  font-weight: normal;
+  font-size: 1em;
+  border-radius: initial;
+}
+#edit-reset .btn:hover {
+  transform: none;
+}
+/* Change padding on featured event - alters unity component style */
+.uds-image-text-block-text-container {
+  padding: 60px;
+}
+/* hide the searchbox in the left column */
+div.form-item-searchtext {
+  display: none;
+}
+.filter-title {
+  margin: 0 0 1rem 0;
+}
+#edit-reldate--wrapper .card-header,
+fieldset#edit-reldate--wrapper legend,
+fieldset#edit-eventdate-wrapper--2 .card-header,
+#edit-eventdate-collapsible {
+  display: none;
+}
+fieldset#edit-reldate--wrapper,
+fieldset#edit-eventdate-wrapper--2 {
+  border: none;
+}
+/* FF fix so focus border not cut off */
+#edit-reldate--wrapper {
+  background: none;
+}
+#edit-reldate--wrapper .card-body {
+  padding: 0;
+}
+#edit-eventdate-collapsible {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+#edit-eventdate-wrapper--2 .card-body {
+  padding: 20px 0 0 0;
+}
+
+#views-exposed-form-events-grid-block-2 .mb-3 {
+  margin-bottom: 0 !important;
+}
+.toolbar-tray-open #views-exposed-form-events-grid-block-2 .form-item-searchtext-hero {
+  top: -64rem;
+}
+.bef-checkboxes label.form-check-label.option {
+  font-weight: normal;
+}
+details#edit-reldate-collapsible {
+  max-height: none;
+  overflow: unset;
+  background: none;
+}
+#edit-eventdate-wrapper--4 .card-body .fieldset-wrapper {
+  padding: 15px 0 0 0;
+}
+#edit-eventdate-wrapper--4 .card>div:last-child {
+  padding-bottom: 0;
+}
+details#edit-category-collapsible,
+details#edit-foryou-collapsible,
+details#edit-reldate-collapsible,
+details#edit-location-collapsible {
+  border-left: none;
+  border-right: none;
+}
+details#edit-location-collapsible,
+details#edit-reldate-collapsible,
+details#edit-foryou-collapsible {
+  border-top: none;
+}
+/* add space to the top of submit button */
+div#edit-actions {
+  margin-top: 25px;
+}
+
+/* ===== details ======= */
+details > summary {
+  font-weight: bold;
+}
+summary.card-header {
+  list-style: none;
+}
+summary.card-header:after {
+  /*content: '\022C0';*/
+  border-style: solid;
+	border-width: 0 0 2px 2px;
+	content: '';
+	/*display: inline-block;*/
+	height: 0.45em;
+	left: 0.15em;
+	position: relative;
+	top: 10px;
+	transform: rotate(-45deg);
+	vertical-align: top;
+	width: 0.45em;
+  float: right;
+}
+details[open] > summary.card-header:after {
+  /*content: '\022C1';*/
+  top: 7px;
+  transform: rotate(135deg);
+  float: right;
+}
+/* align filter checkboxes with headers */
+.form-wrapper .card-body {
+  padding-left: 0;
+}
+.form-checkboxes .js-form-type-checkbox {
+  padding-bottom: 0.3rem;
+}
+label.form-check-label {
+  font-weight: normal;
+}
+.uds-image-text-block-container.views-row {
+  margin-top: 5rem;
+}
+.grid-icon img,
+.list-icon img {
+  width: 25px;
+  margin: 7px;
+}
+.views-element-container .view-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 5px;
+}
+.quicktabs-tabs {
+  display: flex;
+  flex-direction: row;
+}
+ul.quicktabs-tabs li {
+  border: none;
+}
+.events-view-list-wrapper ul.quicktabs-tabs li:hover {
+  background: none;
+}
+.events-view-list-wrapper li.page-item:hover {
+  background-color: #fff;
+}
+.qt-title {
+  text-align: right;
+  margin-right: 42px;
+  font-weight: bold;
+}
+summary.card-header {
+  padding-left: 0;
+}
+/*
+ * Views custom grid display
+ */
+.card-event-details {
+  padding: 0 24px 24px;
+}
+
+/* EVNTWEB-14 - change visited link color */
+.card-title a:visited {
+  color: #440E22;
+  text-decoration: none;
+}
+/* EVNTWEB-14 - align date fields across the row */
+.events-card-grid .card-header h3.card-title {
+  height: 6rem;
+}
+
+img.card-img-top {
+  border-top-left-radius: unset;
+  border-top-right-radius: unset;
+  height: 158px; /* EVNTWEB-14 - 16:9 ratio */
+}
+.events-card-grid {
+  /*margin: 3rem 0 0 0;*/
+  list-style-type: none;
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(3, 1fr);
+}
+ul.events-card-grid {
+  padding: 0;
+}
+/* Remove flex grow on card */
+.card:not(.card.card-foldable)>div:first-of-type:not(.card-image-content) {
+    flex-grow: unset;
+}
+/* Line break for time display on featured event */
+.featured-event .smart-date--time,
+.featured-date .smart-date--time {
+  display: block;
+  padding-left: 1.5em;
+}
+.events-card-grid .views-field-field-event-date-value-1 {
+  padding: 0 24px;
+  font-size: 14px;
+}
+.events-card-grid .views-field-field-event-date-end-value {
+  padding: 0 24px 0 40px;
+  font-size: 14px;
+}
+.events-card-grid .views-field-field-asu-events-location {
+  padding-top: 20px;
+}
+.events-card-grid .views-field-field-event-date-1 .field-content.evtime {
+  padding-left: 9px;
+}
+svg.svg-inline--fa.fa-calendar {
+  margin-right: 5px;
+}
+.events-view-list-wrapper svg.svg-inline--fa.fa-calendar.fa-w-14 {
+  margin-right: 0;
+}
+/*
+ * Event node display
+ */
+article.asu-event h1.article {
+  margin: 6rem 0 3rem 0;
+}
+.event-description {
+  padding-right: 3rem;
+}
+.event-description h2,
+.event-details {
+  margin-top: 3rem;
+}
+.event-date,
+.event-time,
+.event-location,
+.event-cost,
+.event-cta {
+  margin-top: 2rem;
+}
+.event-date-label,
+.event-time-label,
+.event-location-label,
+.event-cost-label {
+  font-size: 1.5em;
+}
+.event-date h2,
+.event-time h2,
+.event-location h2,
+.event-cost h2 {
+  margin: 0;
+}
+.event-contact {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  margin: 2.5rem 0;
+  padding: 1rem 0;
+}
+.event-contact h3,
+h3.event-download {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.25rem;
+  line-height: 1.625rem;
+  letter-spacing: -.01875rem;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+.event-download {
+  border-top: 1px solid #ccc;
+  padding-top: 2rem;
+  margin-top: 2.5rem;
+}
+
+
+/* tag "pills" */
+.event-pills ul,
+.event-pills-detail ul {
+  padding: 0;
+  margin: 0;
+}
+.event-pills ul li,
+.event-pills-detail ul li {
+  list-style-type: none;
+  color: #212529;
+  background-color: #e7e7e7;
+  border-color: #e7e7e7;
+  text-align: center;
+  display: inline-block;
+  border-radius: 400rem;
+  font-size: .75rem;
+  padding: 0.25rem 0.75rem;
+  margin: 0 .5rem .5rem 0;
+}
+.applied-filters {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.event-pills,
+.event-pills-detail {
+  max-width: 700px;
+}
+.event-pills span,
+.event-pills-detail span {
+  color: #999999;
+}
+.event-pills a,
+.clear-filters a {
+  text-decoration: none;
+  font-size: 1em;
+}
+
+/*
+ * Events list block display
+ */
+
+.events-view-list-wrapper ul {
+  padding-left: 0;
+}
+.events-view-list-wrapper li {
+  display: flex;
+  flex-direction: row;
+  padding: 1.3rem 0;
+  border-top: 1px solid #ddd;
+  max-width: 895px;
+}
+.events-view-list-wrapper li:hover {
+  background-color: #eee;
+}
+.events-view-list-wrapper ul a,
+.events-view-list-wrapper ul a:hover {
+  color: initial;
+  text-decoration: none;
+  display: block;
+}
+.events-view-list-wrapper .views-field-title {
+  width: 40rem;
+  margin-right: 1rem;
+}
+.events-view-list-wrapper .views-field-title div {
+  margin: 3px 0;
+}
+.events-view-list-wrapper .event-pills li:hover {
+  background-color: #e7e7e7;
+}
+.event-list-date {
+  min-width: 7rem;
+  text-align: center;
+}
+.event-list-day {
+  font-size: 2.3em;
+  font-weight: bold;
+}
+.event-list-month {
+  font-size: 1.3em;
+  font-weight: bold;
+  line-height: .5em;
+}
+.events-view-list-wrapper .views-field.views-field-field-asu-events-event-image {
+  max-width: 15rem;
+}
+li.page-item {
+  border: none;
+}
+
+/* h2 event titles for both list and grid */
+h2.event-list-title,
+h2.event-grid-title {
+  font-size: 1.5rem;
+  line-height: 1.75rem;
+  letter-spacing: -.0525rem;
+  margin: 0 0 0.5rem 0;
+}
+
+/* featured event */
+.featured-sub-heading {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.625rem;
+  letter-spacing: -.01875rem;
+  box-shadow: -0.15em 0 0 #ffc627, 0.15em 0 0 #ffc627;
+  background: #ffc627;
+  color: #191919;
+}
+.featured-date-loc {
+  display: flex;
+  margin-bottom: 1.5rem;
+}
+.featured-date {
+  margin-right: 2rem;
+}
+.block img.img-fluid {
+   max-height: 684px;
+   max-width: 100%;
+   height: auto;
+   width: auto;
+}
+
+/* Mobile display */
+@media (max-width: 991px) {
+  /* EVNTWEB-13 fix search box display for mobile */
+  div.uds-hero-md .content {
+    display: block;
+  }
+  .uds-hero-md .form-item-searchtext-hero {
+    width: 100%;
+    padding: 1.5rem;
+    display: block;
+    /* EVNTWEB-13 - adjust margin */
+    margin-top: -195px;
+  }
+  div[class^=uds-hero] h1 {
+    /* EVNTWEB-13 - adjust margin */
+    margin: 0 0 12rem;
+  }
+  input#start-search {
+    margin-left: 0;
+    margin-top: 15px;
+  }
+  form#views-exposed-form-events-grid-block-2,
+  form#views-exposed-form-events-grid-block-1 {
+    margin-top: 0;
+  }
+  input#edit-submit-search--2 {
+    margin-left: 0;
+    margin-top: 10px;
+  }
+  .uds-image-text-block-text-container {
+    padding: 30px;
+  }
+  .uds-image-text-block-container.views-row {
+    margin-top: 0;
+  }
+  .featured-date-loc {
+    display: none;
+  }
+  .events-view-list-wrapper {
+    margin-top: 3rem;
+  }
+  .events-view-list-wrapper ul {
+    padding-left: 0;
+  }
+  .event-list-date {
+    display: none;
+  }
+  h2.event-list-title {
+    display: -webkit-box;
+    max-width: 200px;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .events-card-grid {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+  article.asu-event h1.article {
+    margin: 4rem 0 2.3rem 0;
+  }
+  /* event details */
+  .event-date h2, .event-time h2, .event-location h2, .event-cost h2 {
+    margin: 0;
+    font-size: 1em;
+    font-weight: normal;
+    letter-spacing: normal;
+    line-height: 1.6em;
+  }
+  div.event-cta:empty {
+    margin-top: 0;
+  }
+  .event-date-label, .event-time-label, .event-location-label, .event-cost-label {
+    font-size: 1em;
+  }
+  .event-description h2 {
+    margin-top: 2rem;
+  }
+  .event-description {
+    padding-right: 0;
+  }
+  .events-view-list-wrapper .views-field-field-asu-events-event-image img.img-fluid {
+    width: 240px;
+    height: 100px;
+    object-fit: cover;
+  }
+  .block img.img-fluid {
+    max-height: 512px;
+    max-width: 100%;
+    height: auto;
+    width: auto;
+  }
+}
+  /* TKB 060426 event details cleanup */
+.bs-gray-5 {
+	color:#747474;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+.fa-repeat {
+	font-size: 1.25rem;
+}
+.myCal, .gCal, .mapLink{
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+  /* TKB 060426 hide homepage tx filters */
+.form-item-unit-name,
+.edit-unit-name,
+.form-item-interests,
+.form-item-event-type,
+#edit-unit-name--wrapper,
+#edit-interests-collapsible,
+#edit-event-type-collapsible
+ {
+  display: none;
+}
+  /* TKB 060426 Smart date time zone */
+.form-item--field-event-date-0-timezone,
+.form-item--field-event-date-1-timezone,
+.form-item--field-event-date-2-timezone,
+.form-item--field-event-date-3-timezone,
+.form-item--field-event-date-4-timezone,
+.form-item--field-event-date-5-timezone,
+.form-item--field-event-date-6-timezone,
+.form-item--field-event-date-7-timezone,
+.form-item--field-event-date-8-timezone,
+.form-item--field-event-date-9-timezone,
+.form-item--field-event-date-10-timezone,
+.form-item--field-event-date-11-timezone,
+.form-item--field-event-date-12-timezone,
+.form-item--field-event-date-13-timezone,
+.form-item--field-event-date-14-timezone,
+.form-item--field-event-date-15-timezone,
+.form-item--field-event-date-16-timezone,
+.form-item--field-event-date-17-timezone,
+.form-item--field-event-date-18-timezone,
+.form-item--field-event-date-19-timezone,
+.form-item--field-event-date-20-timezone,
+.form-item--field-event-date-21-timezone,
+.form-item--field-event-date-22-timezone,
+.form-item--field-event-date-23-timezone,
+.form-item--field-event-date-24-timezone,
+.form-item--field-event-date-25-timezone,
+.form-item--field-event-date-26-timezone,
+.form-item--field-event-date-27-timezone,
+.form-item--field-event-date-28-timezone,
+.form-item--field-event-date-29-timezone,
+.form-item--field-event-date-30-timezone{
+	display:block !important;
+	max-width: 300px;
+	background-color: #FF7F32;
+}
+  /* TKB 060426 text decoration on single event view */
+.myCal, .gCal, .mapLink{
+	text-decoration: revert !important;
+}
+.myCal:hover,
+.gCal:hover,
+.mapLink:hover {
+  text-decoration: none !important;
+}

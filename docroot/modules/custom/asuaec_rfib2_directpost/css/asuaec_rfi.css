@@ -1,0 +1,51 @@
+#rfi-img,
+#rfi-img > .formatted-text,
+#rfi-img > .formatted-text > img
+{
+    height: 100%;
+}
+#rfi-img > .formatted-text > img {
+    object-fit: cover;
+}
+/* Grad entry term - Dynamic select */
+fieldset[data-drupal-selector=edit-grad-entry-term] {
+    border: none;
+}
+fieldset[data-drupal-selector=edit-grad-entry-term] > .card-header {
+    padding: 0;
+}
+fieldset[data-drupal-selector=edit-grad-entry-term]  > div:last-child.fieldset-wrapper {
+    padding: 0 !important;
+}
+
+.form-item-phone > .form-item--error-message {
+    display: none !important;
+}
+/* Webspark 2.10 update RFI form fix for Required red dot (2/15/2024) */
+.uds-form svg {
+  width: inherit;
+}
+/* Added on 5/31/2024 */
+form.uds-form select.is-invalid, form.uds-form textarea.is-invalid {
+  border: solid #b72a2a !important;
+  border-width: 1px 1px 8px !important;
+}
+input#edit-gdpr-consent-1.error + label::before {
+  border: solid #b72a2a !important;
+  border-width: 1px 1px 8px !important;
+}
+input#edit-gdpr-consent-online-1.error + label::before {
+  border: solid #b72a2a !important;
+  border-width: 1px 1px 8px !important;
+}
+/* Fix RFI image in Safari mobile */
+@media (max-width:767px) {
+  #rfi-img > .formatted-text > img {
+    height: auto;
+  }
+}
+
+/* Fix phone input field */
+form.uds-form input[type="tel"] {
+  padding-left: 3rem !important;
+}

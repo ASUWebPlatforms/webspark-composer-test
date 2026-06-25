@@ -1,0 +1,81 @@
+{#
+/**
+ * @file
+ * Theme override of a views exposed form.
+ *
+ * Available variables:
+ * - form: A render element representing the form.
+ *
+ * @see template_preprocess_views_exposed_form()
+ */
+#}
+{% if q is not empty %}
+  {#
+    This ensures that, if clean URLs are off, the 'q' is added first,
+    as a hidden form element, so that it shows up first in the POST URL.
+  #}
+{{ q }}
+{% endif %}
+
+
+<div class="container">
+<div class="row">
+  <div class="col-4">
+
+
+{{ drupal_block('views_exposed_filter_block:faqs-page_4') }}
+
+  <div class="view-filters form-group">
+    {{ exposed.field_topic_target_id }}
+    {{ exposed.field_question_value }}
+	 {{ exposed.field_title }}
+    {{ exposed.actions }}
+	
+	
+	{{ form.field_topic_target_id}}
+  </div>
+
+
+</div>
+
+  <div class="col-8">
+
+
+  </div>  </div> </div>
+
+
+
+<style type="text/css">
+#content1
+{
+    display:none;
+}
+
+#content2
+{
+    display:none;
+}
+
+#toggle1:checked ~ #content1
+{
+  display: block;
+}
+
+#toggle2:checked ~ #content2
+{
+  display: block;
+}
+
+</style>
+
+
+
+<input type=checkbox id="toggle1" name="toggle">Toggle1
+<input type=checkbox id="toggle2" name="toggle">Toggle2
+
+<br><br>
+
+<span id="content1">{{ drupal_view('cost_of_attendance', 'block_3') }}</span>
+<span id="content2">{{ drupal_view('cost_of_attendance', 'block_1') }}
+</span>
+  

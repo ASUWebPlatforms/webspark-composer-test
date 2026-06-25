@@ -1,0 +1,4 @@
+'administer graduate_custom':
+  'title': 'Administer Graduate Custom Features'
+  'description': 'Configure settings for custom feature blocks'
+  restrict access: true

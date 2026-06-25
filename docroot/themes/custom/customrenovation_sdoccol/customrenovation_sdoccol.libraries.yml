@@ -1,0 +1,20 @@
+style:
+  version: VERSION
+  css:
+    theme:
+      assets/css/customrenovation.style.css: {}
+      assets/css/tempstyles.css: {}
+  js:
+    assets/js/copyutmvariables.js?v=9.4.15: {preprocess: false}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.
+
+faculty-pages:
+  js:
+    js/faculty-pages.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once

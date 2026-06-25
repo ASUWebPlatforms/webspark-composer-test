@@ -1,0 +1,10 @@
+global:
+  css:
+    theme:
+      assets/css/myapps.css: {}
+  js:
+    assets/js/myapps.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once

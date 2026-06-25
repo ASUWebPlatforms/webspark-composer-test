@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Template for a Node component.
+ */
+#}
+{%
+  set classes = [
+  'resource',
+  'gray-1-bg m-4 p-4',
+]
+%}
+
+<article {{ attributes.addClass(classes) }}>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="resource--image">
+        {{ content.field_media }}
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="resource--type font-weight-bold text-uppercase">
+        {{ content.field_resource_type }}
+      </div>
+      <div class="resource--title lead font-weight-bold mb-2">
+        <a href="{{ path('entity.node.canonical', {'node': node.nid.0.value}) }}">{{ node.title.0.value }}</a>
+      </div>
+      <div class="resource--description">
+        {{ content.body }}
+      </div>
+
+      {% if content.field_link.0 %}
+        <div class="resource--link mb-2">{{ content.field_link }}</div>
+      {% endif %}
+
+      {% if content.field_tags.0 %}
+        <div class="resource--tags">{{ content.field_tags }}</div>
+      {% endif %}
+    </div>
+  </div>
+</article>
+

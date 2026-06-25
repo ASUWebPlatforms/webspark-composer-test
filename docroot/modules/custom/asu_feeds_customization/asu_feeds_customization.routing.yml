@@ -1,0 +1,7 @@
+asu_feeds_customization.degreePopulateForm:
+    path: '/admin/config/content/degreesListsettings'
+    defaults:
+      _form: '\Drupal\asu_feeds_customization\Form\degreePopulateForm'
+      _title: 'Populate/Refresh degrees'
+    requirements:
+      _permission: 'administer asu_feeds_customization'

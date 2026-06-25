@@ -1,0 +1,25 @@
+name: Embryo
+type: theme
+description: Subtheme for EMBRYO
+screenshot: screenshot.png
+core_version_requirement: ^8 || ^9 || ^10
+# Defines the base theme
+base theme: renovation
+# Defines libraries group in which we can add CSS/JS.
+libraries:
+  - embryo/global-styling
+# Regions, quote the names
+regions:
+  header: Header
+  pre_pre_content: Pre Pre Content
+  pre_content: Pre Content
+  search_sidebar: Search Sidebar
+  search_content: Search Content
+  content: Content
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer
+
+entity_print:
+  node:
+    all: embryo/global-styling

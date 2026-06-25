@@ -1,0 +1,107 @@
+sp_learningmod.api.csrf_token:
+  path: '/api/sp-learningmod/csrf-token'
+  defaults:
+    _controller: '\Drupal\sp_learningmod\Controller\UserStateApiController::getCsrfToken'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
+
+sp_learningmod.api.budget_state:
+  path: '/api/sp-learningmod/budget'
+  defaults:
+    _controller: '\Drupal\sp_learningmod\Controller\UserStateApiController::getBudgetState'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
+
+sp_learningmod.api.visited_nodes:
+  path: '/api/sp-learningmod/visited-nodes'
+  defaults:
+    _controller: '\Drupal\sp_learningmod\Controller\UserStateApiController::getVisitedNodes'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
+
+sp_learningmod.api.track_visit:
+  path: '/api/sp-learningmod/track-visit'
+  defaults:
+    _controller: '\Drupal\sp_learningmod\Controller\UserStateApiController::trackNodeVisit'
+  requirements:
+    _permission: 'access content'
+  methods: [GET, POST]
+  options:
+    no_cache: TRUE
+
+sp_learningmod.api.warning_state:
+  path: '/api/sp-learningmod/warning-state'
+  defaults:
+    _controller: '\Drupal\sp_learningmod\Controller\UserStateApiController::getWarningState'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
+
+sp_learningmod.api.set_warning:
+  path: '/api/sp-learningmod/set-warning'
+  defaults:
+    _controller: '\Drupal\sp_learningmod\Controller\UserStateApiController::setWarningState'
+  requirements:
+    _permission: 'access content'
+  methods: [GET, POST]
+  options:
+    no_cache: TRUE
+
+sp_learningmod.api.reset_progress:
+  path: '/api/sp-learningmod/reset'
+  defaults:
+    _controller: '\Drupal\sp_learningmod\Controller\UserStateApiController::resetProgress'
+  requirements:
+    _permission: 'access content'
+  methods: [POST]
+  options:
+    no_cache: TRUE
+
+sp_learningmod.api.selected_responses:
+  path: '/api/sp-learningmod/selected-responses'
+  defaults:
+    _controller: '\Drupal\sp_learningmod\Controller\UserStateApiController::getSelectedResponses'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
+
+sp_learningmod.api.council_progress:
+  path: '/api/sp-learningmod/council-progress'
+  defaults:
+    _controller: '\Drupal\sp_learningmod\Controller\UserStateApiController::getCouncilProgress'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
+    
+sp_learningmod.council_meeting:
+  path: '/learning/prostitution/plan/city-council-meeting'
+  defaults:
+    _title: 'City Council Meeting Quiz'
+    _form: '\Drupal\sp_learningmod\Form\CouncilMeetingForm'
+  requirements:
+    _permission: 'access content'
+
+sp_learningmod.buildmyplan:
+  path: '/learning/prostitution/plan/buildmyplan'
+  defaults:
+    _form: 'Drupal\sp_learningmod\Form\BuildMyPlanForm'
+    _title: 'Build My Plan'
+  requirements:
+    _permission: 'access content'
+
+sp_learningmod.reviewmyplan:
+  path: '/learning/prostitution/plan/reviewmyplan'
+  defaults:
+    _form: 'Drupal\sp_learningmod\Form\ReviewMyPlanForm'
+    _title: 'Review My Plan'
+  requirements:
+    _permission: 'access content'

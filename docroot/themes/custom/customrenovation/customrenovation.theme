@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the customrenovation theme.
+ */
+
+/**
+ * Implements hook_preprocess_HOOK() for html.html.twig.
+ */
+function customrenovation_preprocess_html(&$variables) {
+
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page.html.twig.
+ */
+function customrenovation_preprocess_page(&$variables) {
+
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node.html.twig.
+ */
+function customrenovation_preprocess_node(&$variables) {
+
+}
+
+function customrenovation_preprocess_responsive_image_formatter(array &$variables) {
+    //this is the hook where you do get access to the image file entity
+    //don't use 'width' or 'height' as attribute names, they might get unset by Drupal in the following hook
+    $variables['responsive_image']['#attributes']['data-original-image-width'] = $variables['item']->width;
+    $variables['responsive_image']['#attributes']['data-original-image-height'] = $variables['item']->height;
+}
+function customrenovation_preprocess_responsive_image(array &$variables) {
+    //this is the preparing the rendering, here you can set the width and height attribute again
+    $variables['#attributes']['width'] = $variables['img_element']['#attributes']['data-original-image-width'];
+    $variables['#attributes']['height'] = $variables['img_element']['#attributes']['data-original-image-height'];
+}
+
+
+function customrenovation_preprocess_views_view_field(&$variables) {
+
+ $variables['output'] = $variables['field']->advancedRender($variables['row']);
+
+}
+
+
+
+function customrenovation_page_attachments_alter(&$page){
+    $path = $current_path = Drupal::service('path.current')->getPath();
+    // gets node for faculty directory faculty page
+    if($path == '/node/30219') {
+        $page['#attached']['library'][] = 'customrenovation/faculty-pages';
+    }
+}

@@ -1,0 +1,8 @@
+name: 'GP Dataquiz handler'
+type: module
+description: 'Get Protected Data Quiz submission handler, provides custom submission messages based on tagging of radio elements in a webform'
+package: 'Custom'
+core_version_requirement: ^9.4 || ^10 || ^11
+dependencies:
+  - 'webform:webform'
+  - 'webform:webform_ui'

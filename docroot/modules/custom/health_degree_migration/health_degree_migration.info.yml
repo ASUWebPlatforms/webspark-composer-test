@@ -1,0 +1,13 @@
+type: module
+name: health-degree-migration
+description: 'A custom module to contain migrations from degrees json to Webspark 2.'
+core_version_requirement: ^8.8 || ^9 || ^10
+dependencies:
+  - drupal:migrate
+  - migrate_plus:migrate_plus
+  - drupal:menu_ui
+  - drupal:path
+  - drupal:image
+  - drupal:text
+  - drupal:options
+  - drupal:taxonomy

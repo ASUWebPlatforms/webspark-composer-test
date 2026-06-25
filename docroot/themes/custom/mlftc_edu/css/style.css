@@ -1,0 +1,20 @@
+ /*Social Button Links */
+.social-buttons-links a {
+  padding: 8px 8px;
+  text-align: center;
+  color: #fff;
+  width: 40px;
+}
+
+.social-buttons-title {
+  display: none;
+}
+
+.social-buttons ul.links li::marker {
+  color:  transparent;
+}
+
+.social-buttons ul.links li {
+  display: inline-flex !important;
+}
+ /* -- END --  Social Button Links */

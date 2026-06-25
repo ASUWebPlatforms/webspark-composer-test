@@ -1,0 +1,20 @@
+<?php
+
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\node\Entity\Node;
+use Drupal\views\ViewExecutable;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_preprocess_node
+ *
+ * Add JS for newsletter content type
+ */
+function asuaec_counselors_preprocess_node(&$variables) {
+    $node = $variables['node'];
+    //check content type
+    if ($node->getType() == 'newsletter') {
+        $variables['#attached']['library'][] = 'asuaec_counselors/asuaec-counselors-library';
+    }
+}

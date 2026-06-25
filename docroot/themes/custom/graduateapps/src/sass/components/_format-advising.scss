@@ -1,0 +1,38 @@
+form.asu-format-advising-multistep-form{
+  .form-group{
+    p{
+      max-width: none;
+    }
+    
+    margin-bottom: 1rem;
+
+    div[id$="date"] {
+      display: flex;
+    }
+    
+    small[id$="description"],
+    div[id$="description"]{
+      display: block;
+      margin: 1rem 0;
+    }
+
+    .text-muted{
+      font-size: .8rem;
+      margin-bottom: .5rem;
+    }
+
+    legend{
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--bs-gray-5);
+    }
+  }
+}
+
+.word-count {
+  color: black;
+}
+
+.max-reached {
+  color: red;
+}

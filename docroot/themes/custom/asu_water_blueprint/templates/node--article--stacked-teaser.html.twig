@@ -1,0 +1,19 @@
+{% set catch_cache = content|render %}
+{% set class = [
+  'container',
+  'border-bottom',
+  'my-2',
+  'py-2',
+] %}
+<div{{ attributes.addClass(class) }}>
+  <div class="row">
+    <div class="col">
+      <a class="lead font-weight-bold" href="{{ url }}">{{ node.getTitle() }}</a>
+      <div class="font-weight-bold text-uppercase mb-1">{{ node.getCreatedTime()|date('F j, Y') }}</div>
+      {{ content.body }}
+    </div>
+    <div class="col flex-shrink-0">
+      {{ content.field_media }}
+    </div>
+  </div>
+</div>

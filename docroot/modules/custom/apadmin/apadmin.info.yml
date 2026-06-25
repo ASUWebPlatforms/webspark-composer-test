@@ -1,0 +1,10 @@
+name: apadmin - Admin site for the Assessment Portal
+description: University Academic Program Assessment Portal Admin - UOEEE
+package: UOEEE
+type: module
+version: 2.0
+core_version_requirement: ^10
+dependencies:
+  - drupal:block
+libraries:
+  - apadmin/apadmin-app

@@ -1,0 +1,4 @@
+'administer asumex_custom':
+  'title': 'Administer ASU Mexico Custom Features'
+  'description': 'Configure settings for custom feature blocks'
+  restrict access: true

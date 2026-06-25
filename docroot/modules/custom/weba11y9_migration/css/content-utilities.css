@@ -1,0 +1,419 @@
+/**
+ * @file content-utilities.css
+ * BRIDGE CSS — Generic content typography, table, blockquote, and comment
+ * styles used across many pages. Extracted from the legacy Access theme.
+ * These classes are referenced in database content. Remove as TSS team
+ * migrates content to Webspark-native components.
+ * See: WEBA11Y9_MIGRATION_TICKETS.md (Tickets S1, S2)
+ * @todo Remove after content migration is complete.
+ */
+
+.asu-well p,
+p.lead {
+	max-width: 968px;
+}
+
+/* TYPOGRAPHY */
+.content-page ol ol {
+  list-style: lower-alpha;
+}
+.content-page ol ol ol {
+  list-style: lower-roman;
+}
+.uds-list ul.no-btm-mrg,
+ul.uds-list.no-btm-mrg {
+	margin-bottom: 0;
+	padding-bottom: 1rem;
+}
+ul.nobullets li {
+  list-style-type: none;
+}
+ul.bullets li {
+  list-style-type: disc;
+}
+ul.xtrspace,
+ul li.xtrspace {
+  margin-bottom: 1em;
+}
+ul.inline li {
+  display: inline-block;
+}
+.block ul ul {
+  list-style-type: circle;
+}
+.uds-hdr-dropdown-container ul {
+  list-style-type: none !important;
+}
+.bordered-box {
+  border: 1px solid #dadada;
+  padding: 1em;
+  display: inline-block;
+}
+.gray-box {
+  border: 1px solid #dadada;
+  background-color: #e8e8e8;
+  width: 100%;
+  padding: 1em;
+  display: inline-block;
+  font-size: 0.9rem;
+}
+.asu-well {
+	min-height: 20px;
+	width: auto;
+	padding: 19px;
+	background-color: #fafafa;
+	border: 1px solid #e8e8e8;
+	border-radius: 0;
+	box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+}
+code,
+.code {
+  background-color: #e8e8e8;
+  border-radius: 0;
+  padding: 2px 4px;
+  font-family: Menlo,Monaco,Consolas,"Courier New","DejaVu Sans Mono",monospace,sans-serif;
+  font-size: 90%;
+  color: #c7254e;
+}
+mark {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+mark.blue {
+   background-color: #74FFF7;
+}
+mark.yellow {
+  background-color: #FEE431;
+}
+mark.green {
+   background-color: #7AFD7D;
+}
+
+@media (min-width: 480px) {
+  blockquote.conventional {
+    padding-right: 2em;
+  }
+}
+blockquote.conventional {
+	background-image: 0 none;
+	border-left: 8px solid #dadada;
+  font-weight: normal;
+  color: #444;
+  padding: 0 1em 0.25em 2em;
+  margin-left: 2em;
+}
+blockquote.robust {
+	margin-left: 4em;
+	font-weight: bold;
+}
+blockquote.robust::before {
+	display: block;
+	background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMDIuODcgMjQ1LjgyIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6IzE5MTkxOTt9PC9zdHlsZT48L2RlZnM+PGcgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiI+PGcgaWQ9IkxheWVyXzEtMiIgZGF0YS1uYW1lPSJMYXllciAxIj48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xMTMuNjEsMjQ1LjgySDBWMTY0LjU2cTAtNDkuMzQsOC42OS03Ny44M1E0MC44NCwzNS41OFE2NC4yOSwxMi45NSwxMDAuNjcsMGwyMi4yNCw0Ni45cS0zNCwxMS4zMy00OC43MiwzMS41NFQ1OC42MywxMzIuMjFoNTVabTE4MCwwSDE4MFYxNjQuNTZxMC00OS43NCw4LjctNzhUMjIxLDM1LjU4UTI0NC42NSwxMi45NSwyODAuNjMsMGwyMi4yNCw0Ni45cS0zNCwxMS4zMy00OC43MiwzMS41NHQtMTUuNTcsNTMuNzdoNTVaIi8+PC9nPjwvZz48L3N2Zz4K);
+	background-repeat: no-repeat;
+	float: left;
+	margin-top: 0.5rem;
+	margin-left: -4rem;
+	min-height: 3rem;
+	min-width: 2.375rem;
+  content: '';
+  vertical-align: top;
+}
+cite, .cite {
+  font-size: 0.9em;
+  text-align:left;
+  font-style: normal;
+}
+/* Are used on a span in the WYSIWYG */
+.sm-08rem-font {
+  font-size: 0.8rem;
+}
+.sm-09rem-font {
+  font-size: 0.9rem;
+}
+.med-font,
+.lg-1-15rem-font{
+	font-size: 1.15rem;
+}
+.lg-font,
+.lg-2rem-font {
+	font-size: 2rem;
+}
+.lead {
+	margin-bottom: 2em;
+	font-family: inherit;
+	font-size: 1.25rem;
+	line-height: 2em;
+	color: #191919;
+}
+.gold {
+  color: #fec53d!important;
+}
+.highlight {
+  color: #333;
+  font-size: 1.3em;
+  line-height: 1.3;
+}
+.highlight span {
+  color: #fec53d;
+  font-weight: bold;
+  font-size: 2em;
+}
+h1.article {
+	margin-bottom: 1em;
+}
+.content-page h3 {
+	font-size: 1.95rem;
+	line-height: 2.4rem;
+}
+.block-inline-blockmenu-sidebar h3:empty {
+	display: none;
+}
+/* Make the standard button smaller */
+.sm-btn {
+	border-radius: 18px;
+	line-height: 0.5rem;
+	margin-top: 0.5em;
+	padding: 0.75rem 1rem;
+	font-size: 0.95em;
+}
+
+h2.small {
+  font-size: 1.85rem;
+  line-height: 2rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+h3.small {
+  font-size: 1.5rem;
+  line-height: 1.65rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+h2.smaller {
+  font-size: 1.35rem;
+  line-height: 1.65rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+h3.smaller {
+  font-size: 1.2rem;
+  line-height: 1.65rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+/* 1rem font headers */
+h2.inline-hd,
+h3.inline-hd {
+  font-size: 1rem;
+  line-height: 1rem;
+  letter-spacing: 0;
+  margin: 0;
+}
+h2.inline-hd + p,
+h3.inline-hd + p {
+  display: inline-block;
+}
+
+/* Back to top button */
+button#uds-back-to-top {
+  transform: rotate(-90deg);
+  position: fixed;
+  bottom: 96px;
+  right: -40px;
+  z-index: 99;
+  border: none;
+  outline: none;
+  background-color: #A6A6A6;
+  color: white;
+  cursor: pointer;
+  margin: 0;
+  padding: 5px 10px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+@media (max-width: 480px) {
+  button#uds-back-to-top {
+    display: none;
+  }
+}
+button#uds-back-to-top:focus,
+button#uds-back-to-top:hover {
+  background-color: #5a5a5a;
+}
+
+/* Tables */
+.uds-table>table tr td:first-child,
+.uds-table>table tr th:first-child,
+.uds-table>table tr p:first-child,
+.uds-table>table tr img:first-child {
+  min-width: auto;
+}
+.uds-table>table tr td p:nth-child(n+1),
+.uds-table>table tr td img:nth-child(n+1) {
+  max-width: none;
+  width: auto!important;
+  min-width: auto!important;
+}
+.uds-table>table th,
+.uds-table>table td {
+	vertical-align: top;
+}
+.uds-table>table caption,
+table caption {
+  border-color: transparent;
+  color: #191919;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  caption-side: top;
+}
+.ul-list table td ul {
+  padding-left: 1em;
+}
+
+/* Ext link icon */
+.uds-table>table tr svg.ext:nth-child(n+1),
+.uds-table>table tr svg.ext:first-child,
+.uds-table>table tr svg.ext path:nth-child(n+1),
+.uds-table>table tr svg.ext path:first-child,
+.uds-table>table tr svg.mailto:nth-child(n+1),
+.uds-table>table tr svg.mailto:first-child,
+.uds-table>table tr svg.mailto path:nth-child(n+1),
+.uds-table>table tr svg.mailto path:first-child {
+  width: 14px;
+  height: 14px;
+  min-width: auto;
+}
+
+table.col2 th,
+table.col2 td {
+  width: 48%;
+}
+table.col3 th,
+table.col3 td {
+  width: 32%;
+}
+table.col4 th,
+table.col4 td {
+  width: 24%;
+}
+table.col5 th,
+table.col5 td {
+  width: 19%;
+}
+
+svg.ext,
+svg.mailto {
+  width: 14px;
+  height: 14px;
+  padding-right: 0;
+  padding-left: 0.1em;
+  vertical-align: top;
+}
+
+.uds-table.border>table tr {
+  border-top: 1px solid #ddd;
+}
+
+/* Comments */
+article.js-comment .row .col-md-2,
+.product-review .product__field-comments article .col-md-2 {
+  display: none;
+}
+.product-review .product__field-comments .indented article {
+  padding-left: 3rem;
+}
+article.js-comment ul.links,
+.product-review .product__field-comments article ul.links {
+  padding-left: 0;
+}
+article.js-comment ul.links li a,
+.product-review .product__field-comments article ul.links li a {
+  display: inline-block;
+  background-color: #888;
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-decoration: none;
+  line-height: 1;
+}
+article.js-comment ul.links li a:hover,
+article.js-comment ul.links li a:focus,
+.product-review .product__field-comments article ul.links li a:hover,
+.product-review .product__field-comments article ul.links li a:focus {
+  background-color: #222;
+}
+article.js-comment .card-header,
+.product-review .product__field-comments article .card-header {
+  font-weight: bold;
+}
+
+/* Comment forms */
+/* Adjusting width of reply comment form, then reverting for node comment form */
+@media (min-width: 768px) {
+  article.js-comment,
+  form.comment-comment-form {
+    flex: 0 0 66.6666666667%;
+    max-width: 66.6666666667%;
+  }
+  .product-review article.js-comment,
+  .product-review form.comment-comment-form {
+    flex: 100%;
+    max-width: 100%;
+  }
+}
+@media (min-width: 768px) {
+  .product-review .col-md-10,
+  article.js-comment .row .col-md-10 {
+    flex: 100%;
+    max-width: 100%;
+  }
+}
+article.js-comment,
+form.comment-comment-form {
+  padding-right: 12px;
+  padding-left: 12px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.product-review .product__field-comments article {
+  padding-right: 0;
+  padding-left: 0;
+}
+.product-review .product__field-comments form label,
+form.comment-comment-form .field--name-comment-body label {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.product-review .product__field-comments form label svg,
+form.comment-comment-form .field--name-comment-body svg {
+  display: none;
+}
+
+/* Best Practices Articles */
+/* CSS page */
+.bg-img {
+  background-image: url('/sites/default/files/inline-images/logo.png');
+  width: 70px;
+  height: 64px;
+  display: block; /* display:inline-block also works */
+}
+
+/* Email page */
+.uds-table.contrast-table>table tbody tr:focus td,
+.uds-table.contrast-table>table tbody tr:focus th,
+.uds-table.contrast-table>table tbody tr:hover td,
+.uds-table.contrast-table>table tbody tr:hover th {
+  background-color: #fff;
+}
+.uds-table.contrast-table>table tbody tr td p {
+	margin-bottom: 1rem !important;
+}
+
+/* Social Media */
+.uds-table.social-media>table tr th:first-child {
+  width: 300px;
+  min-width: 300px;
+}

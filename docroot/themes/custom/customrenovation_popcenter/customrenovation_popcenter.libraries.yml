@@ -1,0 +1,6 @@
+style:
+  version: VERSION
+  css:
+    theme:
+      assets/css/customrenovation.style.css: {}
+      assets/css/tempstyles.css: {}

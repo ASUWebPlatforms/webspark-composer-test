@@ -1,0 +1,97 @@
+{# Specify that we want to hide the content so we can print our fields individually #}
+{{ content|without('field_slides', 'field_sli', 'field_wi', 'field_bg') }}
+
+
+<div class="container">
+  <div class="col-12" data-bs-ride="carousel">
+    <div id="myCarousel-{{ paragraph.id.value }}" class="d-flex justify-content-center carousel slide carousel-gl">
+      <div class="carousel-inner carousel-inner-gl">
+        {% set slidesg = [] %}
+        {% for key, item in content.field_slides %}
+          {% if key|first != '#' %}
+            {% set slidesg = slidesg | merge([item]) %}    
+          {% endif %}
+        {% endfor %}
+        {% for slide in slidesg %}
+          {% if slide['#paragraph'].field_carousel_image.entity.field_media_image_1.value[0]['target_id'] %}
+            {% set target_id = slide['#paragraph'].field_carousel_image.entity.field_media_image_1.value[0]['target_id'] %}
+            {% set altimg = slide['#paragraph'].field_carousel_image.entity.field_media_image_1.value[0]['alt'] %}
+            {% set file = drupal_entity('file', target_id) %}
+            {% set uri = file['#file'].getFileUri() %}
+            {% set url = file_url(uri) %}
+            <div class="carousel-item {{ loop.first ? 'active' }}">
+              <div class="image-container-gl">
+                <img src="{{ url }}" alt="{{ altimg }}" class="carousel-image-gl"/>
+                {% if slide['#paragraph'].field_body_carousel_image_gl.value %}
+                  <div class="carousel-caption-gl">
+                    {{ slide['#paragraph'].field_body_carousel_image_gl.value|raw }}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="carousel-indicators-gl">
+        <a class="btn btn-primary mb-3 mr-1" href="#myCarousel-{{ paragraph.id.value }}" role="button" data-bs-slide="prev">
+          <i class="fa fa-arrow-left"></i>
+        </a>
+        <a class="btn btn-primary mb-3" href="#myCarousel-{{ paragraph.id.value }}" role="button" data-bs-slide="next">
+          <i class="fa fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div> 
+</div>
+
+
+
+
+{# {{ dump(item['#paragraph'].field_carousel_image.entity.field_media_image_1) }} #}
+
+{# <div class="container">
+  For the carousel indicators, we loop through the slide field 
+  We use Twig loop.first to set the active class, and the key to set the data-slide-to
+  <div class="col-12">
+    <div id="myCarousel-{{ paragraph.id.value }}" data-bs-ride="carousel" data-interval="false" class="carousel slide">
+      <div class="carousel-inner" style="padding-bottom:100px;">
+        {% for key, item in content.field_slides %}
+          {% if key[0] == 0 %}
+            <div class="carousel-item element--layout-slideshow__slide-{{ key|number_format }} item{% if loop.first %} active{% endif %}">
+              <div class="row">
+                {{ item['#paragraph'].field_slides.value }}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="carousel-indicators">
+        <a class="btn btn-primary mb-3 mr-1" href="#myCarousel-{{ paragraph.id.value }}" role="button" data-bs-slide="prev">
+          <i class="fa fa-arrow-left"></i>
+        </a>
+        <a class="btn btn-primary mb-3" href="#myCarousel-{{ paragraph.id.value }}" role="button" data-bs-slide="next">
+          <i class="fa fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div> #}
+
+
+{# <div id="carouselImpactStories" class="d-flex justify-content-center carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner carousel-inner-gl">
+       <div class="carousel-item active">item['#paragraph'].field_slides.value</div>,
+      <div class="carousel-item">item['#paragraph'].field_slides.value</div>,
+      <div class="carousel-item">item['#paragraph'].field_slides.value</div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselImpactStories" role="button" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+
+    <a class="carousel-control-next" href="#carouselImpactStories" role="button" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div> #}

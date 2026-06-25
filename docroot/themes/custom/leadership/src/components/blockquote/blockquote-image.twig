@@ -1,0 +1,15 @@
+<div class="uds-blockquote with-image {% if image_position != 'left' %} reversed {% endif %} {{ text_color }}">
+  {{ media }}
+  <blockquote>
+    <h3>
+      <span class="{{ highlight }}">{{ heading }}</span>
+    </h3>
+    <p>{{ body_text }}</p>
+    {% if citation_author is not empty or citation_description is not empty %}
+      <div class="citation">
+        <cite class="name">{{ citation_author }}</cite>
+        <cite class="description">{{ citation_description }}</cite>
+      </div>
+    {% endif %}
+  </blockquote>
+</div>

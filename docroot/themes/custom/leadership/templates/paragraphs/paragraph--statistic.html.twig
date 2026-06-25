@@ -1,0 +1,9 @@
+
+{% block paragraph %}
+
+      {% include '@renovation/statistic/statistic.twig' with {
+        statistic: content.field_statistic_title,
+        summary: content.field_statistic_summary,
+      } %}
+
+{% endblock paragraph %}

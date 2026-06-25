@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the ASU.edu Components module.
+ */
+
+/**
+ * Remove the robots.txt file.
+ */
+function asu_edu_components_update_9001(&$sandbox) {
+  unlink('robots.txt');
+}

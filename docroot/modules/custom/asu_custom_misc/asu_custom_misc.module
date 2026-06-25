@@ -1,0 +1,314 @@
+<?php
+
+use Drupal\views\ViewExecutable;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\Entity\Node;
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\views\Plugin\views\style\StylePluginBase;
+use Drupal\views\Views;
+use Drupal\views\Plugin\views\cache\CachePluginBase;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\Core\Mail\MailManagerInterface;
+use Drupal\Component\Utility\SafeMarkup;
+use Drupal\Component\Utility\Html;
+use Drupal\file\Entity\File;
+use Drupal\Core\Url;
+use Drupal\media\Entity\Media;
+
+/**
+ * hook_form_alter()
+ *
+ * Increase maxlength for XML Body for XML Feed Views module.
+ *
+ * @param $form
+ * @param FormStateInterface $form_state
+ * @param $form_id
+ * @return array
+ */
+function asu_custom_misc_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+//    ksm($form_id, "form_id");
+    if($form_id == "views_ui_edit_display_form") {
+        $form['options']['row_options']['xmlfeedviews_body']['#maxlength'] = '2048';
+    }
+    return $form;
+}
+
+/**
+ * hook_page_attachments_alter()
+ *
+ * Temporary fix for Search in header
+ */
+function asu_custom_misc_page_attachments_alter(array &$page) {
+    $sitename = '';
+    if (isset($GLOBALS['gardens_site_settings']['flags']['sitename']) && !empty($GLOBALS['gardens_site_settings']['flags']['sitename'])) {
+        $sitename = $GLOBALS['gardens_site_settings']['flags']['sitename'];
+        $node = \Drupal::routeMatch()->getParameter('node');
+        $nid = '';
+        if ($node instanceof \Drupal\node\NodeInterface) {
+            $nid = $node->id();
+        }
+    }
+    if ($sitename === 'yourfuture-asu') {
+        if($nid == "26") { // For the countdown piece in page: /countdown-to-asu
+            $page['#attached']['library'][] = 'asu_custom_misc/countdown-library';
+        }
+    }
+    elseif ($sitename === 'tuition-asu') {
+        if($nid == "3267") { // Page: Special financial assistance programs for Arizona residents (/special-financial-assistance-programs-arizona-residents-0)
+          $page['#attached']['library'][] = 'asu_custom_misc/special-financial-assistance-library';
+        }
+    }
+    else {
+        $page['#attached']['library'][] = 'asu_custom_misc/asu-custom-misc-library';
+    }
+}
+
+/**
+ * Implements hook_theme() for aas to bas node type.
+ */
+function asu_custom_misc_theme() {
+  return [
+    'node__aas_to_bas' => [
+      'render element' => 'elements',
+      'base hook' => 'node',
+    ],
+  ];
+}
+
+function asu_custom_misc_preprocess_node(array &$variables) {
+  $node = $variables['node'];
+
+  //$node = \Drupal::routeMatch()->getParameter('node');
+  if(isset($node)){
+
+	   /* code to set up aas-to-bas node view as variable for aas to bas page */
+    if($node->getType() == "aas_to_bas"){
+      $aasnid = $node->id();
+      $aasnode_data = Node::load($aasnid);
+
+      $names = [];
+      // Obtain Acadplan code
+      $acad_plans = array();
+      foreach ($node->field_aas_bas as $item) {
+             if ($item->entity) {
+                     $degree_names[$item->entity->id()] = $item->entity->label();
+             }
+      }
+
+      foreach($degree_names as $degree_name){
+        if (strstr($degree_name, 'Technical Communication')) {
+              //array_push($acad_plans, "LSTECBS");
+              array_push($acad_plans, "LSTECBAS"); // Changed on 9/9/2024 <-- TODO: Need to check with Tanya
+        }
+        elseif (strstr($degree_name, 'Operation Management')) { // Use "Operations Management" in Search in Degree listing page
+              array_push($acad_plans, "TSIMCOBAS"); //There are 2 nodes. 9201 and 9224. Deleted 9224.
+        }
+        elseif (strstr($degree_name, 'Health Sciences')) {
+              array_push($acad_plans, "NUHSCBAS");
+        }
+        elseif (strstr($degree_name, 'Aviation')) {
+              array_push($acad_plans, "TSAMTABAS");
+        }
+        elseif (strstr($degree_name, 'Electronic Energy Systems')) {
+              array_push($acad_plans, "TSEESBAS"); //<--- Plan code not existing in asu.edu Degree Search on 9/9/2024
+        }
+        elseif (strstr($degree_name, 'Nursing')) {
+              array_push($acad_plans, "NUNURDBSN");
+        }
+        elseif (strstr($degree_name, 'Emergency Management')) {
+              //array_push($acad_plans, "TSIMCEBAS"); //There are 2 nodes. 11167 and 10527. Unpublished 10527 because it had wrong College URL.
+              array_push($acad_plans, "PPEMGBAS"); // tsimcebas was replaced by ppemgbas.
+        }
+        elseif (strstr($degree_name, 'Food Service Management')) { // This is term name. So, don't change it even though degree name is different. (9/9/2024)
+        //elseif (strstr($degree_name, 'Applied Nutrition and Health')) {
+          array_push($acad_plans, "ECNTRBAS");
+        }
+        elseif (strstr($degree_name, 'Internet')) { // This is term name. So, don't change it even though degree name is different. (9/9/2024)
+        //elseif (strstr($degree_name, 'Internet and Web Development')) {
+              array_push($acad_plans, "TSIWDBAS");
+        }
+        elseif (strstr($degree_name, 'Manufacturing Technology & Management')) {
+              array_push($acad_plans, "TSMETFBAS"); //<--- Plan code not existing in asu.edu Degree Search on 9/9/2024
+        }
+        elseif (strstr($degree_name, 'Applied Science')) {
+              array_push($acad_plans, "ASBASBAS");
+        }
+        elseif (strstr($degree_name, 'Graphic Information Technology')) {
+              array_push($acad_plans, "TSGITBAS");
+        }
+        elseif (strstr($degree_name, 'Software and Computing Systems')) {
+              array_push($acad_plans, "TSCSTBAS"); //<--- Plan code not existing in asu.edu Degree Search on 9/9/2024
+        }
+        elseif (strstr($degree_name, 'Health Innovation')) { // This is term name. So, don't change it even though degree name is different. (9/9/2024)
+        // elseif (strstr($degree_name, 'Health Entrepreneurship and Innovation')) {
+              //array_push($acad_plans, "NUHCIBS"); // // Changed on 9/9/2024 <-- TODO: Need to check with Tanya
+              array_push($acad_plans, "NUHCIBAS");
+        }
+        elseif (strstr($degree_name, 'Medical Laboratory Science')) {
+              array_push($acad_plans, "NUMLSBAS");
+        }
+        elseif (strstr($degree_name, 'Early Childhood Studies')) {
+              array_push($acad_plans, "TEAPSECBAS");
+        }
+        elseif (strstr($degree_name,'Project Management')) {
+              array_push($acad_plans, "LSAPSPMBAS");
+        }
+        elseif (strstr($degree_name, 'Applied Leadership')) {
+              array_push($acad_plans, "LSALSBAS");
+        }
+        else {
+        }
+      }
+      $degree_arg = implode("+", $acad_plans);
+      $variables['aas_to_bas_node_view'] = views_embed_view('aas_to_bas', 'block_1', $degree_arg);
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for node templates.
+ */
+function asu_custom_misc_theme_suggestions_node_alter(array &$suggestions, array $variables) {
+  $node = $variables['elements']['#node'];
+
+
+  if ($node instanceof \Drupal\node\NodeInterface && $node->bundle() == 'aas_to_bas') {
+    $suggestions[] = 'node--aas_to_bas';
+  }
+}
+
+
+/** Hook view prerender to update vistual tours view to change views output Register/Watch link text value based on event date and on demand  **/
+
+function asu_custom_misc_views_pre_render(ViewExecutable $view) {
+
+  if ($view->id() == "virtual_sessions_new" && (($view->current_display == 'page_1') || ($view->current_display == 'block_1') || ($view->current_display == 'block_2') || ($view->current_display == 'block_4'))) {
+	// Get the existing filters
+    $filters = $view->display_handler->getOption('filters');
+
+	 foreach($view->result as $value){
+      //$date = mycustomfunction($value->_entity->get('field_event_date_time_vs')->value);
+		$date = $value->_entity->get('field_event_date_time_vs')->value;
+		$display_date = $value->_entity->get('field_display_date_vs')->value;
+		$str_date = strtotime($date);
+		$title = $value->_entity->get('title')->value;
+		$current_time = \Drupal::time()->getCurrentTime();
+		$field_url = $value->_entity->get('field_url_vs')->uri;
+		$field_url_title = $value->_entity->get('field_url_vs')->title;
+		$body_value = $value->_entity->get('body')->value;
+		$time = $value->_entity->get('field_display_time_vs')->value;
+		$campus = $value->_entity->get('field_campus_vs')->value;
+		$virtual_session = $value->_entity->get('field_virtual_session_vs')->value;
+		$ondemand = $virtual_session = $value->_entity->get('field_on_demand_vs')->value;
+
+    // Image
+    $media_id = $value->_entity->get('field_virtual_session_image')->target_id;
+    $image_uri = '';
+    if(!empty($media_id)){
+      // Load the media entity.
+      $media = \Drupal\media\Entity\Media::load($media_id);
+//      if (!empty($media) && $media->hasField('field_media_image')) {
+      if (!empty($media)) {
+        $target_id = '';
+        // Get the target ID of the file referenced in the media entity.
+        $target_id = $media->get('field_media_image')->target_id;
+        if (!empty($target_id)) {
+          // Load the file entity.
+          $file = \Drupal\file\Entity\File::load($target_id);
+          if ($file) {
+            // Return the file URI.
+            $image_uri = $file->getFileUri();
+          }
+        }
+      }
+    }
+//    ksm($image_uri, "image uri"); // public://2024-11/grad_event_image.jpg
+    $image_code = '';
+    if($image_uri != '') {
+      $image_url = substr($image_uri,9);
+//      ksm($image_url, "image_url"); // 2024-11/grad_event_image.jpg
+      $image_code = '<img src="/sites/default/files/'.$image_url.'" alt="" />';
+    }
+
+		$btn_label = "Register";
+		if($str_date < $current_time){
+			$btn_label = "Watch";
+			$before_event = true;
+			if(!empty($ondemand)){
+				$view->display_handler->getOption['filters']['field_on_demand_vs_value']['value']['Yes'] = 'Yes';
+			}
+			else{
+				$view->display_handler->getOption['filters']['field_on_demand_vs_value']['value'][''] = '';
+			}
+
+		}
+		else{
+			// Button label will be whatever value in title field for the URL. If it is empty, default will be "Register".-->
+			if(!empty($field_url_title)){
+				$btn_label = $field_url_title;
+			}
+			else{
+				$btn_label = "Register";
+			}
+			$before_event = false;
+			$view->display_handler->getOption['filters']['field_on_demand_vs_value']['value']['Yes'] = 'Yes';
+		}
+		if($before_event != true){
+			if (!empty($display_date)){
+					$event_date = "<div>&nbsp;&nbsp;$display_date</div><br>";
+			}
+			else{
+				$event_date = '';
+			}
+			if(!empty($time)){
+					$event_time = "<div>&nbsp;&nbsp;$time</div><br /><br />";
+			}
+			else{
+				$event_time = '';
+			}
+
+		}
+		else{
+				$event_time = "<div>&nbsp;&nbsp;On demand</div>";
+				$event_date = '';
+			}
+
+
+
+
+		if($campus){
+			$campus_data = '<div><i class="fas fa-map-marker-alt"></i><p>'.$campus.'</p></div>';
+		}
+		else{
+			$campus_data = '';
+		}
+
+		$event_icon_data = $event_date."<br />".$event_time."<br />".$campus_data;
+//		ksm($event_icon_data);
+
+		if($virtual_session == "Yes"){
+			$vitual_data = '<div class="card-tags"><p><a class="btn btn-tag btn-tag-alt-white" href="#">Virtual events</a></p></div>';
+		}
+		else{
+			$vitual_data = '';
+		}
+//		 ksm($vitual_data);
+
+		$new_body =  '<div class="col-12"><div class="card card-event">'.$image_code.'<div class="card-header"><h3 class="card-title">'.$title.'</h3></div><div class="card-body"><p class="card-text">'.$body_value.'</p></div><div class="card-event-details"><div class="card-event-icons"><i class="fas fa-calendar"></i>'.$event_icon_data.'</div></div><div class="card-button"><a class="btn btn-gold" data-ga="Button link here" data-ga-action="click" data-ga-event="link" data-ga-name="onclick" data-ga-region="main content" data-ga-section="card default title" data-ga-type="internal link" href="'.$field_url.'">'.$btn_label.'</a></div>'.$vitual_data.'</div></div>';
+		$content = \Drupal\Core\Render\Markup::create($new_body);
+		//ksm($new_body);
+		$value->_entity->set('title', $content);
+
+
+
+
+		}
+  }
+
+}
+
+
+

@@ -1,0 +1,401 @@
+/**
+ * @file webform-audit.css
+ * BRIDGE CSS — Audit tool, mobile checklist, and course audit page layouts.
+ * Extracted from the legacy Access theme.
+ * These classes are referenced in database content. Remove as TSS team
+ * migrates content to Webspark-native components.
+ * See: WEBA11Y9_MIGRATION_TICKETS.md (Tickets S1, S2)
+ * @todo Remove after content migration is complete.
+ */
+
+/* Audit Report */
+.web-audit-report .block--access-tabs ul.nav-pills,
+.web-audit-form .webform-submission-navigation,
+.web-audit-report .webform-submission-navigation,
+.web-audit-form .webform-submission-information,
+.web-audit-report .webform-submission-information,
+.mobile-form .webform-submission-navigation,
+.mobile-report .webform-submission-navigation,
+.mobile-form .webform-submission-information,
+.mobile-report .webform-submission-information,
+.course-form .webform-submission-navigation,
+.course-report .webform-submission-navigation,
+.course-form .webform-submission-information,
+.course-report .webform-submission-information {
+  display: none;
+}
+
+/* Audit pages */
+main.web-audit-form,
+main.web-audit-report,
+main.mobile-form,
+main.mobile-report,
+main.course-form,
+main.course-report {
+  width: 100%;
+}
+@media (min-width: 576px) {
+  main.web-audit-form,
+  main.web-audit-report,
+  main.course-form,
+  main.course-report,
+  main.mobile-form,
+  main.mobile-report
+  {
+    max-width: 540px;
+  }
+}
+@media (min-width: 768px) {
+  main.web-audit-form,
+  main.web-audit-report,
+  main.mobile-form,
+  main.mobile-report,
+  main.course-form,
+  main.course-report {
+    max-width: 768px;
+  }
+}
+@media (min-width: 992px) {
+  main.web-audit-form,
+  main.web-audit-report {
+    max-width: 992px;
+  }
+}
+@media (min-width: 1260px) {
+  main.web-audit-form,
+  main.web-audit-report,
+  main.mobile-form,
+  main.mobile-report,
+  main.course-form,
+  main.course-report {
+    max-width: 1224px;
+    width: 100%;
+    padding-right: 12px;
+    padding-left: 12px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
+.web-audit-form ol ol,
+.web-audit-report ol ol,
+.mobile-form ol ol,
+.mobile-report ol ol,
+.course-form ol ol,
+.course-report ol ol,
+.webform-submission-form ol ol {
+  list-style-type: lower-alpha;
+}
+
+#audit-tabs .tab-content,
+.web-audit-report .webform-submission-data,
+.web-audit-form .webform-submission-form,
+form.checklist,
+form.checklist {
+  max-width: 900px;
+}
+.web-audit-report h1,
+.web-audit-form h1,
+.mobile-form h1,
+.mobile-report h1,
+.course-form h1,
+.course-report h1 {
+  font-size: 3rem;
+}
+.web-audit-report h2,
+.web-audit-form h2,
+.mobile-form h2,
+.mobile-report h2,
+.course-form h2,
+.course-report h2 {
+  margin: 2em 0 1em 0;
+  padding: 0;
+	font-weight: bold;
+	font-size: 1.4em;
+	line-height: 1.5rem;
+	letter-spacing: 0;
+}
+.web-audit-form .question-set h2,
+#web_audit--name2_grp_container h2 {
+  margin-top: 1em;
+}
+.question-set h2.webform-section-title,
+.question-set h3.webform-section-title {
+  margin: 1em 0;
+  font-size: 1.1rem;
+  letter-spacing: 0;
+}
+
+/* Adjusting form group spacing */
+.web-audit-form form.uds-form .form-group,
+#web_audit--name2_grp_container .form-group {
+  margin: 0;
+}
+.web-audit-form form.uds-form .form-group.js-form-item-auditor-name {
+  margin-bottom: 1em;
+}
+.question-set,
+.submission-intro,
+#web_audit--name2_grp_container {
+  background-color: #f5f5f5;
+	border: 1px solid #dadada;
+  box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+  border-radius: 4px;
+  margin-bottom: 2em;
+  padding: 0.5em 1.5em 1.5em 1.5em;
+}
+.webform-submission .question-set {
+	border-left: 4px solid #e3e3e3;
+}
+.webform-submission .question-set.pass {
+	border-left: 4px solid #09ce0f;
+}
+.webform-submission .question-set.fail {
+	border-left: 4px solid #ce0924;
+}
+.submission-intro {
+	background-color: #fff;
+}
+#reports-link {
+  position: relative;
+}
+#reports-link a {
+  position: absolute;
+  right: 4em;
+  top: -7em;
+}
+
+/* "How to Test" accordion */
+.question-set .card {
+	background-color: #f5f5f5;
+	border: 0 none;
+	margin-bottom: 0!important;
+}
+.question-set .card>div:last-child {
+  padding-bottom: 0;
+}
+.question-set .card-header {
+	width: fit-content;
+	margin: 0;
+	padding: 0;
+	border-bottom: 1px solid #8c1d40;
+	line-height: 1;
+	font-weight: bold;
+  color: #8c1d40;
+}
+.question-set .card-header:hover,
+.question-set .card-header:focus {
+	border-bottom: 1px solid #111;
+  color: #111;
+}
+.question-set .card-header:hover,
+.question-set .card-header:focus {
+	border-bottom: 1px solid #111;
+  color: #111;
+}
+.question-set .card-body {
+	margin: 0;
+	padding: 1em 1em 0 0;
+}
+
+/* Results and Notes fields */
+.question-set .findings-result {
+  float: left;
+	padding: 1em 1em 0 0;
+}
+.question-set .findings-obs {
+  padding: 1em 0 0 7em;
+}
+.question-set label,
+#web_audit--name2_grp_container label {
+  display: block;
+	margin-bottom: 0;
+	font-size: 1rem;
+	line-height: 1.4;
+}
+#web_audit--name2_grp_container label {
+  display: inline-block;
+}
+.question-set .custom-select {
+	width: auto;
+}
+
+/* Report styles */
+.webform-submission .result,
+.webform-submission .show-notes {
+	display: inline-block;
+	vertical-align: top;
+	margin-right: 2em;
+}
+.webform-submission .show-notes {
+	max-width: 70ch;
+}
+.webform-submission .audit-fix {
+	clear: both;
+	padding: 19px 19px 9px 19px;
+	width: 90%;
+	margin-bottom: 20px;
+	margin-left: 0;
+	background-color: #ffffff;
+	border: 1px solid #dadada;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+	box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+}
+
+/* Web Audit Tabs */
+#audit-tabs .tab-content p,
+#audit-tabs .tab-content li {
+  max-width: none!important;
+}
+#audit-tabs ul.layout-tabs {
+	list-style: none;
+	margin: 0 0 10px 0;
+  padding: 0 0 1em 0;
+}
+#audit-tabs ul.layout-tabs li {
+	display: inline-block;
+	list-style-type: none;
+	white-space: nowrap;
+}
+#audit-tabs ul.layout-tabs li a {
+	display: block;
+	font-weight: 600;
+	line-height: 1.44;
+	font-size: 0.95rem;
+	margin: 0;
+	padding: 0.5em 1em;
+	color: #6a6a6a !important;
+	background-color: #eaeaea;
+}
+#audit-tabs ul.layout-tabs li:first-child a {
+	border-bottom-left-radius: 8px;
+	border-top-left-radius: 8px;
+}
+#audit-tabs ul.layout-tabs li:last-child a {
+	border-bottom-right-radius: 8px;
+	border-top-right-radius: 8px;
+}
+#audit-tabs ul.layout-tabs li a.is-active,
+#audit-tabs ul.layout-tabs li a:hover,
+#audit-tabs ul.layout-tabs li a:focus {
+	color: #fff !important;
+	background-color: #8C1D40;
+}
+#audit-tabs .tab-content {
+  padding-top: 0;
+  padding-left: 0.25em;
+}
+#audit-tabs .tab-pane:first-child h3,
+#audit-tabs .tab-pane:first-child h2 {
+	margin-top: 0;
+}
+
+/* Audit report print styles */
+@media print {
+
+  body,
+  .pt-5,
+  .py-5 {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  .block--access-asubrandheader,
+  .page__pre-content,
+  #reports-link,
+  footer {
+    display: none;
+  }
+  main.web-audit-form,
+  main.web-audit-report,
+  #audit-tabs .tab-content,
+  .question-set p,
+  .question-set li,
+  .web-audit-report .webform-submission-data,
+  .web-audit-form .webform-submission-form,
+  .webform-submission .show-notes {
+    max-width: none!important;
+  }
+
+}
+
+/* =MOBILE CHECKLIST
+-------------------------------------------------------------- */
+/* Section and detail headers */
+.checklist-heading h2,
+.content-page .question-container h3 {
+  font-size: 1.1rem;
+  line-height: 1.4rem;
+  letter-spacing: 0;
+  margin: 1.5rem 0 0.5rem 0;
+}
+.content-page .question-container h3 {
+  font-size: 1rem;
+  margin: 0 0 0.5rem 0;
+}
+form.uds-form .form-group.checklist-heading {
+  margin-bottom: 0.25rem;
+}
+
+/* Checkboxes and guidelines */
+form.uds-form .form-check input[type=checkbox]+label:before {
+  left: -2rem;
+}
+form.uds-form.checklist .form-check input[type=checkbox]+label {
+  max-width: 90%;
+  font-weight: 400;
+}
+form.uds-form.checklist .form-check {
+  margin: 0;
+}
+form.checklist .card.mb-3 {
+  margin-bottom: 0.5rem !important;
+}
+
+/* Arrows - move to right of guideline */
+.question-container {
+  position: relative;
+}
+.question-container summary {
+  position: absolute;
+  top: -2em;
+  right: 2em;
+}
+.question-container summary.card-header {
+  padding: 4px 16px;
+}
+
+/* Detail pane */
+form.uds-form.checklist .card {
+  border: 0 none;
+}
+form.checklist .card-body {
+  margin-top: 16px;
+  padding: 0 70px 0 40px;
+}
+form.uds-form.checklist .card-body .form-group {
+  background-color: #F5F5F5;
+  padding: 20px 40px;
+}
+form.checklist .card-body ul.uds-list {
+  padding: 0 0 0 2rem;
+}
+form.checklist .card-body ul.uds-list li {
+  margin-bottom: 0;
+}
+.button.checklist {
+  margin-top: 2rem;
+}
+
+/* Webform confirmation pages */
+.webform-confirmation,
+.alert {
+  max-width: 1224px;
+  width: 100%;
+  padding-right: 12px;
+  padding-left: 12px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.webform-confirmation__message {
+  padding: 3em 0 0 0;
+}

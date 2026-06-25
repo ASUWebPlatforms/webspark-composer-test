@@ -1,0 +1,9 @@
+fdist-app:
+  version: 1.0
+  js:
+    fdist-app/dist/fdist_5625d6da.js: { preprocess: false  }
+  css:
+    component:
+      fdist-app/dist/fdist_1ae98612.css: { }
+  dependencies:
+    - core/drupalSettings

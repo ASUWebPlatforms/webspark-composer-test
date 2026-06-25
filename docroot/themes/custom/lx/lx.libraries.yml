@@ -1,0 +1,5 @@
+lx-resource-filter:
+  version: 1.x
+
+  js:
+    js/lx_resource_filter/dist/app.bundle.js: { minified: true }

@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Contains ggl_mailchimp_forms.module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function ggl_mailchimp_forms_theme() {
+  return [
+    'ggl_mailchimp_subscription_block' => [
+      'variables' => [],
+      'template' => 'block--ggl-mailchimp-subscription',
+    ],
+  ];
+}

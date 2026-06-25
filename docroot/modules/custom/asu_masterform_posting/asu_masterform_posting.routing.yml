@@ -1,0 +1,23 @@
+asu_masterform_posting.fields_admin_settings:
+  path: '/admin/structure/webform/manage/{webform}/settings/master_posting'
+  defaults:
+    _form: '\Drupal\asu_masterform_posting\Form\masterFormPosting'
+    _title: 'Master form Posting'
+  requirements:
+    _permission: 'administer webform'
+
+asu_masterform_posting.admin_settings:
+    path: '/admin/config/content/master_posting'
+    defaults:
+      _form: '\Drupal\asu_masterform_posting\Form\MasterAdminContent'
+      _title: 'Masterform admin content'
+    requirements:
+      _permission: 'administer asu_masterform_posting'
+
+asu_masterform_posting.settings:
+  path: '/admin/config/asu-masterform-posting'
+  defaults:
+    _form: '\Drupal\asu_masterform_posting\Form\AsuMasterformPostingSettingsForm'
+    _title: 'ASU Masterform posting PII Webform config'
+  requirements:
+    _permission: 'administer site configuration'

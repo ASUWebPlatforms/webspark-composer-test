@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalDependencies">
+    <plugin id="com.intellij.apacheConfig" />
+    <plugin id="com.intellij.stylelint" />
+    <plugin id="com.jetbrains.php.drupal" />
+    <plugin id="com.jetbrains.twig" />
+    <plugin id="com.kalessil.phpStorm.phpInspectionsEA" />
+    <plugin id="de.espend.idea.php.annotation" />
+    <plugin id="de.espend.idea.php.toolbox" />
+    <plugin id="intellij.prettierJS" />
+    <plugin id="lv.midiana.misc.phpstorm-plugins.deep-keys" />
+    <plugin id="org.editorconfig.editorconfigjetbrains" />
+    <plugin id="org.intellij.plugins.markdown" />
+    <plugin id="org.jetbrains.plugins.sass" />
+    <plugin id="org.jetbrains.plugins.yaml" />
+    <plugin id="de.php_perfect.intellij.ddev" />
+  </component>
+</project>

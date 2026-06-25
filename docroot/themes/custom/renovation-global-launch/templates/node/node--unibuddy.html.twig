@@ -1,0 +1,36 @@
+{# Final node template: node--unibuddy.html.twig #}
+{{ attach_library('renovation_global_launch/unibuddy-embed') }}
+
+<article class="node node--unibuddy" role="article">
+  <a id="main-content" tabindex="-1"></a>
+
+  {% set raw_value = node.field_unibuddy_src.value ?? (content.field_unibuddy_src['#items'] is defined ? content.field_unibuddy_src['#items'].get(0).value : '') %}
+  {% set src_value = raw_value ? raw_value|trim : '' %}
+
+  {% if src_value starts with('http') %}
+    {% set iframe_src = src_value %}
+  {% elseif src_value %}
+    {% set iframe_src = 'https://unibuddy.co/embed/' ~ src_value %}
+  {% else %}
+    {% set iframe_src = '' %}
+  {% endif %}
+
+  {% if iframe_src %}
+    <div class="unibuddy-embed">
+      <iframe
+        data-ub-cookie-consent="necessary"
+        data-ub-lang="en-US"
+        id="unibuddy-iframe"
+        scrolling="no"
+        src="{{ iframe_src|e('html_attr') }}"
+        title="Unibuddy"
+        width="100%">
+      </iframe>
+    </div>
+  {% else %}
+    <div class="unibuddy-embed--missing">
+      <p>No embed configured for this Unibuddy page.</p>
+    </div>
+  {% endif %}
+</article>
+

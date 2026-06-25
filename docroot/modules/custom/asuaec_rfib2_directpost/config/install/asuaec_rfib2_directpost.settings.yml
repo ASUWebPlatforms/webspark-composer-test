@@ -1,0 +1,8 @@
+#asuaec_rfi_rfipage_nid: '1939' #<--- nid of the node that have the form on.
+#asuaec_rfi_rfipage_alias: 'future-request' #<--- Used to for URL field that is posted to middleware
+#asuaec_rfib_post_url: 'https://crm-enterprise-rfi-forms-submit-handler-sandbox.sdc.uto.asu.edu/'
+#asuaec_rfib_sourceid: '7016T000002c8qMQAQ' #<--- Source ID for testing
+asuaec_rfi_jsonpath_area_of_interest_ugrad: '/admin/asuaec_rfib2/json/categories/ground/ugrad'
+asuaec_rfi_jsonpath_area_of_interest_grad: '/admin/asuaec_rfib2/json/categories/ground/grad'
+asuaec_rfi_jsonpath_area_of_interest_ugrad_online: '/admin/asuaec_rfib2/json/categories/online/ugrad'
+asuaec_rfi_jsonpath_area_of_interest_grad_online: '/admin/asuaec_rfib2/json/categories/online/ugrad'

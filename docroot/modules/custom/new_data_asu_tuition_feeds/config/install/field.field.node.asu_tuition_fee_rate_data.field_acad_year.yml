@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_acad_year
+    - node.type.asu_tuition_fee_rate_data
+id: node.asu_tuition_fee_rate_data.field_acad_year
+field_name: field_acad_year
+entity_type: node
+bundle: asu_tuition_fee_rate_data
+label: 'Acad year'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

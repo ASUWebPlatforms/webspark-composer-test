@@ -1,0 +1,223 @@
+:focus {
+  outline: 0;
+  box-shadow: 0 0 8px #00baff !important;
+}
+
+body {
+  font-family: Arial, Helvetica, "Nimbus Sans L", "Liberation Sans", FreeSans, sans-serif;
+  font-weight: 400;
+  color: #191919;
+}
+
+.text-white {
+  color: #e8e8e8 !important;
+}
+
+.text-underline {
+  text-decoration: underline;
+}
+
+.text-capitalize {
+  text-transform: capitalize !important;
+}
+
+u,
+ins {
+  -webkit-text-decoration-line: none;
+          text-decoration-line: none;
+  font-style: italic;
+}
+
+abbr {
+  -webkit-text-decoration-line: none !important;
+          text-decoration-line: none !important;
+  -webkit-text-decoration-style: none !important;
+          text-decoration-style: none !important;
+  -webkit-text-decoration-color: initial !important;
+          text-decoration-color: initial !important;
+}
+
+b,
+strong {
+  font-weight: 700 !important;
+}
+
+/* Fix btn-primary issue */
+.btn-primary {
+  background-color: #8c1d40;
+  color: #ffffff;
+}
+.btn-primary a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  color: #ffffff;
+  background-color: #8c1d40;
+  border-color: #8c1d40;
+}
+
+/* remove extra padding from nested containers */
+.container .container {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* fix pagination alignment to be centered */
+.pagination {
+  justify-content: center;
+}
+
+/* fix image carousel bullet on black bg */
+.glide__bullet--active {
+  border: 1px solid #d0d0d0 !important;
+}
+
+.goldbg {
+  background-color: #ffc627;
+}
+
+/* Size degree programs overview grid */
+.degreeprograms .row .col-lg-6 img {
+  width: auto;
+  display: block;
+  margin: 0;
+  clear: both;
+}
+
+.degreeprograms .row .col-lg-6 {
+  margin-bottom: 3px;
+  margin-top: 3px;
+}
+
+.degreeprograms .row .col-lg-6 {
+  padding: 25px;
+}
+
+@media only screen and (min-width: 992px) {
+  .bottom-row {
+    border-top: 5px dotted #000;
+  }
+
+  .degreeprograms .row .col-lg-6 {
+    border-right: 5px dotted #000;
+  }
+
+  .degreeprograms .row .col-lg-6 img {
+    height: 70px;
+    width: auto;
+  }
+
+  .degreeprograms .row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .degreeprograms .row .col-lg-6 p {
+    clear: both;
+    max-width: 300px;
+  }
+
+  .degreeprograms {
+    margin-bottom: 48px;
+  }
+}
+.degreeprograms .row .col-lg-6:last-child {
+  border-right: none;
+  padding-right: 0px;
+}
+
+.degreeprograms .row .col-lg-6 {
+  margin-bottom: 3px;
+  margin-top: 3px;
+}
+
+.firstyear.svg, .transferstudents.svg, .graduatestudents.svg, .veterans.svg {
+  height: 80px;
+}
+
+/* fix ranking comparison text bg and wrap */
+.rcontbox p {
+  font-size: 0.875rem;
+  line-height: 1.43rem;
+  letter-spacing: -0.01rem;
+}
+
+.rcontbox p span.highlight-black {
+  box-shadow: 0.3em 0 0 #191919, 0.3em 0 0 #191919;
+  background: #191919;
+  color: #ffc627;
+  padding: 5px;
+  padding-left: 0px;
+  box-shadow: -5px 0 0 #000;
+}
+
+.rcontbox p span[class^=highlight-] {
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+div.rank div.school {
+  margin-bottom: 5px;
+}
+
+.gold-downtown-bg {
+  padding: 96px 0 96px 0;
+  background-image: url(/sites/default/files/uploads/2019/08/sunset-thrive-silhouette-downtown.jpg);
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  min-height: 525px;
+  margin-bottom: -40px;
+}
+
+p.rcontext {
+  background-color: #000;
+  color: #ffc627;
+  display: inline;
+  white-space: pre-wrap;
+  line-height: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: arial, sans-serif;
+  padding: 5px;
+  padding-left: 0px;
+  box-shadow: -5px 0 0 #000;
+  -webkit-box-decoration-break: clone;
+  -o-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.watts-schools {
+  overflow: hidden;
+}
+
+.watts-schools h2 {
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+}
+
+/* Fix weird background issue for mobile */
+.layout__full-width {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.layout__full-width .layout__region--first {
+  width: 100%;
+}
+
+/* end bg fix */
+/* make watts image larger */
+@media (min-width: 768px) {
+  #about-watts > .uds-card-and-image {
+    height: 600px;
+  }
+}
+/* fix spacing on Research Projects pages */
+.field-name-field-project-team p {
+  margin: 0;
+}
+/*# sourceMappingURL=customrenovation_gcahr.style.css.map*/

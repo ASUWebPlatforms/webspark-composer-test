@@ -1,0 +1,31 @@
+<?php
+{#
+/**
+ * @file
+ * Template for a accordion block.
+ */
+#}
+{% set classes = [
+    'block',
+    'block-' ~ configuration.provider|clean_class,
+    'block-' ~ plugin_id|clean_class,
+] %}
+
+<div{{ attributes.addClass(classes) }}>
+{{ title_prefix }}
+  {% if label %}
+    {% block label %}
+<h2{{ title_attributes }}>{{ label }}</h2>
+{% endblock %}
+  {% endif %}
+  {{ title_suffix }}
+  {{ content.field_anchor_menu_settings }}
+  {{ content.field_tooltip }}
+  {% set unique_id = block.id.value %}
+
+<div class="aventri-block spacing-top-96 spacing-bottom-96">
+  <script src="https://na-admin.eventscloud.com/widgets/static/embed/embed-0.0.1.min.js" defer></script>
+  <div class="aventri-widget" data-type="AgendaWidget" data-widgetid="{{ content.field_widget_id.x-default.0 }}" data-accountid="6377" data-language="eng"></div>
+</div>
+
+</div>

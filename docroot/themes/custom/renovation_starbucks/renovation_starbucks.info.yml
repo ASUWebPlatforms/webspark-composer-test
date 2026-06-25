@@ -1,0 +1,22 @@
+name: Renovation Starbucks
+type: theme
+description: This is a Starbucks sub-theme of the Webspark theme Renovation
+core: 10.x
+core_version_requirement: ^10
+# Defines the base theme
+base theme: renovation
+
+libraries:
+  - renovation_starbucks/global-styling
+
+components:
+  namespaces:
+    starbucks: ./src/components
+
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer

@@ -1,0 +1,71 @@
+{% if submitted %}
+	<div class="container bg-white p-4 rounded shadow" style="max-width: 900px;">
+		<h2 class=" fw-bold">{{ title }}</h2>
+		<p>{{ description }}</p>
+
+		<div class="uds-table mt-4">
+			<table>
+				<thead>
+					<tr>
+						{% for header in table_header %}
+							<th>{{ header }}</th>
+						{% endfor %}
+					</tr>
+				</thead>
+				<tbody>
+					{% for row in table_rows %}
+						<tr>
+							<td>
+								<strong>{{ row.title }}</strong>
+							</td>
+							<td>{{ row.risk }}</td>
+							<td>{{ row.success }}</td>
+							<td>{{ row.impact }}</td>
+							<td>{{ row.impact_length }}</td>
+							<td>{{ row.law_enforcement }}</td>
+							<td>{{ row.crime_prevention }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+
+		<div class=" mt-4">
+			<p>
+				<strong>Risk</strong>
+			</p>
+			<p>
+				Possibility of loss of community support, community conflict, demonstrations, bad publicity, law suits, overloading criminal justice system</p>
+			<p>
+				<strong>Chances of success</strong>
+			</p>
+			<p>
+				Low vs. high probability of success if attempted, short term vs. long term impact if implemented, and low vs. high impact if successfully implemented
+			</p>
+			<p>
+				<strong>
+					Law enforcement preference
+				</strong>
+			</p>
+			<p>
+				For extensive involvement of criminal justice and legal system, courts, sentencing, court orders, etc.; traditional law enforcement responses of arrest, control etc.
+			</p>
+			<p>
+				<strong>Crime Prevention preference</strong>
+			</p>
+			<p>
+				Preference for environmental changes that will have long term, permanent effects; changes of traffic flows, street lighting etc. These are interventions that avoid direct involvement of police except for focus on high risk offenders. Gets at underlying causes of the problem.
+			</p>
+
+
+			<a class="btn btn-maroon" href="/learning/prostitution/feedback/ideal-plan" role="button">
+				<span class="text">Continue</span>
+			</a>
+		</div>
+	</div>
+{% else %}
+	<p>You have not submitted a plan yet.</p>
+	<p>Please return to
+		<a href='/learning/prostitution/plan/reviewmyplan'>Review My Plan</a>
+		and submit it first.</p>
+{% endif %}

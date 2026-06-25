@@ -1,0 +1,13 @@
+// Standard teaser --------------------
+[class*="__teaser"] {
+  .card {
+    min-height: 265px;
+  }
+}
+
+// Minimal teaser ---------------------
+[class*="__minimal-teaser"] {
+  .btn.btn-tag {
+    @apply tw-mt-0;
+  }
+}

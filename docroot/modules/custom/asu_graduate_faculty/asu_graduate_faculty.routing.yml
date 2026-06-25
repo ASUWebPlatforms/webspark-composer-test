@@ -1,0 +1,45 @@
+asu_graduate_faculty.settings:
+  path: '/admin/config/asu_graduate_faculty/settings'
+  defaults:
+    _form: '\Drupal\asu_graduate_faculty\Form\SettingsForm'
+    _title: 'ASU Graduate Faculty Settings'
+  requirements:
+    _permission: 'administer site configuration'
+asu_graduate_faculty.search:
+  path: '/graduate-faculty'
+  defaults:
+    _controller: '\Drupal\asu_graduate_faculty\Controller\SearchPageController::content'
+    _title: 'Graduate College'
+  requirements:
+    _access: 'TRUE'
+asu_graduate_faculty.person:
+  path: '/graduate-faculty/person/{person}'
+  defaults:
+    _controller: '\Drupal\asu_graduate_faculty\Controller\GraduateFacultyController::person'
+    _title: 'Graduate Faculty Person'
+  requirements:
+    _permission: 'access content'
+    person: '.+'
+asu_graduate_faculty.degree:
+  path: '/graduate-faculty/degree/{degree}'
+  defaults:
+    _controller: '\Drupal\asu_graduate_faculty\Controller\GraduateFacultyController::degree'
+    _title: 'Graduate Faculty Degree'
+  requirements:
+    _permission: 'access content'
+    degree: '.+'
+asu_graduate_faculty.category:
+  path: '/graduate-faculty/category/{category}'
+  defaults:
+    _controller: '\Drupal\asu_graduate_faculty\Controller\GraduateFacultyController::category'
+    _title: 'Graduate Faculty Category'
+  requirements:
+    _permission: 'access content'
+    category: '.+'
+asu_graduate_faculty.endorsement_info:
+  path: '/graduate-faculty/employee/endorsement/{eid}'
+  defaults:
+    _controller: '\Drupal\asu_graduate_faculty\Controller\EndorsementController::getInfo'
+  requirements:
+    _permission: 'access content'
+    eid: '\d+'

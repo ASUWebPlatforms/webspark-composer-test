@@ -1,0 +1,27 @@
+<?php
+
+
+{% set classes = [
+    'block',
+    'block-layout-builder',
+    'default',
+    'clearfix',
+    'block-' ~ configuration.provider|clean_class,
+    'block-' ~ plugin_id|clean_class,
+] %}
+
+  {{ attach_library('aventri_event_embed/aventri_event_embed') }}
+
+<div {{ attributes.addClass(classes) }}>
+{{ title_prefix }}
+  {% if label %}
+    {% block label %}
+      <h2{{ title_attributes }}>{{ label }}</h2>
+    {% endblock %}
+  {% endif %}
+  {{ title_suffix }}
+<div class="aventri-block spacing-top-96 spacing-bottom-96">
+  <div class="aventri-widget" data-type="AgendaWidget" data-widgetid={{ widget_id }} data-accountid={{ account }} data-language="eng"></div>
+</div>
+
+

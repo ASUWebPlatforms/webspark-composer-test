@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+id: which_view_appeals_you_the_most
+label: 'Which view appeals you the most'
+category: ASU
+likert: false
+options: |-
+  Tempe_campus-16q: '<img class=''cfimg'' src="/sites/default/files/2022-08/downtown1.png" />'
+  Downtown-16q: '<img class=''cfimg'' src="/sites/default/files/2022-08/downtown1.png" />'
+  Poly-16q: '<img class=''cfimg'' src="/sites/default/files/2022-08/poly1.png" />'
+  West-16q: '<img class=''cfimg'' src="/sites/default/files/2022-08/west1.png" />'
+  Havasu-16q: '<img class=''cfimg'' src="/sites/default/files/2022-08/havasu1.png" />'

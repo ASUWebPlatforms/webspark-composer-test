@@ -1,0 +1,9 @@
+wpc_rfi_forms.configuration_form:
+  path: 'admin/config/system/configuration/wpc_rfi_forms'
+  defaults:
+    _form: '\Drupal\wpc_rfi_forms\Form\WpcFormsSettingsForm'
+    _title: 'WPC RFI Forms Configuration'
+  requirements:
+    _permission: 'administer wpc_rfi_forms'
+  options:
+    _admin_route: TRUE

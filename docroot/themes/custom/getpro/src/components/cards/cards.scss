@@ -1,0 +1,35 @@
+// Overrides for card functionality.
+
+.card.card-horizontal {
+  picture {
+    img.card-img-top {
+      max-width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.card {
+  margin-bottom: 1.5rem;
+
+  img.card-img-top {
+    border-radius: 0;
+  }
+}
+
+.uds-card-arrangement-card-container {
+  .card-header {
+    padding-bottom: 16px;
+  }
+}
+.uds-card-arrangement>.uds-card-arrangement-content-container {
+  a {
+    margin-left: auto;
+  }
+}
+.uds-card-arrangement.uds-card-arrangement-vertical>.uds-card-arrangement-content-container {
+  a {
+    margin: initial
+  }
+}
+

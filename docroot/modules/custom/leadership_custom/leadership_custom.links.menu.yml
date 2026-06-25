@@ -1,0 +1,6 @@
+leadership_custom.configuration_form:
+  title: 'Website Feature Blocks '
+  description: 'Leadership Custom Features Admin Configuration'
+  parent: system.admin_config_system
+  route_name: leadership_custom.configuration_form
+  weight: 100

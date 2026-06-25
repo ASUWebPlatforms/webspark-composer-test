@@ -1,0 +1,9 @@
+/* Override */
+body form.uds-form {
+  input[type="text"] {
+    padding-left: 1rem !important;
+  }
+  input[type="submit"].btn-sm {
+    padding-left: 1rem !important;
+  }
+}

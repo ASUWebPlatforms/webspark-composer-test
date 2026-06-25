@@ -1,0 +1,15 @@
+{{ text }}
+{% for  i in 0..count %}
+  <a
+    href="{{ links[i]['#url'] }}"
+    data-ga-rankings-carousel-event = "link"
+    data-ga-rankings-carousel-action = "click"
+    data-ga-rankings-carousel-name = "onclick"
+    data-ga-rankings-carousel-type = "internal link"
+    data-ga-rankings-carousel-region = "main content"
+    data-ga-rankings-carousel-section = "i am a future"
+    data-ga-rankings-carousel = "{{ links[i]['#title']|lower }}"
+  >
+    {{ links[i]['#title'] }}
+  </a>
+{% endfor %}

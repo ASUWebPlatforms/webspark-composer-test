@@ -1,0 +1,64 @@
+ajax_state:
+  version: 1.x
+  js:
+    js/sp_learningmod_ajax.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - core/once
+
+budget_banner:
+  version: 1.x
+  css:
+    theme:
+      css/budget_banner.css: {}
+  js:
+    js/budget_banner.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+
+budget_update:
+  version: 1.x
+  js:
+    js/budget_update.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+    - sp_learningmod/budget_banner
+
+cq_style:
+  version: 1.x
+  css:
+    theme:
+      css/cq_style.css: {}
+
+council_meeting:
+  version: 1.x
+  css:
+    theme:
+      css/council_meeting.css: {}
+
+feedback_styles:
+  version: 1.x
+  css:
+    theme:
+      css/feedback_styles.css: {}
+
+map_navigation:
+  version: 1.x
+  js:
+    js/map_navigation.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+
+ideal_plan_modal:
+  version: 1.x
+  js:
+    js/ideal_plan_modal.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

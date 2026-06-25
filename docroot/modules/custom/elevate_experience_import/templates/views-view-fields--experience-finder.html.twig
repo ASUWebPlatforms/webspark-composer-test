@@ -1,0 +1,40 @@
+{#
+/**
+ * @file
+ * Experience Finder card (one result row).
+ *
+ * Available: fields.title, fields.field_location, fields.body,
+ * fields.field_image, fields.field_new_cta_link.
+ */
+#}
+{% set image = fields.field_image.content|render|trim %}
+{% set location = fields.field_location.content|render|striptags|trim %}
+{% set nid = fields.nid.content|render|striptags|trim %}
+<article class="experience-card">
+  <div class="experience-card__media">
+    {% if image is not empty %}
+      <div class="experience-card__image">{{ fields.field_image.content }}</div>
+    {% elseif ef_placeholder %}
+      <div class="experience-card__image">
+        <img class="experience-card__image-img" src="{{ ef_placeholder.url }}" alt="{{ ef_placeholder.alt }}" loading="lazy">
+      </div>
+    {% else %}
+      <div class="experience-card__image experience-card__image--placeholder" aria-hidden="true"></div>
+    {% endif %}
+    <button type="button" class="experience-card__fav" data-experience-fav data-nid="{{ nid }}" aria-pressed="false" aria-label="{{ 'Add to favorites'|t }}">
+      <svg class="experience-card__fav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M12 21s-7.5-4.7-10-9.2C.6 9 1.6 5.5 4.7 4.6 6.9 4 9 5 12 7.7 15 5 17.1 4 19.3 4.6c3.1.9 4.1 4.4 2.7 7.2C19.5 16.3 12 21 12 21z"/>
+      </svg>
+    </button>
+  </div>
+  <div class="experience-card__body">
+    <h3 class="experience-card__title">{{ fields.title.content }}</h3>
+    {% if location is not empty %}
+      <p class="experience-card__location">{{ fields.field_location.content }}</p>
+    {% endif %}
+    <div class="experience-card__description">{{ fields.body.content }}</div>
+    {% if fields.field_new_cta_link.content|render|trim is not empty %}
+      <div class="experience-card__cta">{{ fields.field_new_cta_link.content }}</div>
+    {% endif %}
+  </div>
+</article>

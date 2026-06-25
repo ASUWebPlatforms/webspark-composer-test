@@ -1,0 +1,5 @@
+name: asuaec_tuition_calendar
+type: module
+description: 'ASU AEC custom module for Tuition calendar section related items'
+package: ASU
+core_version_requirement: ^9 || ^10 || ^11

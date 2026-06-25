@@ -1,0 +1,69 @@
+{#
+/**
+ * @file
+ * Template for a Nav component.
+ *
+ * Available config:
+ * - alignment: left | right | center | vertical.
+ * - style: tabs | pills
+ * - fill: fill | justify
+ * - utility_classes: An array of utility classes.
+ */
+#}
+{% import _self as menus %}
+
+{% set alignment = 'flex-column' %}
+
+{% set nav_classes = [ 'nav', style, alignment, fill]|merge(utility_classes ? utility_classes : []) %}
+
+{% if items %}
+  <h3>{{ title }}</h3>
+  <div class="sidebar-toggler" data-toggle="collapse" data-target="#sidebar-left" aria-expanded="false" aria-controls="sidebar-left">
+    <p>Select Section</p>
+    <span class="fas fa-chevron-up"/>
+  </div>
+  <nav id="sidebar-left" class="sidebar collapse" aria-label="Secondary">
+    {% block items %}
+      {% for item in items %}
+        {% set nav_link_class = [
+          'nav-link',
+          item.in_active_trail ? 'active',
+        ] %}
+        {% if item.is_expanded and item.below %}
+          <div class="card card-foldable">
+
+            <div class="card-header">
+              <a id="{{ item.title|replace({' ' : '-'})|lower }}"
+                 class="collapsed nav-link"
+                 href="#cardBody{{ item.title|replace({' ' : '-'})|lower }}"
+                 data-toggle="collapse"
+                 data-target="#cardBody{{ item.title|replace({' ' : '-'})|lower }}"
+                 aria-expanded="false"
+                 aria-controls="cardBody{{ item.title|replace({' ' : '-'})|lower }}">
+                {{ item.title }}
+                <span class="fas fa-chevron-up"></span>
+              </a>
+            </div>
+
+            <div id="cardBody{{ item.title|replace({' ' : '-'})|lower }}"
+                 class="collapse card-body"
+                 aria-labelledby="{{ item.title|replace({' ' : '-'})|lower }}"
+                 data-parent=".sidebar">
+              {% if item.below %}
+                {% for subitem in item.below %}
+                  {{ link(subitem.title, subitem.url, { 'class': nav_link_class }) }}
+                {% endfor %}
+              {% endif %}
+
+            </div><!-- end .card-body -->
+
+          </div><!-- end .card -->
+        {% else %}
+          <div class="nav-link-container">
+            {{ link(item.title, item.url, { 'id': item.title|replace({' ' : '-'})|lower, 'class': nav_link_class }) }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% endblock %}
+  </nav><!-- end .sidebar -->
+{% endif %}

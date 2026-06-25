@@ -1,0 +1,10 @@
+<?php
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function custom_styles_preprocess_html(array &$variables)
+{
+  $variables['#attached']['library'][] = 'custom_styles/custom_styles';
+  $variables['#attached']['library'][] = 'custom_styles/accordion_script';
+}

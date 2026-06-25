@@ -1,0 +1,106 @@
+{#
+@file
+The template for the Report hero.
+Note that this template can apply to more than one content type.
+
+Available variables:
+- certified: Boolean. If the report is certified.
+- type: The report type/bundle.
+- heading: The report heading.
+- description: The report description.
+- author: The email or name of the report author.
+- pills: An array of objects containing the taxonomy data.
+  - title: The taxonomy name.
+  - data: Array of taxonomy terms.
+- source: The URL to the original report.
+- modal: Bool. Optionally view the source report in a modal.
+- group: The Group entity the report is associated with.
+
+Available macros:
+- tags: Generate markup for the tags.
+- published: Generate markup for the published date.
+
+Available Twig variables:
+- favorites_link: The markup for the favorites link.
+- has_group_access: If the current user is a member of the group.
+#}
+
+{% from '@analytics/macros.html.twig' import tags %}
+
+<div class="spacing-top-48 spacing-bottom-72">
+  <div class="container">
+    <div class="row gy-3">
+      <div class="col-sm-12 col-lg-9">
+        {% if has_group_access(group.id.value) %}
+          {{ favorites_link }}
+        {% else %}
+          <div class="tw-flex tw-justify-center tw-items-center" style="width: 23px; height: 24px;">
+            <span class="fas fa-lock"></span>
+          </div>
+        {% endif %}
+
+        {% if certified %}
+          <div class="tw-text-sm tw-py-2 tw-px-4 tw-border-2 tw-border-solid tw-border-slate-200 tw-rounded-full tw-inline-block">
+            {{ include('@partials/svg/badge.html.twig') }}
+            <strong>Certified</strong> {{ type|replace({ '_': ' ' })|title }}
+          </div>
+        {% endif %}
+
+        <h2 class="meta-title tw-mt-5">{{ heading }}</h2>
+
+        <p>{{ description }}</p>
+
+        <div class="published">
+          <strong>Published:</strong> {{ time_ago() }} by <span class="tw-text-asu-maroon">{{ author }}</span>
+        </div>
+
+        <div class="metadata row mt-1">
+          {% if pills %}
+            {% for pill in pills %}
+              {{ tags(pill.title, pill.data) }}
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-lg-3">
+        {% if group %}
+          <div class="analytics-group">
+            Group:
+            <h5 class="tw-mt-1">
+              {% if has_group_access(group.id.value) %}
+                <a href="{{ group|entity_url }}">{{ group.label.value }}</a>
+              {% else %}
+                {{ group.label.value }}
+              {% endif %}
+            </h5>
+            {% if not has_group_access(group.id.value) and group.field_allow_requests.value %}
+              <a href="#"
+                class="btn btn-primary btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#access-request-modal"
+                data-bs-group-name="{{ group.label.value }}">Request Group Access</a>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if has_group_access(group.id.value) %}
+          {% if node.bundle == 'report' %}
+            <div class="view-original tw-mt-16">
+              <span class="fas fa-external-link-alt"></span>
+              {# Button to trigger the fullscreen modal wihtin fullscreen-modal.html.twig #}
+              <a role="button" href="" data-bs-toggle="modal" data-bs-target="#report-modal">View fullscreen</a>
+            </div>
+          {% endif %}
+
+          {% if source %}
+            <div class="view-original mt-1">
+              <span class="fas fa-external-link-alt"></span>
+              <a href="{{ source }}">View original report</a>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

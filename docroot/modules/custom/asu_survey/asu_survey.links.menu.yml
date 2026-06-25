@@ -1,0 +1,10 @@
+asu_survey.admin_settings:
+  title: 'ASU Survey Quiz'
+  description: 'Administer Survey quiz settings'
+  route_name: asu_survey.admin_settings
+  parent: 'system.admin_config_system'
+  weight: -20
+
+    
+    
+    

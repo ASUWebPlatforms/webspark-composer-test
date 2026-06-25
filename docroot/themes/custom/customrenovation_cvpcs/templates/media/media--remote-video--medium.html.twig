@@ -1,0 +1,6 @@
+<div style="max-width:560px; margin-bottom:2rem;">
+{% include '@renovation/video/video.twig' with {
+  media: content.field_media_oembed_video ? content.field_media_oembed_video : content.thumbnail,
+  player_class: content.field_media_oembed_video ? "youtube-video" : "",
+} %}
+</div>

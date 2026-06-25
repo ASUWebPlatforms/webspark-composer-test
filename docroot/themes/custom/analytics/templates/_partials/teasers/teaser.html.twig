@@ -1,0 +1,114 @@
+{#
+@file
+The template for the standard teaser.
+
+Available variables:
+- type: The type of card. Either 'card' or 'story'.
+- image: The Image object.
+  - url: The image URL.
+  - alt: The image alt text.
+- favorite: Boolean. Whether or not to show the favorites icon.
+- title: The title.
+- content: The content.
+- button: Array of button objects.
+  - url: The button URL.
+  - color: The button color (maroon, gold, dark).
+  - text: The button text.
+- link: Array of link objects.
+  - url: The link URL.
+  - text: The link text.
+- tags: Array of tag objects.
+  - type: The tag type. Either 'alt' or 'standard'.
+  - background: The tag background color.
+  - data: Array of tag objects.
+#}
+{# TODO: Create a way to allow a user to either view or edit the node, base upon path or permissions #}
+
+<style>
+  .teaser--card .card-icon-top .flag a { font-size: 1.5rem; }
+  .teaser--card .card-icon-top .flag-title { display: none; }
+</style>
+
+<div class="teaser--card card {{ type == 'story' ? 'card-story' }}">
+  {% if image.url %}
+    <img class="card-img-top"
+      src="{{ image.url }}"
+      alt="{{ image.alt }}"
+      width="600"
+      height="337"
+      loading="lazy"
+      decoding="async"
+      fetchpriority="high"/>
+  {% endif %}
+
+  {% if type != 'story' %}
+    {% if favorite %}
+      <div class="card-icon-top">
+        {{ favorites_link }}
+      </div>
+    {% endif %}
+  {% endif %}
+
+  {% if title %}
+    <div class="card-header">
+      <h3 class="card-title">{{ title }}</h3>
+    </div>
+  {% endif %}
+
+  {% if content %}
+    <div class="card-body">
+      <p class="card-text">{{ content }}</p>
+    </div>
+  {% endif %}
+
+  {% if button %}
+    <div class="card-buttons">
+      <div class="card-button">
+        {# TODO: If the current user has permission to edit the content, give them the option to edit it #}
+        <a href="{{ button.url }}"
+          class="btn btn-md btn-{{ button.color|default('maroon') }}"
+          data-ga="Button link here"
+          data-ga-name="onclick"
+          data-ga-event="link"
+          data-ga-action="click"
+          data-ga-type="internal link"
+          data-ga-region="main content"
+          data-ga-section="card default title">
+          {{ button.text }}
+        </a>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if link %}
+    <div class="card-link">
+      <a href="{{ link.url }}"
+        class=""
+        data-ga="Regular text link here"
+        data-ga-name="onclick"
+        data-ga-event="link"
+        data-ga-action="click"
+        data-ga-type="internal link"
+        data-ga-region="main content"
+        data-ga-section="card default title">
+        {{ link.text }}
+      </a>
+    </div>
+  {% endif %}
+
+  {% if tags.data is not empty %}
+    {% set array = [tags.data] %}
+
+    <div class="card-tags">
+      {% for item in array %}
+        {% if tags.type == 'alt' %}
+          {# Alternate tag, no link, optional background colors (bg-gray-2, bg-gray-7) #}
+          <span class="badge text-{{ tags.background|default('bg-gray-2') }}">{{ item['#title'] }}</span>
+        {% else %}
+          {# Standard tag, links out #}
+          <a class="btn btn-tag btn-tag-alt-white" href="{{ item['#url'] }}">{{ item['#title'] }}</a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>

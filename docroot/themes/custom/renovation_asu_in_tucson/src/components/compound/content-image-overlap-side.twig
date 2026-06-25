@@ -1,0 +1,50 @@
+<div class="container">
+
+  {% for card in cards %}
+  <div class="row">
+    <div class="col-md-12">
+
+      <div class="uds-image-overlap">
+
+        <img class="img-fluid" src="{{ card.media }}">
+
+        <div class="content-wrapper">
+          {% include '@renovation/headings/card-heading.twig' with {
+            html_tag : 'h2',
+            heading: card.heading,
+          } %}
+
+          <div class="card-body">{{ card.body|raw }}</div>
+
+          <div class="card-button">
+            {% for cta in card.links %}
+              {% include '@renovation/links/cta-link.twig' with {
+                url: cta.uri,
+                label: cta.title,
+                size: '',
+                options: cta.options,
+                color: 'maroon',
+              } %}
+            {% endfor %}
+          </div>
+
+          <div class="card-button">
+            {% for cta in card.ctas %}
+              {% include '@renovation/links/cta-link.twig' with {
+                url: cta.uri,
+                label: cta.title,
+                size: loop.first ? '' : '-sm',
+                options: cta.options,
+                color: 'maroon',
+              } %}
+            {% endfor %}
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+  {% endfor %}
+
+</div>

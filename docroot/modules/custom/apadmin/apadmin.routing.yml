@@ -1,0 +1,34 @@
+apadmin.apadmin:
+  path: '/aportal-admin'
+  defaults:
+    _controller: '\Drupal\apadmin\Controller\ApAdminController::apadminLoad'
+    _title: 'Assessment Portal - Admin Page'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+apadmin.post:
+  path: '/aportal-admin/php/post'
+  defaults:
+    _controller: '\Drupal\apadmin\Controller\ApAdminController::apadminPost'
+    _title: 'Assessment Portal Admin - post'
+  methods:  'POST'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+apadmin.archive:
+  path: '/aportal-admin/php/archive/{tableKey}'
+  defaults:
+    _controller: '\Drupal\apadmin\Controller\ApAdminController::apadminArchive'
+    _title: 'Assessment Portal Admin - Get Archive Table'
+  methods:  'GET'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+apadmin.sync:
+  path: '/aportal-admin/php/sync'
+  defaults:
+    _controller: '\Drupal\apadmin\Controller\ApAdminController::apadminSync'
+    _title: 'Assessment Portal Admin - sync'
+  methods:  'GET'
+  requirements:
+    _user_is_logged_in: 'TRUE'

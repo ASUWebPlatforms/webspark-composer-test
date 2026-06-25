@@ -1,0 +1,27 @@
+@import '../../sass/extends/sidebar';
+
+.sidebar {
+
+  .nav-link {
+    &.active,
+    &.is-active {
+      text-decoration: none;
+      padding-bottom: 0;
+    }
+
+    &.active:after,
+    &.is-active:after {
+      content: '';
+      position: relative;
+      display: block;
+      margin-top: $uds-size-spacing-2;
+      height: $uds-size-spacing-1;
+      width: 100%;
+      background-color: $uds-color-base-gold;
+      text-decoration: none;
+    }
+  }
+  .card.card-foldable {
+    margin-bottom: 0;
+  }
+}

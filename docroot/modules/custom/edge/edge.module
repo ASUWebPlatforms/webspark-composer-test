@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function edge_theme($existing, $type, $theme, $path) {
+  return [
+    "affiliates" => [
+      "variables" => [
+        "nodes" => null,
+      ],
+      "template" => "block--affiliates",
+      "path" => "modules/custom/edge/templates/block",
+    ],
+    "block__slider" => [
+      "base hook" => "block",
+      "template" => "block--slider",
+      "path" => "modules/custom/edge/templates/block",
+    ],
+    "views_view__taxonomy_term" => [
+      "base hook" => "views_view",
+      "template" => "views-view--taxonomy-term",
+      "path" => "modules/custom/edge/templates/views",
+    ],
+    "views_view_fields__taxonomy_term" => [
+      "base hook" => "views_view_fields",
+      "template" => "views-view-fields--taxonomy-term",
+      "path" => "modules/custom/edge/templates/views",
+    ],
+  ];
+}

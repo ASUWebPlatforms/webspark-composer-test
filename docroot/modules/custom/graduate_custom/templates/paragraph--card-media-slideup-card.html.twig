@@ -1,0 +1,22 @@
+
+  
+  {% set card_background = file_url(content.field_media[0]['#media'].field_media_image.entity.uri.value) %}
+  {% set url = content.field_cta_link[0]['#url'] %}
+  {% set title = content.field_cta_link[0]['#title'] %}
+
+  <div class="tile" id="card-{{ paragraph.uuid.value }}" style="background: url('{{ card_background }}')">
+    <div class="image-holder"></div>
+    <div class="tileContent">
+      <h2 class="card-title">{{ content.field_heading|render|striptags|trim }}</h2>
+      <div class="description">
+        {{ content.field_formatted_text|render }}
+        <a href="{{ url|render|trim|striptags }}" class="btn btn-lg btn-gold" role="link" data-ga-animated-content-section-section="{{ content.field_heading|render|striptags|trim }}" data-ga-animated-content-section="learn more" title="Learn More">
+        {% if title|render == url|render %}
+          <i class="fas fa-arrow-right"></i>
+        {% else %}
+          {{ title }}
+        {% endif %}
+        </a>
+      </div>
+    </div>
+  </div>

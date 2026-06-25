@@ -1,0 +1,304 @@
+/* CSS-only tooltip (multiple allowed) */
+/*.css-tooltip { position: relative; display: inline-block; margin-left: 6px; }
+.css-tooltip-trigger {
+  background: none; border: none; padding: 0; cursor: pointer;
+}
+.css-tooltip-content {
+  display: none;
+  position: absolute;
+  top: 3%;
+  left: 5%;
+  transform: translateY(6px);
+  min-width: 200px;
+  max-width: 320px;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 8px;
+  z-index: 9999;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  border-radius: 4px;
+}
+
+
+.css-tooltip:hover .css-tooltip-content,
+.css-tooltip:focus-within .css-tooltip-content {
+  display: block;
+}
+
+.visually-hidden { position: absolute; left: -9999px; } */
+
+button.uds-tooltip .fa-circle{
+  color: #191919 !important;
+}
+
+.scholar-grant-btn-add {
+ /* background: #0b7dda; color: #fff; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer;  font-weight: 700;*/
+ box-shadow: none !important;
+ background: none !important;
+ border: none !important;
+ font-size: 1rem;
+ cursor: pointer;
+}
+
+.scholar-grant-btn-add:focus {
+ box-shadow: none !important;
+ background: none !important;
+ border: none !important;
+}
+
+/* Show a visible focus ring when navigating by keyboard */
+.scholar-grant-btn-add:focus-visible {
+ outline: 2px solid #8c1d40;
+ outline-offset: 3px;
+ border-radius: 3px;
+}
+
+.print-button{
+  border: none;
+  box-shadow: none !important;
+  text-decoration: underline;
+  color: #8c1d40;
+}
+
+.gold-table-header{ 
+  background:#ffc627; 
+}
+
+.custom-form-control{
+  appearance: none;
+  background-clip: padding-box;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  display: block;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: .5rem;
+  transition: border-color .15s 
+  ease-in-out, box-shadow .15s 
+  ease-in-out;
+  width: 100%;
+}
+
+.hide-header{
+  display: none;
+}
+
+.total-calc-tables{
+   margin-top: 50px;
+}
+
+.total-row{
+  border-collapse: separate;
+  border-spacing: 0 12px;
+}
+
+#react-cost-comparison .react-table .annual-costs, #react-cost-comparison .react-table .annual-costs td, #react-cost-comparison .react-table .remaining-total td {
+  background-color: #191919 !important;
+  color: #ffffff;
+  vertical-align: middle;
+}
+
+.react-table .total-rows td{
+  font-size: 1.2rem !important;
+}
+
+input.form-textfield.form-control.total-form-control, input.form-textfield.form-control.total-form-control:focus{
+  border: none !important;
+
+}
+
+input.form-textfield.form-control.gray-form-control, input.form-textfield.form-control.gray-form-control:focus{
+  background-color: #e8e8e8 !important;
+}
+
+input.form-textfield.form-control.annual-form-control, input.form-textfield.form-control.annaul-form-control:focus{
+  background-color: #191919 !important;
+  color:#ffffff;
+}
+
+input.form-textfield.form-control.maroon-form-control, input.form-textfield.form-control.maroon-form-control:focus{
+  background-color: #8c1d40!important;
+  color: #ffffff;
+}
+
+
+#react-cost-comparison .react-table .gold-table-header th{
+  background-color: #ffc627;
+  /* box-shadow: -.15em 0 0 #ffc627, .15em 0 0 #ffc627; */
+  color: #191919;
+  font-size: 1.1em;
+}
+
+th.financeHeaderText {
+  font-size: 1.25rem;
+}
+
+.flex-custom-column{
+  display: flex;
+}
+
+#react-cost-comparison .react-table .maroon-row td{
+   background-color: #8c1d40 !important;
+   color: #ffffff !important;
+}
+
+#react-cost-comparison .react-table .gray-row td{
+  background-color: #e8e8e8 !important;
+  
+}
+
+.gray-radio-block{
+  padding:25px;
+  font-size: 20px;
+  border: 1px solid #191919;
+  height: 250px;
+  margin: 20px;
+  border-radius: 5%;
+}
+
+.color-fa{
+  color: #8c1d40;
+  font-size: 25px;
+}
+
+.form-check-label {
+  display: block;
+  margin: 10px;
+  font-size: 0.9em;
+  font-weight: 300;
+}
+
+.react-input{
+  border-radius: 50%;
+  border-color: #191919;
+  margin-right: 2px;
+}
+
+.total-row{
+  margin-top: 30px !important;
+  margin-bottom: 30px !important;
+}
+
+.annual-costs, .remaining-total{
+  background-color: #191919 !important;
+  color: #ffffff;
+}
+
+/* .financialTableDiv .aid-table thead, .financialTableDiv .aid-table tr{
+  background-color: #191919 !important;
+  color: #fff;
+  padding: 1rem;
+} */
+
+.blackTableHeader, .blackTableHeader th {
+  background: #191919 !important;
+  color: #fff !important;
+  padding: 1rem !important;
+}
+
+.hide-header{
+  display: none;
+}
+
+.total-calc-tables{
+   margin-top: 50px;
+}
+
+.submitButtons{
+  display: flex;
+  flex-direction: row;
+}
+
+.rightsideTextDiv{
+  margin-top: 20px;
+}
+
+#email-modal-div{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-card{
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.total-calc-tables input:focus{
+  box-shadow: none !important;
+}
+
+.label-cell {
+  width: 200px; /* adjust to desired width */
+  min-width: 200px;
+  max-width: 200px;
+ /* white-space: nowrap;*/
+}
+
+.error-text, .error{
+  color: #cc2f2f;
+}
+
+.custom-bottom-text{
+  background: #ffffff !important;
+}
+
+
+/* debug: remove transitions to confirm CSS isn't the cause */
+input, .form-textfield { transition: none !important; outline: none !important; box-shadow: none !important; }
+
+
+/* PDF-specific styles */
+.pdf-mode  .no-print {
+  display: none !important;
+}
+
+.pdf-mode .form-textfield::placeholder {
+  color: transparent !important;
+}
+
+.highlight-black td{
+  background-color: #191919 !important;
+  color: #fff !important;
+}
+
+.gold-table-header th {
+  background-color: #FFD700 !important;
+}
+
+.pdf-mode .gray-row {
+  background-color: #f0f0f0 !important;
+}
+
+div[role=tooltip].uds-tooltip-description .tip-content {
+  width: 100%;            /* fill parent width */
+  height: auto;           /* auto height to fit content */
+  max-height: none;       /* remove any scroll constraints */
+  box-sizing: border-box;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.total_headText{
+  font-size: 1.25rem;
+  letter-spacing: -.01875rem;
+  line-height: 1.625rem;
+}

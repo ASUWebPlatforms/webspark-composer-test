@@ -1,0 +1,12 @@
+/* Add circle to arrow */
+.asu-course-details-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #d0d0d0;
+  border-radius: 50%;
+  font-size: 16px;
+  line-height: 1;
+}

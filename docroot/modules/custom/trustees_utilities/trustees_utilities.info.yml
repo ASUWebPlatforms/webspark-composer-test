@@ -1,0 +1,5 @@
+name: 'Trustees Utilities'
+type: module
+description: 'A module to add custom CSS and JS.'
+core_version_requirement: ^9 || ^10
+package: Custom

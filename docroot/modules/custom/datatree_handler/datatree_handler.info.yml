@@ -1,0 +1,7 @@
+name: 'Datatree hanlder'
+type: module
+description: 'Datatree submission handler, provides custom submission messages based on tagging'
+package: 'Custom'
+core_version_requirement: ^9.4 || ^10
+dependencies:
+  - 'webform:webform'

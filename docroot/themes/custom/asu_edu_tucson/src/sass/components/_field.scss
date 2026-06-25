@@ -1,0 +1,19 @@
+.asu-edu-text-distinguished {
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    font-size: $uds-size-font-xl;
+    line-height: 1.75rem;
+  }
+
+}
+
+.asu-edu-text-distinguished-2 {
+  font-size: $uds-size-font-large;
+}
+
+.asu-edu-future-students__field-paragraph {
+  button {
+    &.btn-gold {
+      display: none;
+    }
+  }
+}

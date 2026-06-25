@@ -1,0 +1,550 @@
+langcode: en
+status: open
+dependencies:
+  module:
+    - asu_campus_fit
+open: null
+close: null
+weight: 0
+uid: 56
+template: false
+archive: false
+id: campus_fit
+title: 'Campus fit'
+description: ''
+category: ''
+elements: |-
+  asu_can_help_you_achieve_your_academic_goals_no_matter_what_they:
+    '#type': radios
+    '#title': 'ASU can help you achieve your academic goals no matter what they are. So let’s start with some basics — what are you looking to do?'
+    '#options':
+      'bachelor degree-2q': 'Earn a bachelor’s degree.'
+      'advanced degree-21q': 'Earn an advanced degree (masters, PhD, etc.).'
+      'I want a program that will help me figure out if I''ll succeed in college-ulcres': 'I''d like to try college risk free to test waters or earn credits to get ahead'
+      'Im in middle or high school and looking to earn college credits to get ahead-ccres': 'I’m in middle or high school and looking to earn college credits to get ahead.'
+      'Id like to increase my skills to advance professionally or learn for my own enrichment-asu4ures': 'I’d like to increase my skills to advance professionally or learn for my own enrichment.'
+  what_are_you_doing_now_:
+    '#type': radios
+    '#title': 'What are you doing now?'
+    '#options':
+      'I still have several years to go before I graduate high school-3q': 'I still have several years to go before I graduate high school-3q'
+      'Finishing up high school-3q': 'Finishing up high school-3q'
+      'Studying at a community college or other university-4q': 'Studying at a community college or other university-4q'
+      'Serving in the military-4q': 'Serving in the military-4q'
+      'Looking to come back to finish the bachelor’s degree that I started-4q': 'Looking to come back to finish the bachelor’s degree that I started-4q'
+    '#wrapper_attributes':
+      class:
+        - 2q
+        - fit-group
+  how_are_high_school_studies_going_:
+    '#type': radios
+    '#title': 'How are high school studies going?'
+    '#options':
+      'Scholar, yo (3.50 or better GPA)-4q': 'Scholar, yo (3.50 or better GPA)-4q'
+      'Gettin’ it done ( 3.00 - 3.49 GPA)-4q': 'Gettin’ it done ( 3.00 - 3.49 GPA)-4q'
+      'OK, but I’m still passing (below 3.00 GPA)-4q': 'OK, but I’m still passing (below 3.00 GPA)-4q'
+      'On the edge of not passing-4q': 'On the edge of not passing-4q'
+    '#wrapper_attributes':
+      class:
+        - 3q
+        - fit-group
+  how_would_you_rather_learn_:
+    '#type': radios
+    '#title': 'How would you rather learn?'
+    '#options': test
+    '#wrapper_type': form_element
+    '#wrapper_attributes':
+      class:
+        - image_select_field
+        - 4q
+        - fit-group
+        - form-wrapper
+  which_of_these_locations_are_you_interested_in_living_and_learni:
+    '#type': radios
+    '#title': 'Which of these locations are you interested in living and learning?'
+    '#options':
+      'The metro Phoenix area-7q': 'The metro Phoenix area.'
+      'Lake Havasu City-7q': 'Lake Havasu City, AZ'
+      'Los Angeles, CA-8q': 'Los Angeles, CA-8q'
+      'Washington, D.C.-9q': 'Washington, D.C.-9q'
+      'Yuma, AZ-9q': 'Yuma, AZ-9q'
+      Online-13q: 'None of these, I want to stay where I am.'
+    '#wrapper_attributes':
+      class:
+        - 5q
+        - fit-group
+  do_you_or_will_you_live_in_any_of_these_cities_:
+    '#type': radios
+    '#title': 'Do you (or will you) live in any of these cities?'
+    '#options':
+      'Los Angeles, CA-12q': 'Los Angeles, CA-12q'
+      'Washington, D.C.-12q': 'Washington, D.C.-12q'
+      'Yuma, AZ-12q': 'Yuma, AZ-12q'
+      'None of these, I want to stay where I am-13q': 'None of these, I want to stay where I am-13q'
+    '#wrapper_attributes':
+      class:
+        - 6q
+        - fit-group
+  would_you_rather_study:
+    '#type': radios
+    '#title': 'Would you rather study'
+    '#options': asu_category_list_with_icons
+    '#wrapper_attributes':
+      class:
+        - 7q
+        - fit-group
+  result_nid:
+    '#type': hidden
+    '#title': 'Result nid'
+  asu_has_several_options_that_would_fit_you_select_the_one_that_i:
+    '#type': radios
+    '#title': 'ASU has several options that would fit you. Select the one that interests you.'
+    '#options':
+      'ASU Local-9q': 'ASU Local-9q -- Choose from more than 130 degrees taught by ASU professors. Courses are entirely online and support a flexible schedule, while you’ll also supplement your learning with in-person guidance from your academic coach, personalized workshops and group activities with other students.'
+      'ASU in Los Angeles-laresults': |+
+        ASU in Los Angeles-laresults -- ASU offers several Los Angeles-based programs including business, nursing, journalism, global management and sustainability.<br /><br /><br />
+
+
+
+    '#wrapper_attributes':
+      class:
+        - 8q
+        - fit-group
+  what_s_your_top_interest_area_:
+    '#type': radios
+    '#title': 'What’s your top interest area?'
+    '#options': asu_local_category_list_with_fon
+    '#wrapper_attributes':
+      class:
+        - 9q
+        - fit-group
+  what_excites_you_about_the_hybrid_college_experience_:
+    '#type': radios
+    '#title': 'What excites you about the hybrid college experience?'
+    '#options':
+      'Immersing myself in a vibrant city as a learning environment.-11q': 'Immersing myself in a vibrant city as a learning environment.-11q'
+      'Having the opportunity to connect and build friendships with my cohort-mates on a weekly basis.-11q': 'Having the opportunity to connect and build friendships with my cohort-mates on a weekly basis.-11q'
+      'The flexibility to complete my coursework completely online.-11q': 'The flexibility to complete my coursework completely online.-11q'
+      'Engaging in various experiential learning-11q': 'Engaging in various experiential learning opportunities to be personally and professionally successful.'
+    '#wrapper_attributes':
+      class:
+        - 10q
+        - fit-group
+  i_am_a_resident_of_:
+    '#type': radios
+    '#title': 'I am a resident of…'
+    '#options':
+      Arizona-lalocalresults: Arizona-lalocalresults
+      California-lalocalresults: California-lalocalresults
+      'Another U.S. state or territory-lalocalresults': 'Another U.S. state or territory-lalocalresults'
+      'Another country and am a non-U.S. citizen-lalocalresults': 'Another country and am a non-U.S. citizen-lalocalresults'
+      'Another country but I have U.S. citizenship-lalocalresults': 'Another country but I have U.S. citizenship-lalocalresults'
+      'I have a unique citizenship status-lalocalresults': 'I have a unique citizenship status-lalocalresults'
+    '#wrapper_attributes':
+      class:
+        - 11q
+        - fit-group
+  online_option_asu_has_several_options_that_would_fit_you_select:
+    '#type': radios
+    '#title': 'ASU has several options that would fit you. Select the one that interests you.'
+    '#options':
+      'ASU Local-9q': 'ASU Local-9q -- Choose from more than 130 degrees taught by ASU professors. Courses are entirely online and support a flexible schedule, while you’ll also supplement your learning with in-person guidance from your academic coach, personalized workshops and group activities with other students.'
+      'ASU Online-13q': |+
+        ASU Online -- No matter where you are in the world, you can earn a high quality ASU degree fully online and on your schedule without ever having to step foot on an ASU campus.<br /><br /><br />
+
+
+
+    '#wrapper_attributes':
+      class:
+        - 12q
+        - fit-group
+  what_s_your_top_interest_area_online:
+    '#type': radios
+    '#title': 'What’s your top interest area?'
+    '#options': asu_online_category_list_with_fo
+    '#wrapper_attributes':
+      class:
+        - 13q
+        - fit-group
+  did_you_know_asu_online_has_educational_partnerships_to_make_you:
+    '#type': radios
+    '#title': 'Did you know ASU Online has educational partnerships to make your degree more attainable?'
+    '#options':
+      'Yes, I am a Starbucks partner looking to participate in the Starbucks College Achievement Plan.-onlres': 'Yes, I am a Starbucks partner looking to participate in the Starbucks College Achievement Plan.-onlres'
+      'Yes, I am an Uber/Uber Eats Driver or beneficiary.-onlres': 'Yes, I am an Uber/Uber Eats Driver or beneficiary.-onlres'
+      'Yes, I am employed by a company that has partnered with ASU Online.-onlres': 'Yes, I am employed by a company that has partnered with ASU Online.-onlres'
+      'That’s awesome, but this doesn’t apply to me.-onlres': 'That’s awesome, but this doesn’t apply to me.-onlres'
+    '#wrapper_attributes':
+      class:
+        - 14q
+        - fit-group
+  which_view_appeals_to_you_the_most_:
+    '#type': radios
+    '#title': 'Which view appeals to you the most?'
+    '#options': which_view_appeals_you_the_most
+    '#wrapper_attributes':
+      class:
+        - 15q
+        - fit-group
+  would_you_rather_live_and_learn_in_a_place_where_:
+    '#type': radios
+    '#title': 'Would you rather live and learn in a place where:'
+    '#options':
+      'You see the same faces almost every day-17q': 'You see the same faces almost every day-17q'
+      'You get the chance to meet new people on a day basis-17q': 'You get the chance to meet new people on a day basis-17q'
+      'Somewhere in the middle-17q': 'Somewhere in the middle-17q'
+    '#wrapper_attributes':
+      class:
+        - 16q
+        - fit-group
+  what_excites_you_about_the_college_experience_check_all_that_app:
+    '#type': checkboxes
+    '#title': 'What excites you about the college experience? Check all that apply.'
+    '#options':
+      meeting_people-18q: 'Meeting new people and networking'
+      living_on_my_own-18q: 'Living on my own and learning how to “adult”'
+      learning_from_professors-18q: 'Learning from professors who are on the cutting edge of their field'
+      learning_how_to_start_business-18q: 'Learning how to start my own business or get funding for me ideas'
+      work_on_innovative_ideas-18q: 'Work on innovative ideas and/or research that is improving our future'
+      learning_in_innovative_ways-18q: 'Learning in innovative ways'
+      learning_to_think_creatively-18q: 'Learning to think creatively and work collaboratively'
+      living_in_fun-18q: 'Living in a fun and future-focused city, with lot of things to do and opps for internships'
+      meeting_people_from_world-18q: 'Meeting people from all over the world, and/or studying abroad.'
+    '#wrapper_attributes':
+      class:
+        - 17q
+        - fit-group
+  what_are_you_the_most_nervous_about_check_all_that_apply_:
+    '#type': checkboxes
+    '#title': 'What are you the most nervous about? Check all that apply.'
+    '#options':
+      new_people-19q: 'A new place with new people'
+      rigorous_academics_of_college-19q: 'The rigorous academics of college'
+      living_first_time-19q: 'Living on my own for the first time'
+      right_major-19q: 'Choosing the right major'
+      paying_for_college_nervous-19q: 'Paying for college'
+      making_friends-19q: 'Making friends'
+      my_way_around-19q: 'Finding my way around'
+    '#wrapper_attributes':
+      class:
+        - 18q
+        - fit-group
+  what_kind_of_weather_do_you_prefer_:
+    '#type': radios
+    '#title': 'What kind of weather do you prefer?'
+    '#options':
+      'Sunny with the chance of a cloud-20q': 'Sunny...with the chance of a cloud-19q'
+      'Sunny with a two hour drive to snow-20q': 'Sunny...with a two hour drive to snow-19q'
+      'Sunny lakeside-20q': Sunny...lakeside-19q
+      'Sunny with the chance of a haboob-20q': 'Sunny...with the chance of a haboob-19q'
+    '#wrapper_attributes':
+      class:
+        - 19q
+        - fit-group
+  i_am_a_resident_of_campus:
+    '#type': radios
+    '#title': 'I am a resident of…'
+    '#options':
+      Arizona-campusRes: Arizona
+      California-CARes: California
+      'A western state other than Arizona-wueRes': 'A western state other than Arizona'
+      'In another U.S. state or territory-terRes': 'In another U.S. state or territory'
+      'Non-U.S. citizen and live in another country-intlRes': 'Non-U.S. citizen and live in another country'
+      'U.S. citizen that lives abroad-campusRes': 'U.S. citizen that lives abroad-campusRes'
+      'I have a unique citizenship status-campusRes': 'I have a unique citizenship status-campusRes'
+    '#wrapper_attributes':
+      class:
+        - 20q
+        - fit-group
+        - ugrad-last-question
+  score:
+    '#type': hidden
+    '#title': Score
+  how_would_you_rather_learn_grad_oprion:
+    '#type': radios
+    '#title': 'How would you rather learn?'
+    '#options': grad_campus_images
+    '#wrapper_type': form_element
+    '#wrapper_attributes':
+      class:
+        - image_select_field
+        - 21q
+        - fit-group
+        - form-wrapper
+  would_you_rather_study_grad:
+    '#type': radios
+    '#title': 'Would you rather study'
+    '#options': asu_grad_category_list_with_icon
+    '#wrapper_attributes':
+      class:
+        - 22q
+        - fit-group
+  which_view_appeals_to_you_the_mostgrad_options_:
+    '#type': radios
+    '#title': 'Which view appeals to you the most?'
+    '#options': which_view_appeals_you_the_most_
+    '#wrapper_attributes':
+      class:
+        - 23q
+        - fit-group
+  would_you_rather_live_and_learn_in_a_place_where_grad_options:
+    '#type': radios
+    '#title': 'Would you rather live and learn in a place where:'
+    '#options':
+      'You see the same faces almost every day-25q': 'You see the same faces almost every day-25q'
+      'You get the chance to meet new people on a day basis-25q': 'You get the chance to meet new people on a day basis-25q'
+      'Somewhere in the middle-25q': 'Somewhere in the middle-25q'
+    '#wrapper_attributes':
+      class:
+        - 24q
+        - fit-group
+  what_excites_you_about_graduate_studies_check_all_that_apply_:
+    '#type': checkboxes
+    '#title': 'What excites you about graduate studies? Check all that apply.'
+    '#options':
+      meeting_people-26q: 'Meeting new people and networking'
+      learning_from_professors-26q: 'Learning from professors who are on the cutting edge of their field'
+      learning_how_to_start_business-26q: 'Learning how to start my own business or get funding for me ideas'
+      work_on_innovative_ideas-26q: 'Work on innovative ideas and/or research that is improving our future'
+      learning_to_think_creatively-26q: 'Learning to think creatively and work collaboratively'
+      living_in_fun-26q: 'Living in a fun and future-focused city, with lot of things to do and opps for internships'
+      meeting_people_from_world-26q: 'Meeting people from all over the world, and/or studying abroad.'
+    '#wrapper_attributes':
+      class:
+        - 25q
+        - fit-group
+  what_kind_of_weather_do_you_prefer_grad_options:
+    '#type': radios
+    '#title': 'What kind of weather do you prefer?'
+    '#options':
+      'Sunny with the chance of a cloud-27q': 'Sunny...with the chance of a cloud-19q'
+      'Sunny with a two hour drive to snow-27q': 'Sunny...with a two hour drive to snow-19q'
+      'Sunny lakeside-27q': Sunny...lakeside-19q
+      'Sunny with the chance of a haboob-27q': 'Sunny...with the chance of a haboob-19q'
+    '#wrapper_attributes':
+      class:
+        - 26q
+        - fit-group
+  i_am_a_resident_of_grad_options:
+    '#type': radios
+    '#title': 'I am a resident of…'
+    '#options':
+      Arizona-campusRes: Arizona
+      'In another U.S. state or territory-terRes': 'In another U.S. state or territory'
+      'Non-U.S. citizen and live in another country-intlRes': 'Non-U.S. citizen and live in another country'
+      'U.S. citizen that lives abroad-campusRes': 'U.S. citizen that lives abroad-campusRes'
+      'I have a unique citizenship status-campusRes': 'I have a unique citizenship status-campusRes'
+    '#wrapper_attributes':
+      class:
+        - 27q
+        - fit-group
+        - ugrad-last-question
+  first_name:
+    '#type': hidden
+    '#title': 'First name'
+  last_name:
+    '#type': hidden
+    '#title': 'Last name'
+  email_address:
+    '#type': hidden
+    '#title': 'Email address'
+  what_s_your_top_interest_area_online_grad_options:
+    '#type': radios
+    '#title': 'What’s your top interest area?'
+    '#options': asu_grad_online_category_list_wi
+    '#wrapper_attributes':
+      class:
+        - 28q
+        - fit-group
+css: ''
+javascript: ''
+settings:
+  ajax: false
+  ajax_scroll_top: form
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: ''
+  page_confirm_path: ''
+  page_theme_name: ''
+  form_title: source_entity_webform
+  form_submit_once: false
+  form_exception_message: ''
+  form_open_message: ''
+  form_close_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_disable_remote_addr: false
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_reset: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
+  form_unsaved: false
+  form_disable_back: false
+  form_submit_back: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  form_method: ''
+  form_action: ''
+  form_attributes: {  }
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
+  submission_label: ''
+  submission_log: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: false
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: false
+  wizard_auto_forward: true
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: true
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  preview: 0
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: url
+  confirmation_title: ''
+  confirmation_message: ''
+  confirmation_url: '/campus-fit-confirmation-page?sid=[webform_submission:sid]&nid=[webform_submission:values:result_nid]'
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  token_delete: false
+  serial_disabled: false
+access:
+  create:
+    roles:
+      - anonymous
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers:
+  update_campus_fit_score_value_after_submission:
+    id: campus_fit_webform_handler
+    label: 'Update campus fit score value after submission'
+    notes: ''
+    handler_id: update_campus_fit_score_value_after_submission
+    status: true
+    conditions: {  }
+    weight: 0
+    settings: {  }
+variants: {  }

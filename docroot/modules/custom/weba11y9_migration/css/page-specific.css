@@ -1,0 +1,252 @@
+/**
+ * @file page-specific.css
+ * BRIDGE CSS — Styles for specific content pages: training, DA liaisons,
+ * group pages, event checklist, feedback widget, report-a-problem form,
+ * and PDF tool. Extracted from the legacy Access theme.
+ * These classes are referenced in database content. Remove as TSS team
+ * migrates content to Webspark-native components.
+ * See: WEBA11Y9_MIGRATION_TICKETS.md (Tickets S1, S2)
+ * @todo Remove after content migration is complete.
+ */
+
+.training .uds-card-arrangement>.uds-card-arrangement-content-container>h2 {
+  display: none;
+}
+.training h2 {
+  display: inline-block;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  box-shadow: -0.15em 0 0 #ffc627, 0.15em 0 0 #ffc627;
+  background: #ffc627;
+  margin-top: 2em;
+  margin-bottom: 0;
+  color: #191919;
+}
+
+/* =DA LIAISONS MEETINGS LIBRARY
+-------------------------------------------------------------- */
+#dal-lib .vidlib {
+	display: inline-block;
+	width: 48%;
+	padding-right: 3rem;
+	padding-bottom: 3rem;
+}
+#dal-lib .vidlib h2 {
+	font-size: 1.4rem;
+	line-height: 1.175;
+	letter-spacing: 0;
+	margin: 0.5rem 0;
+}
+#dal-lib .vidlib .subt {
+	font-weight: 700;
+	font-size: 1.1rem;
+}
+#dal-lib .vidlib iframe {
+	border-bottom: 1px solid #aaa;
+	width: 515px;
+	height: 315px;
+}
+
+/* =GROUP PAGES
+-------------------------------------------------------------- */
+.a11y-projects,
+.a11y-meeting {
+  margin-bottom: 5em;
+}
+.a11y-projects {
+	padding-top: 1em;
+}
+.a11y-projects .group-card {
+  border: 1px solid #e9e9e9;
+  border-left: 6px solid #ffc626;
+  display: inline-block;
+  padding: 1em;
+  margin: 0 1em 1em 0;
+  width: 47%;
+}
+.a11y-projects h3,
+.a11y-meeting h3 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0;
+}
+.a11y-projects p {
+  margin: 0;
+}
+.a11ygroup .asu-well {
+	margin-bottom: 5em;
+}
+.a11y-meeting h3 {
+  padding-top: 1em;
+}
+.a11y-meeting a.btn {
+  margin-top: 0;
+}
+
+/* Event checklist */
+#event-checklist h2 {
+	border-left: 5px solid #f3a536;
+	margin-top: 1.5em;
+	margin-bottom: 0;
+	padding-left: 6px;
+	line-height: 0.9;
+	font-weight: 200;
+}
+#event-checklist h3 {
+	font-size: 26px;
+	font-weight: 600;
+	margin-top: 1.5em;
+	margin-bottom: 0;
+}
+#event-checklist h2 + h3,
+#event-checklist p + h3 {
+	margin-top: 1em;
+}
+#event-checklist h2:first-child {
+	margin-top: 0;
+}
+#event-checklist h4 {
+	margin-top: 1em;
+	margin-bottom: 0;
+}
+#event-checklist h5 {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+#event-checklist p {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+#event-checklist .indent {
+	padding-left: 3em;
+}
+#event-checklist ul.checklist li {
+list-style: none;
+ margin-left: 0;
+ padding-left: 1em;
+ text-indent: -1.25em;
+}
+#event-checklist ul.nobullets {
+ list-style: none;
+ margin-left: 0;
+ padding-top: 0.5em;
+ padding-left: 0;
+}
+
+/* =REPORT A WEB ACCESSIBILITY FORM PAGE
+-------------------------------------------------------------- */
+.node-66 form.uds-form input.btn-primary,
+.node-184 form.uds-form input.btn-primary,
+.node-239 form.uds-form input.btn-primary {
+	margin-bottom: 3rem;
+}
+.node-66 form .webform-required,
+.node-184 form .webform-required,
+.node-239 form .webform-required {
+	font-style: italic;
+}
+
+/* =FEEDBACK WIDGET
+-------------------------------------------------------------- */
+#feedback-widget form {
+  background-color: #E8E8E8;
+  width: 50%;
+  margin: 0 auto;
+  padding: 2em;
+}
+#feedback-widget #edit-feedback-helpful--wrapper {
+  text-align: center;
+}
+#feedback-widget form.uds-form .form-check input[type=radio]+label {
+  font-weight: normal;
+  font-size: 0.9rem;
+}
+#feedback-widget .form-item-feedback-helpful:first-child {
+ margin-right: 1em;
+}
+#feedback-widget .card {
+ border: 0 none;
+ background-color: #E8E8E8;
+}
+#feedback-widget .card-header,
+#feedback-widget .card-body {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+#feedback-widget form.uds-form .card-header legend {
+	padding-bottom: 0.5rem;
+}
+#feedback-widget legend svg {
+	display: none;
+}
+#feedback-widget form.uds-form fieldset,
+#feedback-widget .form-item-feedback-helpful {
+  margin-bottom: 0;
+}
+#feedback-widget #edit-actions {
+  text-align: center;
+}
+#feedback-widget .mb-3 {
+  margin-bottom: 0 !important;
+}
+#feedback-widget .form-item-feedback-comment {
+  padding-top: 1em;
+}
+#feedback-widget .btn {
+  padding: 0.5em 1em;
+  font-size: 0.9rem;
+  line-height: 0.9rem;
+}
+#feedback-widget form.uds-form input.btn {
+  padding-left: 1em !important;
+}
+
+
+/* =PDF tool
+-------------------------------------------------------------- */
+form.webform-submission-pdfs-form {
+  background-color: #E8E8E8;
+  border: 1px solid #d0d0d0;
+  padding: 24px 24px 8px 24px;
+}
+.instructions,
+#docs{
+  background-color: #fff;
+  font-size: 1rem;
+}
+#docs {
+  margin: 24px 0;
+  padding: 24px 32px 12px 32px;
+}
+.instructions {
+  border: 1px solid #d0d0d0;
+  padding: 14px 32px;
+  margin-bottom: 0;
+}
+.pdf-form form.uds-form .form-check input[type=radio]+label {
+  font-weight: normal;
+}
+.pdf-form .fieldset-legend {
+  font-weight: bold;
+  font-size: 1.05rem;
+  letter-spacing: 0.01rem;
+}
+form.uds-form fieldset .form-check {
+  margin: 0 0 1rem 0;
+}
+.pdf-form fieldset .card-body {
+  padding-bottom: 12px;
+}
+h2.pdf-hd {
+  background: url(/sites/default/files/inline-images/pdf-hd.png) 0 0 no-repeat;
+  padding-left: 40px;
+}
+.pdf-form h2 {
+  font-size: 2.1rem;
+}
+.content-page .instructions h3 {
+  font-size: 1.6rem;
+}
+.pdf-form h4 {
+  font-size: 1.2rem;
+}

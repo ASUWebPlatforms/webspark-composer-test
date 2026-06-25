@@ -1,0 +1,37 @@
+asu_campus_fit.admin_settings:
+    path: '/admin/config/content/campusfit_quiz_results'
+    defaults:
+      _form: '\Drupal\asu_campus_fit\Form\CampusFitDynamicContent'
+      _title: 'Campus fit results page dynamic content'
+    requirements:
+      _permission: 'administer site configuration'
+      
+asu_campus_fit.campus_fit_confirm_page:
+  path: '/campusfit/confirmation/{sid}'
+  defaults:
+    _controller: '\Drupal\asu_campus_fit\Controller\CampusFitConfirmController::campus_fit_confirm_page'
+    _title: 'My ASU campus fit'
+  requirements:
+    _permission: 'access content'
+
+
+asu_campus_fit.campus_fit_ajax_campus_page:
+  path: '/campusfit/confirmation/json'
+  defaults:
+    _controller: '\Drupal\asu_campus_fit\Controller\CampusFitAjaxCampusController::campus_fit_ajax_campus_page'
+    _title: 'My ASU campus fit Json data 1'
+  requirements:
+    _permission: 'access content'
+
+asu_campus_fit.interestCampusDegreeData:
+  path: '/campusfit/degrees/{programType}/{interest}/{campus}'
+  defaults:
+    _controller: '\Drupal\asu_campus_fit\Controller\campusFitInterestWebservice::campus_fit_degree_webservice'
+    _title: 'Degrees webservice'
+  requirements:
+    _permission: 'access content'
+
+
+    
+    
+    

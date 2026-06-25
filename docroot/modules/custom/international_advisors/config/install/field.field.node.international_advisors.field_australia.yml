@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_australia
+    - node.type.international_advisors
+    - taxonomy.vocabulary.australia
+id: node.international_advisors.field_australia
+field_name: field_australia
+entity_type: node
+bundle: international_advisors
+label: Australia
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      australia: australia
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

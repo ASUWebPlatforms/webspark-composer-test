@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:text_content:b136f66a-e052-4c8d-94be-ac3bc534fbd3'
+  module:
+    - block_content
+    - system
+  theme:
+    - custom_webspark_theme
+id: custom_webspark_theme_parentblogcollegeboundicononcategorypages
+theme: custom_webspark_theme
+region: content
+weight: -8
+provider: null
+plugin: 'block_content:b136f66a-e052-4c8d-94be-ac3bc534fbd3'
+settings:
+  id: 'block_content:b136f66a-e052-4c8d-94be-ac3bc534fbd3'
+  label: 'Parent blog college bound icon on category pages'
+  provider: block_content
+  label_display: '0'
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    pages: '/parent-blog/*'
+    negate: false

@@ -1,0 +1,316 @@
+#!/bin/bash
+
+##
+## This DDEV custom command pulls database and files from
+## Acquia DEV environment in a Drupal multisite setup for local development.
+##
+## Usage: asusf:pull [ --skip-db ] [ --skip-files ] <site1>
+## Description: Pull the database and files from a site on an ASU Site Factory Stack and generate its Drush aliases.
+## Example: `ddev asusf:pull admissionasu`
+##
+## To use it, set up the needed ACQUIA_FACTORY_URL, ACQUIA_API_KEY, ACQUIA_API_SECRET, ACQUIA_ACSF_USERNAME and ACQUIA_ACSF_KEY
+## in global or project config, just as described in https://ddev.readthedocs.io/en/stable/users/providers/acquia/.
+##  - The ACQUIA_ACSF_USERNAME is the username you use to log in to the ASU Factory site (ASURITE@asu.edu).
+##  - The ACQUIA_ACSF_KEY is the API key found at https://www.asufactory1.acsitefactory.com/user/your_user_id/api-key.
+##
+## This script requires the jq, drush, and acli commands to be available.
+## Install jq: https://jqlang.org/download/
+## Install Drush: https://www.drush.org/13.x/install/ (likely already installed via Composer)
+## Install acli: https://docs.acquia.com/acquia-cloud-platform/add-ons/acquia-cli/docs/install
+##
+## The asusf:pull command creates a Drush alias for the subsite you pull.
+## Use the alias like so: `drush @subsite cache:rebuild`
+##
+## More information on this script and other ASU web platforms development
+## resources can be found at
+## https://docs.google.com/document/d/1R-wFpJnxUmQJ35bbFEhtoXF4YZXkHe6ZVVy8oBUn9kQ/edit?usp=sharing
+##
+## Initial script based on
+## https://stackoverflow.com/questions/68501566/ddev-multisite-setup-with-asusf:pull/68553116#68553116
+##
+
+acquia_project_id=$(sed -n 's/.*ACQUIA_ENVIRONMENT_ID=//p' ./.ddev/config.yaml | awk '{print $0}')
+# If the above gives you issues, uncomment and hardcode the value below
+# acquia_project_id=projectid.dev
+
+tmpdir=/tmp  #inside web container
+
+set -eu -o pipefail
+
+# Define color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RED_BG='\033[41m'
+GREEN_BG='\033[42m'
+NC='\033[0m' # No Color
+
+function show_help() {
+  sed -n 's/^##//p' ${0}
+}
+
+while :; do
+  case ${1:-} in
+  -h | -\? | --help)
+    show_help
+    exit
+    ;;
+  -y|--yes)
+    SKIP_CONFIRMATION=true
+    ;;
+  --skip-files)
+    SKIP_FILES=true
+    ;;
+  --skip-db)
+    SKIP_DB=true
+    ;;
+  --on-demand)
+    ON_DEMAND=true
+    ;;
+  --) # End of all options.
+    shift
+    break
+    ;;
+  -?*)
+    printf 'WARN: Unknown option (ignored): %s\n' "$1" >&2
+    ;;
+  *) # Default case: No more options, so break out of the loop.
+    break ;;
+  esac
+
+  shift
+done
+
+function source_db_name() {
+  site_db=$(echo "$site_output" | jq -r '.sites[0].db_name')
+  echo $site_db
+}
+
+function stack_id() {
+  export stack_id
+  stack_id=$(echo "$site_output" | jq -r '.sites[0].stack_id')
+  echo $stack_id
+}
+
+function localuri() {
+    export localuri
+    if [ ${stack_id} -ne 1 ]; then
+      localuri=${stack_id}
+    else
+      localuri=""
+    fi
+    echo $localuri
+}
+
+function target_db_name() {
+  # locally we use sitename
+  site_name=$1
+  echo $site_name
+}
+
+# Map sitename to files dir
+function target_files_dir() {
+  site_name=$1
+  echo "sites/${site_name}"
+}
+
+# Get the files from upstream and load them.
+function files_pull() {
+  # set -x   # You can enable bash debugging output by uncommenting
+  set -eu -o pipefail
+  site_name=$1
+  source_dir=$(source_db_name ${site_name})
+  target_dir=$(target_files_dir $1)
+  mkdir -p ${DDEV_DOCROOT}/${target_dir}/
+  echo "Using drush rsync to update files for ${site_name}..."
+  # TODO not yet supporting files-private
+  acli pull:files ${acquia_project_id} ${source_dir}
+  rsync -a ${DDEV_DOCROOT}/sites/${source_dir}/ ${DDEV_DOCROOT}/${target_dir}
+  rm -rf ${DDEV_DOCROOT}/sites/${source_dir}
+  # Alternate approach with drush rsync for pull. Could solve for files-private.
+  # Not yet working.
+  #drush rsync --alias-path=~/.drush -q -y -r ${DDEV_DOCROOT} --verbose @${acquia_project_id}:${target_dir}/ ${DDEV_DOCROOT}/${target_dir}/files/
+  #drush rsync @${site_name}.live:/mnt/gfs/${acquia_project_id}/sites/g/files/${source_dir}/files/ ${DDEV_DOCROOT}/${target_dir}/files/
+
+  # Notes:
+  # Public files are in /mnt/gfs/{project_id}/sites/g/files/{source_db_name}/
+  #   contains, files/, settings.php and themes/
+  # /mnt/gfs/asufactory101live/sites/g/files-private/<source_db_name]/
+  # Private files are in /mnt/gfs/{project_id}/sites/g/files-private/{source_db_name}/
+}
+
+
+# Get the db from upstream and load it
+function db_pull() {
+  # set -x   # You can enable bash debugging output by uncommenting
+  set -eu -o pipefail
+  site_name=$1
+  target_db=$(target_db_name ${site_name})
+  rm -rf ${tmpdir}/*.sql ${tmpdir}/*.sql.gz
+  echo "Downloading ${site_name} database..."
+  if [ "${ON_DEMAND:-}" = "true" ]; then
+    acli pull:db -n --on-demand --no-import -- ${acquia_project_id} $(source_db_name)
+  else
+    acli pull:db -n --no-import -- ${acquia_project_id} $(source_db_name)
+  fi
+  mv ${tmpdir}/*.sql.gz ${tmpdir}/${site_name}.sql.gz
+  echo "Loading ${site_name} into database '${target_db}'..."
+  mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS ${target_db}; GRANT ALL ON ${target_db}.* TO 'db'@'%'"
+  gunzip ${tmpdir}/${site_name}.sql.gz
+  mysql -uroot -proot ${target_db} <${tmpdir}/${site_name}.sql
+  drush -r root --uri=${site_name} cache:rebuild
+}
+
+# Handle initial authentication via Acquia secrets and ssh
+function authenticate() {
+  if [ -z "${ACQUIA_FACTORY_URL:-}" ]; then echo "Please make sure you have set ACQUIA_FACTORY_URL in your project or global config" && exit 1; fi
+  if [ -z "${ACQUIA_API_KEY:-}" ] || [ -z "${ACQUIA_API_SECRET:-}" ]; then echo "Please make sure you have set ACQUIA_API_KEY and ACQUIA_API_SECRET in your project or global config" && exit 1; fi
+  if [ -z "${ACQUIA_ACSF_USERNAME:-}" ] || [ -z "${ACQUIA_ACSF_KEY:-}" ]; then echo "Please make sure you have set ACQUIA_ACSF_USERNAME and ACQUIA_ACSF_KEY in your project or global config" && exit 1; fi
+  if [ -z "${AH_ORGANIZATION_UUID:-}" ]; then echo "Please make sure you have set AH_ORGANIZATION_UUID in your project or global config" && exit 1; fi
+  if ! command -v ddev drush >/dev/null; then echo "Please make sure your project contains drush, ddev composer require drush/drush" && exit 1; fi
+  ssh-add -l >/dev/null || { echo "Please 'ddev auth ssh' before running this command." && exit 1; }
+  acli auth:login -n -vvv --key="${ACQUIA_API_KEY}" --secret="${ACQUIA_API_SECRET}"
+  acli auth:acsf-login --username="${ACQUIA_ACSF_USERNAME}" --key="${ACQUIA_ACSF_KEY}" --factory-url="${ACQUIA_FACTORY_URL}"
+}
+
+function create_subsite_alias() {
+  site_name=$1
+  stack_id=$(stack_id)
+  localuri=$(localuri)
+
+  # Create the drush/sites directory if it doesn't exist
+  if [ ! -d "drush/sites" ]; then
+    mkdir -p drush/sites
+  fi
+
+  alias_file="drush/sites/${site_name}.site.yml"
+
+  # Check if the alias file already exists
+  if [ -f "$alias_file" ]; then
+    if [ "${SKIP_CONFIRMATION:-}" != "true" ]; then
+      echo -en "${YELLOW}Site aliases already exist for ${site_name}. Would you like to overwrite them? (y/n):${NC} "
+      read -r overwrite_choice
+      if [[ "$overwrite_choice" != "y" && "$overwrite_choice" != "Y" ]]; then
+        echo -en "${GREEN}Skipping alias creation for ${site_name}.${NC}\n"
+        return
+      fi
+    fi
+  fi
+
+  # Adjust for different Drush versions
+  if [[ ${stack_id} == 4 ]]; then
+    root_dir="/var/www/html/docroot"
+  else
+    root_dir="/app/docroot"
+  fi
+
+  # Write/overwrite the drush/sites/${site_name}.site.yml file
+  cat <<EOF > "$alias_file"
+# Alias added by acquia-pull
+# Local DDEV site
+local:
+  root: ${root_dir}
+  uri: ${site_name}.asu${localuri}.ddev.site
+# ${site_name} Site Factory environments
+live:
+  uri: ${site_name}.asufactory1.acsitefactory.com
+  host: asufactory${stack_id}0${stack_id}live.ssh.enterprise-g1.acquia-sites.com
+  options: { }
+  paths: { dump-dir: /mnt/tmp }
+  root: /var/www/html/asufactory${stack_id}.0${stack_id}live/docroot
+  user: asufactory${stack_id}.0${stack_id}live
+  ssh: { options: '-p 22' }
+test:
+  uri: ${site_name}.test-asufactory1.acsitefactory.com
+  host: asufactory${stack_id}0${stack_id}test.ssh.enterprise-g1.acquia-sites.com
+  options: { }
+  paths: { dump-dir: /mnt/tmp }
+  root: /var/www/html/asufactory${stack_id}.0${stack_id}test/docroot
+  user: asufactory${stack_id}.0${stack_id}test
+  ssh: { options: '-p 22' }
+dev:
+  uri: ${site_name}.dev-asufactory1.acsitefactory.com
+  host: asufactory${stack_id}0${stack_id}dev.ssh.enterprise-g1.acquia-sites.com
+  options: { }
+  paths: { dump-dir: /mnt/tmp }
+  root: /var/www/html/asufactory${stack_id}.0${stack_id}dev/docroot
+  user: asufactory${stack_id}.0${stack_id}dev
+  ssh: { options: '-p 22' }
+EOF
+
+  echo "************************************************************"
+  echo "Creating Drush alias for subsite: $site_name at $alias_file"
+  echo "Example local usage: ddev drush @$site_name.local user:login --mail=<ASURITE>@asu.edu"
+  echo ""
+  echo "Additionally, you can now run Drush in the following environments:"
+  echo "ddev drush @$site_name.dev cache:rebuild"
+  echo "ddev drush @$site_name.test cache:rebuild"
+  echo "ddev drush @$site_name.live cache:rebuild"
+  echo "************************************************************"
+}
+
+# Main script
+echo '   ______     ______     __  __        ______     ______   ______     ______     __  __     ______    '
+echo '  /\  __ \   /\  ___\   /\ \/\ \      /\  ___\   /\__  _\ /\  __ \   /\  ___\   /\ \/ /    /\  ___\   '
+echo '  \ \  __ \  \ \___  \  \ \ \_\ \     \ \___  \  \/_/\ \/ \ \  __ \  \ \ \____  \ \  _"-.  \ \___  \  '
+echo '   \ \_\ \_\  \/\_____\  \ \_____\     \/\_____\    \ \_\  \ \_\ \_\  \ \_____\  \ \_\ \_\  \/\_____\ '
+echo '    \/_/\/_/   \/_____/   \/_____/      \/_____/     \/_/   \/_/\/_/   \/_____/   \/_/\/_/   \/_____/ '
+if [ $# -eq 0 ]; then
+  show_help
+  exit 1
+fi
+
+authenticate || { printf "${RED_BG}[error]${RED} Failed to authenticate${NC}\n" && exit $?; }
+
+site_name=$1
+site_output=$(acli acsf:sites:find --domain_contains=${site_name}.)
+# Extract the count value as a number using jq
+site_count=$(echo "$site_output" | jq -r '.count')
+# If multiple sites are returned, filter for exact match on "site" field
+if [ "$site_count" -gt 1 ]; then
+  # Filter to only the site with an exact match on the "site" field
+  site_output=$(echo "$site_output" | jq --arg site_name "$site_name" '{count: "1", sites: [.sites[] | select(.site == $site_name)]}')
+  # Update the count after filtering
+  site_count=$(echo "$site_output" | jq -r '.count')
+fi
+# Check if the count is 0
+if [ "$site_count" -eq 0 ]; then
+  printf "${RED_BG}[error]${RED} No site found for \"${site_name}\".${YELLOW} Please check the site name for typos.
+If this error persists, you may have a permissions issue. Please contact Enterprise Technology and we will assist you.${NC}\n"
+  exit 1
+fi
+# echo "ACLI Output: $site_output"  # Debugging line
+
+# Create/refresh Drush alias for subsite at drush/sites/<subsite>.site.yml.
+create_subsite_alias $1
+
+if [ "${SKIP_CONFIRMATION:-}" != "true" ]; then
+  echo -en "${YELLOW}This will overwrite the local database and/or files for $*. OK? (y/n): ${NC}"
+  read -r yn
+    case $yn in
+        y|Y ) echo -en "Continuing...\n";;
+        n|N ) echo -en "Exiting...\n"; exit 0;;
+    esac
+fi
+
+for subsite in $*; do
+  echo "Pulling subsite: $subsite"
+  if [ "${SKIP_DB:-}" != "true" ]; then
+    db_pull ${subsite} || (printf "{RED_BG}[error]${RED} Failed to pull db for ${subsite}${NC}" && exit $?)
+  else
+    echo "Skipping db pull for ${subsite}"
+  fi
+
+  if [ "${SKIP_FILES:-}" != "true" ]; then
+    files_pull ${subsite} || (printf "{RED_BG}[error]${RED} Failed to pull files for ${subsite}${NC}" && exit $?)
+  else
+    echo "Skipping files pull for ${subsite}"
+  fi
+
+echo "************************************************************"
+echo -e "\nA local copy of the $1 site has been pulled."
+echo -e "Visit: https://$1.asu${localuri}.ddev.site"
+echo -e "Login using Drush: ddev drush @$1.local user:login --mail=<ASURITE>@asu.edu\n"
+echo "************************************************************"
+
+done

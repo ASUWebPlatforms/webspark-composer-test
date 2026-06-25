@@ -1,0 +1,226 @@
+<?php
+
+
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeViewBuilder;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Url;
+use Drupal\Core\Block\BlockBase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Render\Renderer;
+use Drupal\views\Views;
+use Drupal\node\NodeInterface;
+use Drupal\node\Entity\Node;
+use Drupal\file\Entity\File;
+use Drupal\image\Entity\ImageStyle;
+use Drupal\file\Entity;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\webform\Entity\WebformOptions;
+use Drupal\webform\WebformSubmissionInterface;
+use Drupal\webform\Entity\Webform;
+use Drupal\webform\WebformSubmissionForm;
+use Drupal\webform\Entity\WebformSubmission;
+
+/**
+ * Alter webform elements.
+ *
+ * @param array $element
+ *   The webform element.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ * @param array $context
+ *   An associative array containing the following key-value pairs:
+ *   - form: The form structure to which elements is being attached.
+ */
+
+
+/** Implementation of hook_webform_options_alter to alter predefined webform options **/
+function asu_survey_preprocess_node(&$variables) {
+	  $config_data = \Drupal::config('asu_survey.admin_settings');	
+	  $confirm_nid = $config_data->get('survey_confirm_nid');
+	  $form_nid = $config_data->get('survey_form_nid');
+	  $node_id = $variables['node']->id();
+	 
+	  if($confirm_nid == $node_id){
+		     //if($variables['node']->bundle() == "page"){
+				$variables['#attached']['library'][] = 'asu_survey/SurveyLib';
+	  }
+		else{
+
+		} 
+	  
+	  if($node_id == $form_nid){
+		  $variables['#attached']['library'][] = 'asu_survey/SurveyFormLib';
+	  }
+	  else{
+		
+	  }
+	 
+}
+
+/*** hook_form_alter for gradudate form to update college and program of interest fields dynamically based on degree level field selection ***/
+
+function asu_survey_form_alter(&$form, FormStateInterface $form_state, $form_id){
+	$config_data = \Drupal::config('asu_survey.admin_settings');
+	$form_nid = $config_data->get('survey_form_nid');
+	if(($form_id == "webform_submission_veterans_survey_node_".$form_nid."_add_form") || ($form_id == "webform_submission_veterans_survey_add_form")){
+		
+		$form['#attached']['library'][] = 'asu_survey/SurveyFormLib';
+		$form['elements']['page_12']['rfi_elements']['program_of_interest']['#prefix'] = '<div id="online-program-wrapper">';
+		$form['elements']['page_12']['rfi_elements']['program_of_interest']['#suffix'] = '</div>';
+		$form['elements']['page_12']['rfi_elements']['program_of_interest']['#validated'] = TRUE; //add this line to override validation 
+		
+		/** add ajax functionality to dynamically update college drop down options when degree level field is changed **/
+	    $form['elements']['page_12']['rfi_elements']['area_of_interest_online']['#ajax'] = [
+		    'callback' => 'updateProgramInterest',
+		    'wrapper' => 'online-program-wrapper',
+		  	'event' => 'change',
+		];
+		
+		
+	}
+	return $form;
+}
+
+
+function updateProgramInterest(array $form, FormStateInterface $form_state){
+	$onlinecategory = '';
+	$form_state->setRebuild(true);
+	//ksm($form_state);
+	$type = $form_state->getValue('select_your_student_status');
+	$aoi = $form_state->getValue('area_of_interest_online');
+	//ksm($type);
+	//ksm($aoi);
+	$prog_array = array('0'=>'Select program of interest');
+    switch($type) {
+            case 'First Time Freshman':
+                $onlinecategory = 'Undergraduate';
+                break;
+            case 'Transfer':
+                $onlinecategory = 'Undergraduate';
+                break;
+            case 'Readmission':
+                $onlinecategory = 'Graduate';
+        }
+		$interest = urldecode($aoi);
+		
+		$fields_array = array('onlinecode', 'onlinetitle');
+		$database = \Drupal::database();
+		$table = "asu_online_degrees";
+        $query = $database->select($table, 't');
+        $query->fields('t', $fields_array);
+        $query->condition('onlinecategory', $onlinecategory, '=');
+        $query->condition('onlineinterestarea', '%' . $database->escapeLike($interest) . '%', 'LIKE');
+        $query->orderBy('onlinetitle', 'ASC');
+        $result = $query->distinct()->execute();
+        foreach ($result as $record) {
+            $degreeName = $record->onlinetitle;
+            $degreeCode = $record->onlinecode;
+            $prog_array[$degreeCode] = $degreeName;
+        }
+	   $form['elements']['page_12']['rfi_elements']['program_of_interest']['#options'] = $prog_array;
+	   return $form['elements']['page_12']['rfi_elements']['program_of_interest'];
+}
+
+function asu_survey_webform_options_alter(array &$options, array &$element, $id)
+{
+	//ksm($id,'id');
+	/** Code to alter Freshman states dropdown options **/
+	if($id == "asu_entry_terms"){
+	
+       // build the date array
+		$date = array();
+		$customdate = new DateTime();
+	    // dpm($customdate);
+	    $customdate->modify("+7 day");
+	    $newcusate = $customdate->format("Y-m-d");
+	    $month = date('m', strtotime($newcusate));
+		$day = date('d', strtotime($newcusate));
+		
+		$new = array();
+		$options = array();
+		$semester = array("1"=>"Spring","7"=>"Fall");
+		$year = date('Y', strtotime($newcusate));
+		//for($year = $year_value; $year<=$year_value+5; $year++; ){
+		for($i = 0;$i<=3; $i++)
+		{
+			$dates[$i] = $year + $i;
+			$new[$i]  = substr_replace($dates[$i], "", 1, 1);
+		}
+		foreach($dates as $i => $date){
+			
+			//if($i == 0){
+				if($year == $date ) // check if it is current year
+				{
+					if(($month<=8))
+					{
+						if(($month != 8) || ($month == 8) &&  ($day <= 14)) {
+							$sem = $semester["7"];
+							$trim_year = $new[$i]."7";  // append 1 to the key depending on the season. For spring, add 1.
+							$list = $date;
+							$options[$trim_year] = $list." ".$sem;
+						}
+
+					}
+					if(($month >= 8)){
+						if(($month != 8) || ($month == 8) &&  ($day > 14)){
+							$sem = $semester["1"];
+							$trim_year = ($new[$i]+1)."1";  
+							$list = $date+1;
+							$options[$trim_year] = $list." ".$sem;
+							$up_new = $new[$i]+1;
+							$new_date = $date+1;
+							$sem = $semester["7"];
+							$trim_year = $up_new."7";
+							$list = $new_date;
+							$options[$trim_year] = $list." ".$sem;
+
+						}
+					}
+					//ksm($options);
+				}
+				else{
+					$sem = $semester["1"];
+					$trim_year = ($new[$i])."1";  // append 1 to the key depending on the season. For spring, add 1.
+					$list = $date;
+					$options[$trim_year] = $list." ".$sem;
+
+					$upnext_new = $new[$i] ;
+					$nextnew_date = $date;
+					$next_sem = $semester["7"];
+					$nexttrim_year = $upnext_new."7";
+					$next_list = $nextnew_date;
+					$options[$nexttrim_year] = $next_list." ".$next_sem;
+				}
+    		//}
+		}
+		//}
+		//ksm($options);
+		if(!empty($options)){
+			$sem_dates_array = $options;
+		}
+		
+		//ksm($sem_dates_array);
+		return $sem_dates_array;
+ 
+	}
+}
+
+/**
+ * Implements hook_mail().
+ */
+function asu_survey_mail($key, &$message, $params) {
+    $options = array(
+        'langcode' => $message['langcode'],
+    );
+    switch ($key) {
+        case 'send_survey_email':
+            $message['from'] = \Drupal::config('system.site')->get('mail');
+            $message['subject'] = t('@subject', ['@subject' => $params['subject']], $options);
+            $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed'; // Needed this to display images.
+            $message['body'][] = $params['message'];
+            break;
+    }
+}

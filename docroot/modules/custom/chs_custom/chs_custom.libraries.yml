@@ -1,0 +1,9 @@
+chs:
+  version: 1.x
+  css:
+    theme:
+      css/chs-theme.css: {}
+  js:
+    js/chstheme.js: {}
+  dependencies:
+    - core/jquery

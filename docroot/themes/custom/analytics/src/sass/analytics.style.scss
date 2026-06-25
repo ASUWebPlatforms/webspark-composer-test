@@ -1,0 +1,18 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+@import 'base';
+@import 'partials';
+@import 'overrides';
+@import 'nodes';
+@import 'views';
+@import 'displays';
+
+// WS2 Overrides
+form.uds-form input {
+  padding-left: 1rem !important;
+}
+
+.block--type-banner > h2 {
+  display: none;
+}

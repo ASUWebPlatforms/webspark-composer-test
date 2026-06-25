@@ -1,0 +1,28 @@
+{{ attach_library('asu_alumni/style') }}
+{%
+  set classes = [
+    dom_id ? 'js-view-dom-id-' ~ dom_id,
+    'any-other-custom-class-you-want',
+    'container'
+  ]
+%}
+<div {{ attributes.addClass(classes) }}>
+    <div class="row searchRows">
+        <div class="col-md-8 col-md-push-8 searchResults">
+            {{ rows }}
+        </div>
+        <div class="col-md-4 col-md-pull-4">
+            <div class="border p-2">
+             {{ exposed }}
+            </div>
+            <div class="border p-2 mt-4">
+                {{ drupal_entity('block_content', '66') }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            {{ pager }}
+        </div>
+    </div>
+</div>

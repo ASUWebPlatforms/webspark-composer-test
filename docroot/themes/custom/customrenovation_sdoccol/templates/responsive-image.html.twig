@@ -1,0 +1,36 @@
+{#
+/**
+ * @file
+ * Default theme implementation of a responsive image.
+ *
+ * Available variables:
+ * - sources: The attributes of the <source> tags for this <picture> tag.
+ * - img_element: The controlling image, with the fallback image in srcset.
+ * - output_image_tag: Whether or not to output an <img> tag instead of a
+ *   <picture> tag.
+ *
+ * @see template_preprocess()
+ * @see template_preprocess_responsive_image()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% set image_uri = img_element['#uri'] %}
+{% set image_alt = img_element['#alt'] %}
+{% set image_width = img_element['#attributes']['data-original-image-width'] %}
+{% set image_height = img_element['#attributes']['data-original-image-height'] %}
+
+{% if output_image_tag %}
+  {{ img_element }}
+{% else %}
+  <picture>
+    {% if sources %}
+      {% for source_attributes in sources %}
+        <source{{ source_attributes }}/>
+      {% endfor %}
+    {% endif %}
+    {# The controlling image, with the fallback image in srcset. #}
+    <img src="{{ image_uri }}" alt="{{ image_alt }}" style="aspect-ratio: {{ image_width }} / {{ image_height }};">
+  </picture>
+{% endif %}

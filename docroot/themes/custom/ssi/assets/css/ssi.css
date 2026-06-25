@@ -1,0 +1,43 @@
+.pb-5 {
+    padding-bottom: 0px !important;
+}
+.uds-card-arrangement-card-container .card-wrapper {
+  background: #FFFFFF;
+}
+.services-card  {
+	background-color: #FFFFFF;
+}
+.services-card .uds-table {
+	background-color: #FFFFFF;
+	padding: 20px;
+}
+.uds-table>table tbody tr:focus td,.uds-table>table tbody tr:focus th,.uds-table>table tbody tr:hover td,.uds-table>table tbody tr:hover th{
+	background-color:#FFFFFF
+}
+
+.services-bg-gold {
+	background-color: #FFC627;
+	color: #000000;
+	padding: 5px 20px 15px;
+}
+.services-bg-black {
+	background-color: #000000;
+	color: #FFFFFF;
+  padding: 5px 15px 15px;
+}
+.services-bg-black a {
+	color: #FFFFFF;
+}
+.steps-to-access {
+	height: 175px;
+	border-left: 3px solid black;
+	padding-left: 10px;
+}
+
+.tab-content {
+	padding-left: 2rem;	
+	padding-right: 2rem;
+}
+.uds-figure {
+  padding: 10px 10px 0px 10px;
+}

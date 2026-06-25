@@ -1,0 +1,4 @@
+name: Custom CSS
+type: module
+description: Adds custom CSS to the blocks.
+core_version_requirement: ^9 || ^10

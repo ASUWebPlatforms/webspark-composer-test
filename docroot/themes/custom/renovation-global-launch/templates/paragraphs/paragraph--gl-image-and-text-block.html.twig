@@ -1,0 +1,57 @@
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished',
+    'container'
+  ]
+%}
+{% block paragraph %}
+  <div{{ attributes.addClass(classes) }}>
+    {% block content %}
+    
+{#     		if Image Right is selected, the boolean field will output the class name if true #}
+    		<div class="uds-image-text-block-container uds-image-text-block-container {{content.field_image_text_right_gl}}" >
+    				
+    		
+	    	
+	    	
+    			<div class="uds-image-text-block-image-container">
+    				{{content.field_image_text_image_gl}}
+    			</div>
+    			<div class="uds-image-text-block-text-container ">
+    				<h3>{{content.field_image_text_title_gl}}</h3>
+    				<h4>{{content.field_image_text_subtitle_gl}}</h4>
+    					{{content.field_image_text_body_gl}}
+    					{% if content.field_image_text_link_gl.0['#url'] %}
+    					<div class="row">
+    						<div class="col-12 col-md-6 py-1">
+    							<a href="{{content.field_image_text_link_gl.0['#url']}}" class="btn btn-gold">{{content.field_image_text_link_gl.0['#title']}}</a>
+    						</div>
+    					</div>	
+    					{% endif %}		
+    			</div>
+    		
+    		</div>
+    		
+
+    	
+
+      
+    {% endblock %}
+  </div>
+{% endblock paragraph %}
+
+
+
+
+
+
+
+
+
+
+
+
+

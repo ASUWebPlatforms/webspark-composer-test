@@ -1,0 +1,11 @@
+vanilla-sort:
+  version: 1.x
+  js:
+    js/vanilla-sort.js: {}
+ajax-endorsement:
+  js:
+    js/ajax-endorsement.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupal.ajax

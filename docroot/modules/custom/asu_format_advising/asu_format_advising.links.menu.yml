@@ -1,0 +1,6 @@
+asu_format_advising.admin_settings:
+  title: 'ASU Format Advising'
+  description: 'Configure ASU Format Advising settings.'
+  parent: asu_modules.admin_settings
+  route_name: asu_format_advising.settings_form
+  weight: 100

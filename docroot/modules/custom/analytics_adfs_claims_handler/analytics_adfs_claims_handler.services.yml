@@ -1,0 +1,8 @@
+# services:
+#   analytics_adfs_claims_handler.saml_event_subscriber:
+#     class: Drupal\analytics_adfs_claims_handler\EventSubscriber\SamlAuthEventSubscriber
+#     arguments:
+#       - '@entity_type.manager'
+#       - '@group.membership_loader'
+#     tags:
+#       - { name: event_subscriber }

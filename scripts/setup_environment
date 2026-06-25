@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -e
+
+# Allow MySQL to finish starting.
+sleep 3
+
+export PATH=${COMPOSER_BIN}:$PATH
+
+# Create fake mailer.
+echo "max_execution_time = 120" >> /usr/local/etc/php/conf.d/docker-php-maxexecutiontime.ini
+echo "sendmail_path=/usr/sbin/sendmail -t -i" >> /usr/local/etc/php/conf.d/sendmail.ini
+
+# Ensure that always_populate_raw_post_data PHP setting: Not set to -1 does not happen.
+echo "always_populate_raw_post_data = -1" >> /usr/local/etc/php/conf.d/docker-php-rawpostdata.ini
+# Set PHP memory limit to appease ACMS' sadistic appetites.
+echo 'memory_limit = 2G' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
+
+# Set git info.
+git config --global user.name "Acquia CI"
+git config --global user.email "noreply@acquia-ci.com"
+
+set +e

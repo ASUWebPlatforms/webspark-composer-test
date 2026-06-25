@@ -1,0 +1,9 @@
+{% extends '@renovation/node/node.twig' %}
+
+{% block content %}
+  {{ parent() }}
+
+  <div class="container tw-py-4">
+    {{ favorites_link }}
+  </div>
+{% endblock %}

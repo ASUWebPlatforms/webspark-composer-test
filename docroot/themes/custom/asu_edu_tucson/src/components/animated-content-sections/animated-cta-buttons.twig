@@ -1,0 +1,47 @@
+<div class="animated-content-section my-5 text-white">
+  {% for card in cards %}
+  <div class="content-section my-2" style="background-image: url('{{ card.media }}')">
+    <div class="image-holder"></div>
+    <div class="content-holder px-4">
+      <h2>{{ card.heading }}</h2>
+      <div class="hidden-details">
+        <div class="long-text mt-1 mb-3">{{ card.body|raw }}</div>
+
+        <div class="link-area mb-3">
+          {% for link in card.links %}
+            {{ link(link.title, link.uri) }}
+          {% endfor %}
+        </div>
+
+        <div class="tags-area mb-3">
+          {% for tag in card.tags %}
+            {% include '@renovation/links/tags.twig' with {
+              url: tag.url,
+              name: tag.name,
+            } %}
+          {% endfor %}
+        </div>
+
+        <div class="button-area">
+          <!-- START INSERT: Button Component -->
+            {% for cta in card.ctas %}
+              <a
+                href="{{ cta.uri }}"
+                class="btn btn-md btn-gold"
+                role="link"
+                data-ga-animated-content-section-section="{{ card.heading | lower}}"
+                data-ga-animated-content-section="{{ cta.title | lower }}"
+              >
+                {{ cta.title }}
+              </a>
+
+            {% endfor %}
+          <!-- END INSERT: Button Component -->
+        </div>
+
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{{ attach_library('asu_edu_tucson/animated-content-sections') }}

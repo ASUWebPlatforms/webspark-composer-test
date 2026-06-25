@@ -1,0 +1,5 @@
+name: ASU Campus cameras Module
+type: module
+description: 'Generates blocks to insert cameras'
+package: ASU
+core_version_requirement: ^9 || ^10

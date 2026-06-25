@@ -1,0 +1,5 @@
+name: publicoutcomes
+description: publicoutcomes dummy
+package: Custom
+type: module
+core_version_requirement: ^10

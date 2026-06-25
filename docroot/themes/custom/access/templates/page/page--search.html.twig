@@ -1,0 +1,35 @@
+{#
+/**
+ * @file
+ * Template for the search page.
+ */
+#}
+<div id="skip-to-content" tabindex="-1" class="search page content-page">
+  <main id="main-content" class="pt-5 pb-5">
+    {% if page.header %}
+      <div class="container">
+        {{ page.header }}
+      </div>
+    {% endif %}
+
+    {% if page.pre_content %}
+      <div class="page__pre-content">
+        <div class="container">
+          {{ page.pre_content }}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if page.content %}
+      <div class="page__content">
+        {{ page.content }}
+      </div>
+    {% endif %}
+  </main>
+
+  {% if page.footer %}
+    <footer class="page__footer" role="contentinfo">
+      {{ page.footer }}
+    </footer>
+  {% endif %}
+</div>

@@ -1,0 +1,33 @@
+{#
+/**
+ * @file
+ * Template for a block.
+ */
+#}
+
+{% set display = content.field_grid_links_display|render|trim|striptags %}
+{% set background_effect = content.field_udi_background_effect|render|striptags|trim %}
+
+{% set classes = [
+  'block',
+  'block-' ~ configuration.provider|clean_class,
+  'block-' ~ plugin_id|clean_class,
+  'udi-icon-grid',
+  background_effect,
+] %}
+
+
+
+<div{{ attributes.addClass(classes) }}>{{ background_color }}
+  {{ title_prefix }}
+  {% if label %}
+    {% block label %}
+      <h2{{ title_attributes }}>{{ label }}</h2>
+    {% endblock %}
+  {% endif %}
+  {{ title_suffix }}
+
+  <div class="udi-icon-grid--blocks flex-column flex-sm-row d-flex {% apply spaceless %}{{ display }}{% endapply %}">
+    {{ content.field_card }}
+  </div>
+</div>

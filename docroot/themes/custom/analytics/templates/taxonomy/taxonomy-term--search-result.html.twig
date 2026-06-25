@@ -1,0 +1,13 @@
+{% set preview = null %}
+{% if term.field_description.value %}
+  {% set preview = term.field_description.value|slice(0, 65) ~ (term.field_description.value|length > 65 ? '...') %}
+{% endif %}
+{% set data = {
+  'title': term.name.value,
+  'url': term|entity_url,
+  'description': preview,
+} %}
+
+<article class="term__teaser--search-result">
+  {{ include('@analytics/teaser-search-result.twig', data) }}
+</article>

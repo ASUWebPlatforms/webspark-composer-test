@@ -1,0 +1,37 @@
+{% if content %}
+{# This looks specifically for the section named accordion-panels-for-tabs #}
+  {% if (content['#settings'].label == "accordion-panels-for-tabs") and (in_preview == false) %}
+  <div class="layout__fixed-width">
+    {% if content.first %}
+      <div {{ attributes.addClass('max-size-container','center-container') }}>
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <div {{ region_attributes.first.addClass('layout__region', 'layout__region--first', 'tab-content') }}>
+                {{ content.first }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+  {% else %}
+    <div class="layout__fixed-width">
+      {% if content.first %}
+        <div {{ attributes.addClass('max-size-container','center-container') }}>
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <div {{ region_attributes.first.addClass('layout__region', 'layout__region--first') }}>
+                  {{ content.first }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endif %}
+

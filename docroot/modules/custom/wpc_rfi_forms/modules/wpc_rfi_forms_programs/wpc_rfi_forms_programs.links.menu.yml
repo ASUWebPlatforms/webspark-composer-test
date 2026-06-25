@@ -1,0 +1,12 @@
+# Define the menu links for this module
+
+entity.wpc_rfi_forms_programs_program.collection:
+  title: 'WPC Programs'
+  route_name: entity.wpc_rfi_forms_programs_program.collection
+  description: 'List programs'
+  
+wpc_rfi_forms_programs_program.admin.structure.settings:
+  title: 'WPC Program Settings'
+  description: 'Configure WPC Programs'
+  route_name:  wpc_rfi_forms_programs.program_settings
+  parent: system.admin_structure

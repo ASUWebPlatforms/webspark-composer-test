@@ -1,0 +1,5 @@
+name: ASU Cancel event reservations
+type: module
+description: 'Functionality to cancel event reservations'
+package: ASU
+core_version_requirement: '^8 || ^9 || ^10'

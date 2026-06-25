@@ -1,0 +1,9 @@
+name: ASU cost comparison tool
+type: module
+description: 'Creates a comparison tool for ASU costs using React.'
+package: ASU
+core_version_requirement: ^9 || ^10 || ^11
+dependencies:
+  - drupal:webform
+Authors:
+  - 'Archana Vannela'

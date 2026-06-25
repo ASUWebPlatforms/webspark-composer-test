@@ -1,0 +1,32 @@
+@import "~bootstrap/scss/mixins";
+
+@mixin search-block($selector) {
+  #{$selector} {
+    background: $uds-color-background-gray;
+    padding: rem(72) rem(48);
+
+    .uds-form {
+      display: flex;
+      flex-flow: row wrap;
+
+      .form-group {
+        margin-bottom: 0;
+        margin-right: rem(24);
+        flex-basis: 50%;
+      }
+
+      label {
+        @include visually-hidden;
+      }
+
+      .form-submit {
+        background: $uds-color-base-gold !important;
+        font-size:.875rem !important;
+        padding:.5rem 1rem !important;
+        border-color: $uds-color-base-gold !important;
+        color: #000 !important;
+        height: rem(42) !important;
+      }
+    }
+  }
+}

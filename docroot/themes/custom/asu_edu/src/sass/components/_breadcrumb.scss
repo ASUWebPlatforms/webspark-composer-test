@@ -1,0 +1,8 @@
+.block-webspark-module-asu-breadcrumb {
+  @media screen and (max-width: $uds-grid-container-max-width-md) {
+    .layout__fixed-width & {
+      margin-top: $uds-size-spacing-4;
+      margin-bottom: $uds-size-spacing-2;
+    }
+  }
+}

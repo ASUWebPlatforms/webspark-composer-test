@@ -1,0 +1,5 @@
+name: ASU AEC Admin panel
+type: module
+description: 'ASU AEC custom module - Admin panel related items'
+package: ASU
+core_version_requirement: ^9 || ^10 || ^11

@@ -1,0 +1,33 @@
+<!-- /* old */ <ul class="bookmenu-section">
+	{% for book in books %}
+		<li class="menu-item">
+			<a href={{book.link}}> {{book.title}}</a>
+			{% for key, chapter in child %}
+				<ul>
+					{% if chapter.pid == book.nid %} 
+						<li>
+							<a href={{chapter.link}}> {{chapter.title}}</a>
+						</li>
+					{% endif %}
+				</ul>
+			{% endfor %}
+		</li>		
+	{% endfor %}
+ </ul> -->
+
+ <nav id="" class="sidebar collapse" aria-label="Secondary" style="margin: 20px 0px;">
+	{% for book in books %}
+		<div class="nav-link-container">
+				<a class="nav-link {{book.class}}" href={{book.link}}> <b>{{book.title}}</b></a>
+		</div>
+				
+		{% for key, chapter in child %}			
+				{% if chapter.pid == book.nid %} 
+					<div class="nav-link-container" style="padding-left: 20px;">					
+						<a class="nav-link {{chapter.class}}" style="font-size: 14px;" href={{chapter.link}}>{{chapter.title}}</a>
+					</div>					
+				{% endif %}			
+		{% endfor %}
+		
+	{% endfor %}
+</nav>

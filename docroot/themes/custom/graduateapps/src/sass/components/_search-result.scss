@@ -1,0 +1,20 @@
+.asu-defense-calendar-form.uds-form{
+  .ajax-progress{
+    flex-basis: 100%;
+    margin-top: -1rem;
+    color: var(--bs-gray-5-rgb);
+    .throbber, .message{
+      position: absolute;
+    }
+    .message{
+      padding-left: 1.5rem;
+    }
+  }
+  input{
+    padding-left: 1rem!important;
+  }
+  .text-maroon-emphasis{
+    color: #8c1d40;
+  }
+  
+}

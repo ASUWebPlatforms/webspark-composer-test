@@ -1,0 +1,56 @@
+{#{{ dump(form.field_degree_tags.705['#title']) }}#}
+{#
+/**
+ * @file
+ * Default theme implementation of a views exposed form.
+ *
+ * Available variables:
+ * - form: A render element representing the form.
+ *
+ * @see template_preprocess_views_exposed_form()
+ *
+ * @ingroup themeable
+ */
+#}
+{% if q is not empty %}
+  {#
+  This ensures that, if clean URLs are off, the 'q' is added first,
+  as a hidden form element, so that it shows up first in the POST URL.
+  #}
+  {{ q }}
+{% endif %}
+<div id="views-exposed-form-degree-search-solr8-block-1">
+{% if form.search_api_fulltext is defined %}
+  {{ form.search_api_fulltext }}
+{% endif %}
+{% if form.actions is defined %}
+  {{ form.actions }}
+{% endif %}
+{% if form.field_degree_personas_1 is defined %}
+  {{ form.field_degree_personas_1 }}
+{% endif %}
+{% if form.field_degree_goals_1 is defined %}
+  {{ form.field_degree_goals_1 }}
+{% endif %}
+</div>
+
+<h3 class="h4">
+  <a class="d-md-none" href="#collapseExample" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample">Additional Filters&nbsp;<em><i class="fa-chevron-down ms-2 toggle-icon"><span class="fontawesome-icon-inline"><i class="fa-chevron-down fas ms-2 toggle-icon">&nbsp;</i></span></i></em></a> <span class="d-none d-md-inline">Additional Filters&nbsp;</span>
+</h3>
+<hr>
+
+<div id="collapseExample" class="collapse d-md-block block">
+  {% if form.field_degree_tags is defined %}
+    {{ form.field_degree_tags }}
+  {% endif %}
+<hr>
+  {% if form.field_degree_campuses_offered is defined %}
+    {{ form.field_degree_campuses_offered }}
+  {% endif %}
+<hr>
+</div>
+
+
+{% if form.actions.reset is defined %}
+  {{ form.actions.reset }}
+{% endif %}

@@ -1,0 +1,21 @@
+services:
+  getJsSettings:
+    class: '\Drupal\asu_campus_fit\Service\CampusFitJsSettings'
+
+  
+  asu_campus_fit.campus_fit_confirm_controller:
+    class: 'Drupal\asu_campus_fit\Controller\CampusFitConfirmController'
+    arguments: ['@renderer', '@request_stack']
+    public: true
+
+  asu_campus_fit.CampusFitOtherCampuses:
+    class: 'Drupal\asu_campus_fit\Controller\CampusFitOtherCampuses'
+    arguments: ['@renderer', '@request_stack']
+    public: true
+
+  getOnlineProgramList:
+    class: '\Drupal\asu_campus_fit\Service\AsuOnlineProgramList'
+
+  getOnCampusProgramList:
+    class: '\Drupal\asu_campus_fit\Service\AsuOnCampusProgramList'
+  

@@ -1,0 +1,9 @@
+name: shapingedu Custom Features and Styles
+type: module
+description: Enables custom website features and styles
+package: 'Custom Modules'
+core_version_requirement: ^8.8 || ^9 || ^10
+version: '1.0.0'
+#configure: shapingedu_custom.configuration_form
+dependencies:
+  - drupal:block

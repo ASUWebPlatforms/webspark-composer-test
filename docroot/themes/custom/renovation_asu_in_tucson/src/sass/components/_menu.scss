@@ -1,0 +1,42 @@
+// @import '../../../../webspark/renovation/src/sass/renovation.style.scss';
+
+#uds-anchor-menu {
+	.nav-link {
+    text-decoration: none;
+  }
+
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    nav {
+      padding: 0 $uds-size-spacing-2;
+    }
+
+    h4 {
+      font-size: $uds-size-font-large;
+    }
+    .nav-link {
+      padding: $uds-size-font-medium 0 $uds-size-font-medium $uds-size-font-large;
+      margin-left: $uds-size-spacing-3;
+      margin-right: $uds-size-spacing-3;
+    }
+    #collapseExample {
+      border-top: 1px solid $uds-color-base-gray-3;
+    }
+  }
+}
+
+#asu-header-nav {
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+   .nav-item-selected {
+      margin-top: 0;
+      margin-bottom: 0;
+      &.home {
+        padding-bottom: $uds-size-spacing-half;
+      }
+    }
+    .nav-item {
+      padding-bottom: $uds-size-spacing-half;
+    }
+  }
+
+}

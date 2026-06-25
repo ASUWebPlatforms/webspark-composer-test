@@ -1,0 +1,95 @@
+services:
+  searchPageTitle:
+    class: '\Drupal\asu_tuition\Service\AsuSearchPageTitle'
+  searchPageDescription:
+    class: '\Drupal\asu_tuition\Service\AsuSearchPageDescription'
+  defaultValues:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionDefaultValues'
+  listValues:
+    class: '\Drupal\asu_tuition\Service\listAllowedValues'
+  getOptions:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionGetOptions'
+  getJsSettings:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionGetJsSettings'
+  formDebugMode:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionFormDebugMode'
+  formDebug:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionFormDebug'
+  getUrlParameters:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionGetUrlParameters'
+  resultsLoad:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionResultsLoad'
+  resultsLoadJson:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionResultsLoadJson'
+  selectedOptionsItemsLoad:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionSelectedOptionsItemsLoad'
+  selectedOptionsItemsLoadJson:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionSelectedOptionsItemsLoadJson'
+  getSelectedOptionsText:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionGetSelectedOptionsText'
+  readRecords:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionReadRecords'
+  readRecordsJson:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionReadRecordsJson'
+  tableExists:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionTableExists'
+  getSchema:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionGetSchema'
+  getSchemaFieldsSql:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionSchemaFieldsSql'
+  getFullTimeCreditLoad:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionFullTimeCreditLoad'
+  getBaseTermLoad:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionBaseTermLoad'
+  getBaseTermLoadJson:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionBaseTermLoadJson'
+  getTuitionLabelLoad:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionLabelLoad'
+  getTuitionFullTimeMessageLoad:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionFullTimeMessageLoad'
+  getSumSubArrayByKey:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionSumSubArrayByKey'
+  getFullTimeTuitionLoad:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionFullTimeTuitionLoad'
+  getMaxCreditsLoad:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionMaxCreditsLoad'
+  getFeeTypesLoad:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionFeeTypesLoad'
+  getFullTimeTuitionTable:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionFullTimeTuitionTable'
+  getFullTimeTuitionTableJson:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionFullTimeTuitionTableJson'
+  includeSummer:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionIncludeSummer'
+  tuitionMoneyFormat:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionMoneyFormat'
+  getBreakdownTable:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionBreakdownTable' 
+  getBreakdownTableJson:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionBreakdownTableJson' 
+  getFormValues:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionFormValues'
+  getValidValues:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionValidValues'
+  getValueExists:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionValueExists'
+  getTuitionBreakdownLoad:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionBreakdownLoad'
+  getEntityInfo:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionEntityInfo'
+  editTableFields:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionEditTableFields'
+  countRecords:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionCountRecords'
+  getFilterOptions:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionGetFilterOptions'
+  buildFilterQuery:
+    class: '\Drupal\asu_tuition\Service\AsuTuitionBuildFilterQuery'
+  # Query Batch Service
+  #asu_tuition.batch_service:
+  #  class: Drupal\asu_tuition\Service\AsuFetchQueryBatchService
+  #  arguments: ['@database', '@file_system', '@state', '@logger.factory', '@string_translation', '@uuid']
+  #  public: true  
+  asu_tuition.query_logger:
+    class: Drupal\asu_tuition\Service\QueryLogger
+    arguments: ['@database', '@config.factory', '@messenger', '@current_user']

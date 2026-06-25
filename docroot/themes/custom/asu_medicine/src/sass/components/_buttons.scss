@@ -1,0 +1,66 @@
+@media screen and (min-width: $uds-grid-container-max-width-lg) {
+  .btn:focus {
+    border-radius: 400rem;
+  }
+
+  button.glide__bullet {
+    border-radius: 400rem;
+  }
+}
+
+@media screen and (max-width: $uds-grid-container-max-width-lg) {
+  .card {
+    .card-button {
+      .btn {
+        font-size: $uds-size-font-small;
+        padding: $uds-size-spacing-1 $uds-size-spacing-2;
+        line-height: $uds-size-font-xl;
+      }
+    }
+  }
+
+  .news-feed {
+    .carousel-wrapper {
+      .feed-header-section {
+        .feed-header-control {
+          max-width: initial
+        }
+      }
+    }
+  }
+}
+
+.uds-video-hero {
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    .btn:focus {
+      transform: scale(1.05);
+    }
+
+    .container {
+      .buttons {
+        button:focus {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    video {
+      &.fixed-background {
+        top: 100% !important;
+      }
+    }
+  }
+
+}
+
+.uds-hero-lg {
+  &.has-btn-row {
+    .btn-row {
+      .btn:focus {
+        transform: scale(1.05);
+      }
+    }
+  }
+}

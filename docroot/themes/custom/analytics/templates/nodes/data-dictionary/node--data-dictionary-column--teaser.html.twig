@@ -1,0 +1,17 @@
+{% set data = {
+  'title': node.title.value,
+  'content': node.field_description.value,
+  'button': {
+    'url': node|entity_url,
+    'color': 'maroon',
+    'text': 'View column',
+  },
+  'tags': {
+    'data': content.field_tags.0
+  },
+  'favorite': true
+} %}
+
+<article class="data-dictionary-column__teaser">
+  {{ include('@partials/teasers/teaser.html.twig', data) }}
+</article>

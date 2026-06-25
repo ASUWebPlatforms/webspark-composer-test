@@ -1,0 +1,17 @@
+name: ASU Events Theme asuevents
+type: theme
+base theme: renovation
+description: ASU Events CMS subtheme.
+package: ASU Events Site
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+libraries:
+  - renovation_asuevents/global-styling
+
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer

@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Aventri Event Embed module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function aventri_event_embed_theme($existing, $type, $theme, $path)
+{
+    return [
+        'aventri_embed' => [
+            'variables' => [
+                'account' => \Drupal::config('aventri_event_embed.config')->get('account'),
+                'widget_id' => '',
+            ],
+        ],
+    ];
+}

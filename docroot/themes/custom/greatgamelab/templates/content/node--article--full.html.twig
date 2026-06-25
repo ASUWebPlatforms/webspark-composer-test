@@ -1,0 +1,71 @@
+{#
+/**
+ * @file
+ * Custom Template for a Blog Article Node component.
+ */
+#}
+
+{%
+  set classes = [
+  'node',
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+  'spacing-top-96',
+  'spacing-bottom-96',
+]
+%}
+<div class="layout__fixed-width">
+    <div class="max-size-container center-container bg-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <article {{ attributes.addClass(classes) }} >
+                    {{ title_prefix }}
+                    {{ title_suffix }}
+                    {% block content %}
+                        <div class="ggl-article-title mx-auto">
+                          <h1>{{ node.label }}</h2>
+                          <div class="card-tags mt-2 mb-8" data-testid="card-tags">
+                            <a class="btn btn-tag btn-tag-alt-gray" title="Listed in the {{ content.field_tags|render|striptags|trim }} category">{{ content.field_tags|render|striptags|trim }}</a>
+                          </div>
+                        </div>
+                        <div class="ggl-article-image mt-5 mb-5 mx-auto text-center uds-image">
+                            <figure class="figure uds-figure">
+                                {% if content.field_article_image|render|trim %}
+                                    {{ content.field_article_image }}
+                                {% else %}
+                                    {{ content.field_media }}
+                                {% endif %}
+                                <figcaption class="figure-caption uds-figure-caption">
+                                    <span class="uds-caption-text">{{ content.field_hero_image_credit }}</span>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="ggl-article-body set-piece-body mx-auto">
+                            <p> {{ content.field_date_published }}
+                                {% if content.field_author|render|trim and content.field_date_published|render|trim %}
+                                    <span class="ps-2">|</span>
+                                {% endif %}
+                                <span class="ps-2">{{ content.field_author }}</span>
+                            </p>
+                            <div class="ggl-article-body__article_content">
+                               {% if not node.field_team_members.isEmpty() %}
+                                {% if featured_team_members %}
+                                <hr>
+                                    {{ featured_team_members }}
+                                <hr>
+                                {% endif %}
+                              {% endif %}
+                             
+                                {{ content.body }}
+                            </div>
+                            
+                            <p class="mt-8"><a href="/explore/blog">Back to Mixed Zone Blog</a></p>
+                        </div>
+                    {% endblock %}
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

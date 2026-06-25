@@ -1,0 +1,9 @@
+asumex_custom.configuration_form:
+  path: 'admin/config/system/configuration/asumex_custom'
+  defaults:
+    _form: '\Drupal\asumex_custom\Form\ASUMEXCustomSettingsForm'
+    _title: 'ASU Mexico Custom Features Configuration'
+  requirements:
+    _permission: 'administer asumex_custom'
+  options:
+    _admin_route: TRUE

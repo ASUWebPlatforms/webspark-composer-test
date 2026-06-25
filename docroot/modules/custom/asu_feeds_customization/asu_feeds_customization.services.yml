@@ -1,0 +1,5 @@
+services:
+  asu_feeds_customization.database_service:
+    class: Drupal\asu_feeds_customization\Service\DegreesDataService
+    arguments: ['@database']
+

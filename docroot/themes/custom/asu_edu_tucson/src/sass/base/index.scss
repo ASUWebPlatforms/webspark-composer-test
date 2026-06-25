@@ -1,0 +1,13 @@
+@import "asu-about";
+@import "asu-academics";
+@import "asu-admission";
+@import "asu-alumni";
+@import "asu-giving";
+@import "asu-home";
+@import "asu-news-events";
+@import "asu-research";
+
+// Per tlstarr 1/22/24: Add rounded-circle class to images in the media library (ASUleaderships page)
+div.rounded-circle img {
+    border-radius: 50% !important;
+}

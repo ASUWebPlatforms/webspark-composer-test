@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function asu_graduate_faculty_theme($existing, $type, $theme, $path) {
+  return [
+    'asu_graduate_faculty_search_page' => [
+      'variables' => ['content' => NULL, 'form' => NULL],
+      'template' => 'asu-graduate-faculty-search-page',
+    ],
+    'asu_graduate_faculty_table' => [
+      'variables' => ['rows' => NULL, 'heads' => NULL, 'title'=> NULL, 'searchSummary' => NULL ],
+      'template' => 'asu-graduate-faculty-table',
+    ],
+    'asu_graduate_faculty_list' => [
+      'variables' => ['rows' => NULL, 'title'=> NULL, 'searchSummary' => NULL ],
+      'template' => 'asu-graduate-faculty-list',
+    ],
+  ];
+}

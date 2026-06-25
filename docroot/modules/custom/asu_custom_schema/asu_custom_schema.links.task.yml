@@ -1,0 +1,5 @@
+asu_custom_schema.node.schema:
+  route_name: asu_custom_schema.node.schema
+  base_route: entity.node.canonical
+  title: 'Schema'
+  weight: 30

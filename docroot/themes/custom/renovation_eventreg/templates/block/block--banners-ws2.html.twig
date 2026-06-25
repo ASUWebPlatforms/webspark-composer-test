@@ -1,0 +1,68 @@
+{#
+/**
+ * @file
+ * Template for a block.
+ */
+#}
+
+{% set color_var = 'bg-' ~ content['field_banner_color'][0]['#markup'] %}
+{%
+    set attributes = attributes
+      .addClass('ws2-banner-info ' ~ color_var|lower)
+  %}
+
+
+
+<div{{attributes}}>
+  
+    <div class="pane-content">
+        
+            <div class="row" style="padding: 12px;">
+                <div class="col-sm-11 col-lg-11 col-md-11 ">
+                    
+                </div>
+                <div class="banner-close col-sm-1 col-lg-1 col-md-1 ">
+                    <a href="#" class="close jquery-once-2-processed" title="close" id="close-info-banner">x</a>
+                </div>    
+            </div>
+            <div class="fieldable-panels-pane row">
+                <div class="col-sm-12 col-lg-9 col-md-9 row">
+                    
+                    <div class="col-sm-2 col-lg-2 col-md-2 ">
+                        <h2 class="bell-icon"><i class="fa-solid fa-bell"></i></h3>
+                    </div>
+                    <div class="col-sm-10 col-lg-10 col-md-10">
+                        <div class="field field-name-field-banner-title-int field-type-text field-label-hidden">
+                            <div class="field-items">
+                                <div class="field-item even">
+                                    <h3 class="title">{{content['field_banner_title_int'][0]['#context']['value']}}</h3> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field field-name-field-banner-body field-type-text-long field-label-hidden">
+                            <div class="field-items">
+                                <div class="field-item even">
+                                    <p>
+                                        {{content['field_banner_body'][0]['#text']}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-lg-3 col-md-3">
+                    <div class="field field-name-field-ws2-button field-type-link-field field-label-hidden">
+                        <div class="field-items">
+                            <div class="field-item even">
+                                <a href="https://universityevents.asu.edu/guidelines-person-events-and-meetings" class="btn btn-sm btn-black">
+                                    Guidelines
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+    

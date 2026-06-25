@@ -1,0 +1,87 @@
+asu_contact_webform_custom_options.rep_info_page:
+  path: '/get-rep-data/{state_selected}'
+  defaults:
+    _controller: '\Drupal\asu_contact_webform_custom_options\Controller\ContactFormController::rep_info_page'
+    _title: Reps data
+  requirements:
+    _permission: 'access content'
+
+
+asu_contact_webform_custom_options.rep_info_hs_page:
+  path: '/get-rep-data/{state_selected}/{hs_selected}'
+  defaults:
+    _controller: '\Drupal\asu_contact_webform_custom_options\Controller\ContactFormController::rep_info_hs_page'
+    _title: Reps data
+  requirements:
+    _permission: 'access content'
+
+
+asu_contact_webform_custom_options.transfer_ca_az_rep_info_page:
+  path: '/get-tr-ca-az-rep-data/{state_selected}/{inst_selected}'
+  defaults:
+    _controller: '\Drupal\asu_contact_webform_custom_options\Controller\ContactFormController::transfer_ca_az_rep_info_page'
+    _title: Transfer CA Reps data
+  requirements:
+    _permission: 'access content'
+
+
+asu_contact_webform_custom_options.transfer_other_rep_info_page:
+  path: '/get-tr-rep-data/{state_selected}'
+  defaults:
+    _controller: '\Drupal\asu_contact_webform_custom_options\Controller\ContactFormController::transfer_other_rep_info_page'
+    _title: Transfer all Reps data
+  requirements:
+    _permission: 'access content'
+
+
+asu_contact_webform_custom_options.intl_rep_info_page:
+  path: '/get-intl-rep-data/{region}/{country}'
+  defaults:
+    _controller: '\Drupal\asu_contact_webform_custom_options\Controller\ContactFormController::intl_rep_info_page'
+    _title: International Reps data
+  requirements:
+    _permission: 'access content'
+
+asu_contact_webform_custom_options.international_china_specialist_node_load:
+  path: '/get-intl-china-rep-data/{node_id}'
+  defaults:
+    _controller: '\Drupal\asu_contact_webform_custom_options\Controller\ContactFormController::international_china_specialist_node_load'
+    _title: International China Reps data
+  requirements:
+    _permission: 'access content'
+
+
+asu_contact_webform_custom_options.highSchoolAutocomplete:
+  path: '/admin/asu_contact_webform_custom_options/autocomplete/hs'
+  defaults:
+     _controller: '\Drupal\asu_contact_webform_custom_options\Controller\ContactFormController::highSchoolAutocomplete'
+     _format: json
+  requirements:
+     _permission: 'access content'
+
+
+asu_contact_webform_custom_options.transferArizonaInstitutes:
+  path: '/admin/asu_contact_webform_custom_options/autocomplete/tai'
+  defaults:
+     _controller: '\Drupal\asu_contact_webform_custom_options\Controller\ContactFormController::ArizonaInstituteAutocomplete'
+     _format: json
+  requirements:
+     _permission: 'access content'
+
+
+asu_contact_webform_custom_options.transferCaliforniaInstitutes:
+  path: '/admin/asu_webform_custom_options/autocomplete/tci'
+  defaults:
+     _controller: '\Drupal\asu_contact_webform_custom_options\Controller\ContactFormController::CaliforniaInstituteAutocomplete'
+     _format: json
+  requirements:
+     _permission: 'access content'
+
+
+asu_contact_webform_custom_options.asu_contact_webform_custom_options_contact_form_formnid_settings:
+    path: '/admin/config/content/contact_forms/form_options'
+    defaults:
+      _form: '\Drupal\asu_contact_webform_custom_options\Form\ContactFormNodes'
+      _title: 'Add node ids of the contact forms'
+    requirements:
+      _permission: 'administer asu_contact_webform_custom_options'

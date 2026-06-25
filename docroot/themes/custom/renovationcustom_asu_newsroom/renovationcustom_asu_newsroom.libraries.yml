@@ -1,0 +1,10 @@
+global-styling:
+
+    css:
+        component:
+            css/renovationcustom_asu_newsroom.style.css: {}
+
+
+slider.js:
+  js:
+    \libraries\glider-js\glider.min.js: {}

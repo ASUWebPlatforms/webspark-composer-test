@@ -1,0 +1,20 @@
+name: CHS WS2 Public
+description: "This is a CHS WS2 Public sub theme of Webspark 2"
+screenshot: screenshot.png
+core_version_requirement: ^8.7.7 || ^9.0
+# version: VERSION
+engine: twig
+type: theme
+base theme: renovation
+# Defines libraries group in which we can add css/js.
+libraries:
+  - chs_ws2_public/global-styling
+
+# Regions
+regions:
+  header: Header
+  featured: Featured
+  content: Content
+  sidebar_first: First sidebar
+  sidebar_second: Second sidebar
+  footer: Footer

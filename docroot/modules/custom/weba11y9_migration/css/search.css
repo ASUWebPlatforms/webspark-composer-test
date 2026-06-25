@@ -1,0 +1,84 @@
+/**
+ * @file search.css
+ * BRIDGE CSS — Search block and search results page styles.
+ * Extracted from the legacy Access theme.
+ * These classes are referenced in database content. Remove as TSS team
+ * migrates content to Webspark-native components.
+ * See: WEBA11Y9_MIGRATION_TICKETS.md (Tickets S1, S2)
+ * @todo Remove after content migration is complete.
+ */
+
+/* Sidebar search */
+.search-block-form {
+  margin-bottom: 1rem;
+}
+.search-block-form .form-inline .form-control {
+  display: block;
+  margin-right: 1rem;
+  width: 15.5rem;
+}
+@media (min-width: 768px) {
+  .search-block-form .form-inline .form-control {
+    width: 8rem;
+  }
+}
+@media (min-width: 992px) {
+  .search-block-form .form-inline .form-control {
+    width: 12.5rem;
+  }
+}
+@media (min-width: 1260px) {
+  .search-block-form .form-inline .form-control {
+    width: 15.5rem;
+  }
+}
+#search-block-form .btn,
+.search form.search-form .btn {
+  padding: 0.45rem 0.75rem;
+  font-size: 0.85rem;
+}
+.search form.search-form.uds-form input {
+  padding-left: 0.75em!important;
+}
+
+/* Search result page */
+.search .page__pre-content {
+  display: none;
+}
+.search .page__content {
+  max-width: 1224px;
+  width: 100%;
+  padding-right: 12px;
+  padding-left: 12px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.search form.search-form {
+  max-width: 700px;
+  overflow-wrap: break-word;
+}
+.search form.search-form.uds-form .form-group {
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+.search .search-help-link {
+  font-size: 0.8rem;
+}
+.search .card {
+  border: 0 none;
+}
+.search .card-header {
+  padding: 0.5rem 0 0 0;
+}
+.search .card-body {
+  padding: 0;
+}
+.search .card>div:last-child {
+  padding-bottom: 0;
+}
+.search form.search-form.uds-form fieldset#edit-types-fieldset,
+.search form.search-form.uds-form fieldset#edit-lang-fieldset {
+  display: inline;
+  width: 48%;
+  margin-bottom: 0 !important;
+}

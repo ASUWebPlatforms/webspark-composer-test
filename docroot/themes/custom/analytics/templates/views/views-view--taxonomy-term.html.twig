@@ -1,0 +1,139 @@
+{#
+/**
+ * @file
+ * Default theme implementation for main view template.
+ *
+ * Available variables:
+ * - attributes: Remaining HTML attributes for the element.
+ * - css_name: A CSS-safe version of the view name.
+ * - css_class: The user-specified classes names, if any.
+ * - header: The optional header.
+ * - footer: The optional footer.
+ * - rows: The results of the view query, if any.
+ * - empty: The content to display if there are no rows.
+ * - pager: The optional pager next/prev links to display.
+ * - exposed: Exposed widget form/info to display.
+ * - feed_icons: Optional feed icons to display.
+ * - more: An optional link to the next page of results.
+ * - title: Title of the view, only used when displaying in the admin preview.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the view title.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the view title.
+ * - attachment_before: An optional attachment view to be displayed before the
+ *   view content.
+ * - attachment_after: An optional attachment view to be displayed after the
+ *   view content.
+ * - dom_id: Unique id for every view being printed to give unique class for
+ *   JavaScript.
+ *
+ * @see template_preprocess_views_view()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% set classes = [
+  dom_id ? 'js-view-dom-id-' ~ dom_id,
+  'tw-pb-24',
+] %}
+
+<style>
+  #{{ exposed['#id'] }} #edit-actions {
+    margin-bottom: 24px;
+    margin-top: 24px;
+    display: none;
+  }
+
+  {# TODO: Globalize these styles #}
+  .select2-container--default .select2-selection--multiple {
+    border-radius: 0;
+    border: 1px solid #747474 !important;
+    color: #191919;
+    padding: 0 !important;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    min-height: 42px;
+  }
+
+  .select2-container .select2-search--inline .select2-search__field {
+    margin-top: 0;
+    margin-left: 0;
+    min-height: 42px;
+    vertical-align: middle;
+    padding-left: 1rem !important;
+    padding: 0.5rem;
+  }
+
+  .select2-container .select2-selection--multiple .select2-selection__rendered {
+    display: inline-block;
+  }
+</style>
+
+{# The rendered entity for the term. The {{ header }} can be found in taxonomy-term.html.twig #}
+<div{{ attributes.addClass(classes) }}>
+  {{ include('@analytics/access-request-modal.twig') }}
+
+  {% if header %}
+    <header>
+      {{ header }}
+    </header>
+  {% endif %}
+
+  <div class="container">
+    <div class="row tw-mt-12">
+      <div class="col-12 col-md-3">
+        <h3 class="tw-mt-0">Filters</h3>
+        <div id="extra-actions" class="tw-py-4" style="border-bottom: 1px solid #e5e5e5; border-top: 1px solid #e5e5e5">
+          {{ exposed.actions }}
+        </div>
+        {{ exposed }}
+      </div>
+
+      <div class="col">
+        <div class="tw-flex tw-items-baseline">
+          <h3 class="tw-mt-0">Results</h3>
+          {% if footer %}
+            <span class="tw-text-sm tw-ml-2">
+              {{ footer }}
+            </span>
+          {% endif %}
+        </div>
+        {{ attachment_before }}
+
+        {% if rows -%}
+          {{ rows }}
+        {% elseif empty -%}
+          {% embed '@radix/alert/alert.twig' with {
+            type: 'warning',
+            heading: false,
+            content: empty,
+            alert_utility_classes: ['view-empty']
+          } %}
+          {% endembed %}
+        {% endif %}
+
+        {{ pager }}
+        {{ attachment_after }}
+        {{ more }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // TODO: Consolidate this into the same template as Global Search
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById("{{ exposed['#id'] }}");
+    const submit = document.querySelector("#{{ exposed['#id'] }} .js-form-submit");
+    const extraSubmit = document.querySelector('#extra-actions .js-form-submit');
+
+    extraSubmit.addEventListener('click', function(e) {
+      // In the case of a text field, copy the value of it into the corresponding text field before submit.
+      e.preventDefault();
+      form.requestSubmit(submit);
+    });
+  });
+</script>

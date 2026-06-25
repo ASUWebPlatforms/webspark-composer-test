@@ -1,0 +1,10 @@
+// Page: Content
+// -----------------------------------------------------------------------------
+@import "../base/mixins";
+
+// Wraps all page-rendered views in max-width container.
+.page__content {
+  & > .views-element-container {
+    @include container-bounded-width-base();
+  }
+}

@@ -1,0 +1,212 @@
+<?php
+
+
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeViewBuilder;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Url;
+use Drupal\Core\Block\BlockBase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Render\Renderer;
+use Drupal\views\Views;
+use Drupal\node\NodeInterface;
+use Drupal\node\Entity\Node;
+use Drupal\file\Entity\File;
+use Drupal\image\Entity\ImageStyle;
+use Drupal\file\Entity;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\webform\Entity\WebformOptions;
+use Drupal\webform\WebformSubmissionInterface;
+use Drupal\webform\Entity\Webform;
+use Drupal\webform\WebformSubmissionForm;
+use Drupal\webform\Entity\WebformSubmission;
+
+/**
+ * Alter webform elements.
+ *
+ * @param array $element
+ *   The webform element.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ * @param array $context
+ *   An associative array containing the following key-value pairs:
+ *   - form: The form structure to which elements is being attached.
+ */
+
+
+/** Implementation of hook_webform_options_alter to alter predefined webform options **/
+function asu_campus_fit_form_alter(&$form, FormStateInterface $form_state, $form_id)
+{
+	//ksm($form_id);
+	$build_info = $form_state->getBuildInfo();
+	$config_data = \Drupal::config('asu_campus_fit.admin_settings');
+	$campus_nid = !empty($config_data->get('fit_quiz_nid'))?$config_data->get('fit_quiz_nid'):'';
+	if(($form_id == "webform_submission_campus_fit_add_form") || ($form_id == "webform_submission_campus_fit_node_".$campus_nid."_add_form")){
+		$form['#attached']['library'][] = 'asu_campus_fit/campusFitLib';
+		$form['#attached']['drupalSettings']['asu_campus_fit']['fit_results'] = \Drupal::service('getJsSettings')->getJsSettings($sid = '');
+		//ksm(\Drupal::service('getJsSettings')->getJsSettings());
+	}
+	
+}
+	
+function asu_campus_fit_form_webform_ui_element_form_alter(&$form, FormStateInterface $form_state) {
+	
+	//if($form_id == "campus_fit"){
+		$build_info = $form_state->getBuildInfo();
+		//ksm($build_info);
+		
+		//\Drupal::logger('cf3')->notice('<pre><code>' . print_r($build_info, TRUE) . '</code></pre>' );
+		$form_id = $build_info['args'][0]->id();
+		if($form_id == "campus_fit"){
+		$key = $build_info['args'][1];
+		$new_key = str_replace(' ', '_', $key);
+		$field_type = $build_info['callback_object']->getElement()['#type'];
+		//ksm($field_type);
+	
+		$encrypt_key_name = $form_id.'-'.$new_key;
+		//$options_test = $build_info['callback_object']->getElement()['#options'];
+		//ksm($options_test);
+		//$webform_test_options = WebformOptions::load('asu_category_list_with_icons');
+		
+		//$campus = array('Tempe' => 'Tempe', 'West' => 'West', 'Poly' => 'Poly', 'Downtown' => 'Downtown', 'Havasu' => 'Havasu');
+		$campus = array('Tempe' => 'Tempe', 'West' => 'West', 'Poly' => 'Poly', 'Downtown' => 'Downtown');
+		if(($field_type == "radios") || ($field_type == "checkbox")){
+		$form['element'][$encrypt_key_name.'_score_check'] = [
+					'#type' => 'checkbox',
+					'#title' => t('This '.$encrypt_key_name.' field is contributing to score calculation'),
+					'#default_value' => \Drupal::state()->get($encrypt_key_name.'_score_check'),
+				];
+		$score_field = $encrypt_key_name.'_score_check';
+		$form_score_field = \Drupal::state()->get($score_field);
+		
+		//ksm($key);
+		//ksm($form_score_field);
+		if($form_score_field == 1){
+			//ksm($build_info['callback_object']->getElement()['#options']);
+			$option_type = getType($build_info['callback_object']->getElement()['#options']);
+			if($option_type == "array"){
+			    $options = $build_info['callback_object']->getElement()['#options'];
+				
+			}
+			
+			if($option_type == "string"){
+				//$options = $build_info['callback_object']->getElement()['#options'];
+				$web_options_name = $build_info['callback_object']->getElement()['#options'];
+				//ksm($web_options_name);
+				$webform_test_options = WebformOptions::load($web_options_name);
+				$options = $webform_test_options->getOptions();
+			}
+			
+			foreach($options as $opt_value => $opvalue){
+				$new_opt_value = str_replace(' ', '', $opt_value);
+				
+				$form['element'][$opt_value.' - score_details'] = [
+					'#type' => 'details',
+					'#title' => t($opt_value.' - score details'),
+				];
+				foreach($campus as $cvalue){
+					// ksm(\Drupal::state()->get($encrypt_key_name.'-'.$new_opt_value.'-'.$cvalue));
+					//\Drupal::logger('cf1')->notice($encrypt_key_name.'-'.$new_opt_value.'-'.$cvalue);
+					$form['element'][$opt_value.' - score_details'][$encrypt_key_name.'-'.$new_opt_value.'-'.$cvalue] = [
+						'#type' => 'textfield',
+						'#title' => t($opt_value.' - '.$cvalue.' score'),
+						'#default_value' => \Drupal::state()->get($encrypt_key_name.'-'.$new_opt_value.'-'.$cvalue),
+					];
+				}
+			}
+		}
+		}
+		
+		
+
+		$form['#submit'][] = 'asu_campus_fit_data_submit';
+    
+	}
+	
+	return $form;
+}
+
+function asu_campus_fit_data_submit(array $form, \Drupal\Core\Form\FormStateInterface $form_state){
+    $build_info = $form_state->getBuildInfo();
+	$form_id = $build_info['args'][0]->id();
+	$key = $build_info['args'][1];
+	
+	$option_type = getType($build_info['callback_object']->getElement()['#options']);
+	if($option_type == "array"){
+		$options = $build_info['callback_object']->getElement()['#options'];
+	}
+	if($option_type == "string"){
+		$web_options_name = $build_info['callback_object']->getElement()['#options'];
+		$webform_test_options = WebformOptions::load($web_options_name);
+		$options = $webform_test_options->getOptions();
+	}
+	$new_key = str_replace(' ', '_', $key);
+	$encrypt_key_name = $form_id.'-'.$new_key;
+	$score_field = $encrypt_key_name.'_score_check';
+	//$campus = array('Tempe' => 'Tempe', 'West' => 'West', 'Poly' => 'Poly', 'Downtown' => 'Downtown', 'Havasu' => 'Havasu');
+	$campus = array('Tempe' => 'Tempe', 'West' => 'West', 'Poly' => 'Poly', 'Downtown' => 'Downtown');
+	$form_score_field = $form_state->getValue($score_field);
+	
+	\Drupal::state()->set($score_field, $form_score_field);
+	if($form_score_field == 1){
+		foreach($options as $opt_value => $value){
+				$new_opt_value = str_replace(' ', '', $opt_value);
+				foreach($campus as $cvalue){
+					$all_values = $encrypt_key_name.'-'.$new_opt_value.'-'.$cvalue;
+					//\Drupal::logger('cf4')->notice($all_values);
+					$form_values[$all_values] = $form_state->getValue($all_values);
+
+			    }
+		}
+		//\Drupal::logger('cf2')->notice('<pre><code>' . print_r($form_values, TRUE) . '</code></pre>' );
+		foreach($form_values as $key => $values){
+			 \Drupal::state()->set($key,$values);
+		}
+	}
+	
+	
+}
+
+/*function asu_campus_fit_webform_submission_presave(WebformSubmissionInterface $submission) {
+	$webform_id = $submission->getWebform()->id();
+	
+	//If student has already submitted RFI,get submission data into quiz webform hidden fields and save it into session variables
+	
+	if($webform_id == "campus_fit"){
+		$submission_data = $submission->getData();
+		//ksm($submission);
+		foreach($submission_data as $sub_key => $sub_value){
+			//ksm(\Drupal::state()->get($webform_id.'-'.$sub_key.'_score_check'));
+			if(!empty(\Drupal::state()->get($webform_id.'-'.$sub_key.'_score_check'))){
+				$checked_fields[$sub_key] = $sub_key;
+			}
+		}
+		//ksm($checked_fields);
+		foreach($checked_fields as $checked_key => $checked_value){
+			$study_select = $submission_data[$checked_key];
+			$edited_study_select = str_replace(' ', '', $study_select);
+			$campus = array('Tempe' => 'Tempe', 'West' => 'West', 'Poly' => 'Poly', 'Downtown' => 'Downtown', 'Havasu' => 'Havasu');
+			foreach($campus as $campus_key => $campus_value){
+				$study_score_array[$checked_key][$campus_key] = \Drupal::state()->get("campus_fit-".$checked_key."-".$edited_study_select."-".$campus_key);
+			}
+		}
+		
+		$initial_result_nid = $submission_data['result_nid'];
+		$submission_settings = \Drupal::service('getJsSettings')->getJsSettings($submission_data);
+		if(empty($initial_result_nid)){
+		 	$submission_data['result_nid'] = $submission_settings['top_campus_nid'];
+		}
+		if(!empty($submissin_settings['score_value'])){
+			$submission_data['score'] = $submissin_settings['score_value'];
+		}
+		//ksm($submission_settings);
+		//ksm($submission);
+		//ksm($submission_data);
+		//\Drupal::logger('cf2')->notice('<pre><code>' . print_r($submission_data, TRUE) . '</code></pre>' );
+		//ksm($study_score_array);
+		//ksm($submission_data);
+		//ksm(\Drupal::state()->get('campus_fit-would_you_rather_study-Journalism-Downtown'));
+	}
+}*/

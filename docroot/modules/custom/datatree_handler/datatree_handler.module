@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Provides an example of a webform handler.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function datatree_handler_theme() {
+  return [
+    'webform_handler_example_summary' => [
+      'variables' => ['settings' => NULL, 'handler' => []],
+    ],
+  ];
+}

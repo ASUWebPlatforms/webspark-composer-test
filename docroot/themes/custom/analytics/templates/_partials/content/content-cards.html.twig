@@ -1,0 +1,36 @@
+{#
+@file
+The template for the content cards grid.
+As the cards can be any style, this template should be used as a parent template.
+The cards should be added via the "cards" block in the child template.
+
+Available variables:
+- background: Background colors to apply (gray-2-bg, gray-1-bg).
+- spacing: Top and bottom spacing to apply.
+- heading: Heading to display.
+- content: Content to display.
+- cols: Integer. Number of columns to display.
+
+Available blocks:
+- cards: The cards to display. This block should include loops and columns.
+#}
+
+<div class="{{ background }} {{ spacing|default('tw-py-24') }}">
+  <div class="container">
+    {% if heading or content %}
+      <div class="row tw-mb-12">
+        <div class="col">
+          {% if heading %}
+            <h2 class="tw-mt-0">{{ heading }}</h2>
+          {% endif %}
+          {% if content %}
+            <p>{{ content }}</p>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+    <div class="row row-cols-{{ cols|default(3) }} gy-2">
+      {% block cards %}{% endblock %}
+    </div>
+  </div>
+</div>

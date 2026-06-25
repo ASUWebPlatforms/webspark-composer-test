@@ -1,0 +1,27 @@
+<div id="story--molecules-content-sections-card-and-image-templates--left-floated-card-inner"  data-name="Left Floated Card">
+
+      <div id="html-root">
+        <div class="uds-card-and-image" style='background-image: linear-gradient(rgba(25, 25, 25, 0) 0%, rgba(25, 25, 25, 0.79) 100%), url("{% for row in rows %}{{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_media_image }}'] }}{% endfor %}");'>
+          <div class="uds-content-align">
+            <div class="uds-card-and-image-container">
+              <div class="card card-centered">
+                
+                <div class="card-header">
+                  <h3 class="card-title">{% for row in rows %}{{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ title }}'] }}{% endfor %}</h3>
+                </div>
+                <div class="card-body">
+                </div>
+                <div class="card-buttons">
+                  <div class="card-button">
+                    <a href="{% for row in rows %}{{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ view_node }}'] }}{% endfor %}" class="btn btn-dark btn-responsive">Read this story</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+</div>
+
+

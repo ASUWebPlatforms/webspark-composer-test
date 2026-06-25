@@ -1,0 +1,8 @@
+name: 'ASU AEC BriteVerify Webform Validation'
+type: module
+description: 'Adds BriteVerify email validation to Webforms.'
+core_version_requirement: ^10 || ^11
+package: ASU
+dependencies:
+  - drupal:webform
+configure: 'admin/config/asuaec-briteverify'

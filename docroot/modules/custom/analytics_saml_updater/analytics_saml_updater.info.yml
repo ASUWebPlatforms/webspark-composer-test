@@ -1,0 +1,8 @@
+name: Analytics SAML Updater
+description: Module to automatically update SAML XML metadata.
+package: Analytics
+type: module
+version: 1.0.0
+core_version_requirement: ^9 || ^10
+dependencies:
+  - simplesamlphp_auth:simplesamlphp_auth

@@ -1,0 +1,6 @@
+udi_custom.configuration_form:
+  title: 'Website Feature Blocks '
+  description: 'UDI Custom Features Admin Configuration'
+  parent: system.admin_config_system
+  route_name: udi_custom.configuration_form
+  weight: 100

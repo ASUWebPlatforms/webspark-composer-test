@@ -1,0 +1,65 @@
+asu_digital_book.admin_settings:
+    path: '/admin/config/content/digital_book'
+    defaults:
+      _form: '\Drupal\asu_digital_book\Form\DigitalBookSettingsForm'
+      _title: 'ASU Ditigal View book content form'
+    requirements:
+      _permission: 'administer asu_digital_book'
+
+asu_digital_book.getSettings:
+  path: '/api/settings'
+  defaults:
+    _controller: '\Drupal\asu_digital_book\Controller\DigitalBookJsVariablesSettingsPage::getSettings'
+    _title: 'Settings API'
+  requirements:
+    _permission: 'access content'
+
+asu_digital_book.learning:
+  path: '/admin/config/content/digital_book/learning'
+  defaults:
+    _form: '\Drupal\asu_digital_book\Form\LearningForm'
+    _title: 'Learning module content'
+  requirements:
+    _permission: 'administer site configuration'
+
+asu_digital_book.customize:
+  path: '/admin/config/content/digital_book/customize'
+  defaults:
+    _form: '\Drupal\asu_digital_book\Form\CustomizeForm'
+    _title: 'Customize module content'
+  requirements:
+    _permission: 'administer site configuration'
+
+asu_digital_book.invest:
+  path: '/admin/config/content/digital_book/invest'
+  defaults:
+    _form: '\Drupal\asu_digital_book\Form\InvestForm'
+    _title: 'Invest module content'
+  requirements:
+    _permission: 'administer site configuration'
+
+asu_digital_book.rfi:
+  path: '/admin/config/content/digital_book/rfiInfo'
+  defaults:
+    _form: '\Drupal\asu_digital_book\Form\RfiInfo'
+    _title: 'RFI page top content'
+  requirements:
+    _permission: 'administer site configuration'
+
+asu_digital_book.CreateWebformSubmission:
+  path: '/asu_digital_book/create_submission'
+  defaults:
+    _controller: '\Drupal\asu_digital_book\Controller\DitigalBookSubmissionController::CreateWebformSubmission'
+    _title: 'Create webform submission API'
+  methods: [POST]
+  requirements:
+    _access: 'TRUE'
+    _permission: 'access content'
+
+asu_digital_book.getTerms:
+  path: '/asu_digital_book/json/term'
+  defaults:
+    _controller: '\Drupal\asu_digital_book\Controller\DigitalBookJsVariablesSettingsPage::getTerms'
+    _format: json
+  requirements:
+    _permission: 'access content'    

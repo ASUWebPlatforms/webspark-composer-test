@@ -1,0 +1,12 @@
+styling:
+  version: 1.x
+  css:
+    layout:
+      css/style.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    
+  js:
+    js/index.js: {}

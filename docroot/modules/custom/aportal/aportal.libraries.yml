@@ -1,0 +1,13 @@
+
+aportal_app:
+  version: 2.03
+  js:
+    aportal-app/dist/aportal_b2034e36.js:
+      preprocess: false
+      attributes:
+        type: module
+  css:
+    theme:
+      aportal-app/dist/aportal_ee779e65.css: {}
+  dependencies:
+    - core/drupalSettings

@@ -1,0 +1,9 @@
+{% if items %}
+	<div class="responses-container">
+		{% for item in items %}
+			{{ item|raw }}
+		{% endfor %}
+	</div>
+{% else %}
+	<p>No responses available.</p>
+{% endif %}

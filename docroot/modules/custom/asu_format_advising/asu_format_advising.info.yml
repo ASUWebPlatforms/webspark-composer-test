@@ -1,0 +1,7 @@
+name: ASU Format Advising
+type: module
+description: 'Provides functionality specific to ASU Format Advising.'
+package: ASU
+core_version_requirement: ^9 || ^10
+dependencies:
+  - asu_document_creation

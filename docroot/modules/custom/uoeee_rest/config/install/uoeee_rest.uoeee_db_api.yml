@@ -1,0 +1,10 @@
+defaults:
+  columns: '*'
+  writable: '*'
+  deny_writable: ['modifiedby', 'modifieddate']
+
+tables:
+  CourseEvalSchedule: {}
+  CE_json_Sections:
+    deny_writable: []
+

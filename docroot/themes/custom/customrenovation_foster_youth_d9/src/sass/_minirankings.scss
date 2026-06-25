@@ -1,0 +1,67 @@
+.minirankings {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding-right: 10px;
+    padding-left: 10px;
+
+    .rank {
+	   display:flex;
+	   margin-right:5px;
+    }
+
+  .numberCircleSm {
+    border-radius: 50%;
+    height: 70px !important;
+    width: 70px !important;
+    min-height: 70px;
+    min-width: 70px;
+    max-height: 70px;
+    max-width: 70px;
+    padding: 7px;
+    background: #000;
+    border: 2px solid #000;
+    color: $gold;
+    display:flex;
+    justify-content:center;
+    align-items: center;
+    font: 55px Arial, sans-serif;
+    font-weight: 600;
+    letter-spacing: -7px;
+    margin-right: 10px;
+
+    span {
+      font: 27px Arial, sans-serif;
+      vertical-align: middle;
+      letter-spacing: -2px;
+      margin-left: -7px;
+    }
+  }
+}
+
+.smallsource {
+  margin: 0 auto;
+  max-width: 1170px;
+  text-align: right;
+  padding: 0 10px;
+  font-size: 12px;
+}
+
+.rank div {
+  font-size: 22px;
+  font-weight: bold;
+  line-height: calc(100% + 4px);
+}
+
+@media only screen and (max-width: 767px) {
+  .minirankings {
+    display:flex;
+    flex-direction: column;
+    
+    .rank {
+  		margin-bottom: 15px;
+  	}
+  }
+}

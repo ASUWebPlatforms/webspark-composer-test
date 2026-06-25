@@ -1,0 +1,125 @@
+<?php
+
+/**
+ * @file
+ * Provides a webform handler and adds custom properties to Webform elements.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\Entity\Webform;
+
+/**
+ * Implements hook_theme().
+ */
+function gp_dataquiz_handler_theme() {
+  return [
+    'gp_dataquiz_handler_summary' => [
+      'variables' => ['settings' => NULL, 'handler' => []],
+    ],
+  ];
+}
+
+
+/**
+ * Implements hook_webform_element_default_properties_alter().
+ */
+function gp_dataquiz_handler_webform_element_default_properties_alter(array &$properties, array &$definition) {
+  // Add custom data property to radio elements.
+  // Setting the custom property to an empty string makes the corresponding
+  // element defined via hook_webform_element_configuration_form_alter()
+  // automatically visible.
+  $properties['end_state'] = '';
+  $properties['end_state_negative'] = '';
+}
+
+/**
+ * Implements hook_webform_element_translatable_properties_alter().
+ */
+function gp_dataquiz_handler_webform_element_translatable_properties_alter(array &$properties, array &$definition) {
+  // Make the custom data property translatable.
+  $properties[] = 'end_state';
+  $properties[] = 'end_state_negative';
+}
+
+/**
+ * Implements hook_webform_element_configuration_form_alter().
+ */
+function gp_dataquiz_handler_webform_element_configuration_form_alter(&$form, FormStateInterface $form_state) {
+
+  $form_object = $form_state->getFormObject();
+  $element_plugin = $form_object->getWebformElementPlugin();
+  $element_label = $element_plugin->getPluginLabel();
+  $element_type = $element_plugin->getTypeName();
+  $config = \Drupal::config('gp_dataquiz_handler.settings');
+  $end_states_vocab = $config->get('end_states_taxonomy');
+
+  //getting parent form to check if handler is active
+  $webform = $form_state->getFormObject()->getWebform();
+  $handlers = $webform->getHandlers();
+
+  if ($handlers->has('gp_data_quiz')) {
+    // only showing these settings on radio buttons
+    if ($element_type == 'radios') {
+      // Append custom properties details container and textfield element.
+      $t_args = [
+        '@label' => $element_label,
+        '@type' => $element_type,
+      ];
+      $form['dataquiz_properties'] = [
+        '#type' => 'details',
+        '#title' => t('Data Quiz properties'),
+        '#description' => t('The below custom properties are provided and managed by the gp_dataquiz_handler.module.'),
+        '#open' => TRUE,
+        '#weight' => -10,
+      ];
+      $form['dataquiz_properties']['end_state'] = [
+        '#title' => 'End state',
+        '#description' => 'If this question is tagged with an end state above, this will be returned in the form confirmation message if the answer provided by the user is "YES"',
+        '#type' => 'webform_entity_select',
+        '#target_type' => 'taxonomy_term',
+        '#empty_option' => 'none',
+        '#empty_value'=> 'null',
+        '#multiple' => FALSE,
+        '#default_value' => NULL,
+        '#selection_handler' => 'default',
+        '#selection_settings' => [
+          'target_bundles' => [
+          'taxonomy_vocab_name' => $end_states_vocab
+          ]
+        ],
+        '#required' => FALSE
+      ];
+      $form['dataquiz_properties']['end_state_negative'] = [
+        '#title' => 'End State negative',
+        '#description' => 'If this question is tagged with an end state negative above, this will be returned in the form confirmation message if the answer provided by the user is "NO"',
+        '#type' => 'webform_entity_select',
+        '#target_type' => 'taxonomy_term',
+        '#empty_option' => 'none',
+        '#empty_value'=> 'null',
+        '#multiple' => FALSE,
+        '#default_value' => NULL,
+        '#selection_handler' => 'default',
+        '#selection_settings' => [
+          'target_bundles' => [
+          'taxonomy_vocab_name' => $end_states_vocab
+          ]
+        ],
+        '#required' => FALSE
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_webform_element_alter().
+ */
+function gp_dataquiz_handler_webform_element_alter(array &$element, FormStateInterface $form_state, array $context) {
+  // Add data-properties to the element's attributes.
+  if (!empty($element['#end_state'])) {
+    $element['#attributes']['end-state'] = $element['#end_state'];
+  }
+  if (!empty($element['#end_state_negative'])) {
+    $element['#attributes']['end-state-negative'] = $element['#end_state_negative'];
+  }
+}
+

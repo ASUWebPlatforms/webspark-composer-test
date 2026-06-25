@@ -1,0 +1,21 @@
+uuid: 1f8b8cc0-8749-419e-8698-ff97f4b09e36
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_event_date_and_time
+    - node.type.asu_athletics_events
+  module:
+    - datetime_range
+id: node.asu_athletics_events.field_event_date_and_time
+field_name: field_event_date_and_time
+entity_type: node
+bundle: asu_athletics_events
+label: 'Event Date and Time'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: daterange

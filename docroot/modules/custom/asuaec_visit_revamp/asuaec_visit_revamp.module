@@ -1,0 +1,2233 @@
+<?php
+use Drupal\Component\Datetime\DateTimePlus;
+use Drupal\webform\webformSubmissionInterface;
+use Drupal\node\Entity\Node;
+use Drupal\Core\Render\RendererInterface;
+use Drupal\node\NodeInterface;
+
+
+/**
+ * @param $entity_paragraph
+ * @param $thedate_clicked // In yyyymmdd format
+ * @param $eventseries_entity_id
+ * @param $addtour_paragraph_entity_id
+ * @return mixed|string
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ *
+ * Returns actual capacity to use.
+ * Called from VisitWebformHandler.php at line 781.
+ */
+function _get_capacity_for_addtour_revamp($entity_paragraph, $thedate_clicked, $eventseries_entity_id, $addtour_paragraph_entity_id) {
+
+  // STEP 1: Get Additional tour top-level capacity
+  $capacity = $entity_paragraph->get('field_capacity')->getValue() != null ? $entity_paragraph->get('field_capacity')->getValue()[0]['value'] : '';
+  //        dpm($capacity, "capacity addtour top level"); // <-- Additional tour top-level capacity
+
+  // STEP 2: Get boolean value for capacity overwrite
+  $capacity_overwrite_bool = $entity_paragraph->get('field_overwrite_capacity_addtour')->getValue() != null ? $entity_paragraph->get('field_overwrite_capacity_addtour')->getValue()[0]['value'] : '';
+
+  // STEP 3: Get capacity to use
+  // NOTES: Include code for overwrite
+  // Check if the overwrite checkbox (field_overwrite_capacity_addtour) is checked.
+  // If checked, iterate Capacity set (Date and capacity) and use the one with the correct date.
+
+  $capacity_to_use = $capacity;
+  if($capacity_overwrite_bool == '1') {
+    $capacity_overwrite_para_ids = $entity_paragraph->get('field_capacity_overwrite_para')->getValue() != null ? $entity_paragraph->get('field_capacity_overwrite_para')->getValue() : ''; // 329
+
+    foreach($capacity_overwrite_para_ids as $overwrite_para) {
+      $overwrite_para_id = $overwrite_para['target_id'];
+
+      // Load capacity overwrite paragraph using Paragraph ID
+      $entity_type_overwrite = 'paragraph';
+      $entity_id_overwrite = $overwrite_para_id;
+      $entity_paragraph_overwrite = \Drupal::entityTypeManager()->getStorage($entity_type_overwrite)->load($entity_id_overwrite);
+
+      // Get Capacity overwrite -> Date (Overwritten date)
+      $date_overwrite = $entity_paragraph_overwrite->get('field_date_only')->getValue() != null ? $entity_paragraph_overwrite->get('field_date_only')->getValue()[0]['value'] : ''; // 2023-06-13
+//            dpm($date_capoverwrite, "date_capoverwrite"); // 2023-06-13, 2023-06-02
+      $date_overwrite_nodash_str = str_replace("-","",$date_overwrite);
+
+      // Get date clicked
+//            dpm($thedate_clicked, "thedate_clicked"); // 20230613
+      if($date_overwrite_nodash_str == $thedate_clicked) { // If date matches
+        // Get Capacity overwrite -> Capacity (Overwritten capacity).
+        $capacity_overwrite = $entity_paragraph_overwrite->get('field_capacity')->getValue() != null ? $entity_paragraph_overwrite->get('field_capacity')->getValue()[0]['value'] : '';
+//            dpm($capacity_capoverwrite, "capacity_capoverwrite"); // 50
+        $capacity_to_use = $capacity_overwrite;
+      }
+    } // END OF foreach
+  } // END OF if($capacity_overwrite_bool == '1')
+  return $capacity_to_use;
+} // END OF function _get_capacity_for_addtour()
+
+
+/**
+ * @param $entity_paragraph
+ * @param $thedate_clicked
+ * @param $eventseries_entity_id
+ * @param $addtour_paragraph_entity_id
+ * @return array
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ *
+ * Returns array of ttimestamps:
+ * - Actual start timestamp
+ * - Actual end timestamp
+ * - timestamp for addtour id
+ *
+ * Called from VisitWebformHandler.php at line 792.
+ */
+function _get_timestamps_for_addtour_revamp($entity_paragraph, $thedate_clicked, $eventseries_entity_id, $addtour_paragraph_entity_id) {
+
+  // STEP 1: Get original Time range values in Event series
+  $time_range_from = $entity_paragraph->get('field_time_range')->getValue()[0]['from']; // Added isset on 6/30/2023
+  $time_range_to = $entity_paragraph->get('field_time_range')->getValue()[0]['to'];
+
+  // STEP 2: Get boolean value for Time range overwrite
+  $timerange_overwrite_bool = $entity_paragraph->get('field_overwrite_time_addtour')->getValue() != null ? $entity_paragraph->get('field_overwrite_time_addtour')->getValue()[0]['value'] : '';
+
+  // STEP 3: Get Time range to use
+  $timerange_from_to_use = $time_range_from;
+  $timerange_to_to_use = $time_range_to;
+  if($timerange_overwrite_bool == '1') {
+    $time_overwrite_para_ids = $entity_paragraph->get('field_time_overwrite_para')->getValue() != null ? $entity_paragraph->get('field_time_overwrite_para')->getValue() : ''; // 329
+
+    foreach($time_overwrite_para_ids as $overwrite_para) {
+      $overwrite_para_id = $overwrite_para['target_id'];
+
+      // Load the time overwrite paragraph using Paragraph ID
+      $entity_type_overwrite = 'paragraph';
+      $entity_id_overwrite = $overwrite_para_id;
+      $entity_paragraph_overwrite = \Drupal::entityTypeManager()->getStorage($entity_type_overwrite)->load($entity_id_overwrite);
+
+      // Get Time range overwrite -> Date (Overwritten date) -- Which date when we need to overwrite
+      $date_overwrite = $entity_paragraph_overwrite->get('field_date_only')->getValue() != null ? $entity_paragraph_overwrite->get('field_date_only')->getValue()[0]['value'] : ''; // 2023-06-13
+      $date_overwrite_nodash_str = str_replace("-","",$date_overwrite);
+
+      // Get date clicked
+//                dpm($thedate_clicked, "thedate_clicked"); // 20230613
+      if($date_overwrite_nodash_str == $thedate_clicked) { // If date matches
+        // Get Time range overwrite -> Time range (Overwritten Time range).
+        $timerange_overwrite_from = $entity_paragraph_overwrite->get('field_time_range')->getValue() != null ? $entity_paragraph_overwrite->get('field_time_range')->getValue()[0]['from'] : '';
+        $timerange_overwrite_to = $entity_paragraph_overwrite->get('field_time_range')->getValue() != null ? $entity_paragraph_overwrite->get('field_time_range')->getValue()[0]['to'] : '';
+        $timerange_from_to_use = $timerange_overwrite_from;
+        $timerange_to_to_use = $timerange_overwrite_to;
+      }
+    } // END OF foreach
+  } // END OF if($time_overwrite_bool == '1')
+
+  //---------- END OF Additional tour Time range ------------//
+
+  //---------- Prepare 3 timestamps: Actual start and end. Also, timestamp for addtour id ----------------------------------
+
+  // NOTES: In addition to "Time range from", also grab Time field value. Need to use Time field value for Additional tour ID and for capacity counting.
+  $time_for_addtourid = $entity_paragraph->get('field_start_time_for_addtourid')->getValue()[0]['value'];
+
+  // Format time
+  $datenew = DateTime::createFromFormat("Ymd g:i a", $thedate_clicked . "00:00 am", new DateTimeZone('America/Phoenix'));
+  $timestamp_ofthedateat0am = $datenew->getTimestamp(); // Timestamp of the date at 0:00am
+// dpm($datenew->format("Y/m/d g:i a"), "test"); // <--- GMT 12:00am
+
+  // Actual start time timestamp
+  $timestamp_datetime_start = $timestamp_ofthedateat0am + $timerange_from_to_use; // Add timestamp of the date at 0:00am and timestamp for the event time.
+  $timestamp_datetime_end = $timestamp_ofthedateat0am + $timerange_to_to_use;
+  // Timestamp for Add tour ID
+  $timestamp_for_addtourid = $timestamp_ofthedateat0am + $time_for_addtourid;
+
+  $timestamp_array = array(
+    'start' => $timestamp_datetime_start,
+    'end' => $timestamp_datetime_end,
+    'timestamp_for_addtourid' => $timestamp_for_addtourid,
+  );
+
+  return $timestamp_array;
+
+} // END OF function _get_timestamps_for_addtour($entity_paragraph, $thedate_clicked, $eventseries_entity_id, $addtour_paragraph_entity_id)
+
+
+/**
+ * @param $date // In yyyymmdd format
+ * @param $event_series_id
+ * @return mixed
+ *
+ * Returns Barrett event instance id from date and top-level Barret Event series id.
+ * Called from VisitBevformHndler.php at line 829.
+ */
+function _get_barrett_eventinstanceid_from_date_and_eventseriesid_revamp($date, $event_series_id) {
+  $barrett_instance_id = '';
+  // Load View4: Barrett find Event instance id from entity id and date
+  $view4 = \Drupal\views\Views::getView('barrett_find_event_instance_id_from_entity_id_and_date');
+  $view4->setDisplay('default');
+  $view4->setArguments([$date, $event_series_id]); // Date in yyyymmdd format
+  $view4->execute();
+
+  // Get the results of the Additional tours view.
+  $view4_result = $view4->result;
+
+  $barrett_instance_id_array = [];
+  foreach ($view4_result as $row) {
+    $theid = $row->_entity->id();
+    array_push($barrett_instance_id_array, $theid);
+//    dpm($barrett_instance_id_array, "barrett_instance_id_array inside foreach"); // 313
+  }
+//    dpm($barrett_instance_id_array, "barrett_instance_id_array"); // 313
+  $barrett_instance_id = $barrett_instance_id_array[0];
+  return $barrett_instance_id;
+}
+
+
+function _get_selected_events($webform_submission) {
+
+  //-------Children: Additional tours and Barrett under Exp ASU --------//
+
+  // Grab Additional tour id(s) from Webform submission (extra_tour_0, extra_tour_1, etc)
+  $children_addtour = _getAdditionalToursUnderExpAsuForPosting($webform_submission);
+
+  // Grab Barrettt tour id(s) from Webform submission (barrett_tour_0, barrett_tour_1, etc)
+  $children_barrett_under_expasu = _getBarrettToursUnderExpAsuForPosting($webform_submission);
+
+  $children = array_merge($children_addtour, $children_barrett_under_expasu);
+
+  // Get Event IDs
+  $event_ids_array = [];
+  for ($x = 0; $x <= 6; $x++) {
+    $key = "event_id_$x"; // ← build the key as a string
+    $data = $webform_submission->getData();
+    if (isset($data[$key]) && $data[$key] != '') {
+      $event_ids_array[] = $data[$key];
+    }
+  }
+
+  $events_array = [];
+  $i = 0;
+  foreach ($event_ids_array as $event_id) { // Iterate top-level events
+    // Get Event Series ID
+    $temp_array = explode('-', $event_id);
+    $event_series_id = $temp_array[0];
+    $timestamp_for_eventid = $temp_array[1]; // Use it to get the date that user clicked.
+
+    // Attendee ID
+    // Get submission ID
+    $sid = $webform_submission->id();
+//    $attendee_id = $event_series_id . "-" . $sid;
+
+
+    //-------Get Parent entity --------//
+
+    // Load the parent entity
+    $entity_type_eventseries = 'eventseries';
+    $entity_eventseries  = \Drupal::entityTypeManager()->getStorage($entity_type_eventseries)->load($event_series_id);
+
+    //------- eventStartTime ---------//
+
+    //-------Find event instance --------//
+    $event_instance_storage = \Drupal::entityTypeManager()->getStorage('eventinstance');
+
+    // Load all eventinstance nodes tied to $event_series_id
+    $query = \Drupal::entityQuery('eventinstance')
+      ->accessCheck(FALSE)
+      ->condition('eventseries_id', $event_series_id);
+    $ids = $query->execute();
+
+    $entity_eventinstance = null;
+    $event_start_timestamp = null;
+
+    foreach ($ids as $eid) {
+      $instance = $event_instance_storage->load($eid);
+      if ($instance && !$instance->get('date')->isEmpty()) {
+        // Convert instance's start date to timestamp
+        $start_value = $instance->get('date')->value;
+//        \Drupal::logger('cstest')->notice('start_value:<pre>' . $start_value . '</pre>'); // string in UTC 2025-06-16T16:00:00
+        $start_ts = DateTimePlus::createFromFormat('Y-m-d\TH:i:s', $start_value, new \DateTimeZone('UTC'))->getTimestamp();
+//        \Drupal::logger('cstest')->notice('start_ts:<pre>' . $start_ts . '</pre>'); // Timestamp is always in UTC.
+
+        // If it's the same day, it’s a match.
+        if (date('Y-m-d', $start_ts) === date('Y-m-d', $timestamp_for_eventid)) {
+          $entity_eventinstance = $instance;
+          $event_start_timestamp = $start_ts;
+          break; // No need to keep looking
+        }
+      }
+    }
+
+    // For $event_start_time_formatted, do it for America/Phoenix
+    $date_obj_phx = DateTimePlus::createFromTimestamp($event_start_timestamp, new DateTimeZone('UTC'));
+    $date_obj_phx->setTimeZone(new DateTimeZone('America/Phoenix'));
+    $event_start_time_formatted = $date_obj_phx->format('H:i:s'); // In 24-hour format in AZ time
+    $visit_date = $date_obj_phx->format('Y-m-d'); // yyyy-mm-dd in AZ time
+    $actual_datetime = $date_obj_phx->format('Y/m/d H:i:s'); // Use it for sf name
+
+    //--------Get the instance entity ---------//
+
+    // Format timestamp to ISO 8601 in UTC for comparison with JSON:API 'date.value'
+    $event_start_iso = (new \DateTime())
+      ->setTimestamp($event_start_timestamp)
+      ->setTimezone(new \DateTimeZone('UTC'))
+      ->format('Y-m-d\TH:i:s');
+
+    // Load eventinstance entity using EntityQuery
+    $event_instance_storage = \Drupal::entityTypeManager()->getStorage('eventinstance');
+    $query = \Drupal::entityQuery('eventinstance')
+      ->accessCheck(FALSE) // <-- REQUIRED in D10+
+      ->condition('eventseries_id', $event_series_id)
+      ->condition('date.value', $event_start_iso);
+    $ids = $query->execute();
+
+    if (!empty($ids)) {
+      $event_instance_id = reset($ids);
+      $entity_eventinstance = $event_instance_storage->load($event_instance_id);
+    } else {
+      \Drupal::logger('cstest')->warning("No eventinstance found for series ID {$event_series_id} and start time {$event_start_timestamp} (ISO: {$event_start_iso})");
+    }
+
+    //------- eventEndTime ---------//
+    $event_end_timestamp = '';
+
+    if ($entity_eventinstance && !$entity_eventinstance->get('date')->isEmpty()) {
+      $end_value = $entity_eventinstance->get('date')->end_value;
+      if (!empty($end_value)) {
+        $event_end_timestamp = DateTimePlus::createFromFormat('Y-m-d\TH:i:s', $end_value, new \DateTimeZone('UTC'))->getTimestamp();
+      }
+    }
+
+//        \Drupal::logger('cstest')->notice('event_start_timestamp2 (AZ):<pre>' . $event_start_timestamp2 . '</pre>'); // Just for testing. This should match with $event_start_timestamp: Event ID's <event series id>-<start timestamp>.
+//        \Drupal::logger('cstest')->notice('event_end_timestamp (AZ):<pre>' . $event_end_timestamp . '</pre>'); // GOOD
+
+    // For $event_end_time_formatted, do it for America/Phoenix
+    $date_obj_phx2 = DateTimePlus::createFromTimestamp($event_end_timestamp, new DateTimeZone('UTC'));
+    $date_obj_phx2->setTimeZone(new DateTimeZone('America/Phoenix'));
+    $event_end_time_formatted = $date_obj_phx2->format('H:i:s'); // In 24-hour format in AZ time
+
+
+    //------- Capacity ---------//
+
+    // Check if Overwrite is checked or not in Event instance
+    $overwrite_capacity = isset($entity_eventinstance->get('field_overwrite_capacity')->getValue()[0]['value']) ? $entity_eventinstance->get('field_overwrite_capacity')->getValue()[0]['value'] : '';
+    $capacity = '';
+    if($overwrite_capacity == '1') { // Checked. Use capacity value from event instance.
+      $capacity = isset($entity_eventinstance->get('field_capacity_event_instance')->getValue()[0]['value']) ? $entity_eventinstance->get('field_capacity_event_instance')->getValue()[0]['value'] : '';
+
+    } else {
+      $capacity = isset($entity_eventseries->get('field_capacity')->getValue()[0]['value']) ? $entity_eventseries->get('field_capacity')->getValue()[0]['value'] :'';
+    }
+
+    //------- Campus ---------//
+    // Campus - Get it from parent entity
+    // Load the parent entity
+    $campus = isset($entity_eventseries->get('field_campus')->getValue()[0]['value']) ? $entity_eventseries->get('field_campus')->getValue()[0]['value'] :'';
+    $campus_name = $campus;
+    if ($campus === 'West') {
+      $campus_name = "West Valley";
+    }
+
+    //------- Event type ---------//
+    // Event type - Get it from parent entity
+    $event_type = isset($entity_eventseries->get('field_evtype')->getValue()[0]['value']) ? $entity_eventseries->get('field_evtype')->getValue()[0]['value'] :'';
+
+    //------- sf_event_name ---------//
+    $sf_event_name = $event_type . '_' . $campus_name . '_' . $actual_datetime;
+
+    //------- Title ---------//
+    $event_title = isset($entity_eventseries->get('title')->getValue()[0]['value']) ? $entity_eventseries->get('title')->getValue()[0]['value'] :'';
+
+    //------- Display title ---------//
+    $event_display_title = isset($entity_eventseries->get('field_display_title')->getValue()[0]['value']) ? $entity_eventseries->get('field_display_title')->getValue()[0]['value'] :'';
+
+
+    //------- Conf Letter nid ---------//
+    // Check if Overwrite is checked or not in Event instance
+    $overwrite_conf_letter = isset($entity_eventinstance->get('field_overwrite_conf_letter')->getValue()[0]['value']) ? $entity_eventinstance->get('field_overwrite_conf_letter')->getValue()[0]['value'] : '';
+
+    $confLetterNid = '';
+    if($overwrite_conf_letter == '1') { // Checked. Use Conf Letter value from event instance.
+      $confLetterNid = isset($entity_eventinstance->get('field_conf_letter_event_instance')->getValue()[0]['target_id']) ? $entity_eventinstance->get('field_conf_letter_event_instance')->getValue()[0]['target_id'] : '';
+
+    } else {
+      $confLetterNid = isset($entity_eventseries->get('field_confirmation_letter')->getValue()[0]['target_id']) ? $entity_eventseries->get('field_confirmation_letter')->getValue()[0]['target_id'] :'';
+    }
+//    \Drupal::logger('cstest')->notice('confletter:<pre>' . $confLetterNid . '</pre>'); // nid of conf letter node ex. 217044
+
+
+    //------- Values from Conf Letter node ---------//
+    // Load the conf letter node using the $confLetterNid
+    $confEmailText = '';
+    $confEmailAgenda = []; // NEW: initialize agenda array
+//    \Drupal::logger('cstest2')->notice('confLetterNid:<pre>' . $confLetterNid . '</pre>');
+    $node = Node::load($confLetterNid);
+    // Validate node and field
+    if ($node instanceof \Drupal\node\NodeInterface) {
+
+      // NEW conf email text field
+      if($node->hasField('field_email_text_revamp') && !$node->get('field_email_text_revamp')->isEmpty()) {
+        $field = $node->get('field_email_text_revamp');
+        $confEmailText = $field->value ?? '';
+      }
+//      \Drupal::logger('cstest2')->notice('confEmailText:<pre>' . $confEmailText . '</pre>');
+
+      // Agenda field processing - Drupal Paragraph
+      if ($node->hasField('field_agenda') && !$node->get('field_agenda')->isEmpty()) {
+        foreach ($node->get('field_agenda') as $agenda_item) {
+          /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+          $paragraph = $agenda_item->entity;
+
+          if ($paragraph && $paragraph->bundle() === 'agenda') {
+            $text = $paragraph->get('field_agenda_text')->value ?? '';
+            $time_range = $paragraph->get('field_agenda_timerange')->getValue();
+            $start = '';
+            $end = '';
+            if (!empty($time_range)) {
+              $start_raw = $time_range[0]['from'] ?? ''; // 28800
+              $end_raw = $time_range[0]['to'] ?? ''; // 39600
+
+              // Use createFromFormat('U', ...) to handle timestamps
+              if (is_numeric($start_raw)) {
+                $start = \DateTime::createFromFormat('U', $start_raw)->format('g:i a');
+              }
+              if (is_numeric($end_raw)) {
+                $end = \DateTime::createFromFormat('U', $end_raw)->format('g:i a');
+              }
+            }
+
+            // Add structured data to agenda array
+            $confEmailAgenda[] = [
+              'timeRangeStartTime' => $start,
+              'timeRangeEndTime' => $end,
+              'text' => $text,
+            ];
+          }
+        }
+      } // END OF if ($node->hasField('field_agenda') && !$node->get('field_agenda')->isEmpty())
+
+    } // END OF if ($node instanceof \Drupal\node\NodeInterface && $node->hasField('field_email_text_revamp'))
+
+
+      //--- Get Campus code for campusCode ---//
+      // dpm($campus, "campus - cstest");
+      $campus_code = get_campus_code($campus);
+
+    //------- Children for this event ---------//
+    $children_for_this_eventid_array = [];
+    foreach ($children as $child) {
+      if (isset($child['parentEventId']) && $child['parentEventId'] === $event_id) {
+        $children_for_this_eventid_array[] = $child;
+      }
+    }
+
+    $events_array[$i] = [
+      "campaignType" => "Event",
+      // Parent info
+      "campusCode" => $campus_code,
+      "category" => $event_type, // Experience ASU, Burrett tour, etc.
+      "eventId" => $event_id, // Such as "1-1687280400"
+      "eventCapacity" => intval($capacity), // Overwritten value if it is overwritten
+      "eventEndDate" => $visit_date, // yyyy-mm-dd
+      "eventEndTime" => $event_end_time_formatted, // Actual time.
+      "eventLocation" => $campus,
+      "eventName" => $sf_event_name, // Such as "Experience ASU_Tempe_2023/10/01 10:00:00". ***For Master form, this will be provided by Event team. Actual time.
+      "eventStartDate" => $visit_date, // yyyy-mm-dd
+      "eventStartTime" => $event_start_time_formatted, // Actual time.
+      "children" => $children_for_this_eventid_array,
+      // Added for conf page and email
+      "eventTitle" => $event_title,
+      "eventDisplayTitle" => $event_display_title,
+      "confLetterNid" => $confLetterNid, // nid of conf letter node
+      "confEmailText" => $confEmailText,
+      "confEmailAgenda" => $confEmailAgenda,
+
+    ];
+    $i++;
+  } // END OF foreach ($event_ids_array as $event_id) {
+
+
+  // Sort the array by eventStartDate and eventStartTime
+  usort($events_array, function ($a, $b) {
+    $dateA = $a['eventStartDate'];
+    $dateB = $b['eventStartDate'];
+
+    if ($dateA === $dateB) {
+      // Same date: compare by eventStartTime
+      return strcmp($a['eventStartTime'], $b['eventStartTime']);
+    }
+    return strcmp($dateA, $dateB);
+  });
+
+  $return_array = $events_array;
+  return $return_array;
+}
+
+/**
+ * @param $webform_submission
+ * @return array
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ *
+ * There may be multiple Additional tours.
+ * Get the following:
+ * - Actual date/time for Additional tour
+ * - Actual timestamp for Additional tour
+ * - Time only field that was used for building Additional tour ID
+ */
+function _getAdditionalToursUnderExpAsuForPosting($webform_submission) {
+  $return_array = [];
+
+  // Get value of Additional tour fields
+  for ($i = 0; $i <= 10; $i++) {
+    $add_tour_info = isset($webform_submission->getData()['extra_tour_id_' . $i]) ? $webform_submission->getData()['extra_tour_id_' . $i] : '';
+
+    if($add_tour_info != '') {
+
+      $temp_array2 = explode('|', $add_tour_info);
+
+      $parent_event_id = $temp_array2[0]; // parent event id: <parent series id>-<parent event start timestamp>
+      // Get $event_series_id and $visit_date(yyyy-mm-dd) from parent event id.
+      $temp_array3 = explode('-', $temp_array2[0]);
+      $event_series_id = $temp_array3[0];
+      $parent_event_start_timestamp = $temp_array3[1];
+      $dt = new DateTime();
+      $dt->setTimestamp($parent_event_start_timestamp);
+      $dt->setTimezone(new DateTimeZone('America/Phoenix'));
+      $visit_date = $dt->format('Y-m-d'); // In AZ time
+      $visit_date_formatted = str_replace('-', '', $visit_date); // yyyymmdd - AZ time
+
+      // Campus - Load parent event entity and get Campus
+      // Load the parent entity
+      $entity_type_eventseries = 'eventseries';
+      $entity_eventseries  = \Drupal::entityTypeManager()->getStorage($entity_type_eventseries)->load($event_series_id);
+      if (!$entity_eventseries) {
+        \Drupal::logger('cstest')->error('Paragraph entity not found for ID: ' . $event_series_id);
+        continue; // Skip this iteration
+      }
+
+      $campus = isset($entity_eventseries->get('field_campus')->getValue()[0]['value']) ? $entity_eventseries->get('field_campus')->getValue()[0]['value'] :'';
+//      \Drupal::logger('cstest')->notice('campus:<pre>' . $campus . '</pre>');
+
+      // $add_tour_id
+      $add_tour_id = $temp_array2[1];
+
+      // Get para id
+      $temp_array = explode('-', $add_tour_id);
+      $addtour_paragraph_entity_id = $temp_array[1];
+
+      // Load paragraph
+      $entity_type = 'paragraph';
+      $entity_id = $addtour_paragraph_entity_id;
+      $entity_paragraph = \Drupal::entityTypeManager()->getStorage($entity_type)->load($entity_id);
+      if (!$entity_paragraph) {
+        \Drupal::logger('cstest')->error('Paragraph entity not found for ID: ' . $entity_id);
+        continue; // Skip this iteration
+      }
+
+      //----- Addittional tour title -----//
+      $addtour_title = isset($entity_paragraph->get('field_addtour_name')->getValue()[0]['value']) ? $entity_paragraph->get('field_addtour_name')->getValue()[0]['value'] : '';
+
+      //----- Category: Additional tour type such as College session/Housing tour -----//
+      $addtour_type = isset($entity_paragraph->get('field_addtour_type')->getValue()[0]['value']) ? $entity_paragraph->get('field_addtour_type')->getValue()[0]['value'] : '';
+
+      //----- Capacity: Actual capacity for the date -----//
+      $capacity_to_use = _get_capacity_for_addtour_revamp($entity_paragraph, $visit_date_formatted, $event_series_id, $addtour_paragraph_entity_id);
+
+      //----- Start time and end time (Actual time) -----//
+      $timestamp_array = _get_timestamps_for_addtour_revamp($entity_paragraph, $visit_date_formatted, $event_series_id, $addtour_paragraph_entity_id);
+//                ksm($timestamp_array, "timestamp_array");
+
+      // Actual start time timestamp
+      $timestamp_datetime_start = $timestamp_array['start'];
+      // Timestamp for Add tour ID
+      $timestamp_for_addtourid = $timestamp_array['timestamp_for_addtourid'];
+
+      // Create Date obj from timestamp
+      // For America/Phoenix
+      $date_obj_phx = DateTimePlus::createFromTimestamp($timestamp_datetime_start, new DateTimeZone('UTC'));
+      $date_obj_phx->setTimeZone(new DateTimeZone('America/Phoenix'));
+      $time_start_formatted = $date_obj_phx->format('H:i:s');
+
+      // Do the same for end time
+      $timestamp_datetime_end = $timestamp_array['end'];
+
+      // Create Date obj from timestamp
+      // For America/Phoenix
+      $date_obj_phx2 = DateTimePlus::createFromTimestamp($timestamp_datetime_end, new DateTimeZone('UTC'));
+      $date_obj_phx2->setTimeZone(new DateTimeZone('America/Phoenix'));
+      $time_end_formatted = $date_obj_phx2->format('H:i:s');
+
+      // If it is College tour
+      // Get colleges for the additional tour - Added on 1/23/2024
+      $department_college = '';
+      if($addtour_type == 'College session') {
+        $department_college_4char_code =  $entity_paragraph->get('field_college')->getValue()[0]['value'];
+        // Changed on 12/27/2023. Allow multiple colleges associated per additional tour
+        if(!is_null($department_college_4char_code)) {
+          $department_college = _getCollegeNameFrom4charCollegeCode($department_college_4char_code);
+        }
+      }
+      // $confEmailText --- NEW FIELD TO REVAMP
+      $confEmailText = isset($entity_paragraph->get('field_conf_email_text')->getValue()[0]['value']) ? $entity_paragraph->get('field_conf_email_text')->getValue()[0]['value'] : '';
+//      \Drupal::logger('cstest')->info('confEmailText for add tour: ' . $confEmailText);
+
+
+      // Conf email agenda
+      $confEmailAgenda = [];
+      if ($entity_paragraph->hasField('field_agenda_para') && !$entity_paragraph->get('field_agenda_para')->isEmpty()) {
+        foreach ($entity_paragraph->get('field_agenda_para') as $agenda_item) {
+          /** @var \Drupal\paragraphs\Entity\Paragraph $agenda_paragraph */
+          $agenda_paragraph = $agenda_item->entity;
+
+          if ($agenda_paragraph && $agenda_paragraph->bundle() === 'agenda') {
+            $text = $agenda_paragraph->get('field_agenda_text')->value ?? '';
+            $time_range = $agenda_paragraph->get('field_agenda_timerange')->getValue();
+
+            $start = '';
+            $end = '';
+            if (!empty($time_range)) {
+              $start_raw = $time_range[0]['from'] ?? '';
+              $end_raw = $time_range[0]['to'] ?? '';
+
+              if (is_numeric($start_raw)) {
+                $start = \DateTime::createFromFormat('U', $start_raw)->format('g:i a');
+              }
+              if (is_numeric($end_raw)) {
+                $end = \DateTime::createFromFormat('U', $end_raw)->format('g:i a');
+              }
+            }
+
+            $confEmailAgenda[] = [
+              'timeRangeStartTime' => $start,
+              'timeRangeEndTime' => $end,
+              'text' => $text,
+            ];
+          }
+        }
+      }
+
+      //--- Get Campus code for campusCode ---//
+      // dpm($campus, "campus - cstest");
+      $campus_code = get_campus_code($campus);
+
+      $return_array[$i] = array(
+        "campaignType" => "Event",
+        "campusCode" => $campus_code,
+        "category" => $addtour_type,
+        "departmentCollege" => $department_college, // Added on 1/23/2024.
+        "eventId" => $add_tour_id, // 1-331-1687880400: <parent event series id>-<para id>-<start timestamp>
+        "eventCapacity" => intval($capacity_to_use), // Overwritten value
+        "eventEndDate" => $visit_date, // yyyy-mm-dd
+        "eventEndTime" => $time_end_formatted, // Acttual time
+        "eventLocation" => $campus,
+        "eventName" => $addtour_title,
+        "eventStartDate" => $visit_date, // yyyy-mm-dd
+        "eventStartTime" => $time_start_formatted, // Actual time
+        "parentEventId" => $parent_event_id,
+        // For Conf email and page
+        "confEmailAgenda" => $confEmailAgenda,
+        "confEmailText" => $confEmailText,
+        "eventDisplayTitle" => $addtour_title
+      );
+
+    } // END OF if($add_tour_info != '') {
+  }  // END OF foreach
+  return $return_array;
+} // END OF public function getAdditionalToursUnderExpAsuForPosting($webform_submission)
+
+
+function _getCollegeNameFrom4charCollegeCode($four_char_college_code) {
+  $college_name = '';
+  // Get Taxonomy name from description value
+  // Returns empty string if description value is not set.
+  $database = \Drupal::database();
+  $query = $database->select('taxonomy_term_field_data', 't');
+  $query->fields('t', ['name']);
+  $query->condition('t.description__value', $four_char_college_code,'=');
+  $result = $query->execute();
+  $records = $result->fetchAll();
+  $num_results = count($records);
+  if($num_results > 0 ) {
+//            foreach($result as $data){
+    foreach($records as $data){
+      $college_name = isset($data->name) ? $data->name : '';
+    }
+  }
+  return $college_name;
+}
+
+
+function _getBarrettToursUnderExpAsuForPosting($webform_submission) {
+  // There may be multiple Barrett tours.
+  $return_array = [];
+
+  // Get value of Barrett tour fields
+  for ($i = 0; $i <= 10; $i++) {
+    $barrett_tour_info = isset($webform_submission->getData()['barrett_tour_id_' . $i]) ? $webform_submission->getData()['barrett_tour_id_' . $i] : '';
+//    \Drupal::logger('cstest')->notice('barrett_tour_info:' . $barrett_tour_info);
+
+    if($barrett_tour_info != '') {
+
+      $temp_array2 = explode('|', $barrett_tour_info);
+//      \Drupal::logger('cstest')->notice('temp_array2:<pre>' . print_r($temp_array2, true) . "</pre>");
+
+      if (count($temp_array2) < 2) {
+        \Drupal::logger('cstest')->warning('Malformed Barrett tour value (missing |): ' . $barrett_tour_info);
+        continue; // Skip this iteration
+      }
+
+      $parent_event_id = $temp_array2[0]; // Parent Exp ASU event id: <parent series id>-<parent event start timestamp>
+      $child_event_id = $temp_array2[1]; // Child Barrett event id: <child series id>-<child event start timestamp>
+//      \Drupal::logger('cstest')->notice('child_event_id' . $child_event_id); // 354-1751955300
+
+      // **1751955300 is not event's actual start time. It is a timestamp for Event id.
+
+      // Use $child_event_id and get $visit_date(yyyy-mm-dd).
+      $temp_array3 = explode('-', $child_event_id);
+      $event_series_id = $temp_array3[0];
+      $timestamp_for_eventid = $temp_array3[1];
+
+
+      //---- Here load Event Series and get start time ----//
+      //     Using the same code from line 255 in _get_selected_events()
+
+      //-------Get Parent entity --------//
+
+      // Load the parent entity
+      $entity_type_eventseries = 'eventseries';
+      $entity_eventseries  = \Drupal::entityTypeManager()->getStorage($entity_type_eventseries)->load($event_series_id);
+
+      //------- eventStartTime ---------//
+
+      //-------Find event instance --------//
+      $event_instance_storage = \Drupal::entityTypeManager()->getStorage('eventinstance');
+
+      // Load all eventinstance nodes tied to $event_series_id
+      $query = \Drupal::entityQuery('eventinstance')
+        ->accessCheck(FALSE)
+        ->condition('eventseries_id', $event_series_id);
+      $ids = $query->execute();
+
+      $entity_eventinstance = null;
+      $event_start_timestamp = null;
+
+      foreach ($ids as $eid) {
+        $instance = $event_instance_storage->load($eid);
+        if ($instance && !$instance->get('date')->isEmpty()) {
+          // Convert instance's start date to timestamp
+          $start_value = $instance->get('date')->value;
+//          \Drupal::logger('cstest')->notice('start_value:<pre>' . $start_value . '</pre>'); // string in UTC 2025-06-16T16:00:00
+          $start_ts = DateTimePlus::createFromFormat('Y-m-d\TH:i:s', $start_value, new \DateTimeZone('UTC'))->getTimestamp();
+//          \Drupal::logger('cstest')->notice('start_ts:<pre>' . $start_ts . '</pre>'); // Timestamp is always in UTC.
+
+          // If it's the same day, it’s a match.
+          if (date('Y-m-d', $start_ts) === date('Y-m-d', $timestamp_for_eventid)) {
+            $entity_eventinstance = $instance;
+            $event_start_timestamp = $start_ts;
+            break; // No need to keep looking
+          }
+        }
+      }
+
+      $child_event_start_timestamp = $event_start_timestamp;
+//      \Drupal::logger('cstest')->notice('child_event_start_timestamp: ' . $child_event_start_timestamp); // 1751955300
+
+      //$visit_date = date('Y-m-d', $child_event_start_timestamp);
+      $dt = new DateTime();
+      $dt->setTimestamp($child_event_start_timestamp);
+      $dt->setTimezone(new DateTimeZone('America/Phoenix'));
+      $visit_date = $dt->format('Y-m-d'); // In AZ time
+      $visit_date_formatted_utc = gmdate('Ymd', $child_event_start_timestamp); // yyyymmdd in UTC.
+
+      // Load the Barrett tour and get campus - Same as Barrett top-level entity
+      $entity_type_eventseries = 'eventseries';
+      $entity_eventseries = \Drupal::entityTypeManager()->getStorage($entity_type_eventseries)->load($event_series_id);
+      if (!$entity_eventseries) {
+        \Drupal::logger('cstest')->error('Barrett tour entity not found for ID: ' . $event_series_id);
+        continue; // Skip this iteration
+      }
+
+      $campus = isset($entity_eventseries->get('field_campus')->getValue()[0]['value']) ? $entity_eventseries->get('field_campus')->getValue()[0]['value'] : '';
+
+      // Load the instance entity
+      // NOTE: We need to use UTC date for $visit_date_formatted_utc.
+      $entity_id_eventinstance = _get_barrett_eventinstanceid_from_date_and_eventseriesid_revamp($visit_date_formatted_utc, $event_series_id);
+
+      // Get Event type such as "Barrett tour"
+      $event_type = $entity_eventseries->hasField('field_evtype') ? $entity_eventseries->get('field_evtype')->getValue()[0]['value'] : '';
+
+      // Capacity
+
+      $capacity_to_use = '';
+      $date_formatted2 = '';
+      $datetime_foreventname = '';
+      $date_formatted = '';
+      if (!is_null($entity_id_eventinstance)) { // Added on 9/6/2023. So, the website doesn't get white screen with error message.
+        // Load event instance
+        $entity_type_eventinstance = 'eventinstance';
+        $entity_eventinstance = \Drupal::entityTypeManager()->getStorage($entity_type_eventinstance)->load($entity_id_eventinstance);
+
+        // Capacity
+        // Check if Overwrite is checked or not in Event instance
+        $overwrite_capacity = $entity_eventinstance->hasField('field_overwrite_capacity') && isset($entity_eventinstance->get('field_overwrite_capacity')->getValue()[0]['value']) ? $entity_eventinstance->get('field_overwrite_capacity')->getValue()[0]['value'] : '';
+        if ($overwrite_capacity == '1') { // Overwrite conf letter
+          $capacity_to_use = isset($entity_eventinstance->get('field_capacity_event_instance')->getValue()[0]['value']) ? $entity_eventinstance->get('field_capacity_event_instance')->getValue()[0]['value'] : '';
+        } else {
+          $capacity_to_use = isset($entity_eventseries->get('field_capacity')->getValue()[0]['value']) ? $entity_eventseries->get('field_capacity')->getValue()[0]['value'] : '';
+        }
+
+        // Actual Start time and End time
+        // Look at Event instance
+        // Start time
+        $start_time_string = $entity_eventinstance->get('date')->getValue()[0]['value']; // 2023-07-19T14:00:00
+//        \Drupal::logger('cstest')->notice('start_time_string:<pre>' . $start_time_string . '</pre>'); // nid of conf letter node ex. 217044
+
+        $date_obj = DateTime::createFromFormat("Y-m-d\TH:i:s", $start_time_string, new DateTimeZone('UTC'));
+        $date_obj->setTimeZone(new DateTimeZone('America/Phoenix'));
+        $date_formatted = $date_obj->format('H:i:s');
+        // Date/time for Event name such as "Barrett tour_Tempe_2023/10/01 10:00:00"
+        $datetime_foreventname = $date_obj->format('Y/m/d H:i:s');
+
+        // End time
+        $end_time_string = $entity_eventinstance->get('date')->getValue()[0]['end_value']; // 2023-07-19T15:30:00
+        $date_obj2 = DateTime::createFromFormat("Y-m-d\TH:i:s", $end_time_string, new DateTimeZone('UTC'));
+        $date_obj2->setTimeZone(new DateTimeZone('America/Phoenix'));
+        $date_formatted2 = $date_obj2->format('H:i:s');
+
+
+        //------- Title ---------//
+        $event_title = isset($entity_eventseries->get('title')->getValue()[0]['value']) ? $entity_eventseries->get('title')->getValue()[0]['value'] :'';
+
+        //------- Display title ---------//
+        $event_display_title = isset($entity_eventseries->get('field_display_title')->getValue()[0]['value']) ? $entity_eventseries->get('field_display_title')->getValue()[0]['value'] :'';
+
+        //------- Conf email agenda ---------//
+        //------- Conf Letter nid ---------//
+        // Check if Overwrite is checked or not in Event instance
+        $overwrite_conf_letter = isset($entity_eventinstance->get('field_overwrite_conf_letter')->getValue()[0]['value']) ? $entity_eventinstance->get('field_overwrite_conf_letter')->getValue()[0]['value'] : '';
+
+        $confLetterNid = '';
+        if($overwrite_conf_letter == '1') { // Checked. Use Conf Letter value from event instance.
+          $confLetterNid = isset($entity_eventinstance->get('field_conf_letter_event_instance')->getValue()[0]['target_id']) ? $entity_eventinstance->get('field_conf_letter_event_instance')->getValue()[0]['target_id'] : '';
+
+        } else {
+          $confLetterNid = isset($entity_eventseries->get('field_confirmation_letter')->getValue()[0]['target_id']) ? $entity_eventseries->get('field_confirmation_letter')->getValue()[0]['target_id'] :'';
+        }
+//    \Drupal::logger('cstest')->notice('confletter:<pre>' . $confLetterNid . '</pre>'); // nid of conf letter node ex. 217044
+
+
+        //------- Values from Conf Letter node ---------//
+
+        // Load the conf letter node using the $confLetterNid
+        $confEmailText = '';
+        $confEmailAgenda = []; // NEW: initialize agenda array
+        $node = Node::load($confLetterNid);
+        // Validate node and field
+        if ($node instanceof \Drupal\node\NodeInterface) {
+
+          // NEW conf email text field
+          if($node->hasField('field_email_text_revamp') && !$node->get('field_email_text_revamp')->isEmpty()) {
+            $field = $node->get('field_email_text_revamp');
+            $confEmailText = $field->value ?? '';
+          }
+//          \Drupal::logger('cstest')->notice('confEmailText:<pre>' . print_r($confEmailText, true) . '</pre>');
+//          \Drupal::logger('cstest')->notice('confEmailText:<pre>' . $confEmailText . '</pre>');
+
+
+          // Agenda field processing - Drupal Paragraph
+          if ($node->hasField('field_agenda') && !$node->get('field_agenda')->isEmpty()) {
+            foreach ($node->get('field_agenda') as $agenda_item) {
+              /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+              $paragraph = $agenda_item->entity;
+
+              if ($paragraph && $paragraph->bundle() === 'agenda') {
+                $text = $paragraph->get('field_agenda_text')->value ?? '';
+                $time_range = $paragraph->get('field_agenda_timerange')->getValue();
+//                \Drupal::logger('cstest')->notice('time_range:<pre>' . print_r($time_range, true) . '</pre>');
+                $start = '';
+                $end = '';
+                if (!empty($time_range)) {
+                  $start_raw = $time_range[0]['from'] ?? ''; // 28800
+                  $end_raw = $time_range[0]['to'] ?? ''; // 39600
+
+                  // Use createFromFormat('U', ...) to handle timestamps
+                  if (is_numeric($start_raw)) {
+                    $start = \DateTime::createFromFormat('U', $start_raw)->format('g:i a');
+                  }
+                  if (is_numeric($end_raw)) {
+                    $end = \DateTime::createFromFormat('U', $end_raw)->format('g:i a');
+                  }
+                }
+
+                // Add structured data to agenda array
+                $confEmailAgenda[] = [
+                  'timeRangeStartTime' => $start,
+                  'timeRangeEndTime' => $end,
+                  'text' => $text,
+                ];
+              }
+            }
+          } // END OF if ($node->hasField('field_agenda') && !$node->get('field_agenda')->isEmpty())
+
+        } // END OF if ($node instanceof \Drupal\node\NodeInterface && $node->hasField('field_email_text_revamp'))
+
+      } // END OF if (!is_null($entity_id_eventinstance))
+
+      //--- Get Campus code for campusCode ---//
+      // dpm($campus, "campus - cstest");
+      $campus_code = get_campus_code($campus);
+      $campus_name = $campus;
+      // Change for West Valley campus
+      if($campus == 'West') {
+        $campus_name = 'West Valley';
+      }
+
+      $return_array[$i] = array(
+        "campaignType" => "Event",
+        "campusCode" => $campus_code,
+        "category" => $event_type,
+        "eventId" => $child_event_id, // 6-1689778800
+        "eventCapacity" => intval($capacity_to_use), // Overwritten value
+        "eventEndDate" => $visit_date, // yyyy-mm-dd
+        "eventEndTime" => $date_formatted2, //$time_end_formatted, // Acttual time
+        "eventLocation" => $campus,
+        "eventName" => $event_type. "_" . $campus_name . "_" . $datetime_foreventname, // Such as "Experience ASU_Tempe_2023/10/01 10:00:00". Actual time.
+        "eventStartDate" => $visit_date, // yyyy-mm-dd
+        "eventStartTime" => $date_formatted, // $time_start_formatted, // Actual time
+        "parentEventId" => $parent_event_id,
+        // Added for conf page and email
+        "eventTitle" => $event_title,
+        "eventDisplayTitle" => $event_display_title,
+        "confEmailText" => $confEmailText,
+        "confEmailAgenda" => $confEmailAgenda,
+      );
+
+    } // END OF if($barrett_tour_info != '') {
+  } // END OF for ($i = 0; $i <= 10; $i++) {
+  return $return_array;
+}
+
+
+/**
+ * @param $timestamp_from
+ * @param $timestamp_to
+ * @return array|string|string[]
+ * Parameter contains unixtimestamp.
+ */
+function format_time_timestamp_confirmation_page($timestamp_from, $timestamp_to) {
+  // $time_from contains 9:00 am. $time_to contains 11:00 am.
+
+  // If start time and end time are the same, make end time empty string.
+  if($timestamp_from === $timestamp_to) {
+    $timestamp_to = '';
+  }
+
+  $time_from = date('g:ia', $timestamp_from);
+  if ($timestamp_to != ''){
+    $time_to = date('g:ia', $timestamp_to);
+  } else {
+    $time_to = '';
+  }
+
+  // Change 12pm to Noon and noon.
+  $time_from = str_replace('12:00pm', 'Noon', $time_from);
+  $time_to = str_replace('12:00pm', 'noon', $time_to);
+
+  if($time_to === '') {
+    $time_string_formatted = $time_from;
+  } else {
+    $time_string_formatted = $time_from . ' &mdash; ' . $time_to;
+  }
+
+  // Change pm to p.m. and am to a.m.
+  $time_string_formatted = str_replace('pm', ' p.m.', str_replace('am', ' a.m.', $time_string_formatted));
+
+  // Remove first am/pm if it is the same as the ending time's am/pm.
+  if(substr_count($time_string_formatted, 'a.m.') == 2 ) {
+    $original_string = '/'.preg_quote(' a.m.', '/').'/';
+    $time_string_formatted = preg_replace($original_string, '', $time_string_formatted, 1);
+  }
+  if(substr_count($time_string_formatted, 'p.m.') == 2 ) {
+    $original_string = '/'.preg_quote(' p.m.', '/').'/';
+    $time_string_formatted = preg_replace($original_string, '', $time_string_formatted, 1);
+  }
+  $time_string_formatted = str_replace(':00', '', $time_string_formatted);
+
+  return $time_string_formatted;
+}
+
+
+/**
+ * @param array $build
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ * @param \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display
+ * @param $view_mode
+ * @return void
+ *
+ * Display Events array when we look at Attendee Conf Email node.
+ */
+function asuaec_visit_revamp_entity_view(array &$build, \Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity instanceof NodeInterface) {
+    if ($entity->getType() === 'attendee_conf_email' && $entity->hasField('field_events_json')) {
+
+      $field = $entity->get('field_events_json');
+      if (!$field->isEmpty()) {
+        $items = $field->getValue();
+
+        // Collect and render all Json items
+        $outputs = [];
+        $i = 0;
+        foreach ($items as $item) {
+          $json = $item['value'] ?? '';
+          if (!empty($json)) {
+            $data = json_decode($json, true);
+            $outputs[] = is_array($data)
+              ? "<p><strong>Event(#" . $i . "):</strong><br /><pre>" . print_r($data, true) . "</pre></p>"
+              : '<em>Invalid JSON</em>';
+          }
+          $i++;
+        }
+
+        // Combine all items for display
+        if (!empty($outputs)) {
+          // Attach as a sibling at the root (NOT inside field_events_json)
+          $build['field_json_display'] = [
+            '#type'  => 'fieldset',
+            '#title' => t('Events JSON Display'),
+            '#attributes' => ['class' => ['field-json-display']],
+            'content' => [
+              '#type'   => 'markup',
+              '#markup' => implode('<hr/>', $outputs),
+            ],
+            // Optional: place it right after the real field. Adjust as needed.
+            '#weight' => isset($build['field_events_json']['#weight'])
+              ? $build['field_events_json']['#weight'] + 1
+              : 10,
+          ];
+        }
+
+
+      } // END OF if (!$field->isEmpty()) {
+    }
+  }
+}
+
+
+/**
+ * Implements hook_node_insert().
+ *
+ * When attendee_conf_email is created, sends conf email.
+ */
+function asuaec_visit_revamp_node_insert(NodeInterface $node) {
+  if ($node->getType() === 'attendee_conf_email') {
+    \Drupal::logger('asuaec_visit_revamp')->info('New attendee_conf_email node created: @nid', ['@nid' => $node->id()]);
+    _asuaec_visit_revamp_send_confirmation_email($node);
+  }
+}
+
+/**
+ * @param NodeInterface $node
+ * @return void
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ *
+ * When send conf email, it looks at Json in field_events_json and build the email content by calling _asuaec_visit_revamp_buildConfEmailBody($the_attendee_conf_email_node).
+ * After sending, it will save the email content to field_email_content_html in the attendee_conf_email node
+ */
+function _asuaec_visit_revamp_send_confirmation_email(NodeInterface $node) {
+
+  $json = $node->get('field_events_json')->value;
+//  $email = $node->get('field_student_email')->value;
+  // Get Student's email
+  $student_email = $node->get('field_student_email')->value;
+
+
+  if (empty($json) || empty($student_email)) {
+    \Drupal::logger('asuaec_visit_revamp')->warning('Missing JSON or email for node @nid', ['@nid' => $node->id()]);
+    return;
+  }
+
+  $email_parts = _asuaec_visit_revamp_buildConfEmailBody($node);
+
+  $body = $email_parts['body'];
+
+  $mailManager = \Drupal::service('plugin.manager.mail');
+  $module = 'asuaec_visit_revamp';
+  $key = 'attendee_conf_email_revamp';
+
+  //------------ Add additional email addresses -------------//
+  $rsvp_emails = '';
+  $additional_emails_array = [];
+
+  // For Grad -- Grad submission may have value in field_student_add_email field.
+  $email_address_additional = $node->get('field_student_add_email')->value;
+  if($email_address_additional != ''){
+    $additional_emails_array =explode(',', $email_address_additional);
+  }
+//  \Drupal::logger('cstest')->info('addittional_emails_array1: <pre>' . print_r($additional_emails_array, true) . '</pre>', []);
+
+
+  // For Ugrad
+  $parent1_email = $node->get('field_parent1_email')->value;
+  if (!empty($parent1_email)) {
+    array_push($additional_emails_array, $parent1_email);
+  }
+  $parent2_email = $node->get('field_parent2_email')->value;
+  if (!empty($parent2_email)) {
+    array_push($additional_emails_array, $parent2_email);
+  }
+
+//  \Drupal::logger('cstest')->info('addittional_emails_array2: <pre>' . print_r($additional_emails_array, true) . '</pre>', []);
+
+  $rsvp_emails = _asuaec_visit_revamp_remove_duplicate_email_address_and_build_comma_separated_email_string($additional_emails_array, $student_email);
+  if($rsvp_emails == '') {
+    $to = $student_email;
+  } else {
+    $to = $student_email . ', ' . $rsvp_emails;
+  }
+
+
+//  \Drupal::logger('cstest')->info('to: <pre>' . print_r($to, true) . '</pre>', []);
+
+
+
+  $params['message'] = $body;
+  $params['subject'] = $email_parts['subject'];
+  $langcode = \Drupal::currentUser()->getPreferredLangcode();
+  $send = true;
+
+  $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+  if ($result['result']) {
+    \Drupal::logger('asuaec_visit_revamp')->info('Confirmation email sent to @to for node @nid', ['@to' => $to, '@nid' => $node->id()]);
+
+    // Save the email code to attendee_conf_email node
+    _asuaec_visit_revamp_save_email_code($node, $params['message']);
+
+  } else {
+    \Drupal::logger('asuaec_visit_revamp')->error('Failed to send confirmation email to @to for node @nid', ['@to' => $to, '@nid' => $node->id()]);
+  }
+}
+
+
+/**
+ * @param $key
+ * @param $message
+ * @param $params
+ *
+ * Implements hook_mail().
+ * For emailing, we need hook_mail. Works with sendConfEmail() in VisitWebformHander.php.
+ */
+function asuaec_visit_revamp_mail($key, &$message, $params) {
+  $options = array(
+    'langcode' => $message['langcode'],
+  );
+  switch ($key) {
+    case 'attendee_conf_email_revamp':
+    case 'visit_conf_email_failure_revamp':
+    case 'visit_post_failure_revamp':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('@subject', ['@subject' => $params['subject']], $options);
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed'; // Needed this to display images.
+      $message['body'][] = $params['message'];
+      break;
+  }
+}
+
+
+/**
+ * @param $attendee_conf_email_node
+ * @return array
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ *
+ * Addes a link to cancel form: /cancel-registration?aid={attendee_id}&eventid={event_id}&etype=exp&source=conf-email&sid=65315&ptype=High%20school%20junior
+ */
+function _asuaec_visit_revamp_buildConfEmailBody($attendee_conf_email_node) {
+//  $json = $attendee_conf_email_node->get('field_events_json')->value;
+//  $events_array = json_decode($json, true);
+  $json = '';
+  $field = $attendee_conf_email_node->get('field_events_json');
+  if (!$field->isEmpty()) {
+    $items = $field->getValue();
+    $last  = end($items);
+    // formatted text (text_long/text_with_summary) stores ['value'=>..., 'format'=>...]
+    // plain string types may be just string values.
+    $json = is_array($last) && array_key_exists('value', $last)
+      ? (string) ($last['value'] ?? '')
+      : (is_string($last) ? $last : '');
+  }
+  $events_array = json_decode($json, true);
+
+  $guests = $attendee_conf_email_node->get('field_student_guests')->value;
+  $first_name = $attendee_conf_email_node->get('field_student_first_name')->value;
+  $attendee_id = $attendee_conf_email_node->get('field_sid')->value;
+  $sid = $attendee_conf_email_node->get('field_sid')->value;
+  $ptype = $attendee_conf_email_node->get('field_student_type')->value; // High school senior
+  $interest = $attendee_conf_email_node->get('field_student_interest')->value; // Interest
+  $interest_name = $attendee_conf_email_node->get('field_student_interest_name')->value; // Interest name
+  $conf_email_nid = $attendee_conf_email_node->get('field_conf_email_nid')->value; // Confirmation email template nid. Added on 6/1/2026.
+  $domain = 'https://' . $_SERVER['HTTP_HOST'];
+
+  $email_parts = [];
+
+  // Changed on 6/1/2026.
+  // Cofirmation email body to pull in from conf_email_master_content node
+  // Determin which conf_email_master_content node to pull from.
+
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  $master_node = NULL;
+
+  // First choice: conf_email_nid that was passed from preset.
+  $conf_email_nid = trim((string) ($attendee_conf_email_node->get('field_conf_email_nid')->value ?? ''));
+
+  // Second choice: default template from config.
+  if ($conf_email_nid === '') {
+    $conf_email_nid = trim((string) \Drupal::config('asuaec_visit_revamp.settings')->get('default_conf_email_nid'));
+  }
+
+  // Load conf_email_master_content node.
+  if ($conf_email_nid !== '' && is_numeric($conf_email_nid)) {
+    $candidate = $storage->load((int) $conf_email_nid);
+    if ($candidate && $candidate->bundle() === 'conf_email_master_content') {
+      $master_node = $candidate;
+    }
+  }
+
+  // Final fallback: old behavior.
+  if (!$master_node) {
+    $query = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'conf_email_master_content')
+      ->range(0, 1)
+      ->sort('created', 'DESC');
+
+    $nids = $query->execute();
+    if (!empty($nids)) {
+      $master_node = $storage->load(reset($nids));
+    }
+  }
+
+
+  if ($master_node) {
+    // Get formatted long text fields
+    $closing_text_render = $master_node->get('field_section_closing_text')->view(['label' => 'hidden', 'type' => 'text_default']);
+    $signature_render = $master_node->get('field_section_signature')->view(['label' => 'hidden', 'type' => 'text_default']);
+
+    // Get Email suject line
+    $email_parts['subject'] = $master_node->get('field_email_subject_line')->value;
+
+    // Get image file URL and alt text
+    if ($master_node->hasField('field_email_banner_image') && !$master_node->get('field_email_banner_image')->isEmpty()) {
+      $media = $master_node->get('field_email_banner_image')->entity;
+      if ($media && $media->hasField('field_media_image')) {
+        $image = $media->get('field_media_image')->first();
+        $banner_img_uri = $image->get('target_id') ? $image->entity->getFileUri() : '';
+        $banner_img_path = !empty($banner_img_uri) ? \Drupal::service('file_url_generator')->generateAbsoluteString($banner_img_uri) : '';
+        $banner_img_alt = $image->alt ?? '';
+      }
+    }
+  }
+
+  // Build $main_content
+
+  // Intro/greeting
+  if ($guests == 1) {
+    $main_content = "<p>Thank you for your interest in Arizona State University. As requested, you and {$guests} guest are registered to attend the following campus tours. Please keep this email accessible for your upcoming visit.</p>";
+  } else if ($guests >= 2) {
+    $main_content = "<p>Thank you for your interest in Arizona State University. As requested, you and {$guests} guests are registered to attend the following campus tours. Please keep this email accessible for your upcoming visit.</p>";
+  } else {
+    $main_content = "<p>Thank you for your interest in Arizona State University. As requested, you are registered to attend the following campus tours. Please keep this email accessible for your upcoming visit.</p>";
+  }
+
+  //-----Display like "You have selected"-----//
+  $output_selected_events = '';
+  // Step 1: Group by date and campus
+  $grouped = [];
+
+  foreach ($events_array as $event) {
+    $date = $event['eventStartDate'];
+    $campus = $event['eventLocation'];
+    $grouped[$date][$campus][] = $event;
+  }
+
+  // Step 2: Format and display
+  foreach ($grouped as $date => $campuses) {
+    $formatted_date = date('l, F j, Y', strtotime($date));
+    $output_selected_events .= "<h4>$formatted_date</h4>" . "\n";
+
+    foreach ($campuses as $campus => $event_list) {
+      // Change for West Valley campus
+      if($campus == 'West') {
+        $campus = 'West Valley';
+      }
+      $output_selected_events .= "<h5>$campus campus</h5>";
+
+      $output_selected_events .= "<ul>";
+      foreach ($event_list as $event) {
+
+        $title = $event['eventTitle'] ?? $event['eventName'];
+//         $eventdisplaytitle = $event['eventDisplayTitle'];
+//         $start_time = date('g:i a', strtotime($event['eventStartTime']));
+// //        $output_selected_events .= "<li>$title - $start_time</li>";
+//         $event_id = $event['eventId'];
+//         $cancelform_link_html = "<a href='{$domain}/cancel-registration-v2?aid={$attendee_id}&eventid={$event_id}&etype=exp&source=conf-email&sid={$sid}&ptype={$ptype}'>Cancel your registration</a>";
+//         $output_selected_events .= "<li>$eventdisplaytitle - $start_time ($cancelform_link_html)</li>";
+
+        $eventdisplaytitle = $event['eventDisplayTitle'] ?? $title;
+        // \Drupal::logger('cstest')->notice('event - cstest:<pre>' . print_r($event, true) . '</pre>');
+        $event_type = $event['category'] ?? '';
+
+        // Detect self-guided
+        $is_self_guided =
+          (trim($event_type) === 'Self-guided campus Tour')
+          || (stripos($eventdisplaytitle, 'self-guided') !== FALSE);
+
+        $event_id = $event['eventId'] ?? '';
+        $cancelform_link_html = "<a href='{$domain}/cancel-registration-v2?aid={$attendee_id}&eventid={$event_id}&etype=exp&source=conf-email&sid={$sid}&ptype={$ptype}&int={$interest}&int_name={$interest_name}'>Cancel your registration</a>";
+
+        // Build time only when NOT self-guided
+        $time_html = '';
+        if (!$is_self_guided && !empty($event['eventStartTime'])) {
+          $start_time = date('g:i a', strtotime($event['eventStartTime']));
+          $time_html = " - $start_time";
+        }
+
+        // Always output the <li> (title is never removed)
+        $output_selected_events .= "<li>{$eventdisplaytitle}{$time_html} ({$cancelform_link_html})</li>";
+
+
+        // Add confEmailText for parent event
+        if (!empty(trim($event['confEmailText'] ?? ''))) {
+          $output_selected_events .= '<div style="margin-left:15px;">' . nl2br(trim($event['confEmailText'])) . '</div>';
+        }
+
+        // Handle children
+        if (!empty($event['children'])) {
+          $output_selected_events .= "<ul>";
+          foreach ($event['children'] as $child) {
+//            $child_title = $child['eventTitle'] ?? $child['eventName'];
+            $child_display_title = $child['eventDisplayTitle'] ?? $child['eventTitle'];
+            $child_start = date('g:i a', strtotime($child['eventStartTime']));
+            $child_end = date('g:i a', strtotime($child['eventEndTime']));
+            $output_selected_events .= "<li>Optional session — $child_display_title ($child_start - $child_end)</li>";
+
+            // NEW: Add confEmailText for child event
+            if (!empty(trim($child['confEmailText'] ?? ''))) {
+              $output_selected_events .= '<div style="margin-left:15px;">' . nl2br(trim($child['confEmailText'])) . '</div>';
+            }
+          }
+          $output_selected_events .= "</ul>";
+        }
+      }
+      $output_selected_events .= "</ul>";
+    }
+
+    $output_selected_events .= "\n"; // Space between dates
+  }
+
+//  \Drupal::logger('cstest')->notice('output_selected_events:<pre>' . $output_selected_events . '</pre>');
+
+  $main_content .= $output_selected_events;
+  //------END OF Display like "You have selected"-----//
+
+  // Closing and signature which pulled from attendee_conf_email node
+  $main_content .= \Drupal::service('renderer')->render($closing_text_render);
+  $main_content .= \Drupal::service('renderer')->render($signature_render);
+
+  $email_parts['body'] = _asuaec_visit_revamp_applyEmailTemplate($main_content, $banner_img_path, $banner_img_alt, $first_name);
+
+
+  return $email_parts;
+}
+
+
+
+function _asuaec_visit_revamp_applyEmailTemplate($main_content, $banner_img_path, $banner_img_alt, $first_name) {
+
+  $output = '';
+
+  $output = <<<EOD
+<!DOCTYPE html "-//w3c//dtd xhtml 1.0 transitional //en" "http://www.w3.org/tr/xhtml1/dtd/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <!--[if gte mso 9]><xml>      <o:OfficeDocumentSettings>       <o:AllowPNG/>       <o:PixelsPerInch>96</o:PixelsPerInch>      </o:OfficeDocumentSettings>     </xml><![endif]-->
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+    <meta name="x-apple-disable-message-reformatting">
+    <!--target dark mode-->
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark only">
+    <title>Arizona State University
+    </title>
+    <!-- Allow for better image rendering on Windows hi-DPI displays. -->
+    <!--[if mso]>
+<noscript>
+<xml>
+<o:OfficeDocumentSettings>
+<o:AllowPNG/>
+<o:PixelsPerInch>96</o:PixelsPerInch>
+</o:OfficeDocumentSettings>
+</xml>
+</noscript>
+<![endif]-->
+    <!--to support dark mode meta tags-->
+    <style type="text/css">
+      :root {
+        color-scheme: light dark;
+        supported-color-schemes: light dark;
+      }
+    </style>
+    <!--webfont code goes here-->
+    <!--[if (gte mso 9)|(IE)]><!-->
+    <!--webfont <link /> goes here-->
+    <style>
+      /*Web font over ride goes here
+      h1, h2, h3, h4, h5, p, a, img, span, ul, ol, li { font-family: 'webfont name', Arial, Helvetica, sans-serif !important; } */
+    </style>
+    <!--<![endif]-->
+    <!--[if gte mso 16]>
+<style>
+.keep-black {
+mso-style-textfill-type:gradient;
+mso-style-textfill-fill-gradientfill-stoplist:"0 \#000000 1 100000\,99000 \#000000 1 100000";
+color:#fff !important;
+}
+</style>
+<![endif]-->
+    <style id="media-query">
+      /* Client-specific Styles & Reset */
+      v\:* {
+        behavior: url(#default#VML);
+        display: inline-block
+      }
+      #outlook a {
+        padding: 0;
+      }
+      a[x-apple-data-detectors] {
+        color: inherit !important;
+        text-decoration: none !important;
+        font-size: inherit !important;
+        font-family: inherit !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+      }
+      u + .body .gmail-blend-screen{
+        background:#000;
+        mix-blend-mode:screen;
+      }
+      u + .body .gmail-blend-difference {
+        background:#000;
+        mix-blend-mode:difference;
+      }
+      u + .body .gmailhack {
+        background:#fff;
+      }
+      /* .ExternalClass applies to Outlook.com (the artist formerly known as Hotmail) */
+      .ExternalClass {
+        width: 100%;
+      }
+      .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
+        line-height: 100%;
+      }
+      #backgroundTable {
+        margin: 0;
+        padding: 0;
+        width: 100% !important;
+        line-height: 100% !important;
+      }
+      /* Buttons */
+      .button a {
+        display: inline-block;
+        text-decoration: none;
+        -webkit-text-size-adjust: none;
+        text-align: center;
+      }
+      .button a div {
+        text-align: center !important;
+      }
+      /* Outlook First */
+      body.outlook p {
+        display: inline !important;
+      }
+      /*  Media Queries */
+      @media only screen and (max-width: 500px) {
+        table[class="body"] img.fullwidth {
+          max-width: 100% !important;
+        }
+        table[class="body"] center {
+          min-width: 0 !important;
+        }
+        table[class="body"] .container {
+          width: 95% !important;
+        }
+        table[class="body"] .row {
+          width: 100% !important;
+          display: block !important;
+        }
+        table[class="body"] .wrapper {
+          display: block !important;
+          padding-right: 0 !important;
+        }
+        table[class="body"] .columns, table[class="body"] .column {
+          table-layout: fixed !important;
+          float: none !important;
+          width: 100% !important;
+          padding-right: 0px !important;
+          padding-left: 0px !important;
+          display: block !important;
+        }
+        table[class="body"] .wrapper.first .columns, table[class="body"] .wrapper.first .column {
+          display: table !important;
+        }
+        table[class="body"] table.columns td, table[class="body"] table.column td, .col {
+          width: 100% !important;
+        }
+        table[class="body"] table.columns td.expander {
+          width: 1px !important;
+        }
+        table[class="body"] .right-text-pad, table[class="body"] .text-pad-right {
+          padding-left: 10px !important;
+        }
+        table[class="body"] .left-text-pad, table[class="body"] .text-pad-left {
+          padding-right: 10px !important;
+        }
+        table[class="body"] .hide-for-small, table[class="body"] .show-for-desktop {
+          display: none !important;
+        }
+        table[class="body"] .show-for-small, table[class="body"] .hide-for-desktop {
+          display: inherit !important;
+        }
+        *[class=nomobile]{
+          display:none !important;
+        }
+        *[class=mobilefullwidth]{
+          width:100% !important;
+          height: auto !important;
+        }
+      }
+      @media screen and (max-width: 700px) {
+        div[class="col"] {
+          width: 100% !important;
+        }
+        .mobilefont {
+          font-size:14px !important;
+        }
+        h1 {
+          font-size:24px !important;
+          line-height:32px !important;
+      }
+        .mobilefontheader {
+          font-size:24px !important;
+          line-height:32px !important;
+          background-color:#ffc627 !important;
+          color:#000 !important;
+        }
+        .mobilefonthero {
+          font-size:48px !important;
+          line-height: 48px !important;
+          padding: 24px 0px 14px 0px !important;
+        }
+        .mobilebg {
+          background-color: #FFFFFF !important;
+          background-color: #FFFFFF !important;
+          border: none !important;
+        }
+        .fullwidth {
+          width: 100% !important;
+        }
+      }
+      @media screen and (min-width: 701px) {
+        table[class="container"] {
+          width: 700px !important;
+        }
+      }
+    </style>
+    <style>
+      @media (prefers-color-scheme: light) {
+        .dark-img {
+          display: none !important;
+        }
+        .light-img {
+          display: block !important;
+          width: auto !important;
+          overflow: visible !important;
+          float: none !important;
+          max-height: inherit !important;
+          max-width: 240px !important;
+          line-height: auto !important;
+          margin-top: 0px !important;
+          visibility: inherit !important;
+        }
+        .linkHover {
+          color: #8c1d40 !important;
+          transition: .5s !important
+        }
+        .linkHover:hover {
+          color: #cb2a5d !important;
+          transition: .5s !important;
+        }
+      }
+      @media (prefers-color-scheme: dark) {
+        /* Shows Dark Mode-Only Content, Like Images */
+        .dark-img {
+          display: block !important;
+          width: auto !important;
+          overflow: visible !important;
+          float: none !important;
+          max-height: inherit !important;
+          max-width: inherit !important;
+          line-height: auto !important;
+          margin-top: 0px !important;
+          visibility: inherit !important;
+        }
+        /* Hides Light Mode-Only Content, Like Images */
+        .light-img {
+          display: none !important;
+        }
+        /* Custom Dark Mode Background Color */
+        .darkmode {
+          background-color: #000000 !important;
+        }
+        .darkmode2 {
+          color: white !important;
+          background-color: #000000 !important;
+          border-right: solid 1px #191919 !important;
+          border-left: solid 1px #191919 !important;
+        }
+        .darkmode3 {
+          color:#fff !important;
+        }
+        .darkmode4 {
+          color: #000 !important;
+          background-color: #000000 !important;
+          border-right: solid 1px #191919 !important;
+          border-left: solid 1px #191919 !important;
+        }
+        .darkmodenotext {
+          background-color: #000000 !important;
+        }
+        .darkmode5 {
+          color: #000 !important;
+          background-color: #000000 !important;
+        }
+        .darkmode6 {
+          color: #fff !important;
+          background-color: #000000 !important;
+        }
+        .darkmodecallout {
+          color: #000 !important;
+          background-color: #000000 !important;
+          border-right: solid 1px #191919  !important;
+          border-left: solid 1px #191919 !important;
+          border-top: solid 1px #191919  !important;
+          border-bottom: solid 1px #191919  !important;
+        }
+        .darkModeLink {
+          color: #000 !important
+        }
+        .darkModeA {
+          color: #ffc627 !important;
+          border-bottom: 1px dotted #ffc627 !important;
+        }
+        .darkModeSpacer {
+          Background-color: #000 !important;
+        }
+        .darkModedvb {
+          background-color:#000 !important;
+          background:linear-gradient(0deg, #808080, #808080 50%, #000, #000 50%) !important;
+          border-color:#000 !important;
+        }
+        .header {
+          color: #ffffff !important;
+          background-color: #000000 !important;
+        }
+        .darkModeNoBorder {
+          color: white !important;
+          background-color: #000000 !important;
+        }
+        .darkmode365{
+          color: white !important;
+          background-color: #000000 !important;
+          border-right: solid 1px #191919 !important;
+          border-left: solid 1px #191919 !important;
+        }
+        .mso-h1 {
+          Margin-bottom:0px !important;
+        }
+        .linkHover {
+          color: #ffc627 !important;
+          transition: .5s !important
+        }
+        .linkHover:hover {
+          color: #ffd35a !important;
+          transition: .5s !important;
+        }
+      }
+      /* Copy dark mode styles for android support */
+      /* Shows Dark Mode-Only Content, Like Images */
+      [data-ogsc] .dark-img {
+        display: block !important;
+        width: auto !important;
+        overflow: visible !important;
+        float: none !important;
+        max-height: inherit !important;
+        max-width: inherit !important;
+        line-height: auto !important;
+        margin-top: 0px !important;
+        visibility: inherit !important;
+      }
+      /* Hides Light Mode-Only Content, Like Images */
+      [data-ogsc] .light-img {
+        display: none !important;
+      }
+      /* Custom Dark Mode Background Color */
+      [data-ogsc] .darkModeA {
+        color: #ffc627 !important;
+        border-bottom: 1px dotted #ffc627 !important;
+      }
+      [data-ogsc] .darkModeNoBorder {
+        color: #fff !important;
+        background-color: #000000 !important;
+      }
+      [data-ogsc] .darkmode {
+        background-color: #000000 !important;
+      }
+      [data-ogsc] .darkmode2 {
+        color: white !important;
+        background-color: #000000 !important;
+        border-right: solid 1px #191919 !important;
+        border-left: solid 1px #191919 !important;
+      }
+      [data-ogsc] .darkmode3 {
+        color:#fff !important;
+      }
+      [data-ogsc]   .darkmode4 {
+        color: #000 !important;
+        background-color: #000000 !important;
+        border-right: solid 1px #191919 !important;
+        border-left: solid 1px #191919 !important;
+      }
+      [data-ogsc]  .darkmode5 {
+        color: #000 !important;
+        background-color: #000000 !important;
+      }
+      [data-ogsc]  .darkmode6 {
+        color: #fff !important;
+        background-color: #000000 !important;
+      }
+      [data-ogsc] .darkmode365{
+        background-color: #000000 !important;
+        border-right: solid 1px #191919 !important;
+        border-left: solid 1px #191919 !important;
+      }
+      /* Custom Dark Mode Font Colors */
+      /* Custom Dark Mode Text Link Color */
+      .buttonHover {
+        transition: .05s
+      }
+      .buttonHover:hover {
+        background: #ffd35a !important;
+        transition: .05s
+      }
+      /* Button and link hover styles */
+      .buttonHover{
+        transition:.05s}
+      .buttonHover:hover{
+        background:#ffd35a !important;
+        transition:.05s}
+      .linkHover{
+        color:#8c1d40 !important;
+        transition:.5s !important}
+      .linkHover:hover{
+        color:#cb2a5d !important;
+        transition:.5s !important;
+      }
+      .darkbackground {
+        background-color:#fff !important;
+      }
+    </style>
+    <!--[if (gte mso 9)|(IE)]> <style> .mso-link {text-decoration: underline !important; display: inline-block !important;}  </style> <![endif]-->
+  </head>
+  <body class="mobilebg darkmode body body-fix" style="width: 100% !important;min-width: 100%;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100% !important;margin: 0;padding: 0; background-color: #F1F1F1;">
+    <style type="text/css">
+      div.preheader
+      {
+        display: none !important;
+      }
+    </style>
+    <!--[if mso]> <style type="text/css"> body, table, td, p, div, a {font-family: Arial, sans-serif !important;} .mso-link {border-bottom: 1px solid #8c1d40 !important; display: inline-block;}  </style> <![endif]-->
+    <!--Begin Email-->
+    <table role="presentation" class="body mobilebg" style="border-spacing: 0;border-collapse: collapse;vertical-align: top;height: 100%;width: 100%;table-layout: fixed" cellpadding="0" cellspacing="0" width="100%" border="0">
+      <div width="100%" align="center">
+        <!--End Wrap-->
+        <!-- Insert &zwnj;&nbsp; hack after hidden preview text -->
+        <div style="display: none; max-height: 0px; overflow: hidden;">
+          &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp; &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp; &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+        </div>
+        <table role="presentation" style="border-spacing: 0; border-collapse: collapse; vertical-align: top;" cellpadding="0" cellspacing="0" align="center" width="100%" border="0">
+          <tbody>
+            <!--Insert Reference block for UTM-->
+            <tr>
+              <td>
+                <custom name="opencounter" type="tracking">
+                  </td>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+              <td style="word-break: break-word; border-collapse: collapse !important; vertical-align: top" width="100%">
+                <!--[if (gte mso 9)|(IE)]> <table id="outlookholder" border="0" cellspacing="0" cellpadding="0" align="center"><tr><td> <table width="700" align="center" cellpadding="0" cellspacing="0" border="0"> <tr> <td> <![endif]-->
+                <!--Header-->
+                <!--Grey Wrapper-->
+                <table role="presentation" style="border-spacing: 0; border-collapse: collapse; vertical-align: top; max-width: 700px; margin: 0 auto; background-color: #f1f1f1;" cellpadding="0" cellspacing="0" align="center" width="100%" border="0">
+                  <tbody>
+                    <tr>
+                      <td style="word-break: break-word;border-collapse: collapse !important; vertical-align: top;" width="100%">
+                        <!--Header-->
+                        <tr>
+                          <td id="asu_header" align="center" valign="top">
+                            <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="min-width: 100%; " class="stylingblock-content-wrapper"><tr><td class="stylingblock-content-wrapper camarker-inner"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" align="center" style="padding: 0px;" bgcolor="#ffffff">
+<tr>
+            <td class="darkmode2" align="left" valign="top" style="padding:24px 24px 24px 24px; background-color: #ffffff;">
+                <!--light mode logo image-->
+                <a alias="ASU Top Logo" href="https://asu.edu">
+        <img class="light-img" src="https://image.reply.asu.edu/lib/fe8d137272610d7c76/m/3/d9f2d016-e69b-4a9f-9054-b0651026a038.png" width="230" height="auto" alt="Arizona State University" style="border-collapse: collapse; text-align: left; font-size:22px; color:#ffc627; font-family: Arial, sans-serif; padding: 0px; line-height: 24px; font-weight: bold; width:230px !important;">
+
+                <!--dark mode logo image-->
+                <div class="dark-img" style="display:none; overflow:hidden; width:0px; max-height:0px; max-width:0px; line-height:0px; visibility:hidden;" align="left">
+                    <img src="https://image.reply.asu.edu/lib/fe8d137272610d7c76/m/7/e0014106-a5a7-4286-9410-f5d5a1f52fc4.png" width="230" height="auto" alt="Arizona State University" style="border-collapse: collapse; text-align: left; font-size:22px; color:#ffc627; font-family: Arial, sans-serif; padding: 0px; line-height: 24px; font-weight: bold;">
+                </div>
+                    </a>
+            </td>
+          </tr>
+</table></td></tr></table>
+                          </td>
+                        </tr>
+                        <!--Start Content-->
+                        <tr>
+                          <td id="asu_header" align="center" valign="top">
+                            <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="min-width: 100%; " class="stylingblock-content-wrapper"><tr><td class="stylingblock-content-wrapper camarker-inner"><table width="100%" cellspacing="0" cellpadding="0" role="presentation"><tr><td align="center"><img data-assetid="404749" src="{$banner_img_path}" alt="{$banner_img_alt}" width="700" style="display: block; padding: 0px; text-align: center; border: 0px solid transparent; height: auto; width: 100%;"></td></tr></table></td></tr></table>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td id="asu_header" align="center" valign="top">
+                            <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="min-width: 100%; " class="stylingblock-content-wrapper"><tr><td class="stylingblock-content-wrapper camarker-inner"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" align="center" style="background-color: #ffffff; padding: 0px;">
+                              <tr>
+                                <td class="darkmode2" style="border-collapse: collapse; text-align: left; font-size:16px; color:#000000; font-family: Arial, sans-serif; padding: 24px 24px 24px 24px; mso-line-height-rule:exactly; line-height: 24px; font-weight: bold;">
+                                {$first_name},
+                                </td>
+                              </tr>
+                            </table></td></tr></table>
+                            <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="min-width: 100%; " class="stylingblock-content-wrapper"><tr><td class="stylingblock-content-wrapper camarker-inner">
+                                <table class="darkmodenotext" role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="background-color: #ffffff; padding: 0px;">
+                                  <tr>
+                                    <td class="darkmode2" style="border-collapse: collapse; text-align: left; font-size:16px; color:#000000; font-family: Arial, sans-serif; padding: 0px 24px 24px 24px; line-height: 24px;">
+                                      <p style="margin-top:0px;margin-bottom:0px">
+                                        {$main_content}
+                                      </p>
+                                    </td>
+                                  </tr>
+                                </table>
+                            </td></tr></table>
+                          </td>
+                        </tr>
+                        <!--End Content-->
+                        <!--Social Media-->
+                        <tr>
+                          <td id="asu_header" align="center" valign="top">
+                            <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="min-width: 100%; " class="stylingblock-content-wrapper"><tr><td class="stylingblock-content-wrapper camarker-inner"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" align="center" style="background-color: #000000;padding: 0px;">
+  <tr style="vertical-align: middle">
+    <td style="word-break: break-word; border-collapse: collapse !important; vertical-align: middle;text-align: center; font-size: 0; padding: 16px 0px 16px 0px;">
+
+<!--[if (gte mso 9)|(IE)]><table width="100%" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td valign="middle" width="355" style="line-height:0px"><![endif]-->
+
+<div style="display: inline-block;vertical-align: middle;text-align: center;width: 355px;">
+
+<table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="padding: 0px 8px 0px 0px;">
+
+<tr>
+<td align="center" valign="middle" style="border-collapse: collapse; text-align: center; font-size:16px; color:#000000; font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif; padding: 0px 24px 4px 48px; line-height: 24px; font-weight: 300;">
+<a alias="Repeataedly Ranked #1" href="https://asu.edu">
+<img src="https://image.reply.asu.edu/lib/fe8d137272610d7c76/m/1/46d71a63-4f9e-4daa-9266-ccb390669950.jpg" width="230" height="auto" alt="Repeataedly Ranked #1. 20+ lists in the last 3 years." style="border-collapse: collapse; text-align: left; font-size:22px; color:#ffc627; font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif; padding: 0px; line-height: 24px;">
+</a>
+</td>
+
+</tr>
+</table>
+
+</div>
+
+<!--[if (gte mso 9)|(IE)]><td valign="middle" width="285" style="padding: 0px 0px 0px 0px;><![endif]-->
+
+<div class="col num4" style="display: inline-block;vertical-align: middle;text-align: center;width: 285px;">
+
+<table role="presentation" width="95%" border="0" cellspacing="0" cellpadding="0" align="center" style="padding: 0px 0px 0px 0px;">
+
+<tr>
+<td align="center" valign="middle" style="border-collapse: collapse; text-align: center; font-size:16px; color:#000000; font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif; padding: 10px 10px 10px 10px; line-height: 24px; font-weight: 300;">
+<a alias="ASU Bottom Logo" href="https://asu.edu">
+<img src="https://image.reply.asu.edu/lib/fe8d137272610d7c76/m/7/e0014106-a5a7-4286-9410-f5d5a1f52fc4.png" width="230" height="auto" alt="Arizona State University" style="border-collapse: collapse; text-align: left; font-size:22px; color:#ffc627; font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif; padding: 0px; line-height: 24px;">
+</a>
+</td>
+</tr></table>
+
+</div>
+
+<!--[if (gte mso 9)|(IE)]></td></tr></table><![endif]-->
+</td>
+</tr>
+</table>
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" align="center" style="padding: 0px;">
+
+  <tr>
+    <td style="word-break: break-word;border-collapse: collapse !important; vertical-align: top; text-align: center; padding-top: 16px;" align="center" width="100%">
+ <center>
+ <table role="presentation" style="width: 90%;">
+  <tr>
+        <td style="word-break: break-word; border-collapse: collapse !important; vertical-align: middle; padding:0px; text-align: center;">
+        <a alias="Facebook_ASU" href="https://www.facebook.com/FutureSunDevils">
+        <img width="40" height="40" border="0" alt="Facebook Logo" src="https://image.reply.asu.edu/lib/fe8d137272610d7c76/m/1/02bb64df-844c-4720-8d37-d4c7de8c464c.png" style="vertical-align: middle; padding: 0px; text-align: center;">
+        </a>
+        </td>
+        <td style="word-break: break-word; border-collapse: collapse !important; vertical-align: middle; padding:0px; text-align: center;">
+        <a alias="X_ASU" href="http://twitter.com/futuresundevils">
+        <img width="40" height="40" border="0" alt="X Logo" src="https://image.reply.asu.edu/lib/fe8d137272610d7c76/m/1/8a3c00b5-9dfb-4fec-b46a-7846599e563f.png" style="vertical-align: middle; padding: 0px; text-align: center;">
+        </a>
+        </td>
+        <td style="word-break: break-word; border-collapse: collapse !important; vertical-align: middle; padding:0px; text-align: center;">
+        <a alias="Instagram_ASU" href="https://instagram.com/FutureSunDevils">
+        <img width="40" height="40" border="0" alt="Instagram Logo" src="https://image.reply.asu.edu/lib/fe8d137272610d7c76/m/1/54231603-7475-4639-aa0b-6811447b0062.png" style="vertical-align: middle; padding: 0px; text-align: center;">
+        </a>
+        </td>
+
+        <td style="font-size:0px; word-break: break-word; border-collapse: collapse !important; vertical-align: middle; padding:0px; text-align: center;">
+
+        <a alias="YouTube_ASU" href="https://www.youtube.com/@futuresundevils">
+        <img width="40" height="40" border="0" alt="YouTube Logo" src="https://image.reply.asu.edu/lib/fe8d137272610d7c76/m/1/20f269f0-483a-4410-b178-bc36440cb68e.png" style="vertical-align: middle; padding: 0px; text-align: center;">
+        </a>
+
+        </td>
+        </tr>
+ </table>
+ </center>
+    </td>
+  </tr>
+</table></td></tr></table>
+                          </td>
+                        </tr>
+                        <!--Start Content/Legal-->
+                        <tr>
+                          <td id="asu_header" align="center" valign="top">
+
+                          </td>
+                        </tr>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!--[if mso]> </td> </tr> </table> </td> </tr> </table> <![endif]-->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </table>
+  </body>
+</html>
+EOD;
+
+  return $output;
+}
+
+
+/**
+ * @param $attendee_conf_email_node
+ * @param $email_code
+ * @return void
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ *
+ * Save HTML email code into Attendee_conf_email node.
+ */
+function _asuaec_visit_revamp_save_email_code($attendee_conf_email_node, $email_code) {
+  if (
+    $attendee_conf_email_node instanceof \Drupal\node\NodeInterface &&
+    $attendee_conf_email_node->bundle() === 'attendee_conf_email' &&
+    $attendee_conf_email_node->hasField('field_email_content_html')
+  ) {
+    // Get existing values (if any)
+    $existing_values = $attendee_conf_email_node->get('field_email_content_html')->getValue();
+
+    // Append new item
+    $existing_values[] = [
+      'value' => $email_code,
+      'format' => 'full_html', // Use the appropriate text format
+    ];
+
+    // Set the updated field values --- TODO: Need to test if original one is kept after create "Resend" functionality
+    $attendee_conf_email_node->set('field_email_content_html', $existing_values);
+
+    // Save the node
+    $attendee_conf_email_node->save();
+  }
+  else {
+    \Drupal::logger('asuaec_visit_revamp')->error('Invalid node or field in _asuaec_visit_revamp_save_email_code().');
+  }
+}
+
+
+
+/**
+ * @param $additional_emails_array
+ * @param $student_email
+ * @return string
+ *
+ * Remove duplicate email addresses and build comma separatted email string.
+ * Also remove empty string.
+ */
+function _asuaec_visit_revamp_remove_duplicate_email_address_and_build_comma_separated_email_string($additional_emails_array, $student_email) {
+  $rsvp_emails = '';
+  // Clean $additional_emails_array. Remove duplicate email addresses if there are any.
+  $additional_emails_array_cleaned = array_unique($additional_emails_array); // Duplicate removed.
+  $i = 0;
+  foreach($additional_emails_array_cleaned as $additional_email) {
+    if($additional_email == $student_email) {
+      unset($additional_emails_array_cleaned[$i]);
+    }
+    if($additional_email == '') {
+      unset($additional_emails_array_cleaned[$i]);
+    }
+    $i++;
+  }
+  // Build comma-separated string
+  $i = 0;
+  foreach($additional_emails_array_cleaned as $addittional_email) {
+    if($i == 0){
+      $rsvp_emails .= $addittional_email;
+    } else {
+      $rsvp_emails .= ',' . $addittional_email;
+    }
+    $i++;
+  }
+  return $rsvp_emails;
+}
+
+
+/**
+ * Remove an event (parent or child) from field_events_json on attendee_conf_email.
+ * Mark "all cancelled" if none remain.
+ * Append regenerated email HTML.
+ *
+ * @param \Drupal\node\NodeInterface $attendee_conf_node
+ *   The attendee_conf_email node to update.
+ * @param string $canceled_event_id
+ *   The eventId string to remove (e.g. "356-1757948400" or child id like "346-1758303000").
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function asuaec_visit_revamp_update_on_cancel(NodeInterface $attendee_conf_node, string $canceled_event_id): void {
+
+  if ($attendee_conf_node->bundle() !== 'attendee_conf_email') {
+    \Drupal::logger('asuaec_visit_revamp')->warning('Updater called on non-attendee_conf_email node @nid', ['@nid' => $attendee_conf_node->id()]);
+    return;
+  }
+
+  // Read the *latest* stored item if the field is multi-value
+  $json_items = $attendee_conf_node->get('field_events_json')->getValue(); // array of items or empty
+  if (empty($json_items)) {
+    \Drupal::logger('asuaec_visit_revamp')->notice('No JSON to update on attendee_conf_email @nid', ['@nid' => $attendee_conf_node->id()]);
+    return;
+  }
+  $last_item = end($json_items);
+  // If field is a *formatted text* type (text_long/text_with_summary), each item is ['value' => ..., 'format' => ...].
+  // If it's a *string* type (string/string_long), items are plain strings.
+
+  $json_raw = is_array($last_item) && array_key_exists('value', $last_item)
+    ? ($last_item['value'] ?? '')
+    : (is_string($last_item) ? $last_item : '');
+
+  if ($json_raw === '') {
+    \Drupal::logger('asuaec_visit_revamp')->notice('Latest field_events_json item is empty on attendee_conf_email @nid', ['@nid' => $attendee_conf_node->id()]);
+    return;
+  }
+
+  $events = json_decode($json_raw, TRUE);
+  if (!is_array($events)) {
+    \Drupal::logger('asuaec_visit_revamp')->error('Invalid JSON in field_events_json on attendee_conf_email @nid', ['@nid' => $attendee_conf_node->id()]);
+    return;
+  }
+
+  // --- Remove the canceled eventId (handles parent or child) ---
+  $updated = [];
+  foreach ($events as $evt) {
+    // If this is the exact event being canceled at the parent level, skip it entirely.
+    if (!empty($evt['eventId']) && $evt['eventId'] === $canceled_event_id) {
+      continue;
+    }
+
+    // Otherwise, also remove a child match if present.
+    if (!empty($evt['children']) && is_array($evt['children'])) {
+      $evt['children'] = array_values(array_filter($evt['children'], function ($child) use ($canceled_event_id) {
+        return empty($child['eventId']) || $child['eventId'] !== $canceled_event_id;
+      }));
+    }
+
+    $updated[] = $evt;
+  }
+
+  // If nothing is left, mark as "all canceled".
+  if (empty($updated)) {
+    // if ($attendee_conf_node->hasField('field_all_events_canceled_text')) {
+    //   $attendee_conf_node->set('field_all_events_canceled_text', 'All events canceled');
+    // }
+    if ($attendee_conf_node->hasField('field_user_cancelled_all_events')) {
+      $attendee_conf_node->set('field_user_cancelled_all_events', 1);
+    }
+
+    // Store an empty array back into JSON field.
+    // Append empty snapshot when possible instead of overwrite
+    $field = $attendee_conf_node->get('field_events_json');
+    $cardinality = $field->getFieldDefinition()->getFieldStorageDefinition()->getCardinality();
+    $empty_json = json_encode([], JSON_UNESCAPED_SLASHES);
+
+    // Append new item preserving field type.
+    if (!empty($json_items) && is_array($json_items[0]) && array_key_exists('value', $json_items[0])) {
+      $field->appendItem(['value' => $empty_json, 'format' => 'plain_text']);
+    } else {
+      $field->appendItem($empty_json);
+    }
+
+    $attendee_conf_node->save();
+
+//    // Rebuild email HTML (will reflect no events + your closing/signature).
+//    $parts = _asuaec_visit_revamp_buildConfEmailBody($attendee_conf_node);
+//    _asuaec_visit_revamp_save_email_code($attendee_conf_node, $parts['body']);
+
+    \Drupal::logger('asuaec_visit_revamp')->notice('All events cancelled for attendee_conf_email @nid. JSON cleared.', [
+      '@nid' => $attendee_conf_node->id(),
+    ]);
+    return;
+  }
+
+  // There are remaining events; write back the updated JSON.
+  $new_json = json_encode(array_values($updated), JSON_UNESCAPED_SLASHES);
+
+  // Append-as-new-item
+  $field = $attendee_conf_node->get('field_events_json');
+  $cardinality = $field->getFieldDefinition()->getFieldStorageDefinition()->getCardinality();
+
+  // Multi-value: append snapshot preserving field type.
+  if (!empty($json_items) && is_array($json_items[0]) && array_key_exists('value', $json_items[0])) {
+    // formatted text field
+    $field->appendItem(['value' => $new_json, 'format' => 'plain_text']);
+  } else {
+    // string/string_long field
+    $field->appendItem($new_json);
+  }
+
+
+  // --- Optional: Append-as-new-item strategy (if field is multi-value).
+  // If you want to keep a history and your field allows multiple values:
+  // $existing = $attendee_conf_node->get('field_events_json')->getValue();
+  // $existing[] = ['value' => $new_json, 'format' => 'plain_text'];
+  // $attendee_conf_node->set('field_events_json', $existing);
+  // IMPORTANT: If you enable this, update all readers to use the LAST item.
+
+  $attendee_conf_node->save();
+
+  // Rebuild email HTML with remaining events and append to field_email_content_html.
+  $parts = _asuaec_visit_revamp_buildConfEmailBody($attendee_conf_node);
+  _asuaec_visit_revamp_save_email_code($attendee_conf_node, $parts['body']);
+
+  \Drupal::logger('asuaec_visit_revamp')->notice('Removed eventId @eid from attendee_conf_email @nid.', [
+    '@eid' => $canceled_event_id,
+    '@nid' => $attendee_conf_node->id(),
+  ]);
+}
+
+
+/**
+ * Convenience wrapper: find attendee_conf_email by field_sid and update JSON for a canceled event.
+ *
+ * @param string|int $sid
+ *   Webform Submission ID stored in attendee_conf_email.field_sid.
+ * @param string $canceled_event_id
+ *   The eventId to remove.
+ */
+function asuaec_visit_revamp_update_on_cancel_by_sid($sid, string $canceled_event_id): void {
+  $query = \Drupal::entityQuery('node')
+    ->accessCheck(FALSE)
+    ->condition('type', 'attendee_conf_email')
+    ->condition('field_sid', $sid)
+    ->range(0, 1);
+
+  $nids = $query->execute();
+  if (empty($nids)) {
+    \Drupal::logger('asuaec_visit_revamp')->warning('No attendee_conf_email found for sid @sid', ['@sid' => $sid]);
+    return;
+  }
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = Node::load(reset($nids));
+  asuaec_visit_revamp_update_on_cancel($node, $canceled_event_id);
+}
+
+/**
+ * Implements hook_node_delete().
+ *
+ * Fires once per node deleted (after storage delete).
+ */
+function asuaec_visit_revamp_node_delete(\Drupal\node\NodeInterface $node) {
+  if ($node->bundle() !== 'student_registered_visits') {
+    return;
+  }
+
+  // Read needed values from the node being deleted.
+  $sid = $node->get('field_web_sub_id')->value ?? NULL;
+  $canceled_event_id = $node->get('field_student_event_id')->value ?? NULL;
+
+  \Drupal::logger('cstest')->notice('sid: @sid', [ '@sid' => $sid]);
+  \Drupal::logger('cstest')->notice('canceled_event_id: @canceled_event_id', ['@canceled_event_id' => $canceled_event_id]);
+
+  if (!$sid || !$canceled_event_id) {
+    \Drupal::logger('asuaec_visit_revamp')->warning(
+      'Missing sid or event id on deleted node @nid (sid: @sid, event: @event).',
+      ['@nid' => $node->id(), '@sid' => $sid ?? 'NULL', '@event' => $canceled_event_id ?? 'NULL']
+    );
+    return;
+  }
+
+  \Drupal::logger('asuaec_visit_revamp')->notice(
+    'Student Registered Visits node deleted: @nid (sid: @sid, event: @event).',
+    ['@nid' => $node->id(), '@sid' => $sid, '@event' => $canceled_event_id]
+  );
+
+  // Update the attendee confirmation email node(s).
+  asuaec_visit_revamp_update_on_cancel_by_sid($sid, $canceled_event_id);
+}
+
+/**
+ * Campus name is passed and returns campus code
+ * @param mixed $campus
+ * @return $campus_code
+ */
+function get_campus_code($campus) {
+  $campus_code = '';
+  if ($campus !== '') {
+    switch ($campus) {
+      case 'Tempe':
+        $campus_code = 'TEMPE';
+        break;
+      case 'Downtown Phoenix':
+        $campus_code = 'DTPHX';
+        break;
+      case 'Polytechnic':
+        $campus_code = 'POLY';
+        break;
+      case 'West':
+        $campus_code = 'WEST';
+        break;
+      case 'ASU California Center in downtown LA':
+        $campus_code = 'LOSAN';
+        break;
+      default:
+        $campus_code = '';
+    }
+  }
+  return $campus_code;
+}

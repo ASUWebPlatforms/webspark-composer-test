@@ -1,0 +1,53 @@
+
+/*------------------------------------------------------------------
+ Mailchimp - Custom
+--------------------------------------------------------------------*/
+
+#mc-embedded-subscribe {
+  margin: 0;
+}
+
+#mc_embed_signup {
+  input.form-submit {
+    border: 1px solid transparent;
+    border-radius: 400rem;
+  }
+}
+
+#mc_embed_signup,
+#sf_embed_signup {
+  h2 {
+    font-weight: bold;
+    padding: 0;
+    margin: 15px 0;
+    font-size: 1.4em;
+  }
+  form {
+    display: block;
+    position: relative;
+    text-align: left;
+    padding: 10px 0 10px 3%;
+  }
+  
+  .mc-field-group {
+    width: 100%;
+  }
+  input {
+    &.subscribe {
+      border: 1px solid transparent;
+      border-radius: 400rem;
+      font-size: 1rem;
+    }
+  }
+  .mc-group-name {
+    .mc-field-group {
+      padding: 0 0 3% 0;
+      &:first-child {
+        padding-right: 1rem;
+      }
+      &:last-child {
+        padding-left: 1rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,385 @@
+<?php
+/**
+ * Implements hook_cron().
+ *
+ * We implement hook_cron() to do "background" processing. It gets called every
+ * time the Drupal cron runs. We then decide what has to happen in response.
+ * We update tables once a month.
+ *
+ * Changed to use Admin page (/admin/config/asu/webform_optionsdata) instead of asuaec_webform_optionsdata.setting.yml on 4/25/2022.
+ */
+function asuaec_webform_optionsdata_cron() {
+  // Changed to get from Admin page instead of asuaec_webform_optionsdata.setting.yml on 4/25/2022.
+  //  $config_internal = \Drupal::config('asuaec_webform_optionsdata.settings');
+  //  $cron_interval_internal = $config_internal_default->get('asuaec_webform_optionsdata_cron_interval');
+  $config = \Drupal::config('asuaec_webform_optionsdata.admin_settings');
+  $cron_interval = $config->get('asuaec_webform_optionsdata_cron_interval_admin');
+
+  if($cron_interval == '') {
+    $cron_interval = 2629800000; // 1 month interval
+  }
+
+//  $cron_interval = !empty($cron_interval) ? $cron_interval : 2629800000; // 1 month interval
+//  $cron_interval = !empty($cron_interval) ? $cron_interval : 60000; // 1 min interval for testing
+
+    $next_execution = \Drupal::state()->get('asuaec_webform_optionsdata.next_execution', 0);
+    if (\Drupal::time()->getRequestTime() >= $next_execution) {
+      update_data_in_tables();
+      \Drupal::state()->set('asuaec_webform_optionsdata.next_execution', \Drupal::time()->getRequestTime() + $cron_interval );
+    } else {
+//        \Drupal::state()->set('asuaec_webform_optionsdata.next_execution', \Drupal::time()->getRequestTime() + $cron_interval );
+    }
+
+} // END OF function asuaec_webform_optionsdata_cron()
+
+/**
+ * Helping function
+ *
+ * Updates tables:
+ * asu_webform_optionsdata_countries
+ * asu_webform_optionsdata_state
+ */
+function update_data_in_tables() {
+  // Changed to get from Admin page instead of asuaec_webform_optionsdata.setting.yml on 4/25/2022.
+  //  $config = \Drupal::config('asuaec_webform_optionsdata.settings');
+  //  $webservice_url = $config->get('asuaec_webform_optionsdata_datapotluck_webservice_url');
+  $config = \Drupal::config('asuaec_webform_optionsdata.admin_settings');
+  $webservice_url = $config->get('asuaec_webform_optionsdata_datapotluck_webservice_url');
+  if($webservice_url == '') {
+    $webservice_url = 'https://api.myasuplat-dpl.asu.edu/api/codeset';
+  }
+  $connection = \Drupal::database();
+
+  // Update countries table
+  // ============================
+  $filter = '/countries';
+  $data = _get_data_from_datapotluck_webservice($webservice_url, $filter);
+  // DB inserts
+  if ($data) {
+    // Truncate table before inserting data
+    $connection->truncate('asu_webform_optionsdata_countries')->execute();
+
+    // Loop thru and create the array elements
+    foreach ($data as $c) {
+      // Insert to database
+      $dbentry = array(
+        'countryCode2' => trim((isset($c->countryCodeTwoChar) && trim($c->countryCodeTwoChar) != '') ? $c->countryCodeTwoChar : '99'),
+        'countryCode3' => trim((isset($c->countryCode)  && trim($c->countryCode) != '') ? $c->countryCode : '999'),
+        'countryDesc' => trim((isset($c->description) && trim($c->description) != '') ? $c->description : ''),
+      );
+      try {
+          $query = $connection->insert('asu_webform_optionsdata_countries')->fields($dbentry)->execute();
+      } catch (Exception $e) {
+          \Drupal::logger('asuaec_webform_optionsdata')->error($c['countryDesc'] . ': ' . $e->getMessage());
+          continue;
+      }
+    } // END OF foreach
+    // Log this process in the watchdog table
+    \Drupal::logger('asuaec_webform_optionsdata')->notice("The asu countries table has been refreshed.");
+  } // END OF if ($data)
+
+
+    // Update US states table
+    // ============================
+    $filter = '/country/US';
+    $data = _get_data_from_datapotluck_webservice($webservice_url, $filter);
+    // DB inserts
+    if ($data) {
+      // Truncate table before inserting data
+      $connection->truncate('asu_webform_optionsdata_state')->execute();
+      // Loop thru and create the array elements
+      foreach ($data->states as $st) {
+        // Insert to database
+        $dbentry = array(
+          'stateCode' => trim($st->stateCode),
+          'stateDesc' => trim($st->description),
+        );
+        try {
+          $query = $connection->insert('asu_webform_optionsdata_state')->fields($dbentry)->execute();
+        } catch (Exception $e) {
+          \Drupal::logger('asuaec_webform_optionsdata')->error($st['stateDesc'] . ': ' . $e->getMessage());
+          continue;
+        }
+      } // END OF foreach
+      // Log this process in the watchdog table
+      \Drupal::logger('asuaec_webform_optionsdata')->notice("The asu states table has been refreshed.");
+    } // END OF if ($xmlcountry)
+
+} // END OF function update_data_in_tables()
+
+/**
+ * Helping function
+ *
+ * Get data from ASU Data potluck web service.
+ */
+function _get_data_from_datapotluck_webservice($webservice_url, $filter) {
+    $client = \Drupal::httpClient();
+    $data = '';
+    try {
+        $url = $webservice_url . $filter;
+        // \Drupal::logger('asupesc_degree_webservice2')->notice("url: <pre>" . $url . "</pre>");
+        $request = $client->get($url);
+        $code = $request->getStatusCode();
+        if ($code == 200) {
+            $content = $request->getBody()->getContents();
+            if ($content != null) {
+              $data = json_decode($content);
+            } else {
+                throw new Exception("Web service didn't return anything.");
+            }
+        } else {
+            throw new Exception("Error occured. Error code: " . $code);
+        }
+    }
+    catch (Exception $e) {
+        $messenger = \Drupal::messenger();
+        $messenger->addMessage(t($e->getMessage(), []));
+        \Drupal::logger('asupesc_webform_optiondata')->error($e->getMessage());
+    }
+    return $data;
+}
+
+
+//-------------------------------------------------------//
+/**
+ * @param array $options
+ *   An associative array of options.
+ * @param array $element
+ *   The form element that the options is for.
+ * @param string $options_id
+ *   The form options id. Set to NULL if the options are custom.
+ *
+ * Alter form options by id.
+ * Implements hook_webform_options_alter
+ *
+ * For Entry term and Hight school state
+ *
+ * For this to work, need to add following options from /admin/structure/webform/options/manage page:
+ *  - "Entry term" (machine name: entry_term)
+ *  - "ASU US state" (machine name: asu_us_state)
+ */
+function asuaec_webform_optionsdata_webform_options_alter(&$options, &$element = NULL, $options_id = NULL) {
+  if (!is_array($options)) {
+    // During uninstall/config rebuild, options can be NULL.
+    $options = [];
+    return;
+  }
+
+  if($options_id == 'entry_term') { // Default entry term
+
+      $timezone = new \DateTimeZone('America/Phoenix');
+
+      // Temporary local testing override.
+      // $today = new \DateTimeImmutable('2026-08-14 12:00:00', $timezone);
+      // $today = new \DateTimeImmutable('2026-08-15 12:00:00', $timezone);
+
+      // Changed to use DateTimeImmutable to get the current date in America/Phoenix timezone instead of server timezone because of the daylight saving time change. With the daylight saving time change, the server time can be different from the local time in Phoenix. So, we need to get the current date in Phoenix timezone to make sure we are calculating the entry term correctly. (6/18/2026)
+      $today = new \DateTimeImmutable('now', $timezone);
+      $today_month = (int) $today->format('n');
+      $today_year = (int) $today->format('Y');
+      $today_day = (int) $today->format('j');
+
+      $include_fall_current_year = ($today_month < 8 || ($today_month == 8 && $today_day <= 14));
+      $options = array();
+      $semester = array('Spring' => '1', 'Summer' => '4', 'Fall' => '7');
+      $next_semester = "";
+      $next_semester_year = "";
+
+      /*
+      2187|2018 Fall
+      2191|2019 Spring
+      2194|2019 Summer
+      2197|2019 Fall
+      2201|2020 Spring
+      2204|2020 Summer
+      2207|2020 Fall
+      2211|2021 Spring
+      2214|2021 Summer
+      2217|2021 Fall
+      2221|2022 Spring
+      2224|2022 Summer
+      2227|2022 Fall
+      */
+
+      $i = 0;
+      $num_of_options = sizeof($options);
+//        while($num_of_options < 16) {
+      while($num_of_options < 8) {
+
+          if($i == 0) { // First iteration.
+
+//                $current_semester_year = $today_year - 1; // Changed it 12/17/2021
+              $current_semester_year = $today_year;
+
+              // if(($today_month <= 5)) { // Jan - May
+              // Jan 1 - Aug 14 (Changed on 6/18/2026)
+              if ($include_fall_current_year) {
+                  // Start from Summer semester
+                  $current_semester = "Spring";
+
+                  $sem = $semester[$current_semester];
+                  //$three_digit_year = substr($current_semester_year, 2);
+                  $three_digit_year = substr ($current_semester_year, 0, 1) . substr ($current_semester_year, 2, 3);
+                  $semester_code = $three_digit_year . $sem;
+                  // Insert option to $options array.
+//                    $options[$semester_code] = $current_semester_year . " " . $current_semester; - Skip to add for the first iteration. Changed on 12/20.
+
+                  // Set next semester for the next iteration.
+//                    $next_semester = "Summer";
+                  $next_semester = "Fall"; // Removed Summer
+                  $next_semester_year = $current_semester_year;
+              }
+
+//                if(($today_month == 6 || $today_month == 7)) {
+//                    // Start from Fall semester
+//                    $current_semester = "Summer";
+//
+//
+//                    $sem = $semester[$current_semester];
+//                    $three_digit_year = substr ($current_semester_year, 0, 1) . substr ($current_semester_year, 2, 3);
+//                    $semester_code = $three_digit_year . $sem;
+//                    // Insert option to $options array.
+//                    $options[$semester_code] = $current_semester_year . " " . $current_semester;
+//
+//                    // Set next semester for the next iteration.
+//                    $next_semester = "Fall";
+//                    $next_semester_year = $current_semester_year;
+//                }
+//                \Drupal::logger('asuaec_rfi')->notice("today_month:<pre>" . print_r($today_month, true) . "</pre>");
+
+//                if(($today_month >= 8)) {
+              // if(($today_month >= 6)) { // Removed summer
+              // Aug 15 - Dec 31 (6/18/2026)
+              if (!$include_fall_current_year) {
+                  // Start from Spring semester
+                  $current_semester = "Fall";
+
+                  $sem = $semester[$current_semester];
+                  $three_digit_year = substr ($current_semester_year, 0, 1) . substr ($current_semester_year, 2, 3);
+                  $semester_code = $three_digit_year . $sem;
+                  // Insert option to $options array.- Skip to add for the first iteration. Changed on 12/20.
+//                    $options[$semester_code] = $current_semester_year . " " . $current_semester;
+
+                  // Set next semester for the next iteration.
+                  $next_semester = "Spring";
+                  $next_semester_year = $current_semester_year + 1;
+
+              }
+
+
+          } // END of if($i == 0)
+          else { // Not first iteration
+              $current_semester_year = $next_semester_year;
+              $current_semester = $next_semester;
+
+              $sem = $semester[$current_semester];
+              $three_digit_year = substr ($current_semester_year, 0, 1) . substr ($current_semester_year, 2, 3);
+              $semester_code = $three_digit_year . $sem;
+              // Insert option to $options array.
+              $options[$semester_code] = $current_semester_year . " " . $current_semester;
+
+              // Set next semester for the next iteration.
+              if($current_semester == "Spring") {
+//                    $next_semester = "Summer"; // Removed Summer
+                  $next_semester = "Fall";
+                  $next_semester_year = $current_semester_year;
+              } elseif ($current_semester == "Summer") {
+                  $next_semester = "Fall";
+                  $next_semester_year = $current_semester_year;
+              } elseif ($current_semester == "Fall") {
+                  $next_semester = "Spring";
+                  $next_semester_year = $current_semester_year + 1;
+              }
+
+          }
+
+          $num_of_options = sizeof($options);
+          $i++;
+      } // END of while
+
+      return $options;
+  } // END OF if($options_id == 'entry_term')
+
+  if($options_id == 'asu_us_state') {
+
+//        // Load cached options.
+//        if ($cache = \Drupal::cache()->get('asu_us_state')) {
+//            $options = $cache->data;
+//            return $options;
+//        }
+
+      // Get states from asu_webform_optionsdata_state table which came from ASU Data Potluck Webservice.
+      $database = \Drupal::database();
+      $table = 'asu_webform_optionsdata_state';
+      $fields_array = array(
+          'stateCode',
+          'stateDesc'
+      );
+
+      $query = $database->select($table, 't');
+      $query->fields('t', $fields_array);
+//        $query->condition('categoryname', $interest, '=');
+//        $query->condition('categoryname', '%' . Database::getConnection()->escapeLike($interest) . '%', 'LIKE');
+      $query->orderBy('stateDesc', 'ASC');
+//        $query->range(0, 10);
+      $result = $query->distinct()->execute();
+      foreach ($result as $record) {
+          $stateCode = $record->stateCode;
+          $stateDesc = $record->stateDesc;
+//            $options[] = array('key' => $degreeCode, 'value' => $degreeName);
+          $options[$stateCode] = $stateDesc;
+      }
+//        array_unshift($options , 'Select..');
+
+      // Cache options so that we don't have to make continual requests
+      // to the external webservice.
+      \Drupal::cache()->set('asu_us_state', $options);
+
+      // Add "International school" in State dropdown list at the top.
+      $options = array('international' => 'International school') + $options;
+
+      return $options;
+  } // END OF if($options_id == 'asu_us_state')
+
+  if($options_id == 'asu_us_state_name') {
+
+      // Load cached options.
+      if ($cache = \Drupal::cache()->get('asu_us_state_name')) {
+          $options = $cache->data;
+          return $options;
+      }
+
+      // Get states from asu_webform_optionsdata_state table which came from ASU Data Potluck Webservice.
+      $database = \Drupal::database();
+      $table = 'asu_webform_optionsdata_state';
+      $fields_array = array(
+          'stateDesc'
+      );
+      //        $options = array();
+
+      $query = $database->select($table, 't');
+      $query->fields('t', $fields_array);
+      //        $query->condition('categoryname', $interest, '=');
+      //        $query->condition('categoryname', '%' . Database::getConnection()->escapeLike($interest) . '%', 'LIKE');
+      $query->orderBy('stateDesc', 'ASC');
+      //        $query->range(0, 10);
+      $result = $query->distinct()->execute();
+      foreach ($result as $record) {
+          $stateDesc = $record->stateDesc;
+          //            $options[] = array('key' => $degreeCode, 'value' => $degreeName);
+          $options[$stateDesc] = $stateDesc;
+      }
+
+      //        array_unshift($options , 'Select..');
+
+      // Cache options so that we don't have to make continual requests
+      // to the external webservice.
+      \Drupal::cache()->set('asu_us_state_name', $options);
+
+      return $options;
+  } // END OF if($options_id == 'asu_us_state_name')
+
+
+
+} // END OF function asuaec_webform_optionsdata_webform_options_alter(array &$options, array &$element, $options_id = NULL)
+

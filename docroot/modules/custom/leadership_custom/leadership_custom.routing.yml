@@ -1,0 +1,9 @@
+leadership_custom.configuration_form:
+  path: 'admin/config/system/configuration/leadership_custom'
+  defaults:
+    _form: '\Drupal\leadership_custom\Form\LeadershipCustomSettingsForm'
+    _title: 'Leadership Custom Features Configuration'
+  requirements:
+    _permission: 'administer leadership_custom'
+  options:
+    _admin_route: TRUE

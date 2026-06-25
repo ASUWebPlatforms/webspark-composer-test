@@ -1,0 +1,8 @@
+name: surveylogin - Survey Login routing site
+description: Site uses url and global user to redirect users to the correct qualtrics survey link. - UOEEE
+package: UOEEE
+type: module
+version: 1.1
+core_version_requirement: ^10
+libraries:
+  - surveylogin/surveylogin-app

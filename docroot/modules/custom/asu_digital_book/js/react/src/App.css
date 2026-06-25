@@ -1,0 +1,599 @@
+input{
+  font-size: inherit;
+  display: block;
+}
+
+.invalid-error{
+  color: #b72a2a;
+}
+
+.noMattertextLink{
+  color: #8c1d40 !important;
+  text-decoration: underline;
+  cursor: pointer !important;
+}
+
+.back-to-module-btn{
+  padding: 5px !important;
+  font-size: 12px;
+}
+
+.react-international-phone-input-container{
+  width: max-content !important;
+}
+
+.progressbarDivDummy{
+  display: none !important;
+}
+
+ul.nav-list li a {
+  cursor: pointer;
+}
+/* @media screen and (min-width: 992px) {
+  .flexFields{
+    display: flex;
+  }
+
+  .flexFields .js-form-item{
+    width: 50%;
+  }
+} */
+
+/* 
+@keyframes gold-slide {
+0% {
+  background-position: 100% 0;
+}
+100% {
+  background-position: -100% 0;
+}
+}
+
+.animated-bg {
+background: linear-gradient(90deg, transparent, #ffc627);
+background-size: 200% 200%;
+color: #191919;
+padding: 20px;
+text-align: center;
+animation: gold-slide 3s ease-in-out forwards infinite;
+} */
+
+.animated-bg-new {
+position: relative;
+overflow: hidden;
+display: inline-block;
+}
+.animated-bg-new::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: linear-gradient(90deg, #ffc627, #ffc627); /* Gold color */
+background-size: 200% 200%;
+z-index: -1;
+transform: translateX(-100%);
+transition: transform 3s;
+}
+.aos-animate.animated-bg-new::before {
+transform: translateX(0);
+}
+
+.animated-bg-q2 {
+position: relative;
+overflow: hidden;
+display: inline-block;
+color: #ffffff;
+}
+.animated-bg-q2::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: linear-gradient(90deg, #191919, #191919); /* Gold color */
+background-size: 200% 200%;
+z-index: -1;
+transform: translateX(-100%);
+transition: transform 3s;
+}
+.aos-animate.animated-bg-q2::before {
+transform: translateX(0);
+}
+
+.imagesPersona{
+text-align: center;
+}
+
+.progress-bar{
+  background: #191919;
+  margin-top: 10px;
+  /*margin-bottom: 10px;*/
+}
+
+.progressbarDiv{
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+  bottom: 0%;
+}
+
+/*.progress-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ccc;
+}
+
+.progressDiv {
+  background-color: #ccc;
+  height: 50px;
+ 
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+
+
+.progressDiv.active {
+  background-color: rgb(255, 198, 39); 
+}
+
+.progressDiv.complete {
+  background-color: #78BE20; 
+}
+
+.progressDiv.active .pageTitle {
+  font-weight: bold;
+}
+
+.active .indexValue{
+  background: #8c1d40;
+}
+
+
+.progressStep{
+  background: none !important;
+  border: none !important;
+}
+*/
+.animateDiv{
+  display: flex;
+}
+
+.animateButton{
+  width: 25px !important;
+  margin-left: 30px;
+  border: none !important;
+  background: none !important;
+}
+
+.goldSection{
+  /*background: #ffc627; */
+  padding:10px;
+}
+
+.q1Section{
+  display: flex;
+}
+
+.q1innerinputField{
+  height:200px;
+}
+
+.infoQues1{
+  position: relative;
+}
+
+.middleOr{
+  position: absolute;
+  top: 50%;
+  left: 31%;
+  font-size: 1.5em;
+  width: 40px;
+  height: 40px;
+  background: #ffffff !important;
+ 
+  border-radius: 50%;
+  text-align: center;
+  padding-bottom: 10px;
+  vertical-align: middle;
+  margin-bottom: 30px;
+  border: 1px solid;
+}
+
+.blackSection{
+  background: #191919;
+  padding-left:10px;
+  padding-right:10px;
+  padding-bottom: 10px;
+  color: #ffffff;
+}
+
+.vampireButton, .vampireButton:focus{
+  font-size: 24px;
+  padding: 5px !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.popover-header{
+border: none !important;
+background: none !important;
+}
+
+.q1Results{
+  padding: 30px;
+  font-size: 1.5em;
+}
+
+
+
+
+.indexValue{
+ 
+  border: 1px solid;
+  text-align: center !important;
+  justify-content: center;
+  border-radius: 50%; 
+  width: 25px;
+  background: #191919;
+  position:relative;
+  z-index: 10;
+  display:flex;
+
+}
+
+.slideBackgroundText{
+/*background-color: gold;*/
+animation: slide-in 3s ease-in-out; 
+}
+
+@keyframes slide-in {
+0% {
+  background-color: #ffffff; /* Initial background color */
+  transform: translateX(-100%);
+}
+100% {
+ /* background-color: gold;*/ /* Target background color */
+  transform: translateX(0);
+}
+}
+
+[data-aos=custom-animation] {
+background-size: 0 100%;
+transition-property: background-size;
+transition-duration: .4s;
+}
+
+[data-aos=custom-animation].aos-animate {
+/*background-color: gold;*/ 
+background-size: 100% 100%;
+}
+
+[data-aos="bg-highlight"] {
+
+background-color: transparent; /* initial background color */
+background-size: 0 100%;
+transition: background-color 4s ease;
+
+}
+
+
+[data-aos="bg-highlight"].aos-animate {
+background-size: 100% 100%;
+/*background-color: gold; */ /* final background color */
+
+}
+
+form.uds-form .form-check {
+margin: 0 0 .5rem;
+}
+
+
+/**/
+
+
+/* This is progress bar css */
+
+#progress {
+padding: 0;
+list-style-type: none;
+font-family: arial;
+font-size: 16px;
+clear: both;
+line-height: 1em;
+margin: 0 -1px;
+text-align: center;
+margin-top: 10px;
+margin-bottom: 10px;
+}
+
+.progressStep {
+border: none;
+background: none;
+cursor: pointer;
+margin-right: -13px;
+align-items: center;
+}
+
+@media only screen and (min-width: 768px) {
+  .progressStep{
+    margin-right: -13px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  /*.progressStep{
+    margin-right: -30px;
+  }*/
+
+  #progress{
+    margin-left: -32px;
+  }
+}
+
+/* For iPhones (small screens) */
+@supports (-webkit-touch-callout: none) {
+  @media only screen and (max-width: 768px) {
+    .progressStep{
+      margin-right: -30px;
+    }
+  }
+}
+
+.progressStep:focus {
+box-shadow: none !important;
+outline: none !important;
+}
+
+@media screen and (min-width: 992px){
+  #progress li {
+    padding: 10px 30px 10px 40px;
+    width: 120px; 
+  }
+
+   .customVideo{
+    padding-top: 1rem;
+  }
+ 
+}
+
+@media screen and (max-width: 991px){
+  #progress li {
+    padding: 10px 0px 10px 30px;
+    width: auto;
+  }
+ 
+}
+
+.mypath-consent-wording{
+  font-size: 12px;
+}
+
+#progress li {
+float: left;
+background: #333;
+color: #fff;
+position: relative;
+border-top: 1px solid #666;
+border-bottom: 1px solid #666;
+margin: 0 1px;
+}
+
+#progress li:before {
+content: '';
+border-left: 16px solid #191919;
+border-top: 16px solid transparent;
+border-bottom: 16px solid transparent;
+position: absolute;
+top: 0;
+left: 0;
+bottom: 0;
+}
+
+.viewbook-btn{
+  margin: 10px;
+}
+
+#progress li:not(.complete):after {
+content: '';
+border-left: 16px solid #333;
+border-top: 16px solid transparent;
+border-bottom: 16px solid transparent;
+position: absolute;
+top: 0;
+left: 100%;
+z-index: 20;
+bottom: 0;
+} 
+
+.complete{
+background: #FFC627 !important;
+color: #191919;
+}
+
+
+
+#progress li.active {
+background: #FFC627;
+color: #191919;
+}
+
+#progress li.active:after {
+border-left-color: #FFC627;
+color: #191919;
+}
+
+.complete:after{
+border-left: 16px solid #FFC627 !important;
+content: '';
+border-top: 16px solid transparent;
+border-bottom: 16px solid transparent;
+position: absolute;
+top: 0;
+left: 100%;
+z-index: 20;
+bottom: 0;
+}
+
+.check-mark {
+color: #191919;
+}
+
+.popup {
+position: absolute;
+background: #f9f9f9;
+border: 1px solid #ccc;
+padding: 10px;
+border-radius: 5px;
+z-index: 1000;
+width: 300px;
+}
+
+.pre-button{
+margin-right: 10px;
+}
+
+.css-t3ipsp-control{
+border-color: #191919 !important;
+box-shadow: none !important;
+}
+
+.degreeLink{
+color: #FFC627;
+}
+
+.intDesc{
+padding: 8px;
+background: #191919;
+color: #ffffff;
+border-radius: 5px;
+}
+
+.error{
+  color: #b72a2a;
+}
+
+.error-field{
+  border: 1px outset #b72a2a;
+}
+
+
+input#react-select-2-input, input#react-select-3-input, input#react-select-4-input,input#react-select-5-input,input#react-select-6-input, #react-select-7-input {
+border: none !important;
+box-shadow: none !important;
+border-color: #191919 !important;
+}
+
+.css-1nmdiq5-menu{
+background-color: #484848 !important;
+color: #ffffff;
+position: relative !important;
+}
+
+#react-select-2-listbox div:hover, #react-select-3-listbox div:hover, #react-select-4-listbox div:hover, #react-select-5-listbox div:hover, #react-select-6-listbox div:hover{
+  background:#FFC627 !important;
+  color: #191919 !important
+}
+
+#react-select-2-listbox div:active, #react-select-3-listbox div:active, #react-select-4-listbox div:active, #react-select-5-listbox div:active, #react-select-6-listbox div:active{
+  background-color:#FFC627 !important;
+  color: #191919 !important;
+}
+
+input#react-select-2-input:focus, input#react-select-3-input:focus, input#react-select-4-input:focus, input#react-select-5-input:focus, input#react-select-6-input:focus{
+  /*background-color:#FFC627 !important;*/
+  border: none !important;
+}
+
+#react-select-1-listbox div, #react-select-2-listbox div, #react-select-3-listbox div, #react-select-4-listbox div, #react-select-5-listbox div, #react-select-6-listbox div {
+  background: #191919;
+}
+
+/* Youtube video */
+.youtube-video-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+  background: #000;
+}
+
+.youtube-video-container #youtube-player {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+input#react-select-2-input, input#react-select-3-input, input#react-select-4-input, input#react-select-5-input, input#react-select-6-input{
+  width: auto !important;
+}
+
+.button-row{
+margin-bottom: 80px;
+margin-top: 20px;
+}
+
+.popup-content{
+width: 80%;
+float:left;
+/*margin-right: 25px;*/
+}
+
+.js-form-item-current-learning, .js-form-item-hs-value{
+position: relative;
+}
+
+.popupButton{
+padding-top: 10px;
+}
+
+.gradePopupDiv{
+/*margin-top: 10px;
+width:80%;*/
+background: #f9f9f9;
+/*border: 1px solid #ccc;*/
+padding: 5px;
+border-radius: 5px;
+
+}
+
+.custom-container{
+  overflow: visible !important;
+}
+
+@media (max-width: 768px) {
+  .popover {
+      position: fixed !important;  
+      top: 50% !important;          
+      left: 50% !important;        
+      transform: translate(-50%, -50%) !important;  
+      width: 90% !important;       
+      max-width: 300px !important;  
+      
+  }
+}
+
+
+/* #progress li:after,
+#progress li:before {
+content: " ";
+position: absolute;
+top: 0;
+right: -17px;
+width: 0;
+height: 0;
+border-top: 19px solid transparent;
+border-bottom: 17px solid transparent;
+border-left: 17px solid #d9e3f7;	
+z-index: 2;
+transition: border-color 0.2s ease;
+} */

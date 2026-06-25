@@ -1,0 +1,254 @@
+    {#
+    /**
+     * @file
+     * Default theme implementation to display a view of unformatted rows.
+     *
+     * Available variables:
+     * - title: The title of this group of rows. May be empty.
+     * - rows: A list of the view's row items.
+     *   - attributes: The row's HTML attributes.
+     *   - content: The row's content.
+     * - view: The view object.
+     * - default_row_class: A flag indicating whether default classes should be
+     *   used on rows.
+     *
+     * @see template_preprocess_views_view_unformatted()
+     *
+     * @ingroup themeable
+     */
+    #}
+    {% set site_url = url("<current>") %}
+    {% set site_url_parts = site_url|render|render|split('/') %}
+     
+
+
+
+    {% for row in rows %}
+
+
+    {% set url1 = row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_story_1_url }}'] %}
+    {% set url1_parts = url1|render|render|split('/') %}
+
+    {% set url2 = row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_story_2_url }}'] %}
+    {% set url2_parts = url2|render|render|split('/') %}
+
+    {% set url3 = row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_story_3_url }}'] %}
+    {% set url3_parts = url3|render|render|split('/') %}
+
+    {% set url4 = row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_story_4_url }}'] %}
+    {% set url4_parts = url4|render|render|split('/') %}
+
+    {% set url5 = row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_story_5_url }}'] %}
+    {% set url5_parts = url5|render|render|split('/') %}
+
+    {% set url6 = row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_story_6_url }}'] %}
+    {% set url6_parts = url6|render|render|split('/') %}
+
+    {% set url7 = row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_story_7_url }}'] %}
+    {% set url7_parts = url7|render|render|split('/') %}
+
+    {% set url8 = row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_story_8_url }}'] %}
+    {% set url8_parts = url8|render|render|split('/') %}
+
+    
+      {% if site_url_parts[3] in [url1_parts[3] ] %}
+        <div class="thrive-ribbon-wrapper">
+        <div class="thrive-ribbon">
+          <a href="/thrive-magazine" class="thrive-ribbon-link" title="ASU Thrive Magazine home page">ASU Thrive</a>
+          <a href="{{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_media_document }}'] }}" class="thrive-ribbon-link" title="This story was in the {{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ title }}'] }} issue of ASU Thrive.">View issue</a>
+        </div>
+      </div>
+        <style>
+          .page-wrapper-webspark .pt-5.pb-5{
+              background:url("/themes/composer/webspark-theme-renovation/img/background-patterns/TopoPatternWhite.png") repeat-x left top;        
+          }
+          .page-wrapper-webspark .pt-5.pb-5:before{
+              content: '';
+              position: absolute;
+              left: 0;
+              right: 0;
+              top: 300px;
+              bottom: 0;
+              /*background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 30%);*/
+          }
+        </style>
+      {% else %}
+      
+      {% endif %}
+
+      {% if site_url_parts[3] in [url2_parts[3] ] %}
+      <div class="thrive-ribbon-wrapper">
+        <div class="thrive-ribbon">
+          <a href="/thrive-magazine" class="thrive-ribbon-link" title="ASU Thrive Magazine home page">ASU Thrive</a>
+          <a href="{{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_media_document }}'] }}" class="thrive-ribbon-link" title="This story was in the {{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ title }}'] }} issue of ASU Thrive.">View issue</a>
+        </div>
+      </div>
+        <style>
+          .page-wrapper-webspark .pt-5.pb-5{
+              background:url("/themes/composer/webspark-theme-renovation/img/background-patterns/TopoPatternWhite.png") repeat-x left top;        
+          }
+          .page-wrapper-webspark .pt-5.pb-5:before{
+              content: '';
+              position: absolute;
+              left: 0;
+              right: 0;
+              top: 300px;
+              bottom: 0;
+              /*background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 30%);*/
+          }
+        </style>
+      {% else %}
+      
+      {% endif %}
+
+      {% if site_url_parts[3] in [url3_parts[3] ] %}
+      <div class="thrive-ribbon-wrapper">
+        <div class="thrive-ribbon">
+          <a href="/thrive-magazine" class="thrive-ribbon-link" title="ASU Thrive Magazine home page">ASU Thrive</a>
+          <a href="{{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_media_document }}'] }}" class="thrive-ribbon-link" title="This story was in the {{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ title }}'] }} issue of ASU Thrive.">View issue</a>
+        </div>
+      </div>
+        <style>
+          .page-wrapper-webspark .pt-5.pb-5{
+              background:url("/themes/composer/webspark-theme-renovation/img/background-patterns/TopoPatternWhite.png") repeat-x left top;        
+          }
+          .page-wrapper-webspark .pt-5.pb-5:before{
+              content: '';
+              position: absolute;
+              left: 0;
+              right: 0;
+              top: 300px;
+              bottom: 0;
+              /*background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 30%);*/
+          }
+        </style>
+      {% else %}
+      
+      {% endif %}
+
+      {% if site_url_parts[3] in [url4_parts[3] ] %}
+      <div class="thrive-ribbon-wrapper">
+        <div class="thrive-ribbon">
+          <a href="/thrive-magazine" class="thrive-ribbon-link" title="ASU Thrive Magazine home page">ASU Thrive</a>
+          <a href="{{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_media_document }}'] }}" class="thrive-ribbon-link" title="This story was in the {{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ title }}'] }} issue of ASU Thrive.">View issue</a>
+        </div>
+      </div>
+        <style>
+          .page-wrapper-webspark .pt-5.pb-5{
+              background:url("/themes/composer/webspark-theme-renovation/img/background-patterns/TopoPatternWhite.png") repeat-x left top;        
+          }
+          .page-wrapper-webspark .pt-5.pb-5:before{
+              content: '';
+              position: absolute;
+              left: 0;
+              right: 0;
+              top: 300px;
+              bottom: 0;
+              /*background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 30%);*/
+          }
+        </style>
+      {% else %}
+      
+      {% endif %}
+
+      {% if site_url_parts[3] in [url5_parts[3] ] %}
+      <div class="thrive-ribbon-wrapper">
+        <div class="thrive-ribbon">
+          <a href="/thrive-magazine" class="thrive-ribbon-link" title="ASU Thrive Magazine home page">ASU Thrive</a>
+          <a href="{{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_media_document }}'] }}" class="thrive-ribbon-link" title="This story was in the {{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ title }}'] }} issue of ASU Thrive.">View issue</a>
+        </div>
+      </div>
+        <style>
+          .page-wrapper-webspark .pt-5.pb-5{
+              background:url("/themes/composer/webspark-theme-renovation/img/background-patterns/TopoPatternWhite.png") repeat-x left top;        
+          }
+          .page-wrapper-webspark .pt-5.pb-5:before{
+              content: '';
+              position: absolute;
+              left: 0;
+              right: 0;
+              top: 300px;
+              bottom: 0;
+              /*background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 30%);*/
+          }
+        </style>
+      {% else %}
+      
+      {% endif %}
+
+      {% if site_url_parts[3] in [url6_parts[3] ] %}
+      <div class="thrive-ribbon-wrapper">
+        <div class="thrive-ribbon">
+          <a href="/thrive-magazine" class="thrive-ribbon-link" title="ASU Thrive Magazine home page">ASU Thrive</a>
+          <a href="{{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_media_document }}'] }}" class="thrive-ribbon-link" title="This story was in the {{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ title }}'] }} issue of ASU Thrive.">View issue</a>
+        </div>
+      </div>
+        <style>
+          .page-wrapper-webspark .pt-5.pb-5{
+              background:url("/themes/composer/webspark-theme-renovation/img/background-patterns/TopoPatternWhite.png") repeat-x left top;        
+          }
+          .page-wrapper-webspark .pt-5.pb-5:before{
+              content: '';
+              position: absolute;
+              left: 0;
+              right: 0;
+              top: 300px;
+              bottom: 0;
+              /*background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 30%);*/
+          }
+        </style>
+      {% else %}
+      
+      {% endif %}
+
+      {% if site_url_parts[3] in [url7_parts[3] ] %}
+      <div class="thrive-ribbon-wrapper">
+        <div class="thrive-ribbon">
+          <a href="/thrive-magazine" class="thrive-ribbon-link" title="ASU Thrive Magazine home page">ASU Thrive</a>
+          <a href="{{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_media_document }}'] }}" class="thrive-ribbon-link" title="This story was in the {{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ title }}'] }} issue of ASU Thrive.">View issue</a>
+        </div>
+      </div>
+        <style>
+          .page-wrapper-webspark .pt-5.pb-5{
+              background:url("/themes/composer/webspark-theme-renovation/img/background-patterns/TopoPatternWhite.png") repeat-x left top;        
+          }
+          .page-wrapper-webspark .pt-5.pb-5:before{
+              content: '';
+              position: absolute;
+              left: 0;
+              right: 0;
+              top: 300px;
+              bottom: 0;
+              /*background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 30%);*/
+          }
+        </style>
+      {% else %}
+      
+      {% endif %}
+
+      {% if site_url_parts[3] in [url8_parts[3] ] %}
+      <div class="thrive-ribbon-wrapper">
+        <div class="thrive-ribbon">
+          <a href="/thrive-magazine" class="thrive-ribbon-link" title="ASU Thrive Magazine home page">ASU Thrive</a>
+          <a href="{{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_media_document }}'] }}" class="thrive-ribbon-link" title="This story was in the {{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ title }}'] }} issue of ASU Thrive.">View issue</a>
+        </div>
+      </div>
+        <style>
+          .page-wrapper-webspark .pt-5.pb-5{
+              background:url("/themes/composer/webspark-theme-renovation/img/background-patterns/TopoPatternWhite.png") repeat-x left top;        
+          }
+          .page-wrapper-webspark .pt-5.pb-5:before{
+              content: '';
+              position: absolute;
+              left: 0;
+              right: 0;
+              top: 300px;
+              bottom: 0;
+              /*background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 30%);*/
+          }
+        </style>
+      {% else %}
+      
+      {% endif %}
+   
+    {% endfor %}

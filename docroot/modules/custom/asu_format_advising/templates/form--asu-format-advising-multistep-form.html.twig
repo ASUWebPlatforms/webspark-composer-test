@@ -1,0 +1,50 @@
+{#
+  Template for ASU Format Advising Multistep Form.
+
+  Variables:
+    - form: The form elements array.
+    - attributes: HTML attributes for the form element.
+#}
+
+{% set step = form.step['#value'] %}
+{% set aside_text = form.aside_text['#value'] %}
+
+<div{{ attributes.addClass('container mt-5') }}>
+  <div class="row justify-content-center">
+    <div class="{{ step > 1 ? 'col-md-12 col-lg-8' : 'col-md-12' }}">
+      {# Render necessary hidden fields #}
+      {{ form.form_build_id }}
+      {{ form.form_token }}
+      {{ form.form_id }}
+
+      <div class="format-adv">
+        <div class="format-adv-header">
+          <h2>{{ form['#title'] }}</h2>
+        </div>
+        <div class="format-adv-body">
+          {# Iterate over form elements and render them, excluding internal and hidden elements #}
+          {% for key, element in form %}
+            {% if key|first != '#' and key != 'actions' and key != 'form_build_id' and key != 'form_token' and key != 'form_id' %}
+              <div class="form-group">
+                {{ element }}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="format-adv-footer text-muted">
+          {# Render form actions (submit, next, previous buttons) #}
+          <div class="form-actions pt-3">
+            {{ form.actions }}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if step > 1 %}
+      <div class="col-md-12 col-lg-4 mt-3 mt-md-0">
+        <div class="border border-1 px-3 pb-3">
+          {{ aside_text|raw }}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>

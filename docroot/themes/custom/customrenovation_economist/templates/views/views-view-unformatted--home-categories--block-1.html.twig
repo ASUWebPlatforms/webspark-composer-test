@@ -1,0 +1,54 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ *
+ * @ingroup themeable
+ */
+#}
+{% if title %}
+    <h3>{{ title }}</h3>
+{% endif %}
+<div class="tab-content">
+{% for row in rows %}
+  {%
+    set row_classes = [
+    'tab-pane',
+    'fade',
+  ]
+  %}
+{#  {%#}
+{#    set row_classes = [#}
+{#    default_row_class ? 'views-row',#}
+{#    'tab-pane',#}
+{#    'fade',#}
+{#  ]#}
+{#  %}#}
+  {% set row_id = 'category-' ~ view.style_plugin.getField(loop.index0, 'tid') %}
+  {% set tab_id = 'category-tab-' ~ view.style_plugin.getField(loop.index0, 'tid') %}
+  {%
+    set active_classes = [
+    'show',
+    'active',
+  ]%}
+  {% if loop.first %}
+    <div{{ row.attributes.addClass(row_classes).addClass(active_classes) }} id="{{ row_id }}" role="tabpanel" aria-labelledby="{{ tab_id }}">
+      {{- row.content -}}
+    </div>
+  {% else %}
+    <div{{ row.attributes.addClass(row_classes) }} id="{{ row_id }}" role="tabpanel" aria-labelledby="{{ tab_id }}">
+      {{- row.content -}}
+    </div>
+  {% endif %}
+{% endfor %}

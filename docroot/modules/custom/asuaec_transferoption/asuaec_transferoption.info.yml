@@ -1,0 +1,11 @@
+name: ASU AEC Transfer Option
+type: module
+description: 'Pull Transfer option degrees from ASU Web services'
+package: ASU
+core_version_requirement: ^9 || ^10 || ^11
+dependencies:
+  - path_redirect_import
+  - asu_degree_rfi
+  - views
+  - views_autocomplete_filters
+configure: asuaec_tranferoption.settings

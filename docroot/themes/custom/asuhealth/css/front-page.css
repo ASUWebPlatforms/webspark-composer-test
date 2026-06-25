@@ -1,0 +1,9 @@
+@media (max-width: 575px) {
+  .mid-hc-grid {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+div[class^=uds-hero] .hero-overlay {
+  display: none!important;
+}

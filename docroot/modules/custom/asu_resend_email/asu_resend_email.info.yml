@@ -1,0 +1,5 @@
+name: ASU resend confirmation email
+type: module
+description: 'ASU resend confirmation email'
+package: ASU
+core_version_requirement: '^8 || ^9 || ^10'

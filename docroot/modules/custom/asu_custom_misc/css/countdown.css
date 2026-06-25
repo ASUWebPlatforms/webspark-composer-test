@@ -1,0 +1,24 @@
+#jquery-countdown-timer-note-timer1 {
+	display: none;
+}
+@media (max-width: 679px) {
+	.position {
+		width: 0.8em;
+    font-size: 0.8em;
+	}
+  .countHrs, .countDiv, .countMins {
+/*    margin-top: 0;*/
+  }
+  .countDiv {
+    height: auto;
+  }
+  .countDiv::after {
+    top: -0.9em;
+    margin-left: 0;
+  }  
+  .countDiv::before {
+    top: -0.6em;
+    margin-left: 0;
+  }  
+  
+}

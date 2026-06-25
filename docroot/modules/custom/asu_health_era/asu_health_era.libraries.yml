@@ -1,0 +1,11 @@
+healthlib:
+  version: 1.4
+  css:
+    theme:
+      css/eracard.style.css: {}
+card:
+  version: 1.4
+  js:
+      js/component-card.js: {}
+  dependencies:
+    - asu_react_core/react-core

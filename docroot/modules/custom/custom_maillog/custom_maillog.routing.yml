@@ -1,0 +1,16 @@
+custom_maillog.maillog:
+  path: '/site/mail-log/{param}'
+  defaults:
+    _title: ""
+    _controller: Drupal\custom_maillog\Controller\MailHistory::maillist
+  methods: [GET]
+  requirements:
+    _permission: 'access content'
+
+custom_maillog.maillog_form:
+ path: '/site/maillogs'
+ defaults:
+   _title: 'Mail Logs'
+   _form: '\Drupal\custom_maillog\Form\MailLogForm'
+ requirements:
+   _permission: 'access content'

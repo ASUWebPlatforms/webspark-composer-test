@@ -1,0 +1,6 @@
+name: ASU campus fit quiz
+type: module
+description: 'This module provides customization campus fit webform'
+package: ASU
+dependencies: webform
+core_version_requirement: ^8.8 || ^9 || ^10

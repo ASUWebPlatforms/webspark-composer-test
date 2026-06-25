@@ -1,0 +1,10 @@
+a.svgbtn img {
+    height: 36px;
+    width: auto !important;
+}
+a.svgbtn:hover img {
+    transform: scale(1.05);
+}
+a.svgbtn:focus {
+      box-shadow: none !important;
+}

@@ -1,0 +1,15 @@
+asu_courses_export.courses_export_form:
+  path: '/admin/content/download_courses'
+  defaults:
+      _form: '\Drupal\asu_courses_export\Form\coursesExportForm'
+      _title: 'Download courses'
+  requirements:
+      _permission: 'administer asu_courses_export'
+
+asu_courses_export.export_csv_download:
+  path: '/admin/export/courses/download/{status}'
+  defaults:
+    _controller: '\Drupal\asu_courses_export\Controller\ExportController::downloadCourses'
+    _title: 'Download Export'
+  requirements:
+    _permission: 'administer asu_courses_export'      

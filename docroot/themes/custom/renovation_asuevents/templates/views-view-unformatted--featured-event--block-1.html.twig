@@ -1,0 +1,77 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ *
+ * @ingroup themeable
+ */
+#}
+
+
+{% for row in rows %}
+
+  {% set campus, venue, evdateurl, evdate, evimage, info, evlink, register, cta, alt_title = 
+        row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_asu_events_location }}'],
+        row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_event_location_title }}'],
+        row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_event_date_value }}'],
+        row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_event_date }}'],
+        row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_asu_events_event_image }}'],
+        row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ body }}'],
+        row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ view_node }}'],
+        row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_link_to_register }}'],
+        row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_call_to_action_button_text }}'],
+        row.content['#row']._entity.title[0].value %}
+
+    <div class="uds-image-text-block-container views-row">
+    <div class="views-field views-field-field-asu-events-event-image uds-image-text-block-image-container">
+      <div class="field-content">  
+        {{ evimage }}
+      </div>
+    </div>
+    <div class="views-field views-field-title uds-image-text-block-text-container white-bg">
+      <span class="field-content">
+      <span class="featured-sub-heading">Featured event</span>
+      <h2>{{ alt_title }}</h2>
+      
+      {% if info %}
+        {{ info }}
+      {% endif %}
+
+      <div class="featured-date-loc">
+      <div class="featured-date">
+        <i class="far fa-calendar"></i>&nbsp;&nbsp;{{ evdate }}
+      </div>
+      <div class="featured-loc">
+        
+      {% if campus %}
+        <i class="fas fa-map-marker-alt"></i> {{ campus }}
+      {% endif %}
+      
+      </div>
+      </div>
+      <a href="{{ evlink }}" class="btn btn-maroon">View event</a> 
+      
+
+      {% if register and cta %}
+        <a href="{{ register }}" class="btn btn-gold">{{ cta }}</a>
+        {% elseif register and cta|length <= 0 %}
+        <a href="{{ register }}" class="btn btn-gold">More info</a>
+      {% endif %}
+      
+      </a>
+      </span>
+    </div>
+  </div>
+  
+{% endfor %}

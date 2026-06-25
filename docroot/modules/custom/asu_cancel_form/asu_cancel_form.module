@@ -1,0 +1,41 @@
+<?php
+
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\field\Entity\FieldStorageConfig;
+//use Drupal\Core\Database\Connection;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\views\Plugin\views\style\StylePluginBase;
+use Drupal\views\Views;
+use Drupal\views\Plugin\views\cache\CachePluginBase;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\views\ViewExecutable;
+use Drupal\Core\Mail\MailManagerInterface;
+use Drupal\Component\Utility\SafeMarkup;
+use Drupal\Component\Utility\Html;
+
+/**
+ * Implements hook_theme().
+ */
+function asucancel_form_theme() {
+  return [
+    'webform_handler_cancel_register_form_form_summary' => [
+      'variables' => ['settings' => NULL, 'handler' => []],
+    ],
+	'webform_handler_sankofa_2023_registration_form_summary' => [
+      'variables' => ['settings' => NULL, 'handler' => []],
+    ],  
+	'webform_handler_test_form_form_summary' => [
+      'variables' => ['settings' => NULL, 'handler' => []],
+    ],
+	'webform_handler_master_form_summary' => [
+      'variables' => ['settings' => NULL, 'handler' => []],
+    ],
+	'webform_handler_sun_devil_send_off_form_summary' => [
+      'variables' => ['settings' => NULL, 'handler' => []],
+    ],
+  ];
+}
+
+
+

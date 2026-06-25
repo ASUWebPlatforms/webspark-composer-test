@@ -1,0 +1,25 @@
+
+SurveyLib:
+  version: VERSION
+  js:
+    js/asu_survey_result.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+  css:
+    theme:
+      css/asu_survey.css: {}
+
+SurveyFormLib:
+  version: VERSION
+  js:
+    js/asu_survey_form.js: {}
+    js/asu_enterpriseclientid.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+  css:
+    theme:
+      css/asu_survey_form.css: {}

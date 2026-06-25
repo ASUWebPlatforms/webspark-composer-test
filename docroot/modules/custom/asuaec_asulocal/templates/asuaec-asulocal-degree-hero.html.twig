@@ -1,0 +1,30 @@
+{#
+  Hero in degree page
+#}
+<div class="row g-0">
+  <div class="col uds-full-width">
+    <div class="layout__full-width bg-white">
+
+      <div class="uds-hero-md">
+        <div class="hero-overlay"></div>
+
+        {% if image_url %}
+          <img class="hero"
+               src="{{ image_url }}"
+               alt="{{ title|e }}"
+               loading="lazy"
+               fetchpriority="high">
+        {% endif %}
+
+        <h1><span class="highlight-gold">{{ title }}</span></h1>
+
+        {% if description %}
+          <div class="content">
+            {{ description|raw }}
+          </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+.node-type-people .img-fluid {
+  border-radius: 50%;
+}
+
+.node.people--small {
+  display: grid;
+  grid-template-columns: 1.5rem 1fr;
+
+  .user-icon {
+    width: 1.5rem;
+  }
+
+  .field-author__full-name {
+    font-weight: bold;
+  }
+}
+
+.node.people--teaser {
+
+  img {
+    border-radius: 50%;
+  }
+
+  .field-author__full-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--gray-7);
+    margin-bottom: 0.5rem;
+  }
+
+  .field-title {
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .field-email {
+    margin-bottom: 1rem;
+  }
+}

@@ -1,0 +1,17 @@
+.digit.static {
+    background-image: none !important;
+}
+.digit {
+    background-color: transparent !important;
+}
+.countDiv::before, .countDiv::after {
+    background-color: #fff !important;
+}
+/*.countWeeks .position:first-child {
+    display: none;
+}
+*/
+.countdown-label {
+    font-size: 1rem;
+    color: #fff;
+}

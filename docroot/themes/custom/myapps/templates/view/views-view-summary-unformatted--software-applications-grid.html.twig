@@ -1,0 +1,60 @@
+{#
+/**
+ * @file
+ * Default theme implementation for unformatted summary links.
+ *
+ * Available variables:
+ * - rows: The rows contained in this view.
+ *   - url: The URL to this row's content.
+ *   - count: The number of items this summary item represents.
+ *   - separator: A separator between each row.
+ *   - attributes: HTML attributes for a row.
+ *   - active: A flag indicating whether the row is active.
+ * - options: Flags indicating how each row should be displayed. This contains:
+ *   - count: A flag indicating whether the row's 'count' should be displayed.
+ *   - inline: A flag indicating whether the item should be wrapped in an inline
+ *     or block level HTML element.
+ *
+ * @see template_preprocess_views_view_summary_unformatted()
+ *
+ * @ingroup themeable
+ */
+#}
+
+<div class="row no-gutters mx-n2">
+  <div class="col">
+    <p class="mb-0">Or, view by title:</p>
+  </div>
+
+  <div class="col-md-auto">
+    <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+      <div class="d-flex align-items-center">
+        <div class="px-1">
+          <a href="/my-apps-search"{{ row.attributes.addClass(row.active ? 'is-active')|without('href') }}>
+            <span class="font-weight-bold" style="font-size: 1rem">All</span>
+          </a>
+        </div>
+
+        <div>
+          |
+        </div>
+      </div>
+
+      {% for row in rows  %}
+        <div class="d-flex align-items-center">
+          <div>
+            {% if row.separator -%}
+              {{ row.separator }}
+            {%- endif %}
+          </div>
+
+          <div class="px-1">
+            <a href="{{ row.url }}"{{ row.attributes.addClass(row.active ? 'is-active')|without('href') }}>
+              <span class="font-weight-bold" style="font-size: 1rem">{{ row.link }}</span>
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

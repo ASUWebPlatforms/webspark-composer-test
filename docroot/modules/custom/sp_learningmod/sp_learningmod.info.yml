@@ -1,0 +1,9 @@
+name: SP Learning Module
+type: module
+description: 'Street Prostitution learning module with cache-friendly AJAX state management for Acquia Site Factory.'
+core_version_requirement: ^10 || ^11
+package: Custom
+dependencies:
+  - drupal:node
+  - drupal:user
+configure: false

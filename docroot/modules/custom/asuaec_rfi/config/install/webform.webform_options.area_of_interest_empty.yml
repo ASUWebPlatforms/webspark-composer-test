@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: area_of_interest_empty
+label: 'Area of interest - Empty'
+category: ASU
+likert: false
+options: ''

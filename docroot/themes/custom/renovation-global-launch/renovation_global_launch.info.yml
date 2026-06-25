@@ -1,0 +1,19 @@
+name: Global Launch
+description: "Global Launch Subtheme of Renovation (includes paragraph templates)"
+screenshot: screenshot.png
+core_version_requirement: ^8.7.7 || ^9.0 || ^10.0
+# version: VERSION
+engine: twig
+type: theme
+base theme: renovation
+
+libraries:
+  - renovation_global_launch/global-styling
+
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer

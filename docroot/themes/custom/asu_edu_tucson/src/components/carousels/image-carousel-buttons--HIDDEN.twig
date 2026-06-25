@@ -1,0 +1,82 @@
+<div class="asu-cms-image-carousel">
+  <div class="carousel-header-section uds-content-align">
+    <h2><span class="highlight-gold">{{ heading }}</span></h2>
+  </div>
+  <div class="image-carousel-cta">
+    <div class="one-university-carousel glide">
+      <div class="glide__track" data-glide-el="track">
+        <ul class="glide__slides">
+          {% for card in cards %}
+            <li class="glide__slide">
+              <div class="asucms-image">
+                <img src="{{ card.media }}">
+                <div class="content-area">
+                  <h1 class="highlight-gray slide-header">{{ card.heading }}</h1>
+                  {% for cta in card.ctas %}
+                    {% set link_attributes = create_attribute() %}
+                    {{ link( cta.title, cta.uri, link_attributes.setAttribute('class', ['btn', 'btn-gold' ])
+                        .setAttribute('data-ga-image-carousel-event', 'link')
+                        .setAttribute('data-ga-image-carousel-type', 'internal link')
+                        .setAttribute('data-ga-image-carousel-section', card.heading|lower)
+                        .setAttribute('data-ga-image-carousel-component', 'one university, many places')
+                        .setAttribute('data-ga-image-carousel', cta.title|lower)
+                       )
+                     }}
+                  {% endfor %}
+                </div>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="glide__arrows" data-glide-el="controls">
+        <button
+          class="glide__arrow glide__arrow--left"
+          data-glide-dir="<"
+          data-ga-image-carousel-event="select"
+          data-ga-image-carousel-type="carousel"
+          data-ga-image-carousel-section="one university, many places"
+          data-ga-image-carousel="left chevron"
+        >
+          <svg
+            aria-hidden="true"
+            focusable="false"
+            data-prefix="fas"
+            data-icon="chevron-left"
+            className="svg-inline--fa fa-chevron-left fa-w-10"
+            role="img"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 100 100"
+          >
+            <path fill="currentColor" d="M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z" class="arrow" transform="translate(15,0)"></path>
+          </svg>
+        </button>
+        <button
+          class="glide__arrow glide__arrow--right"
+          data-glide-dir=">"
+          data-ga-image-carousel-event="select"
+          data-ga-image-carousel-type="carousel"
+          data-ga-image-carousel-section="one university, many places"
+          data-ga-image-carousel="right chevron"
+        >
+          <svg
+            aria-hidden="true"
+            focusable="false"
+            data-prefix="fas"
+            data-icon="chevron-right"
+            className="svg-inline--fa fa-chevron-right fa-w-10"
+            role="img"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 100 100"
+          >
+            <path fill="currentColor" d="M 50,0 L 60,10 L 20,50 L 60,90 L 50,100 L 0,50 Z" class="arrow" transform="translate(85,100) rotate(180)"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {{ attach_library('asu_edu_tucson_components/glide.glidejs') }}
+
+</div>
+

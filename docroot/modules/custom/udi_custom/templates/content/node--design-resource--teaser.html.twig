@@ -1,0 +1,63 @@
+{#
+/**
+ * @file
+ * Template for a Node.
+ */
+#}
+{%
+  set classes = [
+  'node',
+  node.isPromoted() ? 'node--promoted',
+  node.isSticky() ? 'node--sticky',
+  not node.isPublished() ? 'node--unpublished',
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+  'design-resource--teaser',
+  'col',
+  'col-xs-12',
+  'col-sm-4',
+]
+%}
+
+
+{% set link = content.field_resource_link|render|striptags|trim %}
+{% set file = content.field_resource_file|render|striptags|trim %}
+{% set image = file_url(content.field_media[0]['#media'].field_media_image.entity.uri.value) %}
+
+{% if file is not empty %}
+{% set link = file %}
+{% endif %}
+
+<article{{ attributes.addClass(classes) }}>
+  {{ title_suffix }}
+  {% block content %}
+  <div class="card-wrapper">
+    <div class="card m-2 card-hover">
+      <div class="design-resource--teaser--image mb-5">
+          <img src="{{ image }}">
+      </div>
+      <div class="design-resource--teaser--body card-body ">
+        <div class="story--headline">
+        <h3>{{ label|render|striptags|trim }}</h3>
+        </div>
+        <div class="story-content">
+          <p>{{ content.body|render|striptags|trim }}</p>
+        </div>
+         {% if content.field_resource_link %}
+        <a href="{{ link }}" class="btn btn-md btn-gold" target="_blank" rel="noopener">View resource</a>
+        {% endif %}
+      </div>
+      <div class="card-tags">
+        <span class="badge badge-gray-2">{{ content.field_related_project_ref|render|striptags|trim }}</span>
+        <span class="badge badge-gray-2">{{ content.field_resource_type|render|striptags|trim }}</span>
+        {%- for item in content.field_category['#items'] -%}
+        <span class="badge badge-gray-2">{{- item.entity.name.value -}}</span>
+        {%- endfor -%}
+      </div>
+    {% if content.field_resource_link %}
+      <a class="stretched-link" href="{{ link }}" target="_blank" rel="noopener"></a>
+    {% endif %}
+    </div>
+  </div>
+    {% endblock %}
+</article>

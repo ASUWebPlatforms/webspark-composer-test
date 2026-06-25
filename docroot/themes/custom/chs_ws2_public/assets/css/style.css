@@ -1,0 +1,147 @@
+:focus {
+  outline: 0;
+  box-shadow: 0 0 8px #00baff !important; }
+
+.uds-card-arrangement {
+  width: 100%; }
+
+a.c-card {
+  height: 100%; }
+
+.bg[class*="black"] .uds-card-arrangement .card {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25); }
+  .bg[class*="black"] .uds-card-arrangement .card .card-icon-top {
+    color: #ffc627; }
+  .bg[class*="black"] .uds-card-arrangement .card .card-header {
+    background-color: transparent; }
+
+div[class^=uds-hero] h1 {
+  line-height: 4.513rem;
+  max-width: 100%; }
+
+.uds-video-hero .highlight- {
+  background-color: #ffc627;
+  color: #191919;
+  box-shadow: -0.15em 0 0 #ffc627, 0.15em 0 0 #ffc627; }
+
+hr.copy-divider {
+  width: 114px; }
+
+.extra-lead {
+  font-size: 30px; }
+  @media (min-width: 992px) {
+    .extra-lead {
+      font-size: 80px; } }
+
+.uds-image-overlap .content-wrapper {
+  align-self: center; }
+
+.asu-testimonial-on-image-container {
+  justify-content: center; }
+
+.glide.slider-start::after,
+.glide.slider-mid::after,
+.glide.slider-end::after {
+  background: none !important; }
+
+.bg-gold-sunburst {
+  background-color: #ffc627;
+  background-image: url(../images/sunburst.png);
+  background-repeat: no-repeat;
+  background-size: 360px auto;
+  background-position: right -250px center; }
+
+.bg-black-sunburst {
+  background-image: url(../images/sunburst.png);
+  background-repeat: no-repeat;
+  background-size: 360px auto;
+  background-position: right -250px center;
+  background-color: #191919; }
+  .bg-black-sunburst .card-category {
+    text-transform: uppercase;
+    font-weight: bold; }
+  .bg-black-sunburst .card-stat {
+    font-size: 110px;
+    max-width: 240px;
+    font-weight: bold;
+    color: #ffc627; }
+    .bg-black-sunburst .card-stat p {
+      font-size: 16px; }
+
+.bg-maroon-info {
+  background-color: #8c1d40;
+  color: #ffffff; }
+  .bg-maroon-info h3 .svg-inline--fa {
+    color: #ffc627; }
+  .bg-maroon-info .svg-inline--fa {
+    color: white; }
+  .bg-maroon-info a {
+    text-decoration: none;
+    color: #ffffff; }
+
+@media screen and (max-width: 992px) {
+  .block-inline-blockasu-edu-anim-content-buttons {
+    margin-left: 2rem;
+    margin-right: calc(2rem - 5px); } }
+
+.block-inline-blockasu-edu-anim-content-buttons .animated-content-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; }
+  .block-inline-blockasu-edu-anim-content-buttons .animated-content-section .content-section {
+    background-size: cover;
+    height: 600px;
+    width: 400px;
+    min-width: 300px;
+    position: relative;
+    transition: all 1s cubic-bezier(0.19, 1, 0.19, 1);
+    margin: 0 1rem; }
+    .block-inline-blockasu-edu-anim-content-buttons .animated-content-section .content-section .link-area a {
+      display: block; }
+  .block-inline-blockasu-edu-anim-content-buttons .animated-content-section .image-holder:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: linear-gradient(to top, rgba(25, 25, 25, 0.75) 0%, rgba(25, 25, 25, 0) 100%); }
+  .block-inline-blockasu-edu-anim-content-buttons .animated-content-section .content-holder {
+    position: absolute;
+    bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 100%;
+    height: auto; }
+
+@media screen and (max-width: 992px) {
+  .block-inline-blockasu-edu-anim-content-buttons .animated-content-section {
+    flex-direction: column; }
+    .block-inline-blockasu-edu-anim-content-buttons .animated-content-section .long-text {
+      display: none; }
+    .block-inline-blockasu-edu-anim-content-buttons .animated-content-section h2,
+    .block-inline-blockasu-edu-anim-content-buttons .animated-content-section .button-area {
+      padding-left: 2.5rem;
+      padding-right: 2.5rem; } }
+
+@media screen and (min-width: 992px) {
+  .block-inline-blockasu-edu-anim-content-buttons .animated-content-section .content-section:hover {
+    transform: scale(1.1); }
+  .block-inline-blockasu-edu-anim-content-buttons .animated-content-section .hidden-details {
+    transition: all 1s cubic-bezier(0.19, 1, 0.19, 1);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0; }
+  .block-inline-blockasu-edu-anim-content-buttons .animated-content-section .content-section:hover .hidden-details {
+    max-height: 300px;
+    opacity: 1; }
+  .block-inline-blockasu-edu-anim-content-buttons .animated-content-section .button-area a:hover {
+    margin-left: 0.25rem; } }
+
+.node.page .bg:last-child {
+  margin-bottom: -56px; }

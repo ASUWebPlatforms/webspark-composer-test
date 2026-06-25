@@ -1,0 +1,23 @@
+surveylogin.surveylogin:
+  path: '/surveylogin/{survey}'
+  defaults:
+    _controller: '\Drupal\surveylogin\Controller\SurveyLoginController::surveyLoginLoad'
+    _title: 'Survey Login Passthrough'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+surveylogin.graduating:
+  path: '/graduating/{survey}/{asurite}/{reportRequestNumber}/{trm}/{pln}/{clg}/{cmp}'
+  defaults:
+    _controller: '\Drupal\surveylogin\Controller\SurveyLoginController::graduatingLoad'
+    _title: 'Graduating Survey Passthrough'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+surveylogin.deanseval:
+  path: '/deanseval/{deanName}'
+  defaults:
+    _controller: '\Drupal\surveylogin\Controller\SurveyLoginController::deansEvalLoad'
+    _title: 'Deans Evalaution ASURITE Passthrough'
+  requirements:
+    _user_is_logged_in: 'TRUE'

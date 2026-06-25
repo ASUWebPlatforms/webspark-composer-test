@@ -1,0 +1,142 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - drupal:migrate
+      - drupal:migrate_plus
+id: migrate_degree_to_detail
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags: null
+migration_group: migrate_degree_to_detail
+label: 'Migrate Degree to Detail'
+source:
+  plugin: url
+  # data_fetcher_plugin: http
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  headers:
+    Content-Type: application/json
+    User-Agent: 'Drupal Migrate'
+  track_changes: true
+  urls:
+    - 'https://api.myasuplat-dpl.asu.edu/api/codeset/acad-plans?include=planCategories&include=planKeywords&include=acadPlanDescription&include=planCategories&include=degreeType&include=acadPlanMarketingDescription&include=asuOnlineAcadPlanUrl&include=fullDescription&include=campusesOffered&include=acadPlanType&include=stemOptText'
+  item_selector: 0
+  fields:
+    -
+      name: acadPlanCode
+      label: 'Academic Plan Code'
+      selector: acadPlanCode
+    -
+      name: acadPlanDescription
+      label: 'Academic Plan Description'
+      selector: acadPlanDescription
+    -
+      name: fullDescription
+      label: 'Full Description'
+      selector: fullDescription
+    -
+      name: planKeywords
+      label: 'Plan Keywords'
+      selector: planKeywords
+    -
+      name: planCategories
+      label: 'Plan Categories'
+      selector: planCategories
+    -
+      name: degreeType
+      label: 'Degree Type'
+      selector: degreeType
+    -
+      name: degreeDescriptionShort
+      label: 'Degree Description Short'
+      selector: degreeDescriptionShort
+    -
+      name: acadPlanMarketingDescription
+      label: 'Academic Marketing Description'
+      selector: acadPlanMarketingDescription
+    -
+      name: activeInDegreeSearch
+      label: 'Active in Degree Search'
+      selector: activeInDegreeSearch
+    -
+      name: asuOnlineAcadPlanUrl
+      label: 'ASU Online Acad Plan Url'
+      selector: asuOnlineAcadPlanUrl
+    -
+      name: campusesOffered
+      label: 'Campuses Offered'
+      selector: campusesOffered
+    -
+      name: acadPlanType
+      label: 'Academic Plan Type'
+      selector: acadPlanType
+    -
+      name: stemOptText
+      label: 'Stem Opt Text'
+      selector: stemOptText
+  ids:
+    acadPlanCode:
+      type: string
+process:
+  _only_health_wellness:
+    - plugin: skip_on_empty
+      method: row
+      source: planCategories
+    - plugin: skip_on_condition
+      method: row
+      source: planCategories
+      condition:
+        plugin: contains
+        negate: true
+        value: { "categoryCode": "03", "categoryDescription": "Health and Wellness" }
+  title: acadPlanMarketingDescription
+  body/format:
+    plugin: default_value
+    default_value: full_html
+  body/value: fullDescription
+  field_academic_plan_code: acadPlanCode
+  field_degreetype: degreeType
+  field_degree_description_short: degreeDescriptionShort
+  field_activeindegreesearch: activeInDegreeSearch
+  field_asuonlineacadplanurl: asuOnlineAcadPlanUrl
+  field_degree_keywords:
+    - source: planKeywords
+      plugin: entity_generate
+      entity_type: taxonomy_term
+      bundle_key: vid
+      bundle: degree_plankeywords
+      value_key: name
+      ignore_case: true
+      skip_existing: true
+  #  field_field_learning_modality:
+  #    plugin: custom_learning_modality_mapper
+  #    source: campusesOffered
+  field_degree_campuses_offered:
+    #    - plugin: campus_test
+    #      source: campusesOffered
+    - plugin: sub_process
+      source: campusesOffered
+      process:
+        target_id:
+          plugin: custom_campus_tid_mapper
+          source: campusCode
+          vocabulary: degree_campuses_offered
+  field_degree_tags:
+    - plugin: custom_degree_tag_mapper
+      source: degreeType
+    - plugin: custom_degree_tag_mapper
+      source: acadPlanType
+    - plugin: custom_degree_tag_mapper
+      source: degreeDescriptionShort
+    - plugin: custom_degree_tag_mapper
+      source: stemOptText
+  field_degree_app_link:
+    plugin: generate_degree_url
+    source: acadPlanCode
+destination:
+  plugin: 'entity:node'
+  default_bundle: degree_feed
+migration_dependencies: null

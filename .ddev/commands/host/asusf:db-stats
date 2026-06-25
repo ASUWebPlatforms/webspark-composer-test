@@ -1,0 +1,95 @@
+#!/bin/bash
+
+##
+## This script retrieves a list of ASU Site Factory sites' database size stats.
+##
+## Usage: asusf:db-stats [--stack_id STACK_NUMBER]
+## Description: This script retrieves a list of sites' database size stats.
+## Example, get stats from all stacks: ddev asusf:db-stats
+## Example, get stats from stack 3: ddev asusf:db-stats --stack_id 3
+##
+## To  use it, set up the needed ACQUIA_FACTORY_URL, ACQUIA_API_KEY, ACQUIA_API_SECRET, ACQUIA_ACSF_USERNAME and ACQUIA_ACSF_KEY
+## in global or project config, just as described in https://ddev.readthedocs.io/en/stable/users/providers/acquia/.
+##  - The ACQUIA_ACSF_USERNAME is the username you use to log in to the ASU Factory site (ASURITE@asu.edu).
+##  - The ACQUIA_ACSF_KEY is the API key found at https://www.asufactory1.acsitefactory.com/user/your_user_id/api-key.
+##
+## This script requires the jq, drush, and acli commands to be available.
+## Install jq: https://jqlang.org/download/
+## Install Drush: https://www.drush.org/13.x/install/ (likely already installed via Composer)
+## Install acli: https://docs.acquia.com/acquia-cloud-platform/add-ons/acquia-cli/docs/install
+
+function show_help() {
+  sed -n 's/^##//p' ${0}
+}
+
+# Define color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+# Example of using color codes:
+# echo -e "${RED}This is red text.${NC}"
+
+# Parse optional arguments
+stack=""
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    -h|--help)
+      show_help
+      exit 0
+      ;;
+    --stack_id)
+      shift
+      stack="$1"
+      ;;
+    --) # End of all options
+      shift
+      break
+      ;;
+    -*)
+      echo "Warning: Unknown option ignored: $1" >&2
+      ;;
+    *) # Default case: No more options, break out of the loop
+      break
+      ;;
+  esac
+  shift
+done
+
+#echo -e "${BLUE}This command runs in the host container and doesn't have access to web environment variables. Please ensure you have run `acli auth:login` and `acli auth:acsf-login`.${NC}"
+function get_db_stats() {
+  # Validate the stack argument if provided
+  if [[ -n "$stack" && ! "$stack" =~ ^[0-9]+$ ]]; then
+    echo "Error: --stack must be a numerical value."
+    exit 1
+  fi
+
+  # Check if the `jq` command is installed
+  if ! command -v jq &> /dev/null; then
+    echo "Error: jq is not installed. Please install jq to parse JSON."
+    exit 1
+  fi
+
+  # Get the list of sites using the `acli acsf:sites:find` command
+  if [[ -n "$stack" ]]; then
+    sites=$(acli acsf:sites:find --limit=1000 --stack_id "$stack" | jq -r '.sites[].site')
+  else
+    sites=$(acli acsf:sites:find --limit=1000 | jq -r '.sites[].site')
+  fi
+
+  # Iterate over the list of sites
+  for site in $sites; do
+    # Run the SQL query using `ddev drush` and capture the output
+    db_stats=$(ddev drush @$site.live sqlq 'SELECT table_schema "DB Name", ROUND(SUM(data_length + index_length) / 1024 / 1024, 1) "DB Size in MB" FROM information_schema.tables GROUP BY table_schema;')
+
+    # Output the site name and the database stats
+    echo "Site: $site"
+    echo "Database Stats in MB:"
+    echo "$db_stats"
+    echo "----------------------------------------"
+  done
+}
+
+echo -e "${BLUE}This command runs in the DDEV host container and doesn't have access to web environment variables so we can't automate authentication. Please ensure you have run 'acli auth:login' and 'acli auth:acsf-login' and 'ddev auth ssh' before executing or you may receive errors.${NC}"
+get_db_stats $stack || { printf "${RED_BG}[error]${RED} Failed to retrieve database stats${NC}\n" && exit $?; }

@@ -1,0 +1,5 @@
+# Schema for the configuration files of the renovation_chs theme.
+
+renovation_chs.settings:
+  type: theme_settings
+  label: 'renovation_chs settings'

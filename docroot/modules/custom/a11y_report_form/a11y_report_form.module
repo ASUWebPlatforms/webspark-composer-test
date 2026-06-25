@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for A11y Report Form module.
+ */
+
+
+function a11y_report_form_page_attachments(array &$page) {
+  // this script is needed to ensure referrer is captured
+  $page['#attached']['library'][] = 'a11y_report_form/a11y_report_form';
+}

@@ -1,0 +1,16 @@
+name: Edge
+description: "A module that extends the Edge theme."
+type: module
+package: Center Edge
+core_version_requirement: ^8 || ^9 || ^10
+dependencies:
+  - drupal:block
+  - drupal:block_content
+  - drupal:entity_reference_revisions
+  - drupal:field
+  - drupal:field_states_ui
+  - drupal:image
+  - drupal:layout_builder
+  - drupal:layout_builder_restrictions
+  - drupal:link
+  - drupal:paragraphs

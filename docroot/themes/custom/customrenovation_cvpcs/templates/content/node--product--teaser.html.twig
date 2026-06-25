@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Template for a Node.
+ */
+#}
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+    'border',
+    'p-3',
+    'mt-5',
+  ]
+%}
+
+<article{{ attributes.addClass(classes) }}>
+  <header>
+    {{ title_prefix }}
+    {{ title_suffix }}
+    {% if display_submitted %}
+      <div class="node__meta">
+        <span{{ author_attributes }}>
+          {{ 'By'|t }} {% apply spaceless %}<span class="node__author">{{ author_name }}</span>{% endapply %}, {{ date }}
+        </span>
+        {{ metadata }}
+      </div>
+    {% endif %}
+    {% if label and not page %}
+      <div class="node__top-wrapper">
+        {{ content.field_image }}
+          <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+      </div>
+    {% endif %}
+  </header>
+  <div{{ content_attributes.addClass('node__content') }} style="min-height:100px;">
+    {{ content|without('field_image') }}
+  </div>
+</article>

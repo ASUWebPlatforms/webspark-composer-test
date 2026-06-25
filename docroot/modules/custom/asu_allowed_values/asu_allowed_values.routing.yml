@@ -1,0 +1,9 @@
+customTerms.settings:
+ path: '/taxonomy/update'
+ defaults:
+   _title: 'Taxonomy terms form'
+   _form: '\Drupal\asu_allowed_values\Form\customTaxonomy'
+ requirements:
+   _permission: 'administer site configuration'
+    
+    

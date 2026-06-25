@@ -1,0 +1,49 @@
+style:
+  version: VERSION
+  css:
+    theme:
+      assets/css/leadership.style.css: {}
+  js:
+    src/js/leadership.js: {}
+  dependencies:
+    - core/once
+    - core/drupal
+    - core/drupal.ajax
+
+    
+leadership.chartjs:
+  remote: https://github.com/chartjs/Chart.js
+  version: 3.2.0
+  license:
+    name: MIT
+    url: https://github.com/chartjs/Chart.js/blob/master/LICENSE.md
+    gpl-compatible: true
+  js:
+    https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js: { type: external, minified: true }
+
+animatedhero:
+  version: VERSION
+  js:
+    src/js/animatedhero.js: {}
+
+aos:
+  version: 1.0
+  css:
+    theme:
+      '//unpkg.com/aos@next/dist/aos.css': { type: external, minified: false }
+  js:
+    https://unpkg.com/aos@next/dist/aos.js: { type: external, minified: false, preprocess: false }
+    src/js/aos.js: {preprocess: false}
+
+scrollama:
+  version: VERSION
+  js: 
+    '//unpkg.com/d3@5.9.1/dist/d3.min.js': { type: external, minified: true }
+    '//unpkg.com/intersection-observer@0.5.1/intersection-observer.js"': { type: external, minified: false }
+    src/js/scrollama.min.js: {}
+    src/js/stickyfill.min.js: {}
+
+resources:
+  version: VERSION
+  js:
+    src/js/resources.js: {}

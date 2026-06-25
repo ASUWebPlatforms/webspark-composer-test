@@ -1,0 +1,9 @@
+# Custom module library for general purposes.
+card_view_format_asuhealth:
+  js:
+    js/card-view-format-asuhealth.js: {}
+  css:
+    component:
+      css/card-view-format-asuhealth.css: {}
+  dependencies:
+    - core/drupalSettings

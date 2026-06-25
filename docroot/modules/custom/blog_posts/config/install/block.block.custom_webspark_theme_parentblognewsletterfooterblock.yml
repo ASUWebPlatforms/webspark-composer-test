@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:text_content:76e5ec0e-b8f9-4ce0-a6bf-ccd4607dc9fa'
+  module:
+    - block_content
+    - system
+  theme:
+    - custom_webspark_theme
+id: custom_webspark_theme_parentblognewsletterfooterblock
+theme: custom_webspark_theme
+region: footer
+weight: -7
+provider: null
+plugin: 'block_content:76e5ec0e-b8f9-4ce0-a6bf-ccd4607dc9fa'
+settings:
+  id: 'block_content:76e5ec0e-b8f9-4ce0-a6bf-ccd4607dc9fa'
+  label: 'Parent blog newsletter footer block'
+  provider: block_content
+  label_display: '0'
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    pages: "/parent-blog\r\n/parent-blog/financial\r\n/parent-blog/academic\r\n/parent-blog/college-life\r\n/parent-blog/preparing-college\r\n/parent-blog/financial/*\r\n/parent-blog/academic/*\r\n/parent-blog/college-life/*\r\n/parent-blog/preparing-college/*"
+    negate: false

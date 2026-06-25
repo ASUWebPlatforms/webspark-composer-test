@@ -1,0 +1,8 @@
+name: EventReg Custom - Radix Theme
+type: theme
+description: 'New Custom Theme for our site.'
+base theme: renovation
+core_version_requirement: ^9 || ^10
+
+libraries:
+  - renovation_eventreg/global-styling

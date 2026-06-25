@@ -1,0 +1,6 @@
+name: ASU.edu Components
+type: module
+description: Contains the ASU.edu components related functionality.
+package: ASU.edu
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10

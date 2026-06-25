@@ -1,0 +1,579 @@
+.post .align-center {
+  width: auto;
+  max-width: 100%;
+}
+.post .align-center img {
+  max-width: 100%;
+}
+.btn-tag.btn-tag-alt-white.uds-modal-close-btn,
+.btn.btn-tag.btn-tag-alt-white a {
+  color: #191919 !important;
+  text-decoration:none !important;
+}
+
+.tag-block {
+  margin-bottom: 3rem;
+}
+
+.tag-block h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0;
+  margin-top: 2rem;
+}
+
+.tag-block .btn.btn-tag.btn-tag-alt-white {
+  background-color: transparent;
+  border: 1px solid #d0d0d0;
+}
+
+.carousel-gl {
+  flex-direction: column;
+}
+
+.carousel-indicators-gl {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: auto;
+  padding: 0;
+  z-index: 2;
+}
+
+.carousel-inner-gl {
+  flex: 1 0 auto;
+  margin-bottom: 3.5rem;
+}
+
+.image-container-gl {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 600px; /* Ajusta según tus necesidades */
+  height: 400px; /* Ajusta según tus necesidades */
+  overflow: hidden;
+  margin: auto; 
+  flex-direction: column;
+}
+
+.carousel-image-gl {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.carousel-item .image-container-gl {
+  position: relative;
+}
+
+.carousel-item .carousel-caption-gl {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.uds-card-arrangement {
+  display: flex;
+  flex-direction: column;
+  max-width: 1400px;
+  grid-gap:1.5rem;
+}
+
+.uds-card-arrangement .uds-card-arrangement-card-container {
+  -moz-column-gap: 1.5rem;
+  column-gap: 1.5rem;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(auto-fill,1fr);
+  grid-gap:1.5rem;
+  margin-top: 1.5rem;
+}
+
+
+.uds-card-arrangement .uds-card-arrangement-card-container.auto-arrangement.three-columns {
+  grid-template-columns: repeat(3,1fr);
+  grid-auto-flow: row;
+}
+
+.uds-card-arrangement .uds-card-arrangement-card-container.auto-arrangement.four-columns {
+  grid-template-columns: repeat(4,1fr);
+  grid-auto-flow: row;
+}
+
+.uds-card-arrangement>.uds-card-arrangement-content-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center
+}
+
+.uds-card-arrangement>.uds-card-arrangement-content-container>h2 {
+  font: normal normal 700 2.5rem Arial;
+  padding-right: 3rem
+}
+
+.uds-card-arrangement>.uds-card-arrangement-content-container>button {
+  margin-left: auto
+}
+
+.card-img-top {
+  padding:0 !important;
+}
+
+.card-gl img {
+  --card-img-top-height: 12.5rem;
+  height: var(--card-img-top-height);
+  max-width: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+
+/* .card-story {
+    max-width: 40%;
+}
+
+.category-views-cards .card-story,
+.category-views-cards-inpage .card-story,
+.full-feature-blog  .card-story,
+.uds-card-arrangement  .card-story {
+    max-width: 100%;
+} */
+
+
+
+/* .card-story>div:first-of-type:not(.card-image-content) {
+    padding: 0px !important;
+    flex-grow: 1
+} */
+
+
+
+.full-feature-blog .card-img-top,
+.full-feature-blog .card-img-top img {
+  height:24rem;
+  margin-bottom:2.5rem;
+}
+
+
+/*
+.category-views-cards > col-12 {
+    background-color: aqua;
+    flex: 0 0 33.3333333333%;
+    max-width: 33.3333333333%
+}
+*/
+
+
+
+
+
+
+/*--------------------------------------------------------------
+5. Trying to figure out the taxonomy page view
+--------------------------------------------------------------*/
+.category-views-cards {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100%;
+  padding: 0;
+  margin: 0;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  display: block;
+  /* background-color: blueviolet; */
+}
+
+.category-views-cards-inpage,
+.category-views-cards>.container>.row>.col-12 {
+  -moz-column-gap: 1.5rem;
+  column-gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  grid-auto-flow:row;
+  /*
+      grid-column: 1 / 3;
+      grid-gap: 1.5rem;
+      grid-template-areas: 'gridhead gridhead gridhead' ;
+      margin-top: 1.5rem;
+  */
+  /* background-color: bisque; */
+}
+
+
+.category-views-cards>.container>.row>.col-12 header {
+  grid-area: gridhead;
+}
+
+.category-views-cards .card {
+  /* max-width: 33%; */
+  /* background-color: pink; */
+}
+
+
+.category-views-cards>.container>.row>.col-12 .auto-arrangement {
+  grid-template-columns: repeat(2,1fr);
+  grid-auto-flow: row;
+  row-gap: 1.5rem
+}
+
+.category-views-cards>.container>.row>.col-12 .auto-arrangement .three-columns {
+  grid-template-columns: repeat(3,1fr);
+  /*     background-color:orange; */
+}
+
+.category-views-cards>.container>.row>.col-12 .auto-arrangement .four-columns {
+  grid-template-columns: repeat(4,1fr)
+}
+
+
+.feed-icon {display: none;}
+
+
+/*--------------------------------------------------------------
+5. Story Hero, Mobile
+--------------------------------------------------------------*/
+/*
+.uds-story-hero {
+  // Calc value in the grid-template row definitions:
+  // First row = height of the overall mobile hero image - 4.5rem offset for the indented content.
+  display: grid;
+  grid-template-columns: $uds-size-spacing-2 1fr $uds-size-spacing-2;
+  grid-template-rows: calc(#{$uds-size-spacing-32} - 4.5rem) 4.5rem auto;
+  gap: 0px 0px;
+  max-width: 1920px;
+  margin: 0 auto;
+}
+
+.uds-story-hero .hero .img-fluid {
+    grid-column: 1 / span 3;
+    grid-row: 1 / span 2;
+    object-fit: cover;
+    height: 100%;
+    max-width: 100%;
+  }
+*/
+
+/*
+ .uds-story-hero .content {
+    grid-column: 2 / span 1;
+    grid-row: 2 / span 2;
+    background-color: $uds-color-base-white;
+
+    // Padding from top of content box should be carried by whatever element comes within it.
+    padding: 0 $uds-size-spacing-2;
+ }
+*/
+
+/*
+ .uds-story-hero   .breadcrumb,
+    p.meta {
+      padding: 0.75rem 0;
+      margin: $uds-size-spacing-half 0;
+    }
+
+ .uds-story-hero   h1 {
+      margin-top: 0;
+    }
+  }
+}
+*/
+
+
+
+/*--------------------------------------------------------------
+BLOCK BLOG CATEGORIES
+--------------------------------------------------------------*/
+
+
+.block-inline-blockgrid-links a {
+  font-size: 1rem !important;
+  padding: 1rem !important;
+}
+
+.uds-grid-links {
+  padding-bottom: 3rem;
+}
+
+/*--------------------------------------------------------------
+NEWSLETTER SIGNUP
+--------------------------------------------------------------*/
+.newsletter-block {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.newsletter-block h3,
+.newsletter-block p {
+  max-width: 100%;
+  text-align: center;
+}
+
+
+/*--------------------------------------------------------------
+BPARAGRAPHS / STYLE BLOCKS
+--------------------------------------------------------------*/
+.paragraph {
+  margin-bottom: 3rem;
+}
+
+.paragraph--type--body-text {
+  background-color: pink;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.topo-black {
+  color: #fff;
+}
+
+.emphasistitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #191919
+}
+
+.emphasistitle span {
+  box-shadow: -.15em 0 0 #ffc627,.15em 0 0 #ffc627;
+  background: #ffc627;
+  color: #191919
+}
+
+.emphasisbody {
+  font-size: 2rem;
+  font-weight: 700;
+  max-width: 80%;
+  margin:0 auto;
+}
+
+.emphasisbody p {
+  max-width: 100%;
+}
+
+.video-stripe-video2 {
+  max-width: 1224px;
+  margin:0 auto;
+}
+
+.uds-full-width .uds-content-align.uds-blockquote {
+  max-width: 700px;
+  margin:0 auto;
+}
+
+
+/*--------------------------------------------------------------
+PROMOTED BLOCK
+--------------------------------------------------------------*/
+
+#blockPromoted,
+.blockPromo {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+/*--------------------------------------------------------------
+ACCORDION
+--------------------------------------------------------------*/
+/* 12/11/2024 Fix issue where multi-line accordion headers are 
+center aligned instead of left aligned. This is a bug in Webspark,
+so this rule can probably be deleted in the near future after the 
+bug is fixed in Webspark. */
+.accordion-header button {
+  text-align: left;
+}
+
+/*--------------------------------------------------------------
+Ridiculously Responsive Social Sharing Buttons Plus
+--------------------------------------------------------------*/
+
+/* .rrssb {
+    position:fixed;
+    left:0px;
+    top:15%;
+} */
+
+.rrssb {
+  /* position: absolute;
+  top: 15%;
+  left: 0; */
+  /* width: 100%;
+  height: 100%; */
+  /* background-color: aqua;
+  overflow:unset;
+  min-height: 1000px; */
+  /* Position the items */
+}
+
+/* .rrssb-buttons {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color: #ffc425 !important;
+} */
+
+/* .rrssb-text {
+    display: none;;
+} */
+
+/*
+#side-social>div {
+   max-width:150px;
+}
+*/
+
+.rrssb:first-of-type {
+
+  position: fixed;
+  top: 35%;
+  z-index:1000;
+  /* display: none; */
+  transition-duration: 500ms;
+}
+
+
+
+/* The sticky class is added to the navbar with JS when it reaches its scroll position */
+.rrssb.sticky {
+  /* position: fixed;
+  top: 40%; */
+  /* background-color: orange; */
+  /* display:initial; */
+
+}
+
+
+/* Hide the social sidenav until we scroll down to the content */
+.rrssb-buttons {opacity:0; transition-duration: 500ms;}
+.rrssb.sticky > .rrssb-buttons {display:inline-block !important;  opacity: 1; transition-duration: 500ms;}
+
+
+
+.rrssb{font-size:14px;font-family:Arial,Helvetica,sans-serif !important;font-weight:bold}
+
+.rrssb .rrssb-buttons{box-sizing:border-box;display:inline-block;margin:0.15em 0;padding:0;padding-top:0.15em !important;width:100%;background-color: #8c1d40 !important; max-width: 40px;}
+
+.rrssb li{box-sizing:border-box;display:inline-block;padding:0.15em}
+
+.rrssb a{background-color:#ccc;border-radius:0.2em;box-sizing:border-box;display:block;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;height:100%;position:relative;text-align:center;text-decoration:none;text-transform:uppercase;-webkit-transition:background-color 0.2s ease-in-out;transition:background-color 0.2s ease-in-out;width:100%}
+
+.rrssb a:active{box-shadow:inset 1px 3px 15px 0 rgba(22,0,0,0.25)}
+
+.rrssb .rrssb-icon{display:block;box-sizing:border-box;left:0.5em;position:absolute;top:15%;height:70%;width:1.75em}
+
+.rrssb .rrssb-text{color:#fff;padding:0 1em 0 2.75em;line-height:2.5em}
+
+.rrssb .rrssb-prefix{padding-right:0.6em}
+
+
+/* MAKE THE NORMAL BUTTONS HIDE THE LABEL */
+.rrssb a{width:2.5em !important;height:2.5em !important}
+
+.rrssb .rrssb-icon{position:relative !important;left:15% !important}
+
+.rrssb .rrssb-text{display:none !important}
+
+
+.rrssb.no-label a{width:2.5em;height:2.5em}
+
+.rrssb.no-label .rrssb-icon{position:relative;left:15%}
+
+.rrssb.no-label .rrssb-text{display:none}
+
+
+
+
+/* RRSSB+ per-button CSS. */
+/* Not required when using the Drupal CMS integration module, which generates its own file. */
+/* Generated from Drupal CMS module using 'drush rrssb-gen-css' */
+
+
+.rrssb-buttons li.rrssb-email a { background-color: #8c1d40 !important; }
+.rrssb-buttons li.rrssb-email a:hover { background-color: #006ed6 !important; }
+
+.rrssb-buttons li.rrssb-facebook a { background-color: #8c1d40 !important; }
+.rrssb-buttons li.rrssb-facebook a:hover { background-color: #244872 !important; }
+
+.rrssb-buttons li.rrssb-linkedin a { background-color: #8c1d40 !important; }
+.rrssb-buttons li.rrssb-linkedin a:hover { background-color: #005983 !important; }
+
+.rrssb-buttons li.rrssb-twitter a { background-color: #8c1d40 !important; }
+.rrssb-buttons li.rrssb-twitter a:hover { background-color: #0eaad6 !important; }
+
+.rrssb-buttons li.rrssb-whatsapp a { background-color: #8c1d40 !important; }
+.rrssb-buttons li.rrssb-whatsapp a:hover {background-color: #28c039 !important;}
+
+
+
+.rrssb-email .rrssb-icon {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 28 28'%3E%3Cpath fill='%23FFF' d='M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z'/%3E%3C/svg%3E") !important;
+}
+
+
+@media screen and (max-width: 768px) {
+
+
+
+  .uds-card-arrangement>.uds-card-arrangement-content-container {
+    flex-direction:column;
+    align-items: flex-start
+  }
+
+  .uds-card-arrangement>.uds-card-arrangement-content-container>h2 {
+    padding-right: 0
+  }
+
+  .uds-card-arrangement>.uds-card-arrangement-content-container>button {
+    margin-left: unset;
+    margin-right: auto
+  }
+
+  .card-story {
+    max-width: 100%;
+  }
+
+
+
+
+  .uds-card-arrangement .uds-card-arrangement-card-container.auto-arrangement {
+    grid-template-columns: repeat(2,1fr);
+    grid-auto-flow: row;
+    row-gap: 1.5rem;
+  }
+
+
+  .uds-card-arrangement .uds-card-arrangement-card-container.auto-arrangement.three-columns {
+    grid-template-columns: repeat(2,1fr);
+    grid-auto-flow: row;
+    row-gap: 1.5rem;
+  }
+
+  .uds-card-arrangement .uds-card-arrangement-card-container.auto-arrangement.four-columns {
+    grid-template-columns: repeat(2,1fr);
+    grid-auto-flow: row;
+    row-gap: 1.5rem;
+  }
+
+}
+
+
+
+@media screen and (max-width: 576px) {
+  .uds-card-arrangement .uds-card-arrangement-card-container {
+    grid-auto-flow:row;
+    row-gap: 1rem;
+  }
+
+  .uds-card-arrangement .uds-card-arrangement-card-container.auto-arrangement.three-columns {
+    grid-template-columns: repeat(1,1fr);
+    grid-auto-flow:row;
+    row-gap: 1rem;
+  }
+
+  .uds-card-arrangement .uds-card-arrangement-card-container.auto-arrangement.four-columns {
+    grid-template-columns: repeat(1,1fr);
+    grid-auto-flow:row;
+    row-gap: 1rem;
+  }
+}

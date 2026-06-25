@@ -1,0 +1,36 @@
+
+// compile: sass scss/chs-theme.scss css/chs-theme.css
+// sass --watch scss:css
+
+@import 'components/nodes';
+@import 'components/blocks';
+@import 'components/cards';
+@import 'components/views';
+@import 'components/forms';
+@import 'components/backgrounds';
+
+/* UNIVERSAL STYLES
+-------------------------------------------------*/
+
+.lh-chs {
+    line-height: 5rem;
+    max-width: 100%;
+}
+
+@media screen and (max-width: 992px) {
+    .lh-chs {
+        line-height: 3rem;
+    }
+}
+
+hr.copy-divider {
+    width: 114px;
+}
+
+.extra-lead {
+    font-size: 30px;
+
+    @media (min-width: 992px) {
+        font-size: 80px;
+    }
+}

@@ -1,0 +1,9 @@
+name: ASU AEC RFI - Version B2
+type: module
+description: 'Includes Main RFI related tasks - Version B2'
+package: ASU
+core_version_requirement: ^8 || ^9 || ^10 || ^11
+dependencies:
+  - webform
+  - asuaec_webform_optionsdata
+configure: asuaec_rfib2.settings

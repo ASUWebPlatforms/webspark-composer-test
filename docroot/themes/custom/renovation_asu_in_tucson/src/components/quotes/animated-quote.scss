@@ -1,0 +1,50 @@
+.block-inline-blockasu-edu-animated-quote {
+  .highlight-gold {
+    background-color: transparent;
+    box-shadow: none;
+    background-size: 200% 200%;
+    transition: background-position 800ms;
+    transition-delay: 200ms;
+    background-image: linear-gradient(
+        to left,
+        transparent 50%,
+        $uds-color-base-gold 0
+    );
+    background-position: right;
+
+    &.delayed {
+      transition-delay: 400ms;
+    }
+  }
+
+  .animate-bg-in-scroll {
+    background-position: left;
+  }
+
+  .formatted-text {
+    p {
+      max-width: none;
+      letter-spacing: revert;
+    }
+  }
+
+  .container {
+    max-width: 1070px !important;
+
+    h2.h4 {
+      color: $uds-color-base-gray-5;
+    }
+  }
+
+  .source {
+    a {
+      color: inherit;
+    }
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    .container {
+      padding-top: $uds-size-spacing-8;
+    }
+  }
+}

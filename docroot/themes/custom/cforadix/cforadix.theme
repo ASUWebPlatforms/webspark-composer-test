@@ -1,0 +1,176 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the cforadix theme.
+ */
+
+// ========================================================================
+// H1 DUPLICATE FIX - Updated 2026-03-10
+// Purpose: Prevents duplicate H1 headings for accessibility (WCAG)
+//
+// Two parts:
+//
+// PART 1 — Hero slideshow renders the NODE TITLE as the H1:
+//   The slideshow template normally renders the slide entity's title as H1.
+//   We override this by passing the current page's node title to the
+//   slideshow template via a preprocess hook, so the H1 always matches
+//   the page title, browser tab, and SEO metadata — regardless of what
+//   the slide entity's title field contains.
+//
+// PART 2 — Page title block is hidden/demoted to avoid duplicate H1:
+//   - Slideshow with visible title: Page title = HIDDEN (hero has H1)
+//   - Layout Builder inline_block:hero: Page title = H2
+//   - Article with field_media: Page title = H2
+//   - All other pages: Page title = H1
+// ========================================================================
+
+/**
+ * Implements hook_preprocess_HOOK() for the slideshow hero template.
+ *
+ * Passes the current page's node title to the slideshow template so the
+ * hero H1 always displays the node title instead of the slide entity's title.
+ * This ensures the H1 matches the browser tab and SEO metadata automatically,
+ * and eliminates issues with shared slides showing the wrong title.
+ */
+function cforadix_preprocess_views_view_fields__generic_slideshow__block_1(&$variables) {
+  $route_match = \Drupal::routeMatch();
+  if ($route_match->getRouteName() === 'entity.node.canonical') {
+    $node = $route_match->getParameter('node');
+    if ($node && is_object($node) && method_exists($node, 'getTitle')) {
+      $variables['parent_node_title'] = $node->getTitle();
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node title fields.
+ */
+function cforadix_preprocess_field__node__title(&$variables) {
+  $variables['title_heading_level'] = _cforadix_get_title_heading_level();
+}
+
+/**
+ * Helper to determine page title heading level.
+ *
+ * Returns 'hide' when the slideshow hero has a visible title (slide title
+ * now matches node title, so the page title is redundant and hidden).
+ * Returns 'h2' for inline_block:hero and article hero cases.
+ * Returns 'h1' in all other cases so the page title becomes the H1.
+ *
+ * @return string
+ *   'hide' to suppress page title, 'h2' to demote it, 'h1' otherwise.
+ */
+function _cforadix_get_title_heading_level() {
+  static $level = NULL;
+  if ($level !== NULL) {
+    return $level;
+  }
+
+  $level = 'h1'; // Default — every page gets h1 unless proven otherwise.
+  $route_match = \Drupal::routeMatch();
+
+  if ($route_match->getRouteName() !== 'entity.node.canonical') {
+    return $level;
+  }
+
+  $node = $route_match->getParameter('node');
+  if (!$node || !is_object($node) || !method_exists($node, 'hasField')) {
+    return $level;
+  }
+
+  $bundle = $node->bundle();
+
+  // LAYOUT BUILDER: Check first if the node has an inline_block:hero in its
+  // layout. These hero blocks hardcode <h1> in the base theme template, so we
+  // demote the page title to <h2> when one is present. This check must run
+  // before content-type checks because Layout Builder overrides apply to any
+  // content type (including page_ nodes that also have field_slides).
+  if ($node->hasField('layout_builder__layout') && !$node->get('layout_builder__layout')->isEmpty()) {
+    $sections = $node->get('layout_builder__layout')->getSections();
+    foreach ($sections as $section) {
+      foreach ($section->getComponents() as $component) {
+        if ($component->getPluginId() === 'inline_block:hero') {
+          $level = 'h2';
+          return $level;
+        }
+      }
+    }
+  }
+
+  // ARTICLES: Only check field_media (the actual "Hero Image" field).
+  // Do NOT check field_image — that's a regular content image on articles.
+  if ($bundle === 'article') {
+    if ($node->hasField('field_media') && !$node->get('field_media')->isEmpty()) {
+      $level = 'h2';
+    }
+    return $level;
+  }
+
+  // PAGE_ and NEWSLETTER: Check if the slideshow hero will render an H1.
+  // The hero H1 only renders when ALL of these are true:
+  //   1. field_slides references a slide node
+  //   2. That slide has field_image (the background image)
+  //   3. That slide has field_hide_title = 0 (show-caption)
+  //   4. The slideshow block is actually present in the page layout
+  //
+  // Why check #4? Some nodes have a Layout Builder override that REMOVED
+  // the slideshow block from the layout, but field_slides still has data
+  // in the database. Without this check, PHP would incorrectly demote the
+  // page title to <h2> even though no hero renders — leaving the page
+  // with 0 H1 tags. This affects nodes like /solar-cady, /capital-programs,
+  // /incident-reporting, etc.
+  //
+  // The slideshow block's plugin ID in Layout Builder is:
+  //   "views_block:generic_slideshow-block_1"
+  //
+  // If the node has NO Layout Builder override (empty layout_builder__layout),
+  // it uses the default layout which includes the slideshow — so we proceed
+  // with the field_slides check as normal.
+  if (in_array($bundle, ['page_', 'newsletter'])) {
+    if ($node->hasField('field_slides') && !$node->get('field_slides')->isEmpty()) {
+
+      // Before checking slide data, verify the slideshow block is actually
+      // in the page layout. If Layout Builder removed it, skip the demotion.
+      if ($node->hasField('layout_builder__layout') && !$node->get('layout_builder__layout')->isEmpty()) {
+        $slideshow_in_layout = FALSE;
+        $sections = $node->get('layout_builder__layout')->getSections();
+        foreach ($sections as $section) {
+          foreach ($section->getComponents() as $component) {
+            if ($component->getPluginId() === 'views_block:generic_slideshow-block_1') {
+              $slideshow_in_layout = TRUE;
+              break 2;
+            }
+          }
+        }
+        // Layout Builder override exists but slideshow block is not in it.
+        // The hero won't render, so keep page title as <h1>.
+        if (!$slideshow_in_layout) {
+          return $level;
+        }
+      }
+
+      // Slideshow block is in the layout (or no LB override = default layout).
+      // Now check the first referenced slide (the view shows 1 item).
+      $slides = $node->get('field_slides')->referencedEntities();
+      if (!empty($slides)) {
+        $slide = reset($slides);
+        // Check slide has an image (hero will render).
+        $has_image = $slide->hasField('field_image')
+          && !$slide->get('field_image')->isEmpty();
+        // Check slide title is visible (h1 will render).
+        $title_visible = !$slide->hasField('field_hide_title')
+          || $slide->get('field_hide_title')->isEmpty()
+          || (int) $slide->get('field_hide_title')->value === 0;
+
+        if ($has_image && $title_visible) {
+          $level = 'hide';
+        }
+      }
+    }
+    return $level;
+  }
+
+  // ALL OTHER CONTENT TYPES: default h1.
+  return $level;
+}

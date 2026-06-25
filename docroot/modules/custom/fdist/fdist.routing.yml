@@ -1,0 +1,23 @@
+fdist.fdist:
+  path: '/fdist/{project}'
+  defaults:
+    _controller: '\Drupal\fdist\Controller\FdistController::fdist_load'
+    _title: 'File Distribution'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+
+fdist.post:
+  path: '/fdist/php/post'
+  defaults:
+    _controller: '\Drupal\fdist\Controller\FdistController::fdist_post'
+    _title: 'File distribution - post'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+
+fdist.sync:
+  path: '/fdist/php/sync'
+  defaults:
+    _controller: '\Drupal\fdist\Controller\FdistController::fdist_sync'
+    _title: 'File distribution - sync'
+  requirements: 
+    _user_is_logged_in: 'TRUE'

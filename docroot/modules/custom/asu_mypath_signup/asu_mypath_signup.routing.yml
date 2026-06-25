@@ -1,0 +1,190 @@
+mypathasu.form:
+  path: '/mypath-asu'
+  defaults:
+    _title: 'MyPath2ASU form'
+    _form: '\Drupal\asu_mypath_signup\Form\MyPathFormASU'
+  requirements:
+    _permission: 'access content'
+
+
+asu_mypath_signup.generateCommunityCollegeList:
+  path: '/asu_mypath_signup/json/commList'
+  defaults:
+    _controller: '\Drupal\asu_mypath_signup\Controller\myPathJsonController::generateCommunityCollegeList'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+
+asu_mypath_signup.generateJsonInterest:
+  path: '/asu_mypath_signup/json/interest/{learningMode}/{studentStatus}'
+  defaults:
+    _controller: '\Drupal\asu_mypath_signup\Controller\myPathJsonController::generateJsonInterest'
+    _format: json
+  requirements:
+    _permission: 'access content'
+    
+
+asu_mypath_signup.generateJsonDegreeData:
+  path: '/asu_mypath_signup/json/degree/{learningMode}/{interest}/Transfer'
+  defaults:
+    _controller: '\Drupal\asu_mypath_signup\Controller\myPathJsonController::generateJsonDegreeData'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asu_mypath_signup.generateJsonCollegeDegreeData:
+  path: '/asu_mypath_signup/json/degreeCollege/{learningMode}/{college}/Transfer'
+  defaults:
+    _controller: '\Drupal\asu_mypath_signup\Controller\myPathJsonController::generateJsonCollegeDegreeData'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asu_mypath_signup.getCollegeList:
+  path: '/asu_mypath_signup/json/college/{learningMode}'
+  defaults:
+    _controller: '\Drupal\asu_mypath_signup\Controller\myPathJsonController::getCollegeList'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asu_mypath_signup.getTerms:
+  path: '/asu_mypath_signup/json/term'
+  defaults:
+    _controller: '\Drupal\asu_mypath_signup\Controller\myPathJsonController::getTerms'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asu_mypath_signup.getPrograms:
+  path: '/asu_mypath_signup/json/programs/{learningMode}'
+  defaults:
+    _controller: '\Drupal\asu_mypath_signup\Controller\myPathJsonController::getProgramsList'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asu_mypath_signup.formRedirect:
+  path: '/asu_mypath_signup/mypath-transfer-redirect'
+  defaults:
+    _controller: '\Drupal\asu_mypath_signup\Controller\myPathPassData::FormRedirectController'
+    _format: json
+  methods: [POST]
+  requirements:
+    _permission: 'access content'
+
+asu_mypath_signup.mypath_external_redirect:
+  path: '/asu_mypath_signup/mypath-redirect'
+  defaults:
+    _controller: '\Drupal\asu_mypath_signup\Controller\MyPathRedirectController::redirectToMyPathExternalSite'
+    _title: 'Redirect to Transfer guide Site'
+  methods: [POST]
+  requirements:
+    _access: 'TRUE'
+
+asu_mypath_signup.my_path_config_form:
+  path: '/admin/config/asu_mypath_signup/settings'
+  defaults:
+    _form: '\Drupal\asu_mypath_signup\Form\myPathAdminSettingsForm'
+    _title: 'Mypath Settings'
+  requirements:
+    _permission: 'administer site configuration'
+
+asu_mypath_signup.mid_api:
+  path: '/asu_mypath_signup/mid/{mid}'
+  defaults:
+    _controller: '\Drupal\asu_mypath_signup\Controller\MidApiController::fetch'
+    _title: 'MID API'
+  methods: [GET, POST]
+  requirements:
+    _permission: 'access content'
+  
+asu_mypath_signup.postToMaricopaAPi:
+  path: '/asu_mypath_signup/post-to-maricopa-api'
+  defaults:
+    _controller: '\Drupal\asu_mypath_signup\Controller\MyPathMaricopaPostData::postToMaricopaAPI'
+    _title: 'Post to Maricopa API'
+  methods: [POST]
+  requirements:
+    _permission: 'access content'
+
+asu_mypath_signup.verify:
+  path: '/asu_mypath_signup/verify'
+  defaults:
+    _controller: '\Drupal\asu_mypath_signup\Controller\BrightVerifyController::verify'
+    _title: 'BrightVerify API'
+  requirements:
+    _permission: 'access content'
+
+# asu_mypath_signup.json.categories.grad:
+#   path: '/admin/asu_mypath_signup/json/categories/ground/grad'
+#   defaults:
+#     _controller: '\Drupal\asu_mypath_signup\Controller\myPathJsonController::generateJsonCat'
+#     _format: json
+#   requirements:
+#     _permission: 'access content'
+
+# asu_mypath_signup.json.categories.online.ugrad:
+#   path: '/admin/asu_mypath_signup/json/categories/online/ugrad'
+#   defaults:
+#     _controller: '\Drupal\asu_mypath_signup\Controller\myPathJsonController::generateJsonCat'
+#     _format: json
+#   requirements:
+#     _permission: 'access content'
+
+# asu_mypath_signup.json.categories.online.grad:
+#   path: '/admin/asu_mypath_signup/json/categories/online/grad'
+#   defaults:
+#     _controller: '\Drupal\asu_mypath_signup\Controller\myPathJsonController::generateJsonCat'
+#     _format: json
+#   requirements:
+#     _permission: 'access content'
+
+# asu_mypath_signup.json.degrees.ground.ugrad:
+#   path: '/admin/asu_mypath_signup/json/degrees/ground/ugrad/{interest}'
+#   defaults:
+#     _controller: '\Drupal\asu_mypath_signup\Controller\myPathJsonController::generateJsonDegree'
+#     _format: json
+#   requirements:
+#     _permission: 'access content'
+
+# asu_mypath_signup.json.degrees.ground.grad:
+#   path: '/admin/asu_mypath_signup/json/degrees/ground/grad/{interest}'
+#   defaults:
+#     _controller: '\Drupal\asu_mypath_signup\Controller\myPathJsonController::generateJsonDegree'
+#     _format: json
+#   requirements:
+#     _permission: 'access content'
+
+# asu_mypath_signup.json.degrees.online.ugrad:
+#   path: '/admin/asu_mypath_signup/json/degrees/online/ugrad/{interest}'
+#   defaults:
+#     _controller: '\Drupal\asu_mypath_signup\Controller\myPathJsonController::generateJsonDegree'
+#     _format: json
+#   requirements:
+#     _permission: 'access content'
+
+# asu_mypath_signup.json.degrees.online.grad:
+#   path: '/admin/asu_mypath_signup/json/degrees/online/grad/{interest}'
+#   defaults:
+#     _controller: '\Drupal\asu_mypath_signup\Controller\myPathJsonController::generateJsonDegree'
+#     _format: json
+#   requirements:
+#     _permission: 'access content'
+
+# asu_mypath_signup.json.term.grad:
+#   path: '/admin/asu_mypath_signup/json/term/grad/{plancode}'
+#   defaults:
+#     _controller: '\Drupal\asu_mypath_signup\Controller\myPathJsonController::generateJsonTerm'
+#     _format: json
+#   requirements:
+#     _permission: 'access content'
+
+# asu_mypath_signup.json.gradtype:
+#   path: '/admin/asu_mypath_signup/json/gradtype/{plancode}'
+#   defaults:
+#     _controller: '\Drupal\asu_mypath_signup\Controller\myPathJsonController::generateJsonGradtype'
+#     _format: json
+#   requirements:
+#     _permission: 'access content'

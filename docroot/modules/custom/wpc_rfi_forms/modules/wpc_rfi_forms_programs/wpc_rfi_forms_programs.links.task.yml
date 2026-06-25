@@ -1,0 +1,32 @@
+# Define the 'local' links for the module
+
+wpc_rfi_forms_programs.program_settings:
+  route_name: wpc_rfi_forms_programs.program_settings
+  title: Settings
+  base_route: wpc_rfi_forms_programs.program_settings
+
+
+entity.wpc_rfi_forms_programs_program.collection:
+  route_name:  entity.wpc_rfi_forms_programs_program.collection
+  base_route:  wpc_rfi_forms_programs.program_settings
+  title: List
+
+
+program.view:
+  route_name: entity.wpc_rfi_forms_programs_program.canonical
+  base_route: entity.wpc_rfi_forms_programs_program.canonical
+  title: View
+
+
+program.page_edit:
+  route_name: entity.wpc_rfi_forms_programs_program.edit_form
+  base_route: entity.wpc_rfi_forms_programs_program.canonical
+  title: Edit
+
+
+program.delete_confirm:
+  route_name:  entity.wpc_rfi_forms_programs_program.delete_form
+  base_route:  entity.wpc_rfi_forms_programs_program.canonical
+  title: Delete
+  weight: 10
+

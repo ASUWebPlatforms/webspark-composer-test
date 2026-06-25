@@ -1,0 +1,197 @@
+/* node/5017 */
+#safeSpaceSpeaker {
+  background-image: url(https://live-asuocms.ws.asu.edu/sites/default/files/2021-08/UnityUI-TopoPattern-Black%402x.png);
+  padding: 24px 24px;
+  color: white;
+  border-width: 1px;
+  border-style: solid;
+}
+
+/* #safeSpaceSpeaker.h3 {
+  font-size: 1.6rem;
+} */
+
+.imageone {
+  width: 380px;
+  float: right;
+  margin: 10px 0 10px 10px;
+}
+
+.imagetwo {
+  width: 360px;
+  float: right;
+  margin: 10px 0 10px 10px;
+}
+
+#blockquoteStaffHelp blockquote p::before {
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMDIuODcgMjQ1LjgyIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6IzE5MTkxOTt9PC9zdHlsZT48L2RlZnM+PGcgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiI+PGcgaWQ9IkxheWVyXzEtMiIgZGF0YS1uYW1lPSJMYXllciAxIj48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xMTMuNjEsMjQ1LjgySDBWMTY0LjU2cTAtNDkuMzQsOC42OS03Ny44M1Q0MC44NCwzNS41OFE2NC4yOSwxMi45NSwxMDAuNjcsMGwyMi4yNCw0Ni45cS0zNCwxMS4zMy00OC43MiwzMS41NFQ1OC42MywxMzIuMjFoNTVabTE4MCwwSDE4MFYxNjQuNTZxMC00OS43NCw4LjctNzhUMjIxLDM1LjU4UTI0NC42NSwxMi45NSwyODAuNjMsMGwyMi4yNCw0Ni45cS0zNCwxMS4zMy00OC43MiwzMS41NHQtMTUuNTcsNTMuNzdoNTVaIi8+PC9nPjwvZz48L3N2Zz4K);
+  /* margin-top: 1.5rem; */
+  background-repeat: no-repeat;
+  content: '';
+  min-height: 3rem;
+  min-width: 2.375rem;
+  float: left;
+  margin-left: -1rem;
+  color: #d0d0d0;
+  font-weight: bold;
+}
+
+#blockquoteStaffHelp blockquote>p>a {
+  margin-left: 24px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+#blockquoteStaffHelp blockquote>p:not([class*=sig-]):after {
+  content: '"';
+  font-size: x-large;
+}
+
+#SubmitSubh {
+  min-height: 20px;
+  margin-bottom: 0px;
+  padding: 19px;
+  background-color: #fafafa;
+  border: 1px solid #e8e8e8;
+  border-bottom: 0px;
+  border-radius: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+  box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+
+}
+
+.SubmitSubhweb {
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 20px;
+  background-color: #fafafa;
+  border: 1px solid #e8e8e8;
+  border-radius: 0;
+  border-top: 0px;
+  -webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+  box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+}
+
+.helpingstaff {
+  padding-left: 20px;
+}
+
+/* node/4606 */
+#ConferenceOverviewCard img.img-fluid {
+  margin-bottom: 3rem;
+}
+
+/* node/7 */
+/* iv */
+#accordion-content-100 ol>li>ol {
+  list-style-type: lower-alpha;
+}
+
+/* vi */
+#accordion-content-102 ol>li>ol {
+  list-style-type: lower-alpha;
+}
+
+/* vi */
+#accordion-content-102 ol>li>ol>li>ol {
+  list-style-type: upper-roman;
+}
+
+/* ix */
+#accordion-content-105 ol>li>ol {
+  list-style-type: lower-alpha;
+}
+
+/* x */
+#accordion-content-106 ol>li>ol {
+  list-style-type: lower-alpha;
+}
+
+#accordion-content-106 ol>li>ol>li>ol {
+  list-style-type: upper-roman;
+}
+
+#accordion-content-106 ol>li>ol>li>ol>li>ol {
+  list-style-type: lower-roman;
+}
+
+/* xi -11 */
+#accordion-content-107 ol>li>ol {
+  list-style-type: lower-alpha;
+}
+
+#accordion-content-107 ol>li>ol>li>ol {
+  list-style-type: upper-roman;
+}
+
+/* xii - 12 */
+#accordion-content-108 ol {
+  list-style-type: decimal;
+}
+
+/* xiii - 13 */
+#accordion-content-109 ol>li>ol {
+  list-style-type: lower-alpha;
+}
+
+
+.col-md-8 moscone-main-content radix-layouts-content panel-panel {
+  list-style-type: lower-alpha;
+}
+
+#activitiesandeventscomm ol>li>ol {
+  list-style-type: lower-alpha;
+}
+
+#staffappreciationcomm ol>li>ol {
+  list-style-type: lower-alpha;
+}
+
+/* node/32/28 */
+.blockpointers ol ol {
+  list-style: lower-alpha;
+}
+
+/* webform theme SUBH*/
+@media(min-width: 1200px) {
+  .webform-submission--webform-speak-up-be-heard {
+    max-width: 1140px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (min-width: 992px) {
+  .webform-submission--webform-speak-up-be-heard {
+    max-width: 960p;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+/* contact staff webform  */
+@media(min-width: 1200px) {
+  .webform-submission--webform-contact-staff-council {
+    max-width: 1140px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (min-width: 992px) {
+  .webform-submission--webform-contact-staff-council {
+    max-width: 960p;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* scrollbar bottom issue fix start */
+.no-gutters{
+  margin: 0px !important;
+}
+
+.no-gutters .uds-full-width {
+  padding: 0px !important;
+}
+
+/* scrollbar bottom issue fix end */

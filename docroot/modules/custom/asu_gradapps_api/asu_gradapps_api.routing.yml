@@ -1,0 +1,39 @@
+asu_gradapps_api.create_announcement:
+  path: '/asu_gradapps_api/announcements'
+  defaults:
+    _controller: 'Drupal\asu_gradapps_api\Controller\AsuGradappsApiController::createAnnouncement'
+  requirements:
+    _permission: 'access asu gradapps api endpoints'
+  methods: ['POST']
+  options:
+    _auth: ['basic_auth']
+    
+asu_gradapps_api.create_gf_data:
+  path: '/asu_gradapps_api/gf_data'
+  defaults:
+    _controller: 'Drupal\asu_gradapps_api\Controller\AsuGradappsApiController::createGFData'
+  requirements:
+    _permission: 'access asu gradapps api endpoints'
+  methods: ['POST']
+  options:
+    _auth: ['basic_auth']
+
+asu_gradapps_api.create_plancode_data:
+  path: '/asu_gradapps_api/plancodes'
+  defaults:
+    _controller: 'Drupal\asu_gradapps_api\Controller\AsuGradappsApiController::createPlancodes'
+  requirements:
+    _permission: 'access asu gradapps api endpoints'
+  methods: ['POST']
+  options:
+    _auth: ['basic_auth']
+
+asu_gradapps_api.create_categories_data:
+  path: '/asu_gradapps_api/categories'
+  defaults:
+    _controller: 'Drupal\asu_gradapps_api\Controller\AsuGradappsApiController::createCategories'
+  requirements:
+    _permission: 'access asu gradapps api endpoints'
+  methods: ['POST']
+  options:
+    _auth: ['basic_auth']

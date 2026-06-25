@@ -1,0 +1,140 @@
+ceadmin.ceadmin:
+  path: '/ceadmin'
+  defaults:
+    _controller: '\Drupal\ceadmin\Controller\CEadminController::ceadminLoad'
+    _title: 'Course Evaluation Administration'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ceadmin.post:
+  path: '/ceadmin/php/post'
+  defaults:
+    _controller: '\Drupal\ceadmin\Controller\CEadminController::ceadminPost'
+    _title: 'Course Evaluation Administration - post'
+  methods:  'POST'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ceadmin.sync:
+  path: '/ceadmin/php/sync/{dept}/{period}'
+  defaults:
+    _controller: '\Drupal\ceadmin\Controller\CEadminController::ceadminSync'
+    _title: 'Course Evaluation Administration - sync'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ceadmin.sections:
+  path: '/ceadmin/php/sections/{period}'
+  defaults:
+    _controller: '\Drupal\ceadmin\Controller\CEadminController::ceadminSections'
+    _title: 'Course Evaluation Administration - all sections'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ceadmin.instructors:
+  path: '/ceadmin/php/instructors'
+  defaults:
+    _controller: '\Drupal\ceadmin\Controller\CEadminController::ceadminInstructors'
+    _title: 'Course Evaluation Administration - get instructors'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ceadmin.activeperson:
+  path: '/ceadmin/php/activeperson'
+  defaults:
+    _controller: '\Drupal\ceadmin\Controller\CEadminController::ceadminActiveperson'
+    _title: 'Course Evaluation Administration - add active people'
+  methods:  'POST'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ceadmin.slackpost:
+  path: '/ceadmin/php/slackpost'
+  defaults:
+    _controller: '\Drupal\ceadmin\Controller\CEadminController::slackPost'
+    _title: 'Send message to user through uoeee-messenger'
+  methods:  'POST'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ceadmin.setslackid:
+  path: '/ceadmin/php/setslackid'
+  defaults:
+    _controller: '\Drupal\ceadmin\Controller\CEadminController::setslackid'
+    _title: 'Set Slack ID for users without one'
+  methods:  'GET'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ceadmin.evaluate:
+  path: '/ceadmin/evaluate'
+  defaults:
+    _controller: '\Drupal\ceadmin\Controller\CEadminController::ceadminLoad'
+    _title: 'Course Evaluation Administration'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ceadmin.modify:
+  path: '/ceadmin/modify'
+  defaults:
+    _controller: '\Drupal\ceadmin\Controller\CEadminController::ceadminLoad'
+    _title: 'Course Evaluation Administration'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ceadmin.combining:
+  path: '/ceadmin/combining'
+  defaults:
+    _controller: '\Drupal\ceadmin\Controller\CEadminController::ceadminLoad'
+    _title: 'Course Evaluation Administration'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+
+ceadmin.instructor:
+  path: '/ceadmin/instructors'
+  defaults:
+    _controller: '\Drupal\ceadmin\Controller\CEadminController::ceadminLoad'
+    _title: 'Course Evaluation Administration'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ceadmin.tas:
+  path: '/ceadmin/TAs'
+  defaults:
+    _controller: '\Drupal\ceadmin\Controller\CEadminController::ceadminLoad'
+    _title: 'Course Evaluation Administration'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ceadmin.courseadmins:
+  path: '/ceadmin/courseadmins'
+  defaults:
+    _controller: '\Drupal\ceadmin\Controller\CEadminController::ceadminLoad'
+    _title: 'Course Evaluation Administration'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ceadmin.surveys:
+  path: '/ceadmin/surveys'
+  defaults:
+    _controller: '\Drupal\ceadmin\Controller\CEadminController::ceadminLoad'
+    _title: 'Course Evaluation Administration'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ceadmin.log:
+  path: '/ceadmin/log'
+  defaults:
+    _controller: '\Drupal\ceadmin\Controller\CEadminController::ceadminLoad'
+    _title: 'Course Evaluation Administration'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ceadmin.downloads:
+  path: '/ceadmin/downloads'
+  defaults:
+    _controller: '\Drupal\ceadmin\Controller\CEadminController::ceadminLoad'
+    _title: 'Course Evaluation Administration'
+  requirements:
+    _user_is_logged_in: 'TRUE'

@@ -1,0 +1,13 @@
+services:
+  asu_custom_schema.builder:
+    class: Drupal\asu_custom_schema\Service\SchemaBuilder
+    arguments:
+      - '@token'
+      - '@file_url_generator'
+      - '@logger.factory'
+      - '@config.factory'
+
+  asu_custom_schema.access_checker:
+    class: Drupal\asu_custom_schema\Access\NodeSchemaAccess
+    arguments:
+      - '@config.factory'

@@ -1,0 +1,6 @@
+style:
+  css:
+    theme:
+      assets/css/style.css: {}
+  js:
+    assets/js/greatgamelab.script.js: {}

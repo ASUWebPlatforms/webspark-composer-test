@@ -1,0 +1,97 @@
+// compile: sass src/scss/style.scss assets/css/style.css
+// sass --watch src/scss:css
+
+// Sub theme styling.
+
+@import 'components/layout';
+@import 'components/block';
+@import 'components/views';
+
+
+/* GENERAL STYLES
+-------------------------------------------------*/
+.small {
+    font-size: .75rem !important;
+}
+.ggl-abstract-1-bg {
+    background-image: url('../../assets/images/ggl-custom-bg.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.ggl-row-align-center {
+    .container {
+        .row {
+            align-items: center;
+        }
+    }
+}
+
+.lead-xl {
+    & {
+        .lead {
+            font-size: 2.25rem;
+            
+            @media (max-width: 575.98px) {
+                font-size: 1.5rem;
+            }
+        }
+    }
+}
+
+.lead-lg {
+    & {
+        .lead {
+            font-size: 1.75rem;
+            line-height: 2.5rem;
+            @media (max-width: 575.98px) {
+                font-size: 1.5rem;
+            }
+        }
+    }
+}
+
+.lead-md {
+    & {
+        .lead {
+            font-size: 1.5rem;
+        }
+    }
+}
+
+.no-border {
+    .uds-img {
+        img {
+            border: none;
+        }
+    }
+    .uds-image-text-block-container {
+        border: none;
+    }
+}
+
+.text-color-blush {
+    color: #E74973;
+}
+
+.text-color-pumpkin {
+    color: #FF7F31;
+}
+
+.text-color-moonstone {
+    color: #4BB7C4;
+}
+
+.header-weight__regular {
+    h2 {
+        font-weight: 400;
+        letter-spacing:normal;
+    }
+}
+
+blockquote {
+    p {
+        hyphens: manual;
+    }
+}
+

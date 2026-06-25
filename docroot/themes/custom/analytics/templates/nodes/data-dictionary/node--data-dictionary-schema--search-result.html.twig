@@ -1,0 +1,8 @@
+{% set data = {
+  'title': node.title.value,
+  'url': node|entity_url
+} %}
+
+<article class="data-dictionary-schema__teaser--search-result">
+  {{ include('@analytics/data-dictionary-teaser-search-result.twig', data) }}
+</article>

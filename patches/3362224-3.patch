@@ -1,0 +1,14 @@
+diff --git a/recently_read.module b/recently_read.module
+index 7a35a20..d112971 100644
+--- a/recently_read.module
++++ b/recently_read.module
+@@ -49,7 +49,8 @@ function recently_read_cron() {
+     case "time":
+       $time = $config->get('delete_time');
+       $query = \Drupal::entityQuery('recently_read')
+-        ->condition('created', strtotime($time), '<=');
++        ->condition('created', strtotime($time), '<=')
++        ->accessCheck(TRUE);
+       $records = $query->execute();
+       if ($records) {
+         $recentlyRead->deleteRecords($records);

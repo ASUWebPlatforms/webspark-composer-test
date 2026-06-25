@@ -1,0 +1,324 @@
+<?php
+ 
+//CE_CrossLists
+function ceadmin_crosslists_table(): array {
+  return [
+    'description' => 'Cross listed section information',
+    'fields' => [
+        'Xlist_Code' => ['type' => 'varchar', 'length' => 10, 'not null' => TRUE, 'default' => ''],
+        'Orig_SLN' => ['type' => 'varchar', 'length' => 10, 'not null' => TRUE, 'default' => ''],
+        'Crse_Dept' => ['type' => 'varchar', 'length' => 20, 'not null' => FALSE, 'default' => NULL],
+        'section_Id' => ['type' => 'varchar', 'length' => 20, 'not null' => TRUE, 'default' => ''],
+        'period' => ['type' => 'varchar', 'length' => 50, 'not null' => TRUE, 'default' => ''],
+    ],
+    'primary key' => ['section_Id'],
+    'indexes' => [
+      'period' => ['period'],
+      'Crse_Dept' => ['Crse_Dept'],
+      'page_path' => ['page_path'],
+    ]
+  ];
+}
+
+//CE_Departments
+function ceadmin_departments_table(): array {
+  return [
+    'description' => 'Stores CE departments.',
+    'fields' => [
+      'id' => ['type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE],
+      'college' => ['type' => 'varchar', 'length' => 20, 'not null' => FALSE],
+      'department' => ['type' => 'varchar', 'length' => 20, 'not null' => TRUE],
+      'evaldepartment' => ['type' => 'varchar', 'length' => 20, 'not null' => TRUE],
+      'description' => ['type' => 'varchar', 'length' => 20, 'not null' => FALSE],
+      'svydepartment' => ['type' => 'varchar', 'length' => 255, 'not null' => FALSE],
+      'rep' => ['type' => 'varchar', 'length' => 50, 'not null' => FALSE],
+      'ftp' => ['type' => 'varchar', 'length' => 50, 'not null' => FALSE],
+    ],
+    'primary key' => ['id'],
+    'indexes' => [
+      'evaldepartment' => ['evaldepartment'],
+      'college' => ['college']
+    ]
+  ];
+}
+
+//CE_Log
+function ceadmin_actionslog_table(): array {
+  return [
+    'description' => 'Audit log for CE actions.',
+    'fields' => [
+      'id' => ['type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE],
+      'asurite' => ['type' => 'varchar', 'length' => 20, 'not null' => TRUE],
+      'period' => ['type' => 'varchar', 'length' => 20, 'not null' => TRUE],
+      'evaldepartment' => ['type' => 'varchar', 'length' => 50, 'not null' => TRUE],
+      'target' => ['type' => 'varchar', 'length' => 20, 'not null' => TRUE],
+      'action' => ['type' => 'varchar', 'length' => 500, 'not null' => TRUE],
+      'submit_ts' => ['type' => 'int', 'not null' => TRUE, 'default' => 0],
+    ],
+    'primary key' => ['id'],
+    'indexes' => [
+      'asurite' => ['asurite'],
+      'evaldepartment' => ['evaldepartment'],
+    ],
+  ];
+}
+
+//CE_Slack
+function ceadmin_slack_table(): array {
+  return [
+    'description' => 'Slack mappings for users.',
+    'fields' => [
+      'asurite' => ['type' => 'varchar', 'length' => 20, 'not null' => TRUE],
+      'slackid' => ['type' => 'varchar', 'length' => 20, 'not null' => FALSE],
+      'name' => ['type' => 'varchar', 'length' => 20, 'not null' => FALSE],
+    ],
+    'primary key' => ['asurite'],
+  ];
+}
+
+//CE_User
+function ceadmin_user_table(): array {
+  return [
+    'description' => 'CE user accounts.',
+    'fields' => [
+      'id' => ['type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE],
+      'asurite' => ['type' => 'text', 'not null' => FALSE],
+      'unit' => ['type' => 'varchar', 'length' => 20, 'not null' => FALSE],
+      'college' => ['type' => 'varchar', 'length' => 20, 'not null' => FALSE],
+      'role' => ['type' => 'varchar', 'length' => 20, 'not null' => FALSE],
+      'name' => ['type' => 'varchar', 'length' => 50, 'not null' => FALSE],
+      'asuemail' => ['type' => 'varchar', 'length' => 50, 'not null' => FALSE],
+      'note' => ['type' => 'varchar', 'length' => 50, 'not null' => FALSE],
+      'slackid' => ['type' => 'varchar', 'length' => 50, 'not null' => FALSE],
+    ],
+    'primary key' => ['id'],
+    'indexes' => [
+      'asurite' => ['asurite'],
+      'unit' => ['unit'],
+    ],
+  ];
+}
+
+//CE_json_Instructors
+function ceadmin_instructors_table(): array {
+  return [
+    'description' => 'JSON instructor attributes.',
+    'fields' => [
+      'asurite' => ['type' => 'varchar', 'length' => 20, 'not null' => TRUE],
+      'attributes' => ['type' => 'text', 'size' => 'big', 'not null' => TRUE],
+    ],
+    'primary key' => ['asurite'],
+  ];
+}
+
+//CE_json_Sections
+function ceadmin_sections_table(): array {
+  return [
+    'description' => 'JSON section records.',
+    'fields' => [
+      'section_Id' => ['type' => 'varchar', 'length' => 15, 'not null' => TRUE],
+      'period' => ['type' => 'varchar', 'length' => 20, 'not null' => FALSE],
+      'sectionInfo' => ['type' => 'text', 'not null' => TRUE],
+      'enrollment' => ['type' => 'int', 'not null' => TRUE],
+      'recorded_enrollment' => ['type' => 'int', 'not null' => FALSE],
+      'orig_instructors' => ['type' => 'text', 'not null' => FALSE],
+      'orig_tas' => ['type' => 'text', 'not null' => FALSE],
+      'ps_instructors' => ['type' => 'text', 'not null' => FALSE],
+      'ps_tas' => ['type' => 'text', 'not null' => FALSE],
+      'modifiedby' => ['type' => 'varchar', 'length' => 10, 'not null' => FALSE],
+      'modifieddate' => ['type' => 'varchar', 'length' => 20, 'not null' => FALSE],
+      'Department' => ['type' => 'varchar', 'length' => 20, 'not null' => TRUE],
+      'EvalDepartment' => ['type' => 'varchar', 'length' => 20, 'not null' => FALSE],
+    ],
+    'primary key' => ['section_Id'],
+    'indexes' => [
+      'Department' => ['Department'],
+      'EvalDepartment' => ['EvalDepartment'],
+      'period' => ['period'],
+    ],
+  ];
+}
+
+//CE_projects
+function ceadmin_projects_table(): array {
+  return [
+    'description' => 'Stores IDs for Blue course evaluation projects',
+    'fields' => [
+      'id' => ['type' => 'serial', 'not null' => TRUE],
+      'strm' => ['type' => 'varchar', 'length' => 10, 'not null' => TRUE, 'default' => ''],
+      'internaltitle' => ['type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''],
+      'project' => ['type' => 'varchar', 'length' => 50, 'not null' => FALSE, 'default' => ''],
+      'project_id' => ['type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''],
+    ],
+    'primary key' => ['id'],
+    'indexes' => ['project_id' => ['project_id']],
+  ];
+}
+
+//CE_terms
+function ceadmin_terms_table(): array {
+  return [
+    'description' => 'Academic terms.',
+    'fields' => [
+      'code' => ['type' => 'varchar', 'length' => 10, 'not null' => TRUE],
+      'term' => ['type' => 'varchar', 'length' => 100, 'not null' => TRUE],
+      'period' => ['type' => 'varchar', 'length' => 3, 'not null' => TRUE],
+      'active' => ['type' => 'varchar', 'length' => 50, 'not null' => TRUE, 'default' => 'Y'],
+      'ImportDate' => ['type' => 'int', 'not null' => TRUE, 'default' => 0],
+    ],
+    'primary key' => ['code'],
+  ];
+}
+
+//CE_userlog
+function ceadmin_userlog_table(): array {
+  return [
+    'description' => 'User activity log.',
+    'fields' => [
+      'asurite' => ['type' => 'varchar', 'length' => 50, 'not null' => TRUE],
+      'unit' => ['type' => 'varchar', 'length' => 50, 'not null' => TRUE],
+      'term' => ['type' => 'varchar', 'length' => 50, 'not null' => TRUE],
+      'lastmodified' => ['type' => 'int', 'not null' => TRUE, 'default' => 0],
+    ],
+    'primary key' => ['asurite'],
+      'indexes' => [
+      'term' => ['term'],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_schema().
+ *
+ * Only add table schema entries for tables that do not already exist in the DB.
+ */
+function ceadmin_schema() {
+  $schema = [];
+  $tables = [
+    // Names pulled from the comments above your functions.
+    'CE_CrossLists'    => 'ceadmin_crosslists_table',
+    'CE_Departments'   => 'ceadmin_departments_table',
+    'CE_Log'           => 'ceadmin_actionslog_table',
+    'CE_Slack'         => 'ceadmin_slack_table',
+    'CE_User'          => 'ceadmin_user_table',
+    'CE_json_Instructors' => 'ceadmin_instructors_table',
+    'CE_json_Sections' => 'ceadmin_sections_table',
+    'CE_projects'      => 'ceadmin_projects_table',
+    'CE_terms'         => 'ceadmin_terms_table',
+    'CE_userlog'       => 'ceadmin_userlog_table',
+  ];
+
+  $db_schema = \Drupal::database()->schema();
+
+  foreach ($tables as $table_name => $schema_func) {
+    // Only call the schema function if the table doesn't already exist.
+    if (!$db_schema->tableExists($table_name)) {
+      if (function_exists($schema_func)) {
+        $schema[$table_name] = $schema_func();
+      }
+      else {
+        // Log so we can notice missing function definitions during deploys.
+        \Drupal::logger('ceadmin')->warning('Schema function @func for table @table not found.', [
+          '@func' => $schema_func,
+          '@table' => $table_name,
+        ]);
+      }
+    }
+    else {
+      // Table exists — skip adding it to hook_schema so install/uninstall won't try
+      // to create/clear it.
+      \Drupal::logger('ceadmin')->debug('Skipping schema for existing table @table.', [
+        '@table' => $table_name,
+      ]);
+    }
+  }
+
+  return $schema;
+}
+
+function ceadmin_update_9001() {
+    $database = \Drupal::database();
+    $schema = $database->schema();
+    $driver = $database->driver();
+    $logger = \Drupal::logger('ceadmin');
+
+    $views = [
+        'CE_CrossListSections' => "
+                    CREATE VIEW CE_CrossListSections AS select `CE_json_Sections`.`section_Id` AS `section_Id`,
+                    `CE_json_Sections`.`sectionInfo` AS `sectionInfo`,`CE_json_Sections`.`enrollment` AS `enrollment`,
+                    `CE_json_Sections`.`recorded_enrollment` AS `recorded_enrollment`,`CE_json_Sections`.`orig_instructors` AS `orig_instructors`,
+                    `CE_json_Sections`.`orig_tas` AS `orig_tas`,`CE_json_Sections`.`ps_instructors` AS `ps_instructors`,
+                    `CE_json_Sections`.`ps_tas` AS `ps_tas`,`CE_json_Sections`.`period` AS `period`,`c1`.`Crse_Dept` AS `SelUnit`,
+                    `c2`.`Crse_Dept` AS `AssocUnit` from (`CE_CrossLists` `c1` 
+                    join (`CE_CrossLists` `c2` join `CE_json_Sections` 
+                    on ((`c2`.`section_Id` = `CE_json_Sections`.`section_Id`))) on(((`c1`.`Xlist_Code` = `c2`.`Xlist_Code`) 
+                    and (`c1`.`period` = `c2`.`period`)))) where (not((`c1`.`Crse_Dept` like `c2`.`Crse_Dept`))) ;
+        ",
+        'CE_UserSections' => "
+                    CREATE VIEW CE_UserSections AS select `CE_json_Sections`.`section_Id` AS `section_Id`,
+                    `CE_json_Sections`.`sectionInfo` AS `sectionInfo`,`CE_json_Sections`.`modifiedby` AS `modifiedby`,
+                    `CE_json_Sections`.`modifieddate` AS `modifieddate`,`CE_json_Sections`.`Department` AS `Department`,
+                    `CE_json_Sections`.`period` AS `period`,`CE_User`.`asurite` AS `asurite`,`CE_CrossListSections`.`SelUnit` AS `SelUnit` 
+                    from ((`CE_json_Sections` left join `CE_User` on((`CE_json_Sections`.`Department` = `CE_User`.`unit`))) 
+                    left join `CE_CrossListSections` on((`CE_json_Sections`.`section_Id` = `CE_CrossListSections`.`section_Id`))) ;
+        ",
+    ];
+
+    if ($driver === 'mysql') {
+        foreach ($views as $view_name => $view_sql) {
+            try {
+                $normalized_select = $view_sql;
+                // Remove any trailing semicolon.
+                $normalized_select = rtrim($normalized_select, " \t\n\r\0\x0B;");
+                $normalized_select = preg_replace(
+                '/^\s*CREATE\s+VIEW\s+`?' . preg_quote($view_name, '/') . '`?\s+AS\s+/i',
+                '',
+                $normalized_select
+                );
+
+                $database->query('DROP VIEW IF EXISTS {' . $view_name . '}');
+                $database->query('CREATE VIEW {' . $view_name . '} AS ' . $normalized_select);
+
+                $logger->info('Created view @view', ['@view' => $view_name]);
+            }
+            catch (\Exception $e) {
+                $logger->error('Failed creating view @view: @msg', [
+                '@view' => $view_name,
+                '@msg' => $e->getMessage(),
+                ]);
+            }
+        }
+    }
+    else {
+        $logger->notice('Skipping view creation: DB driver @driver is not mysql.', ['@driver' => $driver]);
+    }
+}
+
+
+function ceadmin_update_9002() {
+    $database = \Drupal::database();
+    $schema = $database->schema();
+    $driver = $database->driver();
+    $logger = \Drupal::logger('ceadmin');
+
+    $tables_to_remove = [
+        'CE_LinkSurvey',
+        'CE_coursetemplateuse',
+        'CE_json_Sections_xlist',
+    ];
+
+    $ts = date('Ymd_His');
+
+    foreach ($tables_to_remove as $table) {
+        try {
+        if ($schema->tableExists($table)) {
+            $database->query('DROP TABLE IF EXISTS {' . $table . '}');
+        } else {
+            $logger->info('Table {table} not found — skipping.', ['@table' => $table]);
+        }
+        }
+        catch (\Exception $e) {
+        $logger->error('Failed to drop table {table}: {msg}', ['@table' => $table, '@msg' => $e->getMessage()]);
+        }
+    }
+}

@@ -1,0 +1,73 @@
+{#
+/**
+ * @file
+ * Template for a Application component.
+ * Available fields:
+ * - node: The node object with all information loaded.
+ * - title: The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - field_active_status
+ * - field_app_logo
+ * - field_edna_group
+ * - field_instructions
+ * - field_keywords
+ * - field_licensing_information
+ * - field_software_access
+ * - field_software_category
+ * - field_software_platform
+ * - field_software_provider
+ * - field_system_requirements
+ */
+#}
+
+{%
+  set classes = [
+  'node',
+  node.isPromoted() ? 'node--promoted',
+  node.isSticky() ? 'node--sticky',
+  not node.isPublished() ? 'node--unpublished',
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+  'w-100'
+]
+%}
+
+<article{{ attributes.addClass(classes) }}>
+  <div class="card card-degree card-horizontal">
+    <div class="d-flex align-items-center justify-content-center pl-4">
+      {{ content.field_app_logo }}
+    </div>
+    <div class="card-content-wrapper">
+      <div class="card-header">
+        <h3 class="card-title">{{ node.title.value }}</h3>
+      </div>
+      <div class="card-body">
+        <p class="card-text">{{ node.body.value }}</p>
+        <p class="card-text">{{ content.field_software_access }}</p>
+      </div>
+      <div class="card-buttons">
+        <div class="card-button">
+          <a
+            href="{{ path('entity.node.canonical', {'node': node.id}) }}"
+            class="btn btn-dark"
+            data-ga="{{ path('entity.node.canonical', {'node': node.id}) }}"
+            data-ga-name="onclick"
+            data-ga-event="link"
+            data-ga-action="click"
+            data-ga-type="internal link"
+            data-ga-region="main content"
+            data-ga-section="Download"
+          >
+            Download
+          </a>
+        </div>
+      </div>
+      <div class="card-tags">
+        {{ content.field_software_platform }}
+      </div>
+    </div>
+  </div>
+</article>

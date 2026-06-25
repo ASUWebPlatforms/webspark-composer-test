@@ -1,0 +1,275 @@
+<?php
+
+/**
+ * @file
+ * Module bootstrap for asuaec_asulocal.
+ */
+
+use Drupal\Core\Render\Markup;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Component\Serialization\Json;
+
+//===================================//
+// ASU Local Degree detail page
+//===================================//
+
+/**
+ * Implements hook_theme().
+ */
+function asuaec_asulocal_theme($existing, $type, $theme, $path) {
+  return [
+    'asuaec_asulocal_degree_card' => [
+      'variables' => [
+        'title' => NULL,
+        'button_url' => NULL,
+        'image_url' => NULL,
+      ],
+      'template' => 'asuaec-asulocal-degree-card',
+    ],
+    'asuaec_asulocal_degree_hero' => [
+      'variables' => [
+        'title' => NULL,
+        'image_url' => NULL,
+      ],
+      'template' => 'asuaec-asulocal-degree-hero',
+    ],
+    'asuaec_asulocal_degree_details' => [
+      'variables' => [
+        'degree' => NULL,
+        'id' => NULL,
+        'title' => NULL,
+        'short_description' => NULL,
+        'degree_image' => NULL,
+        'detail_page' => NULL,
+
+        'code' => NULL,
+        'program_code' => NULL,
+        'sub_plan_code' => NULL,
+        'concentration_code' => NULL,
+
+        'next_start_date' => NULL,
+        'weeks_per_class' => NULL,
+        'total_classes' => NULL,
+        'total_credit_hours' => NULL,
+
+        'featured_courses_title' => NULL,
+        'featured_courses_description' => NULL,
+
+        'related_careers_title' => NULL,
+        'related_careers_description' => NULL,
+        'related_careers_image' => NULL,
+
+        'local_degree_url' => NULL,
+
+        'curriculum_courses' => [],
+        'career_items' => [],
+      ],
+    ],
+  ];
+}
+
+//===================================//
+// ASU Local Webform
+//===================================//
+
+/**
+ * Implements hook_form_alter().
+ */
+function asuaec_asulocal_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  $target_ids = [
+    'webform_submission_online_rfi_add_form',
+    'webform_submission_online_rfi_edit_form',
+    'webform_submission_online_rfi_node_1_add_form',
+    'webform_submission_online_rfi_node_1_edit_form',
+    // 'webform_submission_online_rfi_block_content_950_add_form', // DDEV
+    // 'webform_submission_online_rfi_block_content_950_edit_form', // DDEV
+    // 'webform_submission_online_rfi_block_content_951_add_form', // PROD
+    // 'webform_submission_online_rfi_block_content_951_edit_form', // PROD
+    // 'webform_submission_online_rfi_block_content_961_add_form', // DEV
+    // 'webform_submission_online_rfi_block_content_961_edit_form', // DEV
+  ];
+
+  // Pull block_content IDs from config (textarea: one per line).
+  $config = \Drupal::config('asuaec_asulocal.customadmin_settings');
+  $raw = (string) $config->get('online_rfi_block_content_ids');
+
+  if (!empty($raw)) {
+    $lines = preg_split("/\r\n|\n|\r/", trim($raw));
+    foreach ($lines as $id) {
+      $id = trim($id);
+      if ($id === '' || !ctype_digit($id)) {
+        continue;
+      }
+      $target_ids[] = "webform_submission_online_rfi_block_content_{$id}_add_form";
+      $target_ids[] = "webform_submission_online_rfi_block_content_{$id}_edit_form";
+      $target_ids = array_unique($target_ids);
+    }
+  }
+
+  if (!in_array($form_id, $target_ids, TRUE)) {
+    return;
+  }
+
+  // Make sure these elements exist
+  if (empty($form['elements']['area_of_interest']) || empty($form['elements']['program_of_interest'])) {
+    return;
+  }
+
+  // Aliases for convenience
+  $area_el = &$form['elements']['area_of_interest'];
+  $prog_el = &$form['elements']['program_of_interest'];
+
+  //---------------------------------------------------
+  // Populate Area of interest options dynamically
+  //---------------------------------------------------
+
+  // Populate Area of interest dynamically
+  $area_el['#type'] = 'select';
+  $area_el['#empty_option'] = t('- Please select -');
+  $area_el['#options'] = asuaec_asulocal_fetch_area_options_online_ugrad();
+
+  // Support default selection from URL
+  $request = \Drupal::request();
+  $default_area = (string) $request->query->get('area_of_interest', '');
+  if ($default_area === '') {
+    $default_area = (string) ($form_state->getValue('area_of_interest') ?? '');
+  }
+
+  if ($default_area !== '' && !isset($area_el['#options'][$default_area])) {
+    $needle = mb_strtolower($default_area);
+    foreach ($area_el['#options'] as $key => $label) {
+      if (mb_strtolower((string) $label) === $needle) {
+        $default_area = (string) $key;
+        break;
+      }
+    }
+  }
+
+  $area_el['#default_value'] = $default_area;
+
+  //--------------------------------------------------------------------------
+  // Populate Program of Interest based on the selection of Area of Interest
+  //--------------------------------------------------------------------------
+
+  // Force program to be a select
+  $prog_el['#type'] = 'select';
+  $prog_el['#empty_option'] = t('- Please select -');
+
+  // Wrap program select so AJAX replaces it without jumping.
+  $prog_el['#prefix'] = '<div id="program-of-interest-wrapper">';
+  $prog_el['#suffix'] = '</div>';
+
+  // Add AJAX to area_of_interest.
+  $area_el['#ajax'] = [
+    'callback' => 'asuaec_asulocal_programs_ajax_callback',
+    'event' => 'change',
+    'wrapper' => 'program-of-interest-wrapper',
+    'disable-refocus' => TRUE,
+  ];
+
+  // Determine selected area (works on initial load + after change).
+  $area = (string) ($form_state->getValue('area_of_interest') ?? $default_area ?? '');
+
+  // Build options for program_of_interest based on area.
+  $prog_el['#options'] = [];
+  if ($area !== '') {
+    $prog_el['#options'] = asuaec_asulocal_fetch_program_options_online_ugrad($area);
+  }
+}
+
+
+/**
+ * AJAX callback: return the program element wrapper.
+ */
+function asuaec_asulocal_programs_ajax_callback(array &$form, FormStateInterface $form_state) {
+  return $form['elements']['program_of_interest'];
+}
+
+/**
+ * Fetch program options from your custom JSON endpoint.
+ *
+ * Returns array like: ['UGBA-BAACCBS' => 'Accountancy (BS)', ...]
+ */
+function asuaec_asulocal_fetch_program_options_online_ugrad(string $area): array {
+  $url = \Drupal::request()->getSchemeAndHttpHost()
+    . '/asuaec-asulocal/json/wsdirect/degrees/online/ugrad/'
+    . rawurlencode($area);
+
+  try {
+    $resp = \Drupal::httpClient()->get($url, [
+      'headers' => ['Accept' => 'application/json'],
+    ]);
+    $data = Json::decode((string) $resp->getBody()) ?: [];
+    return is_array($data) ? $data : [];
+  }
+  catch (\Throwable $e) {
+    \Drupal::logger('asuaec_asulocal')->error('Program options fetch failed: @m', ['@m' => $e->getMessage()]);
+    return [];
+  }
+}
+
+/**
+ * Fetch Area of interest options from custom JSON endpoint.
+ *
+ * Returns array like: ['Business' => 'Business', ...]
+ */
+function asuaec_asulocal_fetch_area_options_online_ugrad(): array {
+  $cid = 'asuaec_asulocal:area_options:online:ugrad';
+  $cache = \Drupal::cache()->get($cid);
+  if ($cache && is_array($cache->data)) {
+    return $cache->data;
+  }
+
+  $url = \Drupal::request()->getSchemeAndHttpHost()
+    . '/asuaec-asulocal/json/wsdirect/categories/online/ugrad';
+
+  try {
+    $resp = \Drupal::httpClient()->get($url, [
+      'headers' => ['Accept' => 'application/json'],
+    ]);
+    $data = Json::decode((string) $resp->getBody()) ?: [];
+
+    // Ensure it is a simple associative array.
+    $options = is_array($data) ? $data : [];
+
+    // Sort labels nicely.
+    asort($options);
+
+    // Cache for 1 hour
+    \Drupal::cache()->set($cid, $options, time() + 3600);
+
+    return $options;
+  }
+  catch (\Throwable $e) {
+    \Drupal::logger('asuaec_asulocal')->error('Area options fetch failed: @m', ['@m' => $e->getMessage()]);
+    return [];
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function asuaec_asulocal_page_attachments_alter(array &$attachments) {
+
+  // Remove Drupal's default canonical only for /degrees/ pages. Added on 3/11/2026.
+  $path = \Drupal::service('path.current')->getPath();
+  if (strpos($path, '/degrees/') !== 0) {
+    return;
+  }
+
+  if (empty($attachments['#attached']['html_head'])) {
+    return;
+  }
+
+  foreach ($attachments['#attached']['html_head'] as $key => $item) {
+    if (empty($item[0]['#tag']) || $item[0]['#tag'] !== 'link') {
+      continue;
+    }
+
+    $attributes = $item[0]['#attributes'] ?? [];
+    if (($attributes['rel'] ?? '') === 'canonical') {
+      unset($attachments['#attached']['html_head'][$key]);
+    }
+  }
+}

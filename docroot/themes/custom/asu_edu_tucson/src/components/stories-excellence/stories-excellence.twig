@@ -1,0 +1,36 @@
+<div class="container stories-of-excellence p-0">
+  <h2><span class="highlight-gold">{{ 'Stories of excellence'|t }}</span></h2>
+  <div class="mt-5 row m-0">
+  {% for card in cards %}
+    <div class="excellence-card col-lg-4 col-md-6 col-sm-12 p-0">
+      <div class="image-holder"><img src="{{ card.media }}"></div>
+      <div class="content-holder mx-2 p-2">
+        {% include '@renovation/headings/card-heading.twig' with {
+          html_tag : 'h3',
+          heading: card.heading,
+        } %}
+        <div class="card-body">{{ card.body|raw }}</div>
+        <div class="card-button">
+          {% for cta in card.ctas %}
+            {% include '@renovation/buttons/button-action.twig' with {
+              url: cta.uri,
+              title: cta.title,
+              button_color: cta.options.attributes.class,
+              target: cta.options.attributes.target
+            } %}
+          {% endfor %}
+        </div>
+      </div>
+      {% if card.url %}
+        <a
+          class="link-wrap"
+          href="{{ card.url }}"
+          data-ga-story-excellence = "{{ card.heading | lower }}"
+        >
+        </a>
+      {% endif %}
+    </div>
+  {% endfor %}
+  </div>
+</div>
+{{ attach_library('asu_edu_tucson/stories-excellence') }}

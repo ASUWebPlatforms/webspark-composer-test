@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ * Template for a Application component.
+ * Available fields:
+ * - node: The node object with all information loaded.
+ * - title: The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - field_active_status
+ * - field_app_logo
+ * - field_edna_group
+ * - field_instructions
+ * - field_keywords
+ * - field_licensing_information
+ * - field_software_access
+ * - field_software_category
+ * - field_software_platform
+ * - field_software_provider
+ * - field_system_requirements
+ */
+#}
+
+{%
+  set classes = [
+    'node',
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    node.bundle|clean_class,
+    node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+  ]
+%}
+
+<article{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {% block content %}
+    {{ content }}
+  {% endblock %}
+</article>

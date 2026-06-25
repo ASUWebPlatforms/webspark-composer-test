@@ -1,0 +1,34 @@
+{#
+/**
+ * @file
+ * Template for a 'form' element.
+ *
+ * Available variables
+ * - attributes: A list of HTML attributes for the wrapper element.
+ * - children: The child elements of the form.
+ *
+ * @see template_preprocess_form()
+ *
+ * @ingroup themeable
+ */
+#}
+<h3><span class="highlight-gold">{{ 'Find my degree program'|t }}</span></h3>
+
+<form{{ attributes }}>
+  {{ children }}
+</form>
+
+<div class="bg-white pt-2">
+  <a
+    href="https://degrees.apps.asu.edu"
+    data-ga-rankings-carousel-event = "link"
+    data-ga-rankings-carousel-action = "click"
+    data-ga-rankings-carousel-name = "onclick"
+    data-ga-rankings-carousel-type = "internal link"
+    data-ga-rankings-carousel-region = "main content"
+    data-ga-rankings-carousel-section = "find my degree program"
+    data-ga-rankings-carousel = "discover what's right for me"
+  >
+    {{ 'Discover what\'s right for me'|t }}
+  </a>
+</div>

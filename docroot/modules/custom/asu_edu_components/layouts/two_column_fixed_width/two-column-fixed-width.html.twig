@@ -1,0 +1,58 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display two column fixed width layout.
+ *
+ * Available variables:
+ * - content: The content for this layout.
+ * - attributes: HTML attributes for the layout wrapper.
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+    'layout',
+    'layout--two-column-fixed-width'
+  ]
+%}
+
+{% if settings.extra_classes %}
+  {% set classes =  classes|merge(settings.extra_classes) %}
+{% endif %}
+
+{% if content %}
+  <div{{ attributes.addClass('max-size-container', 'center-container', classes) }}>
+
+    <div class="container">
+
+      <div class="row">
+
+        {% if content.top %}
+          <div {{ region_attributes.top.addClass('layout__region', 'layout__region--top col col-12 col-lg-12') }}>
+            {{ content.top }}
+          </div>
+        {% endif %}
+
+      </div>
+
+      <div class="row">
+
+        {% if content.left %}
+          <div {{ region_attributes.left.addClass('layout__region', 'layout__region--left col col-12 col-lg-6') }}>
+            {{ content.left }}
+          </div>
+        {% endif %}
+
+        {% if content.right %}
+          <div {{ region_attributes.right.addClass('layout__region', 'layout__region--right col col-12 col-lg-6') }}>
+            {{ content.right }}
+          </div>
+        {% endif %}
+
+      </div>
+
+    </div>
+
+  </div>
+{% endif %}

@@ -1,0 +1,10 @@
+name: svyreport - Survey-Reporting
+description: Survey-Reporting Site - UOEEE
+package: UOEEE
+type: module
+version: 1.01
+core_version_requirement: ^10
+dependencies:
+  - drupal:block
+libraries:
+  - svyreport/svyreport-app

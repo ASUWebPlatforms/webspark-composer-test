@@ -1,0 +1,7 @@
+<?php
+/**
+ * Implements hook_page_attachments().
+ */
+function kwall_jumplinks_page_attachments(array &$attachments) {
+  $attachments['#attached']['library'][] = 'kwall_jumplinks/kwall_jumplinks';
+}

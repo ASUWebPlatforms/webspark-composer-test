@@ -1,0 +1,19 @@
+<?php
+
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_theme_suggestions_page_alter().
+ */
+function renovation_global_launch_suggestions_page_alter(array &$suggestions, array $variables) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+
+  // If node canonical route, check bundle.
+  if ($route_name === 'entity.node.canonical') {
+    $node = \Drupal::routeMatch()->getParameter('node');
+    if ($node instanceof NodeInterface && $node->bundle() === 'unibuddy') {
+      // Use node--unibuddy.html.twig
+      $suggestions[] = 'page__unibuddy';
+    }
+  }
+}

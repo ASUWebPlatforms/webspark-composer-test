@@ -1,0 +1,76 @@
+{#
+@file
+The template for a Access Request Modal.
+
+The trigger for this modal is a button or anchor that contains the following data attributes:
+- data-bs-toggle
+- data-bs-target
+- data-bs-group-name
+
+Note that the name of the group should be passed in the "data-bs-group-name" attribute.
+This will be used to populate the group name in the modal.
+
+Additional data attributes can be added to the trigger to customize the modal as needed, for example:
+- data-modal-title
+- data-modal-content
+
+Example use:
+
+<a href="#"
+  class="btn btn-primary btn-sm"
+  data-bs-toggle="modal"
+  data-bs-target="#access-request-modal"
+  data-bs-group-name="Sample Group">Request Group Access</a>
+{{ include('@analytics/access-request-modal.html.twig') }}
+#}
+<div class="modal fade"
+  id="access-request-modal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="access-request-modal-label"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="access-request-modal-label">Request Group Access</h3>
+        {# <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> #}
+      </div>
+      <div class="modal-body">
+        <p>To request access to this group, please navigate to <a href="https://asu.service-now.com/sp?id=sc_cat_item&sys_id=2e29953c13dd530094ef7e776144b0a2" target="_blank">this access form</a> and complete the following steps:</p>
+        <ol>
+          <li>Complete the section with your personal information.</li>
+          <li>Under Data Area Type, select your intended permissions: Viewer or Power User.
+            <ul>
+              <li>Viewer access to a group allows you to <strong><em>view</em></strong> all content associated with the group.</li>
+              <li>Power User access to a group allows you to <strong><em>view and edit</em></strong> all content associated with the group.</li>
+            </ul>
+          </li>
+          <li>Under Data Area Name, please select <strong>"Analytics Group | <span class="access-request-modal-group-name"></span>"</strong>.</li>
+          <li>After the drop downs are complete, clearly articulate your reason for access and submit your request.</li>
+        </ol>
+        <p>For any questions about access, please contact the <a href="https://asu.enterprise.slack.com/archives/C01A454GNGY" target="_blank">#ask_analytics</a> slack channel.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-maroon btn-md" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('access-request-modal');
+
+    if (modal) {
+      modal.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget;
+        const group = button.getAttribute('data-bs-group-name');
+        const modalGroupName = modal.querySelector('.access-request-modal-group-name');
+
+        // Update the modal's content.
+        modalGroupName.textContent = group;
+      })
+    }
+  });
+</script>

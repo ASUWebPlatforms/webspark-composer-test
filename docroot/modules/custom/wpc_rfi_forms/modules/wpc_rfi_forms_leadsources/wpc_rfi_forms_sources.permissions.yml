@@ -1,0 +1,10 @@
+'delete leadsource entity':
+  title: Delete entity content.
+'add leadsource entity':
+  title: Add entity content
+'view leadsource entity':
+  title: View entity content
+'edit leadsource entity':
+  title: Edit entity content
+'administer leadsource entity':
+  title: Administer settings

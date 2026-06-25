@@ -1,0 +1,22 @@
+
+{% set firstname          = view.field.field_first_name.original_value %}
+{% set lastname           = view.field.field_last_name.original_value %}
+{% set linkedin           = view.field.field_linked_in.original_value %}
+{% set twitter            = view.field.field_twitter.original_value %}
+{% set instagram          = view.field.field_instagram.original_value %}
+{% set facebook           = view.field.field_facebook.original_value %}
+{% set youtube            = view.field.field_youtube.original_value %}
+
+{% if (linkedin is not empty) or (twitter is not empty) or (instagram is not empty) or (facebook is not empty) or (youtube is not empty) %}
+<div class="views-field views-field-nothing">
+  <span class="field-content expert-social-media-icon">
+    <h4>Find {{ firstname }} {{ lastname }}</h4>
+    {% if (twitter is not empty) %} <a href="{{ twitter }}"><span title="X / Twitter Social Media Icon" class="fab fa-square-x-twitter"></span></a>{% endif %}
+    {% if (linkedin is not empty) %} <a href="{{ linkedin }}"><span title="LinkedIn Social Media Icon" class="fab fa-linkedin"></span></a>{% endif %}
+    {% if (facebook is not empty) %} <a href="{{ facebook }}"><span title="Facebook Social Media Icon" class="fab fa-facebook-square"></span></a>{% endif %}
+    {% if (youtube is not empty) %} <a href="{{ youtube }}"><span title="YouTube Social Media Icon" class="fab fa-youtube-square"></span></a>{% endif %}
+    {% if (instagram is not empty) %} <a href="{{ instagram }}"><span title="Instagram Social Media Icon" class="fab fa-instagram-square"></span></a>{% endif %}
+    <hr>
+  </span>
+</div>
+{% endif %}

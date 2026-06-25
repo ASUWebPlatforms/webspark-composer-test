@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function access_theme_preprocess_node(&$variables)
+{
+  // Add the node title to the content array so it can be accessed in the template.
+  $variables['title'] = [
+    '#markup' => '<h3>' . $variables['node']->getTitle() . '</h3>',
+    '#allowed_tags' => ['h3'],
+  ];
+}
+

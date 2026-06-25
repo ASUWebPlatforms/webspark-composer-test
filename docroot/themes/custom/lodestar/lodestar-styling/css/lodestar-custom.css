@@ -1,0 +1,210 @@
+/* Job Board */
+/* ============================================== */
+
+.recent-job-postings-group {
+	columns: 2;
+}
+
+.recent-job-postings-group .views-row {
+	display: inline-block;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+	border-bottom: 1px solid #d0d0d0;
+	width: 100%;
+}
+
+.recent-job-postings-org {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.recent-job-postings-title {
+	margin-top: .1rem;
+	margin-bottom: .3rem;
+}
+
+.job-postings-search-result {
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+	border-bottom: 1px solid #d0d0d0;
+}
+
+.job-postings-search-result p {
+	margin-top: 0.5rem;
+}
+
+.job-postings-page-title {
+	margin-top: 3rem;
+}
+
+.job-postings-page-changed {
+	font-weight: bold;
+	margin-bottom: 1rem;
+}
+
+.job-postings-page-details-padded {
+	padding-bottom: 1.5rem;
+}
+
+.job-postings-page-anchor-links {
+	margin-top: 1.3rem;
+}
+
+.job-postings-details-header h5 {
+	margin-bottom: 0.2rem;
+}
+
+
+/* Job Search filters */
+/* ============================================== */
+
+#views-exposed-form-job-search-listings-block-1 {
+	background-color: #fafafa;
+	padding: 1rem 0.75rem 0.5rem 0.75rem;
+	margin-bottom: 2rem;
+}
+
+#views-exposed-form-job-search-listings-block-1 .form-group {
+	margin: 0 0.25rem 1rem;
+}
+
+.select2-container--default .select2-selection--multiple {
+	border-color: #747474;
+	border-radius: 0;
+	padding-right: 0;
+	padding-bottom: 0;
+}
+
+.select2-container .select2-search--inline .select2-search__field {
+	padding: 0.5rem;
+	margin-top: 0;
+	margin-left: 0;
+	height: 40px;
+	vertical-align: middle;
+}
+
+
+/* NMI course listings */
+/* ============================================== */
+
+article.nmi-course-listing .btn {
+	white-space: normal;
+	margin-top: 0.5rem;
+}
+
+article.nmi-course-listing .content img.img-fluid {
+	padding-bottom: 1rem;
+}
+
+/* Flippy pager tweaks */
+/* ============================================== */
+
+ul.flippy {
+	margin-top: 3rem;
+	padding-inline-start: 0;
+}
+
+ul.flippy li {
+	display: block;
+	white-space: normal;
+}
+
+li.flippy-previous {
+	padding-left: 0 !important;
+}
+
+li.flippy-previous:before {
+	content: 'Previous post: '
+}
+
+li.flippy-next {
+	padding-left: 0 !important;
+}
+
+li.flippy-next:before {
+	content: 'Next post: '
+}
+
+/* Newsroom */
+/* ============================================== */
+
+.newsroom-grid-item {
+	border-bottom: 1px solid rgba(0,0,0,.125);
+	padding-bottom: 2rem;
+	margin-bottom: 3rem;
+}
+
+.uds-story-hero .content h1.article {
+	margin-top: 2rem;
+}
+
+/* Blog posts */
+/* ============================================== */
+
+div.blog-profile-photo img {
+	border-radius: 50%;
+}
+
+div.blog-post-author {
+	font-weight: bold;
+	margin-top: 1rem;
+	font-size: 1.1rem;
+}
+
+div.blog-post-author p:before {
+	content: 'By ';
+}
+
+div.blog-post-author-title {
+	font-style: italic;
+	font-size: 0.9rem;
+}
+
+div.blog-post-graphic img.img-fluid {
+	max-width: 95%;
+	margin-bottom: 2rem;
+}
+
+div.blog-post-date {
+	font-style: italic;
+}
+
+/* Knowledge Specialist Directory */
+/* ============================================== */
+
+.specialist-directory-wrapper {
+	margin-bottom: 3rem;
+}
+
+/* Knowledge Specialist and Leadership Council taxonomy pages */
+/* ============================================== */
+
+div.directory-profile-photo img {
+	border-radius: 50%;
+}
+
+.taxonomy-directory-title {
+	padding-top: 0.5rem;
+	font-weight: bold;
+}
+
+.taxonomy-directory-role {
+	padding-top: 0.5rem;
+	font-style: italic;
+}
+
+.taxonomy-directory-bio p {
+	margin-top: .75rem;
+}
+
+/* Responsive image tweaks to fix Webspark issue in 2.10 */
+/* ============================================== */
+
+.align-center {
+	width: max-content;
+	max-width: 100% !important;
+}
+
+.align-center img {
+	max-width: 100% !important;
+}

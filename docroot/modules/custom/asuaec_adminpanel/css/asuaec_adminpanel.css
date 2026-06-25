@@ -1,0 +1,22 @@
+/* Table for number of registrants */
+.adminpanel-calendar-expasu .calendar-view-day {
+    padding: 0;
+}
+.adminpanel-calendar-expasu caption {
+    display: none;
+}
+.adminpanel-calendar-expasu ul.calendar-view-pager {
+    list-style: none;
+    padding: 0;
+}
+.adminpanel-calendar-expasu li.pager__item.pager__current > * {
+    font-size: larger !important;
+}
+/* For Additional tour registrants page */
+.addtour-registrants caption {
+    caption-side: top;
+}
+
+h2 {
+    max-width: unset;
+}

@@ -1,0 +1,30 @@
+name: 'Blog posts'
+description: 'Provides Blog posts content type and related configuration. Customized blog posts'
+type: module
+core_version_requirement: ^8.9 || ^9 || ^10
+dependencies:
+  - allowed_formats
+  - block
+  - block_content
+  - datetime
+  - feeds
+  - feeds_tamper
+  - field
+  - file
+  - image
+  - layout_builder
+  - layout_builder_restrictions
+  - layout_discovery
+  - menu_ui
+  - node
+  - options
+  - path
+  - responsive_image
+  - svg_image
+  - system
+  - taxonomy
+  - text
+  - user
+  - views
+  - webform
+  - webspark_module_renovation_layouts

@@ -1,0 +1,52 @@
+{#
+/**
+ * @file
+ * Default theme implementation for addtocal_links.
+ *
+ * Available variables:
+ * - attributes: An associative array of element attributes.
+ * - button_text: The addtocal button text.
+ * - button_attributes: An associative array of button attributes.
+ * - menu_attributes: An associative array of menu attributes.
+ * - items: List of add to cal links.
+ *
+ * @see template_preprocess_addtocal_links()
+ *
+ * @ingroup themeable
+ */
+#}
+{#{{ dump(button_attributes.id) }}#}
+{#{{ dump(unique_id) }}#}
+
+<!-- Button trigger modal -->
+<div class="addtocal-container">
+<button class="addtocal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop-{{ unique_id }}">
+    {{ button_text }}
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop-{{ unique_id }}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel-{{ unique_id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel-{{ unique_id }}">Add to calendar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="addtocal-links">
+                    {% for type, item in items %}
+                        <li class="addtocal-link" data-addtocal-type="{{ type }}">
+                            <a href="{{ item.url }}" target="_blank" rel="noopener" aria-label="{{ item['aria-label'] }}">{{ item.title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-md btn-gray" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,13 @@
+{% set data = {
+  'title': node.title.value,
+  'content': node.type.entity.label|title,
+  'button': {
+    'url': node|entity_url,
+    'color': 'maroon',
+    'text': 'View article',
+  }
+} %}
+
+<article class="article__teaser--minimal">
+  {{ include('@analytics/teaser-minimal.html.twig', data) }}
+</article>

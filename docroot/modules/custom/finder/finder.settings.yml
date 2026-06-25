@@ -1,0 +1,14 @@
+title: Finder
+subtitle: This is the subtitle
+question_header: These are the questions
+service_header: These are the services
+service_detail: This is where the disclaimer for contingent services is put
+chart_header: This is the chart
+email_form_header: This is the email email_form
+email_address: example@example.com
+email_name: Example
+main_header: Main Header
+button_select_all: Select All
+button_clear_selections: Clear Selections
+footer_disclaimers: Appears below table results
+asu_responsibilities: This text appears on the table detail with every service

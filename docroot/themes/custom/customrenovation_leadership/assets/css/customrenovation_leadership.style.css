@@ -1,0 +1,379 @@
+:focus {
+  outline: 0;
+  box-shadow: 0 0 8px #00baff !important;
+}
+
+body {
+  font-family: Arial, Helvetica, "Nimbus Sans L", "Liberation Sans", FreeSans, sans-serif;
+  font-weight: 400;
+  color: #191919;
+}
+
+.text-white {
+  color: #e8e8e8 !important;
+}
+
+.text-underline {
+  text-decoration: underline;
+}
+
+.text-capitalize {
+  text-transform: capitalize !important;
+}
+
+u,
+ins {
+  -webkit-text-decoration-line: none;
+          text-decoration-line: none;
+  font-style: italic;
+}
+
+abbr {
+  -webkit-text-decoration-line: none !important;
+          text-decoration-line: none !important;
+  -webkit-text-decoration-style: none !important;
+          text-decoration-style: none !important;
+  -webkit-text-decoration-color: initial !important;
+          text-decoration-color: initial !important;
+}
+
+b,
+strong {
+  font-weight: 700 !important;
+}
+
+/* Fix btn-primary issue */
+.btn-primary {
+  background-color: #8c1d40;
+  color: #ffffff;
+}
+.btn-primary a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  color: #ffffff;
+  background-color: #8c1d40;
+  border-color: #8c1d40;
+}
+
+/* remove extra padding from nested containers */
+.container .container {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* fix pagination alignment to be centered */
+.pagination {
+  justify-content: center;
+}
+
+/* fix gap between top of main section and main menu */
+@media (min-width: 1224px) {
+  .page main.pt-5 {
+    padding-top: 2rem !important;
+  }
+}
+/* fix image carousel bullet on black bg */
+.glide__bullet--active {
+  border: 1px solid #d0d0d0 !important;
+}
+
+.goldbg {
+  background-color: #ffc627;
+}
+
+/* Size degree programs overview grid */
+.degreeprograms .row .col-lg-6 img {
+  width: auto;
+  display: block;
+  margin: 0;
+  clear: both;
+}
+
+.degreeprograms .row .col-lg-6 {
+  margin-bottom: 3px;
+  margin-top: 3px;
+}
+
+.degreeprograms .row .col-lg-6 {
+  padding: 25px;
+}
+
+@media only screen and (min-width: 992px) {
+  .bottom-row {
+    border-top: 5px dotted #000;
+  }
+
+  .degreeprograms .row .col-lg-6 {
+    border-right: 5px dotted #000;
+  }
+
+  .degreeprograms .row .col-lg-6 img {
+    height: 70px;
+    width: auto;
+  }
+
+  .degreeprograms .row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .degreeprograms .row .col-lg-6 p {
+    clear: both;
+    max-width: 300px;
+  }
+
+  .degreeprograms {
+    margin-bottom: 48px;
+  }
+}
+.degreeprograms .row .col-lg-6:last-child {
+  border-right: none;
+  padding-right: 0px;
+}
+
+.degreeprograms .row .col-lg-6 {
+  margin-bottom: 3px;
+  margin-top: 3px;
+}
+
+.firstyear.svg, .transferstudents.svg, .graduatestudents.svg, .veterans.svg {
+  height: 80px;
+}
+
+/* fix ranking comparison text bg and wrap */
+.rcontbox p {
+  font-size: 0.875rem;
+  line-height: 1.43rem;
+  letter-spacing: -0.01rem;
+}
+
+.rcontbox p span.highlight-black {
+  box-shadow: 0.3em 0 0 #191919, 0.3em 0 0 #191919;
+  background: #191919;
+  color: #ffc627;
+  padding: 5px;
+  padding-left: 0px;
+  box-shadow: -5px 0 0 #000;
+}
+
+.rcontbox p span[class^=highlight-] {
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/** About Page grid **/
+.icon-text-grid__header-text {
+  min-height: 5rem;
+}
+
+.icon-text-grid__text strong {
+  font-size: 1.5rem;
+}
+
+.icon-text-grid {
+  display: grid;
+  grid-template-columns: 50px auto;
+  -moz-column-gap: 2rem;
+       column-gap: 2rem;
+  row-gap: 2rem;
+}
+
+.icon-text-grid__icon {
+  padding-top: 0.5rem;
+}
+.icon-text-grid__icon img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Styling for sidebar CTA on contact and faq pages. */
+.contact__sidebar {
+  background: #191919;
+  padding: 2rem;
+  color: #fff;
+}
+.contact__sidebar h2 {
+  margin-top: 0;
+}
+
+/* Change color of cantact page submit button. */
+.webform-submission-webform-7-form .webform-button--submit {
+  background-color: #ffc627;
+  border-color: #ffc627;
+  color: #212529;
+}
+
+.overview-icon {
+  margin-bottom: 2rem;
+}
+
+/* Hide links that anon users cannot access in footer menu and main menu */
+a.nav-link[data-ga-footer=Inaccessible] {
+  display: none;
+}
+
+.authenticated .navbar a[href="/login"],
+.authenticated .navbar a[href="/member-resources-login"] {
+  display: none;
+}
+
+/* Fix weird background issue for mobile */
+.layout__full-width {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.layout__full-width .layout__region--first {
+  width: 100%;
+}
+
+/* end bg fix */
+.la-homepage .bg.morse-code-black.bg-top.bg-percent-100 {
+  background-image: url(../../img/home-background-buildings.png);
+  background-position: center;
+  background-size: cover;
+}
+
+.hiw h2 {
+  margin-bottom: 3rem;
+}
+
+.hiw__icon {
+  min-height: 4rem;
+}
+.hiw__icon img {
+  max-width: 50px;
+}
+
+.hiw__description {
+  margin-bottom: 2rem;
+  min-height: 5rem;
+  max-width: 18rem;
+}
+
+.hiw .btn {
+  margin-bottom: 2rem;
+}
+
+.wml__icon {
+  min-height: 2rem;
+  max-width: 40px;
+  margin-top: 1rem;
+}
+.wml__icon.icon_2 {
+  max-width: 28px;
+}
+
+.wml__description {
+  margin-bottom: 2rem;
+  min-height: 5rem;
+  max-width: 30rem;
+}
+
+.la-homepage .training {
+  display: flex;
+  justify-content: space-between;
+}
+.la-homepage .training > div:last-child {
+  display: flex;
+}
+.la-homepage .training .training__icon {
+  max-width: 44px;
+}
+.la-homepage .training .training__text {
+  max-width: 20rem;
+  margin-left: 1rem;
+  margin-top: 0.25rem;
+}
+
+@media (min-width: 1920px) {
+  .la-homepage .block-inline-blockvideo-hero .uds-video-hero {
+    height: 60rem;
+  }
+}
+@media (max-width: 992px) and (min-width: 576px) {
+  .la-homepage .block-inline-blockvideo-hero .uds-video-hero {
+    height: 50rem;
+  }
+}
+@media (max-width: 992px) {
+  .la-homepage .block-inline-blockvideo-hero .uds-video-hero .poster {
+    -o-object-fit: cover;
+       object-fit: cover;
+  }
+}
+
+#views-exposed-form-participants-block-1,
+#views-exposed-form-resources-block-1,
+#views-exposed-form-library-block-1,
+#views-exposed-form-calendar-block-1 {
+  height: auto;
+}
+#views-exposed-form-participants-block-1 > div,
+#views-exposed-form-resources-block-1 > div,
+#views-exposed-form-library-block-1 > div,
+#views-exposed-form-calendar-block-1 > div {
+  float: left;
+  padding-right: 1rem;
+  min-height: 5rem;
+  margin-bottom: 1rem;
+}
+#views-exposed-form-participants-block-1 .form-actions,
+#views-exposed-form-resources-block-1 .form-actions,
+#views-exposed-form-library-block-1 .form-actions,
+#views-exposed-form-calendar-block-1 .form-actions {
+  float: none;
+  clear: both;
+  width: 100%;
+}
+
+#views-exposed-form-participants-block-1 > div {
+  width: 100%;
+}
+@media (min-width: 36rem) {
+  #views-exposed-form-participants-block-1 > div {
+    width: 50%;
+  }
+}
+@media (min-width: 48rem) {
+  #views-exposed-form-participants-block-1 > div {
+    width: 33%;
+  }
+}
+@media (min-width: 62rem) {
+  #views-exposed-form-participants-block-1 > div {
+    width: 20%;
+  }
+}
+#views-exposed-form-participants-block-1 .form-select option:disabled {
+  display: none;
+}
+
+.participants-list td.views-field-user-picture {
+  min-width: 100px;
+  padding: 0.25rem;
+}
+
+.leadership-team .views-row {
+  display: flex;
+  margin-bottom: 3rem;
+}
+.leadership-team h3 {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+}
+.leadership-team .views-field-user-picture {
+  margin-right: 2rem;
+  max-width: 306px;
+}
+
+.toolkit-list .views-field-nothing,
+.library-list .views-field-nothing,
+.leadership-event-cards .views-field-nothing {
+  height: 100%;
+}
+/*# sourceMappingURL=customrenovation_leadership.style.css.map*/

@@ -1,0 +1,50 @@
+{#
+/**
+ * @file
+ * Template for a block.
+ */
+#}
+{% set classes = [
+  'row',
+  'block',
+  'block-' ~ configuration.provider|clean_class,
+  'block-' ~ plugin_id|clean_class,
+  'block-inline-blockasu-edu-anim-content-buttons'
+] %}
+{% set class_position = content.field_content_position[0]['#markup'] == 'right' ? 'uds-card-and-image-right'%}
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {% if label %}
+    {% block label %}
+      <h2{{ title_attributes }}>{{ label }}</h2>
+    {% endblock %}
+  {% endif %}
+  {{ title_suffix }}
+  {{ content.field_anchor_menu_settings }}
+  {% block content %}
+    <div class="block block-layout-builder block-inline-blockasu-edu-anim-content-buttons">
+        <div class="animated-content-section my-5 text-white">
+            <div class="content-section my-2" style="background-image: url({{ file_url(content.field_media[0]['#media'].field_media_image.entity.uri.value) }})">
+                <div class="image-holder"></div>
+                <div class="content-holder px-4">
+                    {% include '@renovation/headings/heading.twig' with {
+                      html_tag : 'h2',
+                      heading: content.field_heading.0,
+                    } %}
+                    
+                    <div class="hidden-details">
+                        <div class="long-text mt-1 mb-3">
+                          <p>{{content.body}}</p>
+                        </div>
+                        <div class="button-area">
+                          <!-- START INSERT: Button Component -->
+                            {{ content.field_cta }}
+                          <!-- END INSERT: Button Component -->
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+  {% endblock %}
+</div>

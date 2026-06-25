@@ -1,0 +1,58 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.middleeast_country
+  module:
+    - taxonomy
+id: middle_east_countries
+label: 'Middle East countries'
+description: ''
+help: ''
+import_period: -1
+fetcher: upload
+fetcher_configuration:
+  allowed_extensions: 'txt csv tsv xml opml'
+  directory: 'private://feeds'
+parser: csv
+parser_configuration:
+  delimiter: ','
+  no_headers: false
+  line_limit: 100
+processor: 'entity:taxonomy_term'
+processor_configuration:
+  langcode: en
+  insert_new: 1
+  update_existing: 2
+  update_non_existent: _keep
+  expire: -1
+  skip_hash_check: false
+  values:
+    vid: middleeast_country
+  owner_id: 0
+  authorize: false
+  owner_feed_author: false
+custom_sources:
+  middleeast_country:
+    label: 'Middleeast country'
+    value: 'Middleeast country'
+    machine_name: middleeast_country
+  code:
+    label: Code
+    value: Code
+    machine_name: code
+mappings:
+  -
+    target: name
+    map:
+      value: middleeast_country
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: description
+    map:
+      value: code
+    settings:
+      language: null
+      format: plain_text

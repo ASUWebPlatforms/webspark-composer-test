@@ -1,0 +1,121 @@
+/* Remove gutters from pocket Project Page card arrangement */
+.uto-home-cards .uds-card-arrangement>.uds-card-arrangement-card-container.auto-arrangement {
+  row-gap: 0;
+}
+
+.uto-home-cards .uds-card-arrangement>.uds-card-arrangement-card-container {
+  -moz-column-gap: 0;
+  column-gap: 0;
+}
+
+.uto-home-cards .card {
+  border: 0;
+}
+
+.uto-home-cards .card-img-top {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.uto-news-cards .card-img-top img {
+  min-width: 100%;
+}
+
+/* Legacy styles from D7 */
+.btn-primary, .btn-primary:hover {
+  color: #fff;
+  background-color: #8c1d40;
+  border-color: #8c1d40;
+}
+
+/* Leadership Cards */
+.uto-leadership-cards .card-img-top {
+  height: 23.875rem;
+}
+
+.node.article.article--full .uds-story-hero .content h1.article {
+  margin-top: 3rem;
+}
+
+.uds-card-arrangement>.uds-card-arrangement-card-container.awii {
+  grid-auto-flow: row!important;
+  grid-row-gap: 32px!important;
+}
+.awii .card-img-top img {
+  aspect-ratio: auto!important;
+  height: 100%!important;
+  object-fit: cover;
+}
+.node-111 .awii .card-img-top {
+  height: 18.75rem;
+}
+.uto-news-cards .card-img-top {
+  aspect-ratio: 2 / 2!important;
+  padding: 0 !important;
+  max-height: none!important;
+}
+
+.webdir-container .sort {
+  display: none;
+}
+
+.webdir-container .person-social-medias {
+  display: none!important;
+}
+#views-exposed-form-blog-feed-block-1 .js-form-type-textfield {
+  margin-bottom: 20px!important;
+}
+.view-resources-tools .view-empty {
+  display: none;
+}
+.taxonomy .view-resources-tools .view-empty {
+  display: block;
+  border: none;
+  background-color: transparent;
+}
+.taxonomy .view-resoources-tools .view-empty button {
+  display: none;
+}
+.formatted-text form input {
+  width: 100%;
+  border: 1px solid #747474;
+  color: #191919;
+  appearance: none;
+  background-clip: padding-box;
+  border-radius: 0;
+  display: block;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: .5rem!important;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+.formatted-text form select {
+  --bs-form-select-bg-img: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3E%3C/svg%3E");
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-position: right .5rem center;
+  background-repeat: no-repeat;
+  background-size: 16px 12px;
+  background-image: var(--bs-form-select-bg-img);
+  border: 1px solid #747474;
+  border-radius: 0;
+  color: #191919;
+  display: block;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: .5rem 1.5rem .5rem .5rem;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  width: 100%;
+}
+.formatted-text form input[type=submit] {
+  background: #8c1d40;
+  color: #fff;
+  padding: 1rem 2rem;
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: 400rem;
+  border: 2px solid #8c1d40;
+}

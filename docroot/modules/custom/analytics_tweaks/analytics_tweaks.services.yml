@@ -1,0 +1,9 @@
+services:
+  analytics_tweaks.route_subscriber:
+    class: Drupal\analytics_tweaks\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
+  analytics_tweaks.commands:
+    class: Drupal\analytics_tweaks\Commands\AnalyticsTweaksDrushCommands
+    tags:
+      - { name: drush.command }

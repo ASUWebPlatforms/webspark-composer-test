@@ -1,0 +1,12 @@
+style:
+  version: VERSION
+  css:
+    theme:
+      assets/css/customrenovation.style.css: {}
+      assets/css/tempstyles.css: {}
+  js:
+    assets/js/customrenovation.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once

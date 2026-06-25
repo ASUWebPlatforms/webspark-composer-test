@@ -1,0 +1,374 @@
+/**
+ * @file conference.css
+ * BRIDGE CSS — Conference mini-site and session page styles.
+ * Extracted from the legacy Access theme.
+ * These classes are referenced in database content. Remove as TSS team
+ * migrates content to Webspark-native components.
+ * See: WEBA11Y9_MIGRATION_TICKETS.md (Tickets S1, S2)
+ * @todo Remove after content migration is complete.
+ */
+
+/* temporary tweak for the a11y conference front page keynote speaker photo */
+.frkey {
+ margin: 0.25em 1.25em 0 0;
+}
+
+/* Conference Administration Box */
+.block--conferenceadmin {
+  position: absolute;
+  z-index: 10000;
+  top: 10em;
+  right: 1em;
+  border: 1px solid #00A3E0;
+  background-color: #D6F1FA;
+  padding: 1em 1em 1em 2em;
+}
+.block--conferenceadmin h2 {
+  font-size: 16px;
+  line-height: 1rem;
+  letter-spacing: 0;
+  margin: 0 0 0.25em -1em;
+}
+.block--conferenceadmin ul.nav {
+  display: block;
+  list-style: disc;
+}
+.block--conferenceadmin .nav-link {
+    padding: 0;
+}
+
+/* CONFERENCE FRONT PAGE */
+.conf-front-hero {
+  color: #fff;
+}
+.btn-row a {
+	margin-right: 1.5rem;
+}
+h2.conf-front {
+	margin: 0 0 1rem 0;
+}
+.aaad-front-box {
+  background-color: #fff !important;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  transition: border .2s ease-in-out;
+  padding: 1em;
+}
+.reg-box {
+  padding-top: 3em;
+}
+.sponsor-intro {
+  margin-top: 4em;
+}
+.aaad-front-box.sponsor-pane {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 220px;
+  margin: 2em 2em 5em 2em;
+}
+.sponsor-logo img {
+  vertical-align: middle;
+}
+.node-type--conference .block-inline-blockmenu-sidebar {
+	position: relative;
+	z-index: 50;
+	margin-bottom: 2rem;
+}
+
+/* CONFERENCE INTERIOR PAGES */
+.conf-title {
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+}
+.conf-title h1 {
+	display: inline-block;
+  background-color: #FAC52C;
+  padding: 0 0.5rem 0.25rem 0;
+  margin: 2.5rem 0;
+  font-size: 3rem;
+  line-height: 3rem;
+}
+.conf-title h1.article {
+	display: inline-block;
+	margin: 2.5rem 0;
+	color: #000;
+	letter-spacing: -.14rem;
+}
+
+/* CONFERENCE SCHEDULE */
+
+.conf-schedule .paragraph--type--conf-speaker {
+	margin-bottom: 0;
+}
+.conf-schedule td {
+	background-color: #fff;
+}
+.conf-schedule th {
+	background-color: #d0d0d0;
+}
+.conf-schedule tr.preconference td {
+	background-color: #fafafa;
+}
+.conf-schedule tr.break td {
+	background-color: #e8e8e8;
+	border-bottom: 1px solid #d0d0d0;
+	border-left:  1px solid #d0d0d0;
+}
+/* hiding the edit column in the schedule from people without an admin toolbar */
+.conf-schedule th.views-field-edit-node,
+.conf-schedule td.views-field-edit-node {
+	padding: 0;
+	background-color: #fff;
+	border: 0;
+}
+.toolbar-horizontal .conf-schedule th.views-field-edit-node,
+.toolbar-horizontal .conf-schedule td.views-field-edit-node {
+	padding: 0.5rem;
+	border: 1px solid #e8e8e8;
+}
+
+/* CONFERENCE SESSION PAGES */
+.conf-title .session-banner {
+	display: inline-block;
+  background-color: #FAC52C;
+  padding: 0 0.5rem 0.25rem 0;
+  font-size: 3rem;
+  line-height: 3rem;
+  letter-spacing: -.14rem;
+	font-weight: 700;
+	margin: 2.5rem 0;
+	opacity: 1;
+	text-align: left;
+}
+.session h1.article {
+	line-height: 3rem;
+}
+.session .uds-video-container {
+	margin: 0 2rem 2rem 0;
+}
+.conf-speakers h2 {
+	background: #ffc627;
+	box-shadow: -.15em 0 0 #ffc627, .15em 0 0 #ffc627;
+	font-size: 1.75rem;
+  letter-spacing: -.05rem;
+  line-height: 2.25rem;
+	color: #191919;
+	display: table;
+	margin: 3rem 0 1rem 0;
+}
+.conf-speakers.conf-content {
+	padding-top: 0;
+	margin-top: 0em;
+	margin-bottom: 2em;
+}
+.paragraph--type--conf-speaker {
+	margin-bottom: 2em;
+}
+.paragraph--type--conf-speaker .speaker-name {
+	margin-top: 0.25em;
+	font-weight: bold;
+	font-size: 1.25rem;
+}
+.paragraph--type--conf-speaker .speaker-bio {
+	margin-top: 1rem;
+}
+.conf-s-details h2 {
+	font-size: 1rem;
+	letter-spacing: normal;
+	line-height: 1rem;
+	margin: 0;
+}
+.conf-s-details {
+	margin-bottom: 1em;
+}
+.session .session-slides span {
+	display: none;
+}
+.session .session-slides span.file {
+	display: block;
+}
+.session .layout__region--second.col-md-4 {
+	background-color: #fafafa;
+	padding: 2rem 0 0 2rem;
+	border: 1px solid #e1e1e1;
+}
+
+/* CONFERENCE SESSION FORM */
+form.webform-submission-test-conference-session-page-form legend {
+	font-style: italic;
+}
+#edit-contact-info label,
+form.uds-form .speaker-container label {
+	font-size: 1.5rem;
+}
+#edit-contact-info label {
+	margin-top: 2rem;
+}
+#edit-contact-info-items label,
+#edit-speaker-information-items label {
+	font-size: 1rem;
+	margin-top: 0;
+}
+.speaker-container tr {
+	border: 0;
+}
+.speaker-container tr.even td {
+	background-color: #E8E8E8;
+}
+.speaker-container td,
+#edit-session-container {
+	border: 1px solid #d0d0d0;
+	padding: 1rem;
+}
+#contact_info_table tbody td {
+	background-color: #E8E8E8;
+	border: 1px solid #d0d0d0 !important;
+	padding: 1rem;
+}
+#contact_info_table thead {
+	border-bottom: 1px solid #d0d0d0 !important;
+}
+.speaker-container .form-item-speaker-information-add-more-items .form-control,
+.speaker-container .form-item-speaker-information-add-more-items .field-suffix {
+ display: inline-block;
+ width: auto;
+}
+.speaker-container .webform-multiple-add {
+	margin-top: 2rem;
+}
+.speaker-container .webform-multiple-table td .description .webform-element-description br {
+ display: none;
+}
+
+/* CONFERENCE VID PAGE */
+.conf-vids h2 {
+	font-size: 1.6rem;
+	margin: 2rem 0 0 0;
+	letter-spacing: 0;
+}
+.conf-vids h3.smaller {
+	font-size: 1rem;
+	line-height: 1.3rem;
+	margin-bottom: 2rem;
+}
+.conf-vids .uds-video-container iframe {
+	width: 92.1%;
+	border-bottom: 1px solid #ddd;
+}
+
+@media (min-width: 360px) {
+
+	article.conference div[class^=uds-hero] header {
+	 grid-row: 1 !important;
+	}
+	article.conference div[class^=uds-hero] .hero-subtitle,
+	article.conference div[class^=uds-hero] header .hero-subtitle {
+		font-size: 1.1em;
+		line-height: 2;
+		grid-row: 1 !important;
+		margin-top: 1rem;
+	}
+	article.conference div[class^=uds-hero] .h1,
+	article.conference div[class^=uds-hero].has-btn-row h1 {
+		font-size: 1.25rem;
+		max-width: 50%;
+		line-height: 1.25rem;
+		grid-row: 2 !important;
+  }
+  article.conference div.uds-hero-md.has-btn-row .btn-row {
+  	top: 8.5rem;
+	}
+	article.conference div[class^=uds-hero] .btn,
+	article.conference div[class^=uds-hero] .uds-modal-close-btn {
+	  font-size: .875rem;
+    padding: .3rem 0.5rem;
+  }
+  article.conference .conf-front-hero .btn-row a {
+    margin-right: 0;
+	}
+	.session h1.article, .session h1 {
+		font-size: 1.25rem;
+		line-height:1.75rem;
+	}
+	.aaad-front-box {
+		margin: 2em;
+	}
+}
+
+@media (min-width: 480px) {
+
+	article.conference div[class^=uds-hero] .hero-subtitle,
+	article.conference div[class^=uds-hero] header .hero-subtitle {
+		font-size: 1.25rem;
+	}
+	article.conference div[class^=uds-hero] .h1,
+	article.conference div[class^=uds-hero].has-btn-row h1 {
+		font-size: 1.5rem;
+		line-height: 1.5rem;
+	}
+	article.conference div.uds-hero-md.has-btn-row .btn-row {
+   top: 10rem;
+	}
+	.session h1.article, .session h1 {
+		font-size: 1.5rem;
+		line-height: 2rem;
+	}
+
+}
+
+@media (min-width: 768px) {
+
+	article.conference div[class^=uds-hero] header {
+	 grid-row: 1 !important;
+	}
+	article.conference div[class^=uds-hero] .hero-subtitle,
+	article.conference div[class^=uds-hero] header .hero-subtitle {
+		grid-row: 2 !important;
+		font-size: 1.25rem;
+	}
+	article.conference div[class^=uds-hero] .h1,
+	article.conference div[class^=uds-hero].has-btn-row h1 {
+		grid-row: 3 !important;
+		font-size: 2.5rem;
+		line-height: 2.5rem;
+		max-width: 50%;
+	}
+	article.conference div[class^=uds-hero] .btn,
+	article.conference div[class^=uds-hero] .uds-modal-close-btn {
+		font-size: 1rem;
+		padding: 1rem 2rem;
+  }
+  article.conference .conf-front-hero .btn-row a {
+    margin-right: 1.5rem;
+	}
+	.aaad-front-box {
+	  margin: 6em 2em 5em 2em;
+	}
+	#conf-front-side-btns  {
+		display: block;
+	}
+	.session h1.article, .session h1 {
+		font-size: 2.5rem;
+		line-height: 3rem;
+	}
+}
+
+@media (min-width: 1260px) {
+
+	article.conference div[class^=uds-hero] .hero-subtitle,
+	article.conference div[class^=uds-hero] header .hero-subtitle {
+		font-size: 1.75rem;
+	}
+	article.conference div[class^=uds-hero] .h1,
+	article.conference div[class^=uds-hero].has-btn-row h1 {
+		font-size: 4.5rem;
+		line-height: 4rem;
+		max-width: calc(1200px - 34%);
+	}
+	.conf-front-hero div[class^=uds-hero] .content {
+		font-size: 1.75rem;
+		line-height: 1.75rem;
+	}
+
+}

@@ -1,0 +1,23 @@
+{% set classes = [
+  'layout__region',
+  'layout__region--first',
+  'layout__report_content',
+  'layout__report_content__first'
+] %}
+{% if content %}
+  <div{{ attributes }}>
+    {% if content.first %}
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div {{ region_attributes.first.addClass(classes) }}>
+              <div class="layout__report_content__first__inner">
+                {{ content.first }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endif %}

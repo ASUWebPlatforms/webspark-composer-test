@@ -1,0 +1,17 @@
+<a href="{{ url }}" class="coach-link">
+    <div class="coach-card">
+        <div class="coach-card-header">
+            {{ content.field_photo }}
+        </div>
+        {% set full_name = node.title.value ~ ' ' ~ content.field_lastname['#items'].0.value %} 
+        <div class="coach-card-info">
+            <h3>{{full_name}}</h3>
+            <p><i>{{ content.field_major_s }}</i></p>
+            <p class="coach-college"><b>{{ content.field_college_school.0["#title"] }}</b></p>
+
+            <p>{{ content.body.0["#text"]|truncate(300) }}</p>
+            <p><a href="{{ url }}">Learn More</a></p>
+            {{ content.field_handshake_link }}
+        </div>
+    </div>
+</a>

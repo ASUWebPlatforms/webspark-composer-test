@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Template for the main page.
+ */
+#}
+{% if page.header %}
+  <header>
+      {{ page.header }}
+  </header>
+{% endif %}
+<main>
+  <div class="page page-wrapper-webspark">
+    <div class="pt-5 pb-5">
+
+      {% if page.content %}
+        <div id="skip-to-content" class="page__content center-container container pb-5 pt-5">
+          <h1>Welcome to the ASU Library training site.</h1>
+         <p>This site requires authentication.</p>
+          <p>Please sign in using the ASU "Sign in" link at the top of the page.</p>
+         
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</main>
+{% if page.footer %}
+  <footer class="page__footer" id="asu-footer" role="contentinfo">
+    {{ page.footer }}
+  </footer>
+{% endif %}

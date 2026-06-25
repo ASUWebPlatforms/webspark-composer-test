@@ -1,0 +1,54 @@
+.bg-gold-sunburst {
+    background-color: $gold;
+    background-image: url(../images/sunburst.png);
+    background-repeat: no-repeat;
+    background-size: 360px auto;
+    background-position: right -250px center;
+}
+
+.bg-black-sunburst {
+    background-image: url(../images/sunburst.png);
+    background-repeat: no-repeat;
+    background-size: 360px auto;
+    background-position: right -250px center;
+    background-color: $dark;
+  
+    .card-category {
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+  
+    .card-stat {
+      font-size: 110px;
+      max-width: 240px;
+      font-weight: bold;
+      color: $gold;
+  
+      p {
+        font-size: 16px;
+      }
+    }
+  }
+  
+  
+  
+
+.bg-maroon-info {
+    background-color: $maroon;
+    color: $white;
+
+    h3 {
+        .svg-inline--fa {
+            color: $gold;
+        }
+    }
+
+    .svg-inline--fa {
+        color: white;
+    }
+
+    a {
+        text-decoration: none;
+        color: $white;
+    }
+}

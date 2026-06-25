@@ -1,0 +1,30 @@
+nav,
+.universal-nav,
+.page__pre-content,
+#asuHeader,
+.view-theme-asu-now-article .uds-highlighted-heading,
+.view-theme-asu-now-article #views-bootstrap-theme-asu-now-article-block-9,
+.view-theme-asu-now-article nav,
+.node-body-categories,
+.toggle-count,
+#issues-tab,
+.buttonbar,
+.node-body-category,
+.page__pre-content,
+.a2a_kit,
+.addtoany_list,
+footer { display:none; }
+
+.container {padding-left:20px;padding-right:20px;max-width:1200px;}
+
+#asuHeader,
+.page__pre-content {padding:0; margin:0;background-color: aqua;}
+p{width:100%;}
+
+.col-md-6 .author-profile {margin-left:0;}
+.container {max-width:100%;}
+h1 {font-size:2rem;line-height: normal;}
+body,body.toolbar-vertical {padding-top:0;}
+hr {height:0; margin:0;}
+header {background-color:#990033;}
+.a2a_kit.a2a_kit_size_24.addtoany_list{margin-bottom:0;padding-top:10px;display:none;}

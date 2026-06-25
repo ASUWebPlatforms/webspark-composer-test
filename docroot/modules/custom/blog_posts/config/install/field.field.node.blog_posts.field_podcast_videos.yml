@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_podcast_videos
+    - node.type.blog_posts
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    basic_html: '0'
+    minimal_format: '0'
+    restricted_html: '0'
+    full_html: '0'
+    plain_text: '0'
+    php_code: '0'
+id: node.blog_posts.field_podcast_videos
+field_name: field_podcast_videos
+entity_type: node
+bundle: blog_posts
+label: Podcast/Videos
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

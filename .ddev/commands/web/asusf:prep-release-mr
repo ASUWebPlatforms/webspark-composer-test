@@ -1,0 +1,109 @@
+#!/bin/bash
+
+##
+## This script prepares a new release branch for a given release name and opens
+## a merge request. It expects releases to come from the `develop` branch and
+## to merge into `main`.
+##
+## Usage: asusf:prep-release-mr [releaseName] [--no-push]
+## Description: Prepares a new release branch and opens a merge request.
+## Example: ddev asusf:prep-release-mr 2.3.4
+##
+## This script requires the jq command to be available.
+## Install jq: https://jqlang.org/download/
+
+## NOTE: glab CLI tool exists, but opted not to use it here to avoid
+## requiring yet another personal access token (PAT) that would need to be
+## maintained. Less effort and fuss to open the MR manually.
+
+set -e
+
+# Ensure releaseName argument is provided
+if [ -z "$1" ]; then
+  echo "Usage: ddev asusf:prep-release-mr <releaseName>"
+  exit 1
+fi
+
+# Verify that jq is installed
+if ! command -v jq &> /dev/null; then
+  echo "Error: 'jq' is not installed. Please install it and try again."
+  exit 1
+fi
+
+# Parse arguments
+noPush=false
+releaseName=""
+for arg in "$@"; do
+  case $arg in
+    --no-push) noPush=true ;;
+    *) releaseName="$arg" ;;
+  esac
+done
+
+# Ensure releaseName argument is provided
+if [ -z "$releaseName" ]; then
+  echo "Usage: ddev asusf:prep-release-mr <releaseName> [--no-push]"
+  exit 1
+fi
+
+releaseBranch="release-$releaseName"
+
+echo "⚙️  Step 1: Verify releaseName tag hasn't been used and we're starting clean"
+git fetch origin
+if git tag | grep -q "^$releaseName$"; then
+  echo "Error: Tag '$releaseName' already exists in the repository."
+  exit 1
+fi
+if [[ `git status --porcelain` ]]; then
+  echo "Error: You have uncommitted changes. Please commit or stash them before running this script."
+  exit 1
+fi
+
+echo "⚙️  Step 2: Check out 'develop' branch"
+git checkout develop
+
+echo "⚙️  Step 3: Pull latest updates from origin and merge main into develop"
+git pull origin develop
+git merge origin/main
+
+echo "⚙️  Step 4: Create branch named '$releaseBranch'"
+git checkout -b "$releaseBranch"
+
+echo "⚙️  Step 5: Increment Webspark version numbers in profile and module *.libraries.yml files"
+if [ -f "docroot/profiles/contrib/webspark/webspark.info.yml" ]; then
+  # Increment version in webspark.info.yml and Webspark *.libraries.yml files
+  # Calls asusf:set-version script directly like the bash script it is, to
+  # avoid issues with ddev commands being called within ddev commands. Wouldn't
+  # work if the script used web environment variables.
+  /mnt/ddev_config/commands/web/asusf:set-version "$releaseName"
+
+  # Add and commit changes
+  git add docroot/profiles/contrib/webspark/ composer.lock
+  git commit -m "Increment Webspark version to $releaseName"
+fi
+
+echo "⚙️  Step 6: Push release branch"
+if [ "$noPush" = false ]; then
+  echo "Pushing branch '$releaseBranch'..."
+  git push origin "$releaseBranch"
+else
+  echo "Skipping push as --no-push option was provided."
+  echo "You can push manually: git push origin \"$releaseBranch\""
+  echo "Or discard the branch if you want to start over: git checkout main && git branch -D \"$releaseName\""
+fi
+echo
+
+echo "⚙️  Step 7: Show all merge commits in '$releaseBranch' that are not in 'main'..."
+git log --merges --color --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit "$releaseBranch" ^main
+echo
+
+echo "🫏 MANUAL NEXT STEPS 🫏"
+echo
+echo "Please create a merge request manually or use your Git provider's CLI tool."
+echo "  https://code.acquia.com/ArizonaBoardofRegentsSiteFactoryACSFSites/asufactory1/-/merge_requests"
+echo
+echo "Copy and paste the merge commit list, above, into the merge request description."
+echo
+echo "Once merged to 'main', run:"
+echo "  ddev asusf:tag-release $releaseName"
+echo

@@ -1,0 +1,85 @@
+.view-asu-family-calendar-block-view {
+  .fc-unthemed .fc-content,
+  .fc-unthemed .fc-divider,
+  .fc-unthemed .fc-list-heading td,
+  .fc-unthemed .fc-list-view,
+  .fc-unthemed .fc-popover,
+  .fc-unthemed .fc-row,
+  .fc-unthemed tbody,
+  .fc-unthemed td,
+  .fc-unthemed th,
+  .fc-unthemed thead,
+  tr {
+    border-color: transparent;
+    padding: 0;
+  }
+
+  .fc-scroller {
+    overflow: visible !important;
+    height: unset !important;
+  }
+
+  .fc-list-item-time.fc-widget-content,
+  .fc-list-item-marker.fc-widget-content,
+  .fc-list-heading {
+    display: none;
+  }
+
+  .fc-list-item-title a {
+    &[href]:hover {
+      text-decoration: none;
+    }
+  }
+
+  .fc-unthemed .fc-list-item:hover td {
+    background: #ffffff;
+  }
+
+  .event-list-item-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    margin-top: 40px;
+  }
+
+  .event-list-item-date {
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: center;
+
+    .day-of-week {
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: -5px;
+    }
+
+    .day {
+      font-weight: 900;
+      font-size: 1.7rem;
+    }
+  }
+
+  .event-list-item-text {
+    max-width: 500px;
+    width: 500px;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    .event-full-date {
+      position: relative;
+      top: -5px;
+      font-size: .8rem;
+    }
+
+    .event-title {
+      h2 {}
+    }
+
+    .event-location {
+      margin-bottom: 20px;
+
+      span {
+        font-weight: 900;
+      }
+    }
+  }
+}

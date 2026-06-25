@@ -1,0 +1,345 @@
+
+// Card color variables
+$storytelling-color: #E74973;  // Fucia
+$research-color: #FF7F31;      // Orange
+$teaching-color: #4BB7C4;      // Blue
+$conversations-color: #8C1D40;  // Maroon
+
+/* Intro Section Block Styles */
+
+.ggl-intro {
+    .formatted-text {
+        p {
+            max-width: 100%;
+        }
+    }
+    .ggl-intro-logo {
+        .uds-img {
+            text-align: end;
+            @media (max-width: 575.98px) {
+                text-align: start;
+            }
+            img {
+                max-width: 300px;
+                @media (max-width: 575.98px) {
+                    max-width: 60%;
+                    padding-top: 2rem;
+                }
+            }
+        }
+    }
+    &.lead-xl {
+        & {
+            .lead {
+                letter-spacing: .5px;
+                line-height: 3.125rem;
+            }
+        }
+    }
+} 
+
+/* Enlarged Image and Text Block */
+
+.ggl-image-text-block-lg {
+    .uds-image-text-block-container {
+        height: 557px;
+        align-items: center;
+        @media (max-width: 575.98px) {
+            height: 100%;
+        }
+        .uds-image-text-block-image-container {
+            height: 100%;
+        }
+    }
+}
+
+.ggl-coin-cards {
+  
+    // Target the UDS card arrangement container
+    .uds-card-arrangement {
+
+        .uds-card-arrangement-card-container {
+            @media (min-width: 1261px) {
+                background-image: url('../../assets/images/circles-bg.png');
+                background-size: contain; 
+                background-position: center;
+                background-repeat: no-repeat;
+                min-height: 360px;
+                padding: 0 24px;
+            }
+            .card-wrapper {
+                place-items: center;
+                margin: auto;
+                .card {
+                    @media (min-width: 1261px) {
+                        background-color: transparent;
+                        margin-top: -150px;
+                    }
+                    .card-icon-top {
+                        margin: 24px auto;
+                        height: 2.5rem;
+                        width: fit-content;
+                    }
+                    .card-header {
+                        margin: auto;
+                        padding: 0;
+                        h3 {
+                            font-size: 2.25rem;
+                        }
+                    }
+                }
+            }
+            // Target cards by position
+            .card-wrapper:nth-child(1) {
+                .card {
+                .card-icon-top {
+                    color: $storytelling-color;
+                }
+                .card-title {
+                    color: $storytelling-color;
+                }
+                }
+            }
+
+            .card-wrapper:nth-child(2) {
+                .card {
+                .card-icon-top {
+                    color: $research-color;
+                }
+                .card-title {
+                    color: $research-color;
+                }
+                }
+                }
+
+                .card-wrapper:nth-child(3) {
+                    .card {
+                    .card-icon-top {
+                        color: $teaching-color;
+                    }
+                    .card-title {
+                        color: $teaching-color;
+                    }
+                    }
+                }
+
+                .card-wrapper:nth-child(4) {
+                    .card {
+                    .card-icon-top {
+                        color: $conversations-color;
+                    }
+                    .card-title {
+                        color: $conversations-color;
+                    }
+                    }
+                }
+            
+        }
+    }
+}
+
+
+
+/* Testimonials */
+.ggl-testimonial-xl {
+    .uds-blockquote {
+        display: flex;
+        font-size: 2.5rem;
+        line-height: 2.75rem;;
+        font-weight: 700;
+        gap: 1.5rem;
+        grid-template-columns: auto 1fr;
+        padding: 2rem;
+        @media (max-width: 575.98px) {
+            font-size: 1.5rem;
+            line-height: 1.75rem;
+        }
+        .citation {
+            line-height: 1.5rem;
+        }
+        blockquote {
+            p {
+                &:first-of-type {
+                    &:before {
+                    content: "";
+                    }
+                }
+                &:last-of-type {
+                    &:after {
+                    content: "";
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Icon Card Styles */
+.ggl-lg-icons {
+    .uds-card-arrangement {
+        .card {
+            align-items: start;
+            .card-icon-top {
+                height: 2.5rem;
+                width: fit-content;
+                margin: 24px 0 0;
+                max-width: 3.5rem;
+            }
+            .card-body {
+                padding: 0;
+            }
+        }
+    }
+}
+
+/* Hover cards */
+.ggl-hover-cards {
+    .content-section {
+        .content-holder {
+            .content-bg {
+                .hidden-details {
+                    .long-text {
+                        display: none;
+                    }
+                }
+            }
+        }
+        &:hover {
+            .content-holder {
+                .content-bg {
+                    background-color: transparent;
+                    h3 {
+                        color: #ffffff;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Image Carousels */
+
+.ggl-fullimage-carousel {
+    .image-carousel {
+        .glide__track {
+            .glide__slides {
+                .glide__slide {
+                   margin-left: 0 !important;
+                   margin-right: 0 !important;
+                }
+            }
+        }
+        .glide__bullets {
+            display: none;
+        }
+        .glide__arrows {
+            display: none;
+        }
+    }
+}
+
+/* Inquiries Carousel */
+
+.ggl-inquires-carousel {
+    h2 {
+        font-size: 1.25rem;
+        margin: 1rem auto;
+        text-align: center;
+        letter-spacing: normal;
+        &:after {
+            background-color: #ffc627;
+            content: "";
+            display: block;
+            height: .25rem;
+            margin: 1rem auto;
+            width: 4.5rem;        
+            text-align: center;
+        }
+    }
+    .uds-blockquote {
+        svg {
+        display: none;
+        }
+        &.uds-testimonial {
+            blockquote {
+                p {
+                    font-size: 2.5rem;
+                    @media (max-width: 575.98px) {
+                        font-size: 1.5rem;
+                    }
+                    &:first-of-type {
+                        &:before,
+                        &:after
+                         {
+                           display: none;
+                        }
+                    }
+                }
+            }
+        } 
+    }
+}
+
+@media (max-width: 575.98px) {
+    div[class^=uds-hero] {
+        margin: 0 auto 1rem;
+    }
+}
+
+/* Footer Hero */
+
+.ggl-footer-hero {
+    .uds-hero-md {
+        height: 50rem;
+        @media (max-width: 575.98px) {
+            height: 13rem;
+            margin: 0;
+        }
+        .hero-overlay {
+            display: none;
+        }
+        h1 {
+            display: none;
+        }
+        .content{
+            display: none;
+        }
+    }
+    &.ggl-footer-hero-small {
+        .uds-hero-md {
+            height: 32rem;
+        }
+    }
+}
+
+/* GGL Mailchimp Block */
+.ggl-mailchimp-form {
+    .ggl-article-body {
+        max-width: 700px;
+        &__content {
+            font-size: 1.25rem;
+        }
+        .webform-required {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+        .form-item {
+
+            label {
+                
+                &.form-required:after {
+                    content: "*";                            
+                }
+            }
+        }
+        .form-actions {
+            input {
+                padding-left: 2rem !important;
+            }
+        }
+        .form-control, form.uds-form .form-select {
+            border: 1px solid #D0D0D0;
+        }
+
+    }
+}

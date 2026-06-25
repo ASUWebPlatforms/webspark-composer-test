@@ -1,0 +1,7 @@
+services:
+  analytics_groups.resource_service:
+    class: Drupal\analytics_groups\Services\ResourceService
+  analytics_groups.route_subscriber:
+    class: 'Drupal\analytics_groups\Routing\RouteSubscriber'
+    tags:
+      - { name: 'event_subscriber' }

@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: us_institution
+label: 'US institution'
+category: ASU
+likert: false
+options: ''

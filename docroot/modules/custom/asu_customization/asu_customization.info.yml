@@ -1,0 +1,5 @@
+name: ASU customization
+type: module
+description: 'Provides customization for the site. It adds new block'
+package: ASU
+core_version_requirement: ^8.8 || ^9 || ^10

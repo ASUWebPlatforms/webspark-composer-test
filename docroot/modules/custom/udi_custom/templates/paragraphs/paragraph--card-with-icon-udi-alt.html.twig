@@ -1,0 +1,14 @@
+<div class="card-wrapper" id="card-{{ paragraph.uuid.value }}">
+    <div class="card cards-components card--side-icon no-border">
+        <div class="card-header d-flex align-items-center">
+            <div class="card-icon text-info">{{ content.field_icon }}</div>
+            <h3 class="card-title">{{ content.field_heading|render|striptags|trim }}</h3>
+        </div>
+        <div class="card-body">
+
+                {{ content.field_body|render }}
+
+        </div>
+    </div>
+</div>
+

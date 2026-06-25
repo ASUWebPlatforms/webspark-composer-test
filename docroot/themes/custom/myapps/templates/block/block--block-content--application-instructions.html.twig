@@ -1,0 +1,41 @@
+{#
+/**
+ * @file
+ * Template for the Application instructions block.
+ *
+ * @see myapps_preprocess_block()
+ */
+#}
+
+{% set classes = [
+  'block',
+  'block-' ~ configuration.provider|clean_class,
+  'block-' ~ plugin_id|clean_class,
+] %}
+{% set boxes = ['asu_owned', 'personal', 'faculty', 'staff', 'student', 'run_app'] %}
+
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+
+  {% if label %}
+    {% block label %}
+      <h2{{ title_attributes }}>{{ label }}</h2>
+    {% endblock %}
+  {% endif %}
+
+  {{ title_suffix }}
+
+  {% for box in boxes %}
+    {% set box_instructions = attribute(_context, box ~ '_instructions') %}
+    {% if box_instructions %}
+      {% include '@myapps/instructions-box.html.twig' with {
+        'nid': node.id,
+        'domain': domain,
+        'box': box|replace({'_': ' '})|title,
+        'instructions': box_instructions,
+        'link': attribute(_context, box ~ '_link'),
+        'title': attribute(_context, box ~ '_title')
+      } %}
+    {% endif %}
+  {% endfor %}
+</div>

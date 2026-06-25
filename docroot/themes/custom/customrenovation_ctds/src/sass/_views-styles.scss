@@ -1,0 +1,66 @@
+/* Fix views pager */
+.views-element-container nav.pager {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.views-element-container nav.pager ul {
+  list-style: none;
+  display: inline-flex;
+  padding: 0;
+}
+
+.views-element-container nav.pager li {
+  padding: 1rem;
+}
+
+.view-home-news-feature {
+  padding: 0.5rem 1rem;
+  background-color: rgba(255, 198, 39,.65);
+  margin-left: 4px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 512px;
+  border-top: 1px solid white;
+  border-right: 1px solid white;
+  .featured-story {
+    display: inline-block;
+    background-color: #454545;
+    color: #fff;
+    padding: 0.25rem 0.6rem;
+    font-weight: 600;
+    font-size: 1.65rem;
+    position: relative;
+    top: 0.5em;
+    left: 50%;
+    transform: translateX(-50%);
+    min-height: 20px;
+  }
+  & > div {
+    align-self: center;
+  }
+  .well {
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #fafafa;
+    border-radius: 0;
+    box-shadow: rgba(0,0,0,0.2) 2px 2px 12px;
+    border: 1px solid #ddd;
+    max-width: 800px;
+    .thumb {
+      margin: 1rem;
+      @media screen and (min-width: 1020px)
+      {
+        float: left;
+      }
+    }
+  }
+}
+
+
+.more-link {
+  text-align: right;
+  padding: 10px;
+}

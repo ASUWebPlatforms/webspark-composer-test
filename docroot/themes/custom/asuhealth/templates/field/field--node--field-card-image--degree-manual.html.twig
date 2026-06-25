@@ -1,0 +1,3 @@
+{% for item in items %}
+  <img loading="lazy" src="{{ file_url( item.content['#item'].entity.uri.value ) }}" alt="{{ item.content['#item'].alt }}" class="card-img-top uds-img borderless">
+{% endfor %}

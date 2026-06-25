@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_intl_first_name
+    - node.type.international_advisors
+id: node.international_advisors.field_intl_first_name
+field_name: field_intl_first_name
+entity_type: node
+bundle: international_advisors
+label: 'First name'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

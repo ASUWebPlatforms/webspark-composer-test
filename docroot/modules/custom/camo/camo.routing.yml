@@ -1,0 +1,90 @@
+camo.camo:
+  path: '/camo'
+  defaults:
+    _controller: '\Drupal\camo\Controller\CamoController::camoLoad'
+    _title: 'CAMO - Call Attempt Management Online'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+camo.stnd:
+  path: '/stnd'
+  defaults:
+    _controller: '\Drupal\camo\Controller\CamoController::camoLoad'
+    _title: 'CAMO - Standardization'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+camo.extr:
+  path: '/extr'
+  defaults:
+    _controller: '\Drupal\camo\Controller\CamoController::camoLoad'
+    _title: 'CAMO - Extraction'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+
+camo.next:
+  path: '/camo/php/next/{param}'
+  defaults:
+    _controller: '\Drupal\camo\Controller\CamoController::camoNext'
+    _title: 'CAMO - get next respondent'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+camo.sync:
+  path: '/camo/php/sync/{survey}'
+  defaults:
+    _controller: '\Drupal\camo\Controller\CamoController::camoSync'
+    _title: 'CAMO - Get all records for metrics calculations'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+camo.crrstnd:
+  path: '/camo/php/stnd/{survey}/{type}'
+  defaults:
+    _controller: '\Drupal\camo\Controller\CamoController::camoCrrStnd'
+    _title: 'CAMO - Get information for next Standardization'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+camo.stndrecords:
+  path: '/camo/php/stndrecords/{sid}'
+  defaults:
+    _controller: '\Drupal\camo\Controller\CamoController::camoStndRecords'
+    _title: 'CAMO - Get Updated Standardization Information'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+camo.extrrecords:
+  path: '/camo/php/extrrecords'
+  defaults:
+    _controller: '\Drupal\camo\Controller\CamoController::camoExtrRecords'
+    _title: 'CAMO - Get Updated Extraction History'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+camo.stndsearch:
+  path: '/camo/php/stndsearch/{search}'
+  defaults:
+    _controller: '\Drupal\camo\Controller\CamoController::camoStndSearch'
+    _title: 'CAMO - Search for Standardizations and get Recent Entries'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+camo.crrextr:
+  path: '/camo/php/extr/{type}/{eid}'
+  defaults:
+    _controller: '\Drupal\camo\Controller\CamoController::camoCrrExtr'
+    _title: 'CAMO - Get information for next Extraction'
+    eid: '--'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+camo.post:
+  path: '/camo/php/post'
+  defaults:
+    _controller: '\Drupal\camo\Controller\CamoController::camoPost'
+    _title: 'CAMO - Post'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+

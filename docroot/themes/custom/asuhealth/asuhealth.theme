@@ -1,0 +1,25 @@
+<?php
+
+use Drupal\views\Views;
+use Drupal\Core\Render\RendererInterface;
+
+/**
+ * @file
+ * Functions to support theming in the asuhealth theme.
+ */
+function asuhealth_page_attachments_alter(&$page){
+  $path = $current_path = Drupal::service('path.current')->getPath();
+  // applies styles for only degree search page via node id 389
+  $frontpath = $current_path = Drupal::service('path.current')->getPath();
+  // applies styles for only degree search page via node id 1
+  if($path == '/health-workforce') {
+    $page['#attached']['library'][] = 'asuhealth/degreesearch';
+  }
+  if($frontpath == '/node/1') {
+    $page['#attached']['library'][] = 'asuhealth/frontpage';
+  }
+}
+
+
+
+

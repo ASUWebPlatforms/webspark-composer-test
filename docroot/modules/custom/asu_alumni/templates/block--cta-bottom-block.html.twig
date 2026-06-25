@@ -1,0 +1,30 @@
+<div class="pt-2 pb-2 mt-3 chapter-cards-container">
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <h2>
+                    <span class="highlight-gold">
+                        {{ content.field_top_title.0['#context'].value }}
+                    </span>
+                </h2>
+                <div class="topCards">
+                    <div class="topCardOne topCard border">
+                        {{ content.field_top_blocks.0 }}
+                    </div>
+
+                    <div class="topCardTwo topCard border">
+                        {{ content.field_top_blocks.1 }}
+                    </div>
+                </div> 
+                <h2 class="pt-7">
+                    <span class="highlight-gold">
+                        {{ content.field_bottom_tile.0['#context'].value }}
+                    </span>
+                </h2>
+                <div class="bottomCard">
+                    {{ content.field_bottom_card.0 }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

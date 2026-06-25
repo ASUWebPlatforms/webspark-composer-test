@@ -1,0 +1,67 @@
+{#
+@file
+The template for the Training hero.
+Note that this template can apply to more than one content type.
+
+Available variables:
+- certified: Boolean. If the report is certified.
+- type: The report type/bundle.
+- heading: The report heading.
+- description: The report description.
+- author: The email or name of the report author.
+- pills: An array of objects containing the taxonomy data.
+  - title: The taxonomy name.
+  - data: Array of taxonomy terms.
+- source: The URL to the original report.
+
+Available macros:
+- tags: Generate markup for the tags.
+- published: Generate markup for the published date.
+
+Available Twig variables:
+- favorites_link: The markup for the favorites link.
+#}
+
+{% from '@analytics/macros.html.twig' import tags %}
+
+<div class="spacing-top-48 spacing-bottom-72">
+  <div class="container">
+    <div class="row gy-3">
+      <div class="col-sm-12 col-lg-9">
+        {{ favorites_link }}
+
+        {% if certified %}
+          <div class="tw-text-sm tw-py-2 tw-px-4 tw-border-2 tw-border-solid tw-border-slate-200 tw-rounded-full tw-inline-block">
+            {{ include('@partials/svg/badge.html.twig') }}
+            <strong>Certified</strong> {{ type|replace({ '_': ' ' })|title }}
+          </div>
+        {% endif %}
+
+        <h2 class="meta-title tw-mt-5">{{ heading }}</h2>
+
+        <p>{{ description }}</p>
+
+        <div class="published">
+          <strong>Published:</strong> {{ time_ago() }} by <span class="tw-text-asu-maroon">{{ author }}</span>
+        </div>
+
+        <div class="metadata row mt-1">
+          {% if pills %}
+            {% for pill in pills %}
+              {{ tags(pill.title, pill.data) }}
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-lg-3">
+        {% if source %}
+          <div class="view-original mt-1">
+            <span class="fas fa-external-link-alt"></span>
+            <a href="{{ source }}">View original training</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

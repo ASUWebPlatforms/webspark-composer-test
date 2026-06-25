@@ -1,0 +1,63 @@
+{#
+/**
+ * @file
+ * Template for a Data Dictionary node.
+ */
+#}
+{% set classes = [
+  'node',
+  node.isPromoted() ? 'node--promoted',
+  node.isSticky() ? 'node--sticky',
+  not node.isPublished() ? 'node--unpublished',
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+  'pb-12'
+] %}
+
+<article{{ attributes.addClass(classes) }}>
+  <div class="max-size-container center-container">
+    {% block hero %}{% endblock %}
+  </div>
+
+  <div class="container tw-py-24">
+    <div class="row">
+      <div class="col-sm-12 col-lg-8">
+        {% block content %}
+          {{ content }}
+        {% endblock %}
+      </div>
+      <div class="col-sm-12 col-lg-4">
+        {% if node.field_subject_matter_expert.value %}
+          <div class="col-sm-auto">
+            <div>
+              {{ content.field_subject_matter_expert }}
+            </div>
+          </div>
+        {% endif %}
+        {% if node.field_data_stewardship_team.value %}
+          <div class="col-sm-auto">
+            <div>
+              {{ content.field_data_stewardship_team }}
+            </div>
+          </div>
+        {% endif %}
+        {% if node.field_technical_contact.value %}
+          <div class="col-sm-auto">
+            <div>
+              {{ content.field_technical_contact }}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    {% block parent_children %}{% endblock %}
+  </div>
+
+  <div class="container">
+    {{ content.field_related_resources }}
+    {{ content.field_related_content }}
+  </div>
+</article>

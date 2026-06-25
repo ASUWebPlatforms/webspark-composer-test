@@ -1,0 +1,27 @@
+@charset "UTF-8";
+.active-admin-table-tab{
+    border: 3px solid !important;
+}
+
+.is_active_link{
+    color: maroon !important;
+}
+
+.condition-row {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.condition-row .form-item {
+    margin: 3px;
+}
+
+.joins-row {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.joins-row .form-item {
+    margin: 3px;
+    width: 20%;
+}

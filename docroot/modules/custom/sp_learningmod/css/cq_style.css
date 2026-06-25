@@ -1,0 +1,73 @@
+.sp-learningmod-user-form .page-node-add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.sp-learningmod-user-form form.node-form {
+  width: 60%;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 1rem auto;
+}
+
+.sp-learningmod-user-form form.node-form .form-actions {
+  margin-top: 1rem;
+}
+
+.hidden-form-field {
+  display: none !important;
+}
+
+.btn.cq-secondary-button {
+  color: #191919;
+  background-color: #bfbfbf;
+  border-bottom: none;
+}
+
+.btn.cq-secondary-button.margin-top1 {
+  margin-top: 1rem;
+}
+
+.visited-categories {
+  margin-top: 20px;
+}
+
+.response-category {
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+}
+
+.response-category:nth-child(even) {
+  background-color: #f4f4f4;
+}
+
+.response-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.response-box {
+  padding: 10px 15px;
+}
+
+.response-item {
+  margin-bottom: 10px;
+}
+
+.response-label {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.response-text {
+  margin-left: 10px;
+  font-size: 1rem;
+  color: #333;
+}

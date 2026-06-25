@@ -1,0 +1,12 @@
+{% set tooltip_color = 'uds-tooltip-' ~ background %}
+<span class="uds-tooltip {{ tooltip_color }}">
+  <span class="fa-stack">
+    <i class="fas fa-circle fa-stack-2x"></i>
+    <i class="fas fa-info fa-stack-1x"></i>
+  </span>
+  <span class="uds-tooltip-text">
+    <span class="uds-tooltip-text-heading">{{ heading }}</span>
+      {{ tooltip }}
+  </span>
+</span>
+

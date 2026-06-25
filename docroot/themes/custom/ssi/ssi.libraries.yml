@@ -1,0 +1,22 @@
+# Main theme library.
+style:
+  version: VERSION
+  css:
+    theme:
+      assets/css/ssi.css: { }
+  js:
+    assets/js/ssi.script.js: { }
+  dependencies:
+    - renovation/style
+    - renovation/tables
+    - core/drupalSettings
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+    - core/drupal.dialog.ajax
+    - core/once
+
+optimizely:
+  header: true
+  js:
+    https://cdn.optimizely.com/js/28272300019.js: { type: external, minified: true }

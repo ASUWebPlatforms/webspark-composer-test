@@ -1,0 +1,14 @@
+{% set data = {
+  'title': node.title.value,
+  'content': content.body|raw,
+  'button': {
+    'url': node|entity_url,
+    'color': 'gold',
+    'text': 'View page',
+  },
+  'favorite': true
+} %}
+
+<article class="page__teaser">
+  {{ include('@partials/teasers/teaser.html.twig', data) }}
+</article>

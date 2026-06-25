@@ -1,0 +1,6 @@
+asu-event-tracking:
+  version: 1.0.0
+  js:
+    js/asu_eventtracking.js: {}
+  dependencies:
+    - core/drupalSettings

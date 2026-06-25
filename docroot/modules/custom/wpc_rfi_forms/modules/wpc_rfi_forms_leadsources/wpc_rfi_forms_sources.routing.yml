@@ -1,0 +1,65 @@
+# Route name can be used in several places; e.g. links, redirects, and local
+# actions.
+entity.wpc_rfi_forms_sources_leadsource.canonical:
+  path: '/admin/structure/wpc/lead-sources/{wpc_rfi_forms_sources_leadsource}'
+  defaults:
+    # Calls the view controller, defined in the annotation of the lead source
+    # entity. This marks this route as belonging to this entity type.
+    _entity_view: 'wpc_rfi_forms_sources_leadsource'
+    _title: 'Lead Source content'
+  requirements:
+    # Calls the access controller of the entity, passing in the suffix ('view')
+    # as the $operation parameter to checkAccess().
+    _entity_access: 'wpc_rfi_forms_sources_leadsource.view'
+
+entity.wpc_rfi_forms_sources_leadsource.collection:
+  path: '/admin/structure/wpc/lead-sources/list'
+  defaults:
+  # Calls the list controller, defined in the annotation of the lead source entity.
+    _entity_list: 'wpc_rfi_forms_sources_leadsource'
+    _title: 'Lead Source list'
+  requirements:
+  # Checks for permission directly.
+    _permission: 'view lead source entity'
+
+entity.wpc_rfi_forms_sources.leadsource_add:
+  path: '/admin/structure/wpc/lead-sources/add'
+  defaults:
+    # Calls the form.add controller, defined in the lead source entity.
+    _entity_form: wpc_rfi_forms_sources_leadsource.default
+    _title: 'Add lead source'
+  requirements:
+    # Use the entity's access controller. _entity_create_access tells the router
+    # to use the access controller's checkCreateAccess() method instead of
+    # checkAccess().
+    _entity_create_access: 'wpc_rfi_forms_sources_leadsource'
+
+entity.wpc_rfi_forms_sources_leadsource.edit_form:
+  path: '/admin/structure/wpc/lead-sources/{wpc_rfi_forms_sources_leadsource}/edit'
+  defaults:
+  # Calls the form.edit controller, defined in the lead source entity.
+    _entity_form: wpc_rfi_forms_sources_leadsource.default
+    _title: 'Edit lead source'
+  requirements:
+    # Calls the access controller of the entity, passing in the suffix
+    # ('update') as the $operation parameter to checkAccess().
+    _entity_access: 'wpc_rfi_forms_sources_leadsource.update'
+
+entity.wpc_rfi_forms_sources_leadsource.delete_form:
+  path: '/admin/structure/wpc/lead-sources/{wpc_rfi_forms_sources_leadsource}/delete'
+  defaults:
+    # Calls the form.delete controller, defined in the lead source entity.
+    _entity_form: wpc_rfi_forms_sources_leadsource.delete
+    _title: 'Delete lead source'
+  requirements:
+    # Calls the access controller of the entity, passing in the suffix
+    # ('delete') as the $operation parameter to checkAccess().
+    _entity_access: 'wpc_rfi_forms_sources_leadsource.delete'
+
+wpc_rfi_forms_sources.leadsource_settings:
+  path: '/admin/structure/wpc/lead-sources/settings'
+  defaults:
+    _form: '\Drupal\wpc_rfi_forms_sources\Form\LeadSourceSettingsForm'
+    _title: 'Lead source settings'
+  requirements:
+    _permission: 'administer leadsource entity'

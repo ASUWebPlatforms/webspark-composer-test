@@ -1,0 +1,6 @@
+# Override the default 'group.add_group' action
+group.add_group:
+  route_name: 'analytics_groups.add_group'
+  title: 'Add Analytics group'
+  appears_on:
+    - 'entity.group.collection'

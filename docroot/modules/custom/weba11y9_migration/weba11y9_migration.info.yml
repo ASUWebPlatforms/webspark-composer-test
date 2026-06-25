@@ -1,0 +1,9 @@
+name: 'WEB A11Y9 Migration'
+description: 'Migration utilities for the weba11y9 site theme migration from Access to Renovation.'
+type: module
+core_version_requirement: ^10 || ^11
+package: Custom
+dependencies:
+  - drupal:layout_builder
+  - drupal:layout_discovery
+  - layout_builder_restrictions:layout_builder_restrictions

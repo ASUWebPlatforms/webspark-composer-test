@@ -1,0 +1,28 @@
+.asu-news-events {
+  .block-inline-blockcard-carousel {
+    .btn {
+      color: $uds-color-base-white !important;
+    }
+
+    .card:not(.card.card-foldable)>div:first-of-type:not(.card-image-content) {
+      padding-top: $uds-size-spacing-2;
+    }
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+
+    .block-inline-blocktext-content {
+      .formatted-text {
+        .align-items-center {
+          h2 {
+            margin-top: $uds-size-spacing-6;
+            margin-bottom: $uds-size-spacing-3;
+          }
+        }
+      }
+      .text-lg-right {
+        margin-bottom: $uds-size-spacing-6;
+      }
+    }
+  }
+}

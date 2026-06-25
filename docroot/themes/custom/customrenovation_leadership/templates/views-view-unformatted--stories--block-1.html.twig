@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ *
+ * @ingroup themeable
+ */
+#}
+<div class="layout__fixed_width">
+  <div class="container mt-2 pb-4">
+    {% if title %}
+      <h3>{{ title }}</h3>
+    {% endif %}
+      <div class="row">
+          {% for row in rows %}
+              {%
+                  set row_classes = [
+                  default_row_class ? 'col-6',
+              ]
+              %}
+              <div{{ row.attributes.addClass(row_classes) }}>
+                  <div class="uds-blockquote accent-gold uds-content-align">
+                      <svg role="presentation" title="Open quote" viewBox="0 0 302.87 245.82">
+                          <path d="M113.61,245.82H0V164.56q0-49.34,8.69-77.83T40.84,35.58Q64.29,12.95,100.67,0l22.24,46.9q-34,11.33-48.72,31.54T58.63,132.21h55Zm180,0H180V164.56q0-49.74,8.7-78T221,35.58Q244.65,12.95,280.63,0l22.24,46.9q-34,11.33-48.72,31.54t-15.57,53.77h55Z" />
+                      </svg>
+                      {{- row.content -}}
+                  </div>
+              </div>
+          {% endfor %}
+
+      </div>
+  </div>
+</div>

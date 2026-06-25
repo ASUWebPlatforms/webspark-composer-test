@@ -1,0 +1,72 @@
+{#
+@file
+The template for the standard Horizontal Teaser.
+
+Available variables:
+- type: The type of card. Either 'card' or 'story'.
+- image: The Image object.
+  - url: The image URL.
+  - alt: The image alt text.
+- favorite: Boolean. Whether or not to show the favorites icon.
+- title: The title.
+- content: The content.
+- button: Array of button objects.
+  - url: The button URL.
+  - color: The button color.
+  - text: The button text.
+- link: Array of link objects.
+  - url: The link URL.
+  - text: The link text.
+- tags: Array of tag objects.
+  - type: The tag type. Either 'alt' or 'standard'.
+  - background: The tag background color.
+  - data: Array of tag objects.
+#}
+
+<div class="teaser--card-horizontal card card-horizontal {{ type == 'story' ? 'card-story' : 'card-degree' }}">
+  {% if image.url %}
+    <img
+      class="card-img-top"
+      src="{{ image.url }}"
+      alt="{{ image.alt }}"
+      width="600"
+      height="337"
+      loading="lazy"
+      decoding="async"
+      fetchpriority="high"/>
+  {% endif %}
+
+  <div class="card-content-wrapper">
+    {% if title %}
+      <div class="card-header">
+        <h3 class="card-title">
+          {{ title }}
+        </h3>
+      </div>
+    {% endif %}
+
+    {% if content %}
+      <div class="card-body">
+        <p class="card-text">{{ content }}</p>
+      </div>
+    {% endif %}
+
+    {% if button %}
+      <div class="card-buttons">
+        <div class="card-button">
+          <a href="{{ button.url }}"
+            class="btn btn-{{ button.color|default('dark') }}"
+            data-ga="Button link here"
+            data-ga-name="onclick"
+            data-ga-event="link"
+            data-ga-action="click"
+            data-ga-type="internal link"
+            data-ga-region="main content"
+            data-ga-section="card default title">
+            {{ button.text }}
+          </a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>

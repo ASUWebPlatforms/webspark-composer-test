@@ -1,0 +1,9 @@
+name: Delete CAS Users
+type: module
+description: 'A custom to delete all cas users'
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+version: VERSION
+package: Custom
+
+

@@ -1,0 +1,24 @@
+[data-testid="partner"] a:nth-of-type(2) {
+    display: none;
+}
+
+[data-testid="partner"] a:not(:last-child) {
+    border-right: none !important;
+}
+
+.no-bullet-icon > ul {
+    padding-left: 0 !important;
+}
+
+.no-bullet-icon > ul > li {
+    list-style: none;
+}
+
+@media screen and (min-width: 768px) {
+	#endorsed-logo img {
+    min-height: 8rem;
+    margin: 12px 0 !important;
+    transform: initial !important;
+    width: 70% !important;
+   }
+}

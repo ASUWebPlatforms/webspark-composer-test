@@ -1,0 +1,1183 @@
+<?php
+//use Drupal\Core\Database\Connection;
+use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\node\Entity\Node;
+use Drupal\views\ViewExecutable;
+
+/**
+ * Section 1. Insert the Transfer Option degrees into 3 tables:
+ * - asu_transferoption_main
+ * - asu_transferoption_agreement
+ * - asu_transferoption_keyword <-- Used for Keyword autocomplete
+ *
+ * Section 2. Delete Degree detail page nodes that were generated with URL of /bachelors-degrees/majorinfo/LAENGNBA/undergrad/false/2095.
+ *      Nid 2095 is the Degree listing page node that was created for generating nodes for Transfer Option detail page.
+ *
+ * @param $context
+ */
+function asuaec_transferoption_data_insert(&$context) {
+  $degree_errored_array = array();
+  $file_contents = _asuaec_transferoption_get_degrees_from_webservice();
+
+  // ---------------------------Section 1---------------------------------------
+  // DB inserts
+
+  // Truncate table before inserting data
+  $database = \Drupal::database(); //<--- This worked!!!
+  $database->truncate('asu_transferoption_main')->execute(); //Empty the table content before refreshing the table with new data
+  $database->truncate('asu_transferoption_agreement')->execute(); //Empty the table content before refreshing the table with new data
+  $database->truncate('asu_transferoption_keyword')->execute(); //Empty the table content before refreshing the table with new data
+
+  foreach($file_contents as $programs => $thearray) {
+    foreach($thearray as $key2 => $theobj) {
+
+      $data = array();
+
+      // Campuses
+      $campuses_array = $theobj->CampusStringArray;
+      if (sizeof($campuses_array) > 1) {
+        $campuses_string = implode(", ", $campuses_array);
+      } else if (sizeof($campuses_array) == 1) {
+        $campuses_string = $campuses_array[0];
+      } else {
+        $campuses_string = '';
+      }
+
+      // Categories
+      $categories_array = $theobj->planCatDescr;
+      if (sizeof($categories_array) > 1) {
+        $categories_string = implode("| ", $categories_array);
+      } else if (sizeof($categories_array) == 1) {
+        $categories_string = $categories_array[0];
+      } else {
+        $categories_string = '';
+      }
+
+      // keywords
+      $keywords_array = $theobj->keywords;
+      if (sizeof($keywords_array) > 1) {
+        $keywords_string = implode("| ", $keywords_array);
+      } else if (sizeof($keywords_array) == 1) {
+        $keywords_string = $keywords_array[0];
+      } else {
+        $keywords_string = '';
+      }
+
+      // directMatchKeywords
+      $directMatchKeywords_array = $theobj->directMatchKeywords;
+      if (sizeof($directMatchKeywords_array) > 1) {
+        $directMatchKeywords_string = implode("| ", $directMatchKeywords_array);
+      } else if (sizeof($directMatchKeywords_array) == 1) {
+        $directMatchKeywords_string = $directMatchKeywords_array[0];
+      } else {
+        $directMatchKeywords_string = '';
+      }
+
+      // keyword combined
+      $keywordsCombined = '';
+      if ($keywords_string != '' && $directMatchKeywords_string != '') {
+        $keywordsCombined = $keywords_string . '| ' . $directMatchKeywords_string;
+      } else if ($keywords_string == '' && $directMatchKeywords_string != '') {
+        $keywordsCombined = $directMatchKeywords_string;
+      } else if ($keywords_string != '' && $directMatchKeywords_string == '') {
+        $keywordsCombined = $keywords_string;
+      }
+
+      $data['AcadPlan'] = $theobj->AcadPlan;
+
+      // Transfer Agreement -- It is nested arrays.
+
+      $transferAgreementInfo_array = $theobj->transferAgreementInfo; //<--- This is array.
+//          \Drupal::logger('asuaec_transferoption')->notice("transferAgreementInfo_array:<pre>" . print_r($transferAgreementInfo_array, true) . "</pre>");
+
+      if (sizeof($transferAgreementInfo_array) >= 1) {
+//            \Drupal::logger('asuaec_transferoption')->notice("size of array:<pre>" . sizeof($transferAgreementInfo_array) . "</pre>");
+//            \Drupal::logger('asuaec_transferoption')->notice("transferAgreementInfo_array:<pre>" . print_r($transferAgreementInfo_array, true) . "</pre>");
+
+        $i = 0;
+        foreach ($transferAgreementInfo_array as $key => $obj) {
+//              \Drupal::logger('asuaec_transferoption')->notice("key:<pre>" . $key . "</pre>");
+//              \Drupal::logger('asuaec_transferoption')->notice("obj:<pre>" . print_r($obj, true) . "</pre>");
+          foreach ($obj as $key2 => $val) {
+//                \Drupal::logger('asuaec_transferoption')->notice("key2:<pre>" . $key2 . "</pre>");
+//                \Drupal::logger('asuaec_transferoption')->notice("val:<pre>" . print_r($val, true) . "</pre>");
+
+            if($key2 == "tACommunityCollege") {
+              $data['transferAgreementInfo'][$i]['tACommunityCollege'] = $val;
+            }
+
+            if($key2 == "transferAgreementType") {
+              $data['transferAgreementInfo'][$i]['transferAgreementType'] = $val;
+            }
+
+
+            if($key2 == "transferAgreementYearsUrls") {
+              $transferAgreementYearsUrls_array = $val; //<---This is array.
+              foreach ($transferAgreementYearsUrls_array as $theArray) {
+                $data['transferAgreementInfo'][$i]['transferAgreementYearsUrls'][$theArray[0]] = $theArray[1];
+              }
+            }
+//                \Drupal::logger('asuaec_transferoption')->notice("Checking transferAgreementInfo:<pre>" . print_r($data['transferAgreementInfo'], true) . "</pre>");
+          } // END OF  foreach ($obj as $key2 => $val)
+
+          $i++;
+        } // END OF foreach ($transferAgreementInfo_array as $key => $val)
+      } // END OF if (sizeof($transferAgreementInfo_array) >= 1)
+
+      // The rest
+      $data['Descr100'] = isset($theobj->Descr100) ? $theobj->Descr100 : ''; // Degree name
+      $data['Degree'] = isset($theobj->Degree) ? $theobj->Degree : '';
+      $data['CollegeDescr100'] = isset($theobj->CollegeDescr100) ? $theobj->CollegeDescr100 : ''; // ex. Business, W. P. Carey School of
+      $data['DiplomaDescr'] = isset($theobj->DiplomaDescr) ? $theobj->DiplomaDescr : ''; // ex. W. P. Carey School of Business
+      $data['CollegeUrl'] = isset($theobj->CollegeUrl) ? $theobj->CollegeUrl : '';
+      // Not used:
+//          $data['AsuCareerOpp'] = isset($theobj->AsuCareerOpp) ? $theobj->AsuCareerOpp : '';
+//          $data['DegreeDescrlong'] = isset($theobj->DegreeDescrlong) ? $theobj->DegreeDescrlong : '';
+//          $data['AsuCritTrackUrl'] = isset($theobj->AsuCritTrackUrl) ? $theobj->AsuCritTrackUrl : '';
+//          $data['majorMapDefaultYear'] = isset($theobj->majorMapDefaultYear) ? $theobj->majorMapDefaultYear : '';
+//          $data['CollegeAcadOrg'] = isset($theobj->CollegeAcadOrg) ? $theobj->CollegeAcadOrg : ''; // CHI
+//          $data['AcadProg'] = isset($theobj->AcadProg) ? $theobj->AcadProg : ''; // UGHI
+//          $data['DepartmentCode'] = isset($theobj->DepartmentCode) ? $theobj->DepartmentCode : ''; // CPUBAFF
+//          $data['accelerateDegrees'] = isset($theobj->accelerateDegrees) ? 1 : ''; // If the $theobj->accelerateDegrees object is not empty, return 1.
+//          $data['concurrentDegrees'] = isset($theobj->concurrentDegrees) ? 1 : ''; // If the $theobj->concurrentDegrees object is not empty, return 1.
+//          $data['CampusWueInfo'] = isset($theobj->CampusWueInfo) ? 1 : ''; // If the $theobj->CampusWueInfo object is not empty, return 1.
+//          $data['AsuCustomText'] = isset($theobj->AsuCustomText) ? $theobj->AsuCustomText : '';
+//          $data['AsuNactvAppOvrd'] = isset($theobj->AsuNactvAppOvrd) ? $theobj->AsuNactvAppOvrd : '';
+
+
+      // Insert to database
+
+      // Main table - asu_transferoption_main
+      $dbentry_main = array(
+        'AcadPlan' => $data['AcadPlan'],
+        'Descr100' => $data['Descr100'],
+        'Degree' => $data['Degree'],
+        'CollegeDescr100' => $data['CollegeDescr100'],
+        'DiplomaDescr' => $data['DiplomaDescr'],
+        'CampusStringArray' => $campuses_string,
+        'planCatDescr' => $categories_string,
+        'keywords' => $keywords_string,
+        'directMatchKeywords' => $directMatchKeywords_string,
+        // Not used:
+//            'AsuCareerOpp' => $data['AsuCareerOpp'],
+//            'DegreeDescrlong' => $data['DegreeDescrlong'],
+//            'AsuCritTrackUrl' => $data['AsuCritTrackUrl'],
+//            'majorMapDefaultYear' => $data['majorMapDefaultYear'],
+//            'CollegeAcadOrg' => $data['CollegeAcadOrg'], // CHI
+//            'AcadProg' => $data['AcadProg'], // UGHI
+//            'DepartmentCode' => $data['DepartmentCode'], // CPUBAFF
+      );
+
+      // Transfer agreement table - asu_transferoption_agreement
+      $dbentry_agreement = array();
+      if(isset($data['transferAgreementInfo'])) {
+        foreach ($data['transferAgreementInfo'] as $transferAgreementInfo) {
+          foreach ($transferAgreementInfo['transferAgreementYearsUrls'] as $year => $url) {
+            $dbentry_agreement = array(
+              'AcadPlan' => $data['AcadPlan'],
+              'tACommunityCollege' => $transferAgreementInfo['tACommunityCollege'],
+              'transferAgreementType' => $transferAgreementInfo['transferAgreementType'],
+              'transferAgreementYearsUrlsYear' => $year,
+              'transferAgreementYearsUrlsURL' => $url,
+              'Descr100' => $data['Descr100'],
+              'Degree' => $data['Degree'],
+              'CollegeDescr100' => $data['CollegeDescr100'],
+              'DiplomaDescr' => $data['DiplomaDescr'],
+              'CollegeUrl' => $data['CollegeUrl'],
+              'CampusStringArray' => $campuses_string,
+              'planCatDescr' => $categories_string,
+              'keywords' => $keywords_string,
+              'directMatchKeywords' => $directMatchKeywords_string,
+              'keywordsCombined' => $keywordsCombined,
+            );
+
+              // Insert to database
+              try {
+                $query2 = $database->insert('asu_transferoption_agreement')->fields($dbentry_agreement)->execute();
+              } catch (Exception $e) {
+                array_push($degree_errored_array, $data['AcadPlan']);
+                \Drupal::logger('asuaec_transferoption')->error($e->getMessage());
+                continue;
+              }
+
+
+          } // END OF foreach ($transferAgreementInfo['transferAgreementYearsUrls'] as $year => $url)
+//              \Drupal::logger('asuaec_transferoption')->notice("dbentry_agreement:<pre>" . print_r($dbentry_agreement, true) . "</pre>");
+
+
+        } // END OF foreach ($data['transferAgreementInfo'] as $transferAgreementInfo)
+      } // END OF if(isset($data['transferAgreementInfo']))
+
+        // \Drupal::logger('asuaec_transferoption')->notice("dbentry:<pre>" . print_r($dbentry, true) . "</pre>");
+      try {
+          $query = $database->insert('asu_transferoption_main')->fields($dbentry_main)->execute();
+      } catch (Exception $e) {
+          array_push($degree_errored_array, $data['AcadPlan']);
+          \Drupal::logger('asuaec_transferoption')->error($e->getMessage());
+          continue;
+      }
+
+      // Keyword table - asu_transferoption_keyword
+
+      if (sizeof($keywords_array) > 1) {
+        foreach($keywords_array as $keyword) {
+          $dbentry_keyword = array();
+          $dbentry_keyword = array(
+            'keyword' => $keyword,
+            'transferAgreementType' => $transferAgreementInfo['transferAgreementType'],
+          );
+          try {
+            $query = $database->insert('asu_transferoption_keyword')->fields($dbentry_keyword)->execute();
+          } catch (Exception $e) {
+            array_push($degree_errored_array, $data['AcadPlan']);
+            \Drupal::logger('asuaec_transferoption')->error($e->getMessage());
+            continue;
+          }
+        } // END OF foreach($keywords_array as $keyword)
+      } // END OF if (sizeof($keywords_array) > 1)
+
+      if (sizeof($directMatchKeywords_array) > 1) {
+        foreach($directMatchKeywords_array as $keyword) {
+          $dbentry_keyword = array();
+          $dbentry_keyword = array(
+            'keyword' => $keyword,
+            'transferAgreementType' => $transferAgreementInfo['transferAgreementType'],
+          );
+          try {
+            $query = $database->insert('asu_transferoption_keyword')->fields($dbentry_keyword)->execute();
+          } catch (Exception $e) {
+            array_push($degree_errored_array, $data['AcadPlan']);
+            \Drupal::logger('asuaec_transferoption')->error($e->getMessage());
+            continue;
+          }
+        } // END OF if (sizeof($directMatchKeywords_array) > 1)
+      } // END OF if (sizeof($directMatchKeywords_array) > 1)
+
+    } // END OF foreach($thearray as $key2 => $theobj)
+  } // END OF foreach($file_contents as $programs => $thearray)
+
+  // ---------------------------END OF Section 1------------------------------------
+
+  // ---------------------------Section 2------------------------------------
+  // Delete Degree detail page nodes that were generated with URL of /bachelors-degrees/majorinfo/LAENGNBA/undergrad/false/2095.
+  // Nid 2095 is the Degree listing page node that was created for generating nodes for Transfer Option detail page.
+
+  // Get all nodes with degree_detail_page content type.
+  //$nids = \Drupal::entityQuery('node')->condition('type','degree_detail_page')->execute();
+  $nids = \Drupal::entityQuery('node')->accessCheck(FALSE)->condition('type','degree_detail_page')->execute();
+  
+  //  $nodes =  \Drupal\node\Entity\Node::loadMultiple($nids);
+
+    // Why this is not working?
+    $config = \Drupal::config('asuaec_transferoption.settings');
+    $degreelistingpage_nid = $config->get('asuaec_transferoption_degreelistingpage_nid');
+//    \Drupal::logger('asuaec_transferoption')->notice("degreelistingpage_nid3:<pre>" . $degreelistingpage_nid . "</pre>");
+//  $degreelistingpage_nid = '2095';
+  
+  // Iterate degree_detail_page content type nodes.
+  foreach ($nids as $nid) {
+    $alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $nid);
+
+    // If node has alias with 2095 at the end, delete the node.
+    if (preg_match('/(\/bachelors-degrees\/majorinfo\/)(\w+)(\/undergrad\/false\/' . $degreelistingpage_nid . ')/', $alias, $matches) == 1) {
+
+      // Delete the node
+      try {
+        $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);  //$node = Node::load($nid); <---This is fine instead also.
+
+        // Check if node exists with the given nid.
+        if ($node) {
+          $node->delete();
+        }
+      } catch (Exception $e) {
+        \Drupal::logger('asuaec_transferoption')->error("Transferoption - Error while deleting Degree detail page nodes: " . $e->getMessage());
+        continue;
+      }
+
+    } // END OF if (preg_match('/(\/bachelors-degrees\/majorinfo\/)(\w+)(\/undergrad\/false\/' . $degreelistingpage_nid . ')/', $alias, $matches) == 1)
+
+  } // END OF foreach ($nids as $nid)
+
+  // ---------------------------END OF Section 2------------------------------------
+
+  $context['results']['degrees_errored_out'] = $degree_errored_array;
+
+} // END OF function asuaec_transferoption_data_insert()
+
+/**
+ * Get degrees from web service using new method that returns Json.
+ *
+ * @return mixed|string
+ *  Returns Json decoded object
+ */
+function _asuaec_transferoption_get_degrees_from_webservice() {
+    $client = \Drupal::httpClient();
+    $filter = '';
+    $file_contents = '';
+    try {
+        $config = \Drupal::config('asuaec_transferoption.settings');
+        $webservice_url = $config->get('asuaec_transferoption_url');
+        // \Drupal::logger('asuaec_transferoption')->notice("webservice_url: <pre>" . $webservice_url . "</pre>");
+        $url = $webservice_url . $filter;
+        // \Drupal::logger('asuaec_transferoption2')->notice("url: <pre>" . $url . "</pre>");
+        $request = $client->get($url);
+        $code = $request->getStatusCode();
+        if ($code == 200) {
+            $content = $request->getBody()->getContents();
+            if ($content != null) {
+                $file_contents = json_decode($content);
+            } else {
+                throw new Exception("Web service didn't return anything.");
+            }
+        } else {
+            throw new Exception("Error occured. Error code: " . $code);
+        }
+    }
+    catch (Exception $e) {
+        $messenger = \Drupal::messenger();
+        $messenger->addMessage(t($e->getMessage(), []));
+        \Drupal::logger('asuaec_transferoption')->error($e->getMessage());
+    }
+    return $file_contents;
+}
+
+/**
+ * Batch 'finished' callback used by both batch 1, batch 2 and batch 3.
+ */
+function asuaec_transferoption_finished($success, $results, $operations) {
+  $messenger = \Drupal::messenger();
+    if ($success) {
+      $errored_degrees = '';
+      if((isset($results['degrees_errored_out']) && sizeof($results['degrees_errored_out']) > 0)) {
+        $errored_degrees .= print_r($results['degrees_errored_out'], true);
+        \Drupal::logger('asuaec_transferoption')->notice("degrees_errored_out:<pre>" . $errored_degrees . "</pre>");
+        $messenger->addMessage(t('Degrees that had errored out during import: @degrees', ['@degrees' => $errored_degrees]), MessengerInterface::TYPE_ERROR);
+      }
+      else {
+        $messenger->addMessage(t('All degrees were imported.', []));
+
+
+      }
+    }
+    else {
+        // An error occurred.
+        // $operations contains the operations that remained unprocessed.
+        $error_operation = reset($operations);
+        $messenger->addMessage(
+            t('An error occurred while processing @operation with arguments : @args',
+                [
+                    '@operation' => $error_operation[0],
+                    '@args' => print_r($error_operation[0], TRUE),
+                ]
+            ),
+          MessengerInterface::TYPE_ERROR
+        );
+    }
+}
+
+
+
+/**
+ * Implements hook_views_data().
+ */
+/**
+ * Basic textfield filter to handle string filtering commands
+ * including equality, like, not like, etc.
+ *
+ * @ingroup views_filter_handlers
+ *
+ * @ViewsFilter("string")
+ */
+function asuaec_transferoption_views_data() {
+  $data = [];
+  $data['asu_transferoption_agreement'] = [];
+
+  // Describe a single database table named news_subs.
+  $data['asu_transferoption_agreement']['table'] = [
+    // Human readable name of this table used in the Views UI to prefix fields,
+    // filters, etc. Example: "News subscriptions: Email". This string should
+    // be translatable.
+    'group' => t('asu_transferoption_agreement table'),
+
+    // Name of the module that provides the table schema.
+    'provider' => 'asuaec_transferoption',
+
+    // A table can be a "base" table, meaning that in Views you can use it as
+    // base for a View. Non-base tables can be associated to a base table via
+    // a relationship. The primary table for your custom data should be a base
+    // table. Add the "base" key with the following properties:
+    'base' =>  [
+      // Identifier (primary) field in this table for Views.
+      'field' => 'theId',
+      // Label in the UI.
+      'title' => t('Transfer agreements'),
+      // Longer description in the UI. Required.
+      'help' => t('Transfer agreements'),
+    ]
+  ];
+
+  // Other top level elements of the news_subs array define the individual
+  // columns of the table that you want to make available to Views. The key is
+  // the name (and must be unique) used by Views. It's usually the same as the
+  // name of the database column it describes. But doesn't have to be. It's
+  // possible to created computed fields that are not a one-to-one relationship
+  // to a column in the database. For example, a field that contains a link to
+  // edit a record from the table.
+  //
+  // The 'title' and 'help' elements are required.
+  //
+  // Each field definition needs to describe the views plugins (frequently
+  // called "handlers") that are responsible for handling the fields data in
+  // different scenarios including: field, filter, sort, argument, area, and
+  // relationship. All of which are optional.
+  $data['asu_transferoption_agreement']['AcadPlan'] = [
+    // Human readable name of the field that will be displayed in the UI.
+    'title' => t('Plan code (AcadPlan)'),
+    // Required help text that describes the content of the field.
+    'help' => t('Plan code'),
+    // Optional handler to use when displaying a field. This maps to what a user
+    // will see in the "Fields" section of the Views configuration UI. Specify
+    // this if you want a user to be able to display the content of this field.
+    'field' => [
+      // ID of field handler plugin to use. More information about this below.
+      'id' => 'standard',
+    ],
+    // Optional handler to use when sorting field data. This maps to what a user
+    // will see in the "Sort criteria" section of the Views configuration UI.
+    // Specify this if you want a user to be able to sort a Views results based
+    // on the content of this field.
+    'sort' => [
+      'id' => 'standard',
+    ],
+    // Optional handler to use when filtering results based on a field. This
+    // maps to what a user will see in the "Filter criteria" section of the
+    // Views configuration UI. Specify this if you want a user to be able to
+    // filter a Views results based on the content of this field.
+    'filter' => [
+      'id' => 'string',
+    ],
+    // Optional handler to use when making this field available as an argument.
+    // This maps to what a user will see in the "Contextual filters" section of
+    // the Views configuration UI. Specify this if you want a user to be able to
+    // use this field in contextual filters.
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  // More examples of field descriptions.
+  $data['asu_transferoption_agreement']['tACommunityCollege'] = [
+    'title' => t('Community college (tACommunityCollege)'),
+    'help' => t('Community college'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  $data['asu_transferoption_agreement']['transferAgreementType'] = [
+    'title' => t('TAG, MAPP, etc (transferAgreementType)'),
+    'help' => t('TAG, MAPP, etc'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  $data['asu_transferoption_agreement']['transferAgreementYearsUrlsYear'] = [
+    'title' => t('Transfer agreement year (transferAgreementYearsUrlsYear)'),
+    'help' => t('Transfer agreement year'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  $data['asu_transferoption_agreement']['transferAgreementYearsUrlsURL'] = [
+    'title' => t('Transfer agreement URL (transferAgreementYearsUrlsURL)'),
+    'help' => t('Transfer agreement URL'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  $data['asu_transferoption_agreement']['Descr100'] = [
+    'title' => t('Degree name (Descr100)'),
+    'help' => t('Degree name'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  $data['asu_transferoption_agreement']['Degree'] = [
+    'title' => t('BS, BA, etc (Degree)'),
+    'help' => t('BS, BA, etc'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  $data['asu_transferoption_agreement']['CollegeDescr100'] = [
+    'title' => t('College/school name (CollegeDescr100)'),
+    'help' => t('College/school name'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  $data['asu_transferoption_agreement']['DiplomaDescr'] = [
+    'title' => t('College/school name 2 (DiplomaDescr)'),
+    'help' => t('College/school name 2'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  $data['asu_transferoption_agreement']['CollegeUrl'] = [
+    'title' => t('College/school URL (CollegeUrl)'),
+    'help' => t('College/school URL'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  $data['asu_transferoption_agreement']['CampusStringArray'] = [
+    'title' => t('Campuses (CampusStringArray)'),
+    'help' => t('Campuses'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  $data['asu_transferoption_agreement']['planCatDescr'] = [
+    'title' => t('Categories (planCatDescr)'),
+    'help' => t('Categories'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  $data['asu_transferoption_agreement']['keywordsCombined'] = [
+    'title' => t('keywords and directMatchKeywords combined'),
+    'help' => t('keywords and directMatchKeywords combined'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  $data['asu_transferoption_agreement']['keywords'] = [
+    'title' => t('keywords'),
+    'help' => t('keywords'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  $data['asu_transferoption_agreement']['directMatchKeywords'] = [
+    'title' => t('directMatchKeywords'),
+    'help' => t('directMatchKeywords'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  return $data;
+}
+
+// TODO: Take current year and change filter
+// https://www.drupal.org/forum/support/module-development-and-code-questions/2015-04-27/change-filter-value-in-views
+//function asuaec_transferoption_views_pre_view(&$view, &$display_id, &$args) {
+//
+//  $filters = $view->display_handler->getOption('filters');
+//
+//
+//  if ($filters['field_filter']) {
+//    foreach ($filters['field_filter']['value'] as $key => $filter) {
+//      unset($filters['field_filter']['value'][$key]);
+//    }
+//  }
+//  $view->display_handler->overrideOption('filters', $filters);
+//
+//
+//}
+//
+//function customcode_views_pre_view(&$view, &$display_id, &$args){
+//  $view->display['default']->handler->options['filters']['field_raion_value']['value']  = array(
+//    'val1' => 'val1'
+//  );
+//}
+
+
+
+
+
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function asuaec_transferoption_views_pre_render(ViewExecutable $view) {
+  if (isset($view) && ($view->storage->id() == 'transfer_option_search')) {
+//      \Drupal::logger('asuaec_transferoption')->notice("views current display:<pre>" . print_r($view->getDisplay(), true) . "</pre>");
+    $view->element['#attached']['library'][] = 'asuaec_transferoption/transfer-option-search-view-library';
+
+    // Didn't work.
+//    if($view->getDisplay['display_title'] == 'block_1') {
+//      $view->element['#attached']['library'][] = 'asuaec_transferoption/transfer-option-search-view-library-mapp';
+//    }
+//    if($view['view']->current_display == 'block_3') {
+//      $view->element['#attached']['library'][] = 'asuaec_transferoption/transfer-option-search-view-library-tag';
+//    }
+
+  }
+}
+
+
+
+/**
+ * Implements hook_page_attachments_alter
+ *
+ * Include JS if it meets the URL pattern of:
+ *   ex:
+ */
+function asuaec_transferoption_page_attachments_alter(array &$page) {
+
+  $config = \Drupal::config('asuaec_transferoption.settings');
+  $degreelistingpage_nid = $config->get('asuaec_transferoption_degreelistingpage_nid');
+//    \Drupal::logger('asuaec_transferoption')->notice("degreelistingpage_nid from attachment alter:<pre>" . $degreelistingpage_nid . "</pre>");
+
+  // Get the current path alias.
+  $current_path = \Drupal::service('path.current')->getPath();
+  $alias = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
+//  \Drupal::logger('asuaec_transferoption')->notice("test from degree detail page - alias:<pre>" . $alias . "</pre>");
+
+  if (preg_match('/(\/bachelors-degrees\/majorinfo\/)(\w+)(\/undergrad\/false\/' . $degreelistingpage_nid . ')/', $alias, $matches) == 1) {
+//    \Drupal::logger('asuaec_transferoption')->notice("test from preg_match page :<pre>" . $matches[1] . "</pre>");
+
+    $page['#attached']['library'][] = 'asuaec_transferoption/transferoption-library';
+
+  }
+}
+
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Change the following exposed filters' type from text field to dropdown list:
+ *   Campus, Interest, and School/College
+ */
+function asuaec_transferoption_form_views_exposed_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  $view = $form_state->getStorage('view');
+  if ((($view['view']->id() == 'transfer_option_search') && ($view['view']->current_display == 'block_1')) ||
+    (($view['view']->id() == 'transfer_option_search') && ($view['view']->current_display == 'block_3'))) {
+
+    // Campus dropdown
+
+    //Get all options from DB
+    $campusOptions = array();
+    $interestOptions = array();
+    $commcollegeOptions = array();
+
+    try {
+      $database = \Drupal::database();
+      $query = $database->select('asu_transferoption_agreement', 'a');
+      $query->fields('a', ['CampusStringArray', 'planCatDescr']);
+      $result = $query->execute();
+
+      foreach ($result as $record) {
+
+        // Campus dropdown
+        $campusStringArray = $record->CampusStringArray;
+        $campusTempArray = explode(", ", $campusStringArray);
+
+        foreach($campusTempArray as $campusCode) {
+          $campusName = getCampusName($campusCode);
+          if (!array_key_exists('$campusCode', $campusOptions)) {
+            $campusOptions[$campusCode] = $campusName;
+          }
+        } // END OF foreach($campusTempArray as $campusCode)
+
+        // Interest dropdown
+        $planCatDescr = $record->planCatDescr;
+        $interestTempArray = explode('|', $planCatDescr);
+        if(sizeof($interestTempArray) > 0) {
+          foreach ($interestTempArray as $interestName) {
+            if (!in_array(trim($interestName), $interestOptions)) {
+              $interestOptions[trim($interestName)] = trim($interestName);
+            }
+          }
+        }
+
+      } // END OF foreach ($result as $record)
+
+      // Include 'Any' option to Campus dropdown
+      $campusOptions = asuCampusSort($campusOptions);
+      $campusOptions = array('' => 'Any') + $campusOptions;
+      // Include 'Any' option to Interest dropdown
+      asort($interestOptions);
+      $interestOptions = array('' => 'Any') + $interestOptions;
+
+      // School/College dropdown
+
+      $query2 = $database->select('asu_transferoption_agreement', 'a');
+      $query2->fields('a', ['DiplomaDescr']);
+      $result2 = $query2->distinct()->execute();
+      $schoolcollegeOptions = array();
+      foreach ($result2 as $record2) {
+        $schoolcollegeName = $record2->DiplomaDescr;
+        $schoolcollegeOptions[$schoolcollegeName] = $schoolcollegeName;
+      }
+      asort($schoolcollegeOptions);
+      $schoolcollegeOptions = array('' => 'Any') + $schoolcollegeOptions;
+
+      // Comm college dropdown
+
+      if($view['view']->current_display == 'block_3') {
+        $query3 = $database->select('asu_transferoption_agreement', 'a');
+        $query3->fields('a', ['tACommunityCollege']);
+        $result3 = $query3->distinct()->execute();
+        $commcollegeOptions = [];
+        foreach ($result3 as $record3) {
+          $tACommunityCollege = $record3->tACommunityCollege;
+          $commcollegeOptions[$tACommunityCollege] = $tACommunityCollege;
+        }
+        asort($commcollegeOptions);
+//        $commcollegeOptions = array('Select' => 'Select') + $commcollegeOptions;
+      }
+
+    } catch (Exception $e) {
+      \Drupal::logger('asuaec_transferoption')->error($e->getMessage());
+    }
+
+    // Hard code it to make the page load faster?
+//    $options = array (
+//      '' => 'Any',
+//      'DTPHX' => 'Downtown Phoenix campus',
+//      'POLY' => 'Poly',
+//      'TEMPE' => 'Tempe',
+//      'WEST' => 'West',
+//      'CALHC' => 'Lake Havasu City',
+//      'COCHS' => 'ASU@Cochise',
+//      'PIMA' => 'ASU@Pima',
+//      'CAC' => 'ASU@Pinal',
+//      'EAC' => 'ASU@TheGilaValley',
+//      'TUCSN' => 'ASU@Tucson',
+//      'YAVAP' => 'ASU@Yavapai',
+//      'AWC' => 'ASU@Yuma',
+//      'ONLNE' => 'ASU Online'
+//    );
+
+    // Change the exposed filters' type from text field to dropdown list
+
+    if (isset($form['CampusStringArray'])) {
+      $form['CampusStringArray']['#type'] = 'select';
+      $form['CampusStringArray']['#options'] = $campusOptions;
+      $form['CampusStringArray']['#size'] = 1;
+      $form['CampusStringArray']['#default_value'] = '';
+    }
+    if (isset($form['planCatDescr'])) {
+      $form['planCatDescr']['#type'] = 'select';
+      $form['planCatDescr']['#options'] = $interestOptions;
+      $form['planCatDescr']['#size'] = 1;
+      $form['planCatDescr']['#default_value'] = '';
+    }
+    if (isset($form['DiplomaDescr'])) {
+      $form['DiplomaDescr']['#type'] = 'select';
+      $form['DiplomaDescr']['#options'] = $schoolcollegeOptions;
+      $form['DiplomaDescr']['#size'] = 1;
+      $form['DiplomaDescr']['#default_value'] = '';
+    }
+    if($view['view']->current_display == 'block_3') {
+      if (isset($form['tACommunityCollege'])) {
+        $form['tACommunityCollege']['#type'] = 'select';
+        $form['tACommunityCollege']['#options'] = $commcollegeOptions;
+        $form['tACommunityCollege']['#size'] = 1;
+        $form['tACommunityCollege']['#default_value'] = "Arizona Western College";
+        $form['tACommunityCollege']['#empty_option'] = 'Select';
+        unset($form['tACommunityCollege']['#description']);
+        unset($form['tACommunityCollege']['#context']);
+        unset($form['tACommunityCollege']['#process']);
+        unset($form['tACommunityCollege']['#pre_render']);
+//        $form['tACommunityCollege']['#validate'] = 'my_custom_validation_callback';
+      }
+        \Drupal::logger('asuaec_transferoption')->notice("test:<pre>" . print_r($form['tACommunityCollege'], true) . "</pre>");
+    }
+
+    // Keywords - Auto complete
+
+    // MAPP and TAG -- Calling a different routing based on a different Views display:
+    //   asuaec_transferoption.autocomplete.keywords.mapp
+    //   asuaec_transferoption.autocomplete.keywords.tag
+    if($view['view']->current_display == 'block_1') { // MAPP
+      // Make Auto complete use the following JSON page: ex: /admin/asuaec_transferoption/autocomplete/keywords/mapp?q=bio
+      if (isset($form['keywordsCombined'])) {
+        $form['keywordsCombined']['#type'] = 'textfield';
+        $form['keywordsCombined']['#title'] = t('Keyword Autocomplete');
+        $form['keywordsCombined']['#autocomplete_route_name'] = 'asuaec_transferoption.autocomplete.keywords.mapp';
+      }
+
+    } else if($view['view']->current_display == 'block_3') { // TAG
+      // Make Auto complete use the following JSON page: ex: /admin/asuaec_transferoption/autocomplete/keywords/tag?q=bio
+      if (isset($form['keywordsCombined'])) {
+        $form['keywordsCombined']['#type'] = 'textfield';
+        $form['keywordsCombined']['#title'] = t('Keyword Autocomplete');
+        $form['keywordsCombined']['#autocomplete_route_name'] = 'asuaec_transferoption.autocomplete.keywords.tag';
+      }
+    }
+
+  } // END OF if ((($view['view']->id() == 'transfer_option_search') && ($view['view']->current_display == 'block_1')) || (($view['view']->id() == 'transfer_option_search') && ($view['view']->current_display == 'block_3')))
+
+//  \Drupal::logger('asuaec_transferoption')->notice("test:<pre>" . $form['#id'] . "</pre>");
+  if ($form['#id'] == 'views-exposed-form-transfer-option-search-block-3') {
+    \Drupal::logger('asuaec_transferoption')->notice("field_tACommunityCollege_value :<pre>" . print_r($form_state->getUserInput(), true) . "</pre>");
+
+//    array_unshift($form['#validate'], 'my_custom_validation_callback');
+
+    // PROBLEM:
+    // Validation runs when page loaded before pressing "Apply" button
+
+     if($form_state->getUserInput()['tACommunityCollege'] != '') {
+       $form['#validate'][] = 'custom_forms_views_exposed_form_validate';
+     }
+
+  }
+
+
+} // END OF asuaec_transferoption_form_views_exposed_form_alter
+
+function custom_forms_views_exposed_form_validate($form, &$form_state) {
+  \Drupal::logger('asuaec_transferoption')->notice("test from preg_match page :<pre>" . "test" . "</pre>");
+  \Drupal::logger('asuaec_transferoption')->notice("test from preg_match page :<pre>" . print_r($form_state->getUserInput(), true) . "</pre>");
+  if($form_state->getUserInput()['tACommunityCollege'] == '') {
+    \Drupal::logger('asuaec_transferoption')->notice("test from preg_match page :<pre>" . "test2" . "</pre>");
+
+    $form_state->setErrorByName('tACommunityCollege', t('You must select comm college.'));
+
+  }
+}
+
+
+//function asuaec_transferoption_views_exposed_form_validate(&$form, FormStateInterface $form_state) {
+//
+//  $view = &$form_state->get('view');
+//  $input = $view->getExposedInput();
+//      \Drupal::logger('asuaec_transferoption')->notice("test from preg_match page :<pre>" . print_r($input, true) . "</pre>");
+//
+//  if (isset($input['field_tACommunityCollege'])) {
+//    if (empty($input['field_tACommunityCollege'])) {
+//      $form_state->setError($form['field_tACommunityCollege'], "Please select field MYFIELD");
+//    }
+//  }
+//}
+//function asuaec_transferoption_form_views_exposed_form_alter(&$form, &$form_state) {
+//  if ($form['#id'] == 'views-exposed-form-MY_VIEWS_NAME_MY_VIEWS_DISPLAY') {
+//    array_unshift($form['#validate'], 'my_custom_validation_callback');
+//  }
+//}
+
+
+/**
+ * Implements hook_theme().
+ *
+ * Override Views template twig from this module.
+ *   /templates/views-view-grouping--transfer-option-search.html.twig
+ */
+function asuaec_transferoption_theme($existing, $type, $theme, $path){
+    return [
+      'views_view_grouping__transfer_option_search' => [
+          'render element' => 'elements',
+          'base hook' => 'views'
+      ]
+    ];
+}
+
+/**
+ * Implements hook_preprocess_views_view_field().
+ *
+ * Convert Campus from code to user-friendly name.
+ */
+function asuaec_transferoption_preprocess_views_view_field(&$variables) {
+  $view = $variables['view'];
+  $field = $variables['field'];
+  if (
+    ($view->storage->id() == 'transfer_option_search' &&
+      $view->current_display == 'block_1' &&
+      $field->options["id"] == 'CampusStringArray') ||
+    ($view->storage->id() == 'transfer_option_search' &&
+      $view->current_display == 'block_3' &&
+      $field->options["id"] == 'CampusStringArray')
+  ) {
+
+      $campusCodeArray = explode(',', (string)$variables['output']);
+      $output = '<ul class="list-unstyled">';
+      foreach($campusCodeArray as $campusCode) {
+        $output .= '<li>' . getCampusName($campusCode) . '</li>';
+      }
+      $output .= '</ul>';
+//      \Drupal::logger('asuaec_transferoption')->notice("testArray: <pre>" . print_r($campusCodeArray, true) . "</pre>");
+      $variables['output'] =  [
+        '#markup' => $output,
+      ];
+  } // END OF if
+}
+
+/**
+ * Helping function
+ */
+function getCampusName ($campusCode) {
+  $campusName = '';
+  switch (trim($campusCode)) {
+    case 'AWC':
+      $campusName = 'ASU@Yuma';
+      break;
+    case 'CALHC':
+      $campusName = 'Lake Havasu City';
+      break;
+    case 'DTPHX':
+      $campusName = 'Downtown Phoenix campus';
+      break;
+    case 'EAC':
+      $campusName = 'ASU@TheGilaValley';
+      break;
+    case 'ONLNE':
+      $campusName = 'ASU Online';
+      break;
+    case 'POLY':
+      $campusName = 'Polytechnic campus';
+      break;
+    case 'TEMPE':
+      $campusName = 'Tempe campus';
+      break;
+    case 'TUCSN':
+      $campusName = 'ASU@Tucson';
+      break;
+    case 'WEST':
+      $campusName = 'West campus';
+      break;
+    case 'CAC':
+      $campusName = 'ASU@Pinal';
+      break;
+    case 'COCHS':  //Added by Archana 06/18
+      $campusName = 'ASU@Cochise';
+      break;
+    case 'YAVAP':
+      $campusName = 'ASU@Yavapai';
+      break;
+    case 'PIMA':
+      $campusName = 'ASU@Pima';
+      break;
+    case 'WASHD':
+      $campusName = 'ASU@Washington, D.C.';
+      break;
+    case 'MXCTY':
+      $campusName = 'ASU@MexicoCity';
+      break;
+    case 'NEAZ':
+      $campusName = 'ASU@NortheasternArizona';
+      break;
+    case 'LOSAN':
+      $campusName = 'ASU Local@Los Angeles';
+      break;
+  } // END OF switch
+  return $campusName;
+}
+
+/**
+ * Helping function
+ *
+ * Sort campus in campus dropdown.
+ */
+function asuCampusSort ($campusoptions) {
+  asort($campusoptions);
+
+  // Bring ASU@XXX at the bottom
+  // Also, move Lake Havasu City and ASU Online to the bottom
+  if(array_key_exists('CALHC', $campusoptions) ) { // Lake Havasu City
+    $v = $campusoptions['CALHC'];
+    unset($campusoptions['CALHC']);
+    $campusoptions['CALHC'] = $v;
+  }
+  if(array_key_exists('LOSAN', $campusoptions) ) { // ASU Local@Los Angeles
+    $v = $campusoptions['LOSAN'];
+    unset($campusoptions['LOSAN']);
+    $campusoptions['LOSAN'] = $v;
+  }
+  if(array_key_exists('COCHS', $campusoptions) ) { // ASU@Cochise
+    $v = $campusoptions['COCHS'];
+    unset($campusoptions['COCHS']);
+    $campusoptions['COCHS'] = $v;
+  }
+  if(array_key_exists('MXCTY', $campusoptions) ) { // ASU@MexicoCity
+    $v = $campusoptions['MXCTY'];
+    unset($campusoptions['MXCTY']);
+    $campusoptions['MXCTY'] = $v;
+  }
+  if(array_key_exists('NEAZ', $campusoptions) ) { // ASU@Northeastern Arizona
+    $v = $campusoptions['NEAZ'];
+    unset($campusoptions['NEAZ']);
+    $campusoptions['NEAZ'] = $v;
+  }
+  if(array_key_exists('PIMA', $campusoptions) ) {
+    $v = $campusoptions['PIMA'];
+    unset($campusoptions['PIMA']);
+    $campusoptions['PIMA'] = $v;
+  }
+  if(array_key_exists('CAC', $campusoptions) ) { // ASU@Pinal
+    $v = $campusoptions['CAC'];
+    unset($campusoptions['CAC']);
+    $campusoptions['CAC'] = $v;
+  }
+  if(array_key_exists('EAC', $campusoptions) ) { // ASU@TheGilaValley
+    $v = $campusoptions['EAC'];
+    unset($campusoptions['EAC']);
+    $campusoptions['EAC'] = $v;
+  }
+  if(array_key_exists('TUCSN', $campusoptions) ) {
+    $v = $campusoptions['TUCSN'];
+    unset($campusoptions['TUCSN']);
+    $campusoptions['TUCSN'] = $v;
+  }
+  if(array_key_exists('WASHD', $campusoptions) ) { // ASU@Washington, D.C.
+    $v = $campusoptions['WASHD'];
+    unset($campusoptions['WASHD']);
+    $campusoptions['WASHD'] = $v;
+  }
+  if(array_key_exists('YAVAP', $campusoptions) ) { // ASU@Yavapai
+    $v = $campusoptions['YAVAP'];
+    unset($campusoptions['YAVAP']);
+    $campusoptions['YAVAP'] = $v;
+  }
+  if(array_key_exists('AWC', $campusoptions) ) { // ASU@Yuma
+    $v = $campusoptions['AWC'];
+    unset($campusoptions['AWC']);
+    $campusoptions['AWC'] = $v;
+  }
+  return $campusoptions;
+}
+
+/**
+ * @} End of "defgroup asuaec_transferoption".
+ */
+

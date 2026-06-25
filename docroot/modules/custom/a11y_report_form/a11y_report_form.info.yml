@@ -1,0 +1,7 @@
+name: A11y Report Form
+type: module
+description: Sends the referring url with webform submissions
+package: Custom
+core_version_requirement: ^9 || ^10
+dependencies:
+  - webform:webform

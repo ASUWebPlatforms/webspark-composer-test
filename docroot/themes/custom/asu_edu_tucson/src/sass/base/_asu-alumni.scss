@@ -1,0 +1,23 @@
+.asu-alumni-notable-and-famous-alumni {
+  @media screen and (max-width: $uds-grid-container-max-width-md) {
+    .ckeditor-col-container {
+      &.row {
+        flex-direction: column;
+
+        .fourcol {
+          // margin-bottom: $uds-size-spacing-3;
+          // padding-left: $uds-size-spacing-2;
+          // padding-right: $uds-size-spacing-2;
+        }
+      }
+    }
+  }
+
+  @media screen and (min-width: $uds-grid-container-max-width-md) {
+    .ckeditor-col-container {
+      &.row {
+        margin-bottom: $uds-size-spacing-6;
+      }
+    }
+  }
+}

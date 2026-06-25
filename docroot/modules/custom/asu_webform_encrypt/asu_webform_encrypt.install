@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * The Drupal install file.
+ */
+
+use Drupal\Core\Database\Database;
+
+/**
+ * Implements hook_schema().
+ */
+
+function asu_webform_encrypt_schema() {
+
+ $schema = [];
+ $schema['asu_webform_encrypt'] = array(
+  'description' => 'Variables stored for webform encryption',
+  'fields' => array(
+     'name' => array(
+          'description' => 'Name',
+          'type' => 'varchar',
+          'length' => 225,
+          'not null' => TRUE
+          ),
+     'value' => array(
+          'description' => 'Value',
+          'type' => 'varchar',
+          'length' => 225,
+          'not null' => TRUE
+          ),
+     'webnodeid' => array(
+          'description' => 'Webform hosting node id',
+          'type' => 'varchar',
+          'length' => 225,
+          'not null' => TRUE
+           ),
+     'urlvarname' => array(
+           'description' => 'Url variable name',
+           'type' => 'varchar',
+           'length' => 225,
+           'not null' => TRUE
+            )
+      ),
+      'primary key' => array('name'),
+  );
+  
+  return $schema;
+}

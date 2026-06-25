@@ -1,0 +1,24 @@
+uuid: 5f17fef9-b09d-4ffb-a569-e921ab7b8d71
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.asu_athletics_events
+  module:
+    - text
+id: node.asu_athletics_events.body
+field_name: body
+entity_type: node
+bundle: asu_athletics_events
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+  allowed_formats: {  }
+field_type: text_with_summary

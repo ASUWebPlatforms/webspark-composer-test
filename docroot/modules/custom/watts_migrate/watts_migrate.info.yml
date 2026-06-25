@@ -1,0 +1,13 @@
+name: watts_migrate
+type: module
+description: A module to do custom migrations for the Watts website
+package: ASU Watts College
+core_version_requirement: ^8.8.0 || ^9 || ^10
+dependencies:
+  - migrate_drupal
+  - migrate_tools
+  - migrate_plus
+  - layout_builder
+  - media_migration
+  - layout_builder_component_attributes
+  - radix_custom

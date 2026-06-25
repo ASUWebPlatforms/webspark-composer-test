@@ -1,0 +1,26 @@
+<?php
+
+use Drupal\Core\Entity\EntityTypeInterface;
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ *
+ * @param $fields
+ * @param EntityTypeInterface $entity_type
+ * @param $bundle
+ *
+ * @return void
+ */
+function analytics_resources_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle): void
+{
+  if ($entity_type->id() === 'node') {
+    if (in_array($bundle, ['data_table', 'report'])) {
+      $fields['field_external_id']->addConstraint('UniqueField');
+    }
+
+    // Resource Manager Constraints
+    if ($bundle === 'resource_manager') {
+      $fields['field_manager_external_id']->addConstraint('UniqueField');
+    }
+  }
+}

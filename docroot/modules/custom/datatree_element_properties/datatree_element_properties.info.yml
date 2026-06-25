@@ -1,0 +1,8 @@
+name: 'Datatree element properties'
+type: module
+description: 'Provides custom settings for datatree elements.'
+package: 'Custom'
+core_version_requirement: ^9.4 || ^10
+dependencies:
+  - 'webform:webform'
+  - 'webform:webform_ui'

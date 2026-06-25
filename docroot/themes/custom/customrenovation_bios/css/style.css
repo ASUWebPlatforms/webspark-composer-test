@@ -1,0 +1,14 @@
+[data-testid="partner"] a:nth-of-type(2) {
+    display: none;
+}
+
+[data-testid="partner"] a:not(:last-child) {
+    border-right: none !important;
+}
+
+.research-cards img {
+    height: 12.5rem;
+    max-width: 100%;
+    -o-object-fit: cover;
+    object-fit: cover;
+}

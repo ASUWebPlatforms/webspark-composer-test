@@ -1,0 +1,30 @@
+{#
+/**
+ * @file
+ * Default theme implementation for a link to a file.
+ *
+ * Available variables:
+ * - attributes: The HTML attributes for the containing element.
+ * - link: A link to the file.
+ * - file_size: The size of the file.
+ *
+ * @see template_preprocess_file_link()
+ *
+ * @ingroup themeable
+ */
+#}
+{% if attributes.hasClass('file--x-office-presentation') %}
+  {% set classes = ['fa-regular fa-file-powerpoint fa-2x'] %}
+{% endif %}
+
+{% if attributes.hasClass('file--application-pdf') %}
+  {% set classes = ['fa-regular fa-file-pdf fa-2x'] %}
+{% endif %}
+
+
+<span{{ attributes }}>
+<span class="fontawesome-icon-inline"><span{{ attributes.addClass(classes) }}></span>&nbsp;</span>
+{{ link }}</span>
+{% if file_size %}
+  <span>({{ file_size }})</span>
+{% endif %}

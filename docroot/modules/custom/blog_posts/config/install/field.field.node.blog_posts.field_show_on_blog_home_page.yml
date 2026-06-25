@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_show_on_blog_home_page
+    - node.type.blog_posts
+  module:
+    - options
+id: node.blog_posts.field_show_on_blog_home_page
+field_name: field_show_on_blog_home_page
+entity_type: node
+bundle: blog_posts
+label: 'show on blog home page'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

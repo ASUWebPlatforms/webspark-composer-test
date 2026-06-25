@@ -1,0 +1,12 @@
+licensure-library:
+  version: 1.x
+  js:
+    js/asuaec_licensure.js: {}
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+    - core/drupalSettings
+  css:
+    theme:
+      css/asuaec_licensure.css: {}

@@ -1,0 +1,8 @@
+evalinvoice:
+  version: 1.0
+  js:
+    src/js/evalinvoice.js: { preprocess: false  }
+  css:
+    component:
+      src/css/evalinvoice.css: { }
+  dependencies:

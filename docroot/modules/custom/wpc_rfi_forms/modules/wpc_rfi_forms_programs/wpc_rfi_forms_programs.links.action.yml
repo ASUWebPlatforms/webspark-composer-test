@@ -1,0 +1,11 @@
+# All action links for this module
+
+entity.wpc_rfi_forms_programs_program.program_add:
+  # Which route will be called by the link
+  route_name: entity.wpc_rfi_forms_programs_program.program_add
+  title: 'Add program'
+
+  # Where will the link appear, defined by route name.
+  appears_on:
+    - entity.wpc_rfi_forms_programs_program.collection
+    - wpc_rfi_forms_programs.program_settings

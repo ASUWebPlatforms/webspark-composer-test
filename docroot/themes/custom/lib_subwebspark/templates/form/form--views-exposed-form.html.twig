@@ -1,0 +1,32 @@
+{#
+    /**
+     * @file
+     * Template for a 'form' element.
+     * Original file in radix > src > components > form > form.twig
+     *
+     * Available variables
+     * - attributes: A list of HTML attributes for the wrapper element.
+     * - children: The child elements of the form.
+     *
+     * @see template_preprocess_form()
+     *
+     * @ingroup themeable
+     */
+    #}
+    {%
+      set classes = [
+        'form',
+        'uds-form',
+        is_inline ? 'form-inline',
+        'row', 
+        'mb-6',
+      ]|merge(utility_classes ? utility_classes : [])
+    %}
+{% if is_front %}
+  <h2>{{'Search our knowledge base'|t }}</h2>
+  {% else %}    
+    <h1>{{'Search'|t }}</h1>
+{% endif %}    
+    <form{{ attributes.addClass(classes) }}>
+      {{ children }}
+    </form>

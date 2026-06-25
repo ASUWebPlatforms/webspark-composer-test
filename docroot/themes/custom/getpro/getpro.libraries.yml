@@ -1,0 +1,10 @@
+style:
+  version: VERSION
+  css:
+    theme:
+      assets/css/getpro.style.css: {}
+  js:
+    assets/js/getpro.script.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

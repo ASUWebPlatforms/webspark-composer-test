@@ -1,0 +1,47 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.asu_tuition_fee_rate_data.body
+    - field.field.node.asu_tuition_fee_rate_data.feeds_item
+    - field.field.node.asu_tuition_fee_rate_data.field_acad_year
+    - field.field.node.asu_tuition_fee_rate_data.field_enrolled_hrs
+    - field.field.node.asu_tuition_fee_rate_data.field_fee_rate
+    - field.field.node.asu_tuition_fee_rate_data.field_rate_fee_code
+    - field.field.node.asu_tuition_fee_rate_data.field_rate_fee_type
+    - field.field.node.asu_tuition_fee_rate_data.field_rate_institution
+    - field.field.node.asu_tuition_fee_rate_data.field_sterm
+    - field.field.node.asu_tuition_fee_rate_data.layout_builder__layout
+    - node.type.asu_tuition_fee_rate_data
+  module:
+    - text
+    - user
+id: node.asu_tuition_fee_rate_data.teaser
+targetEntityType: node
+bundle: asu_tuition_fee_rate_data
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  feeds_item: true
+  field_acad_year: true
+  field_enrolled_hrs: true
+  field_fee_rate: true
+  field_rate_fee_code: true
+  field_rate_fee_type: true
+  field_rate_institution: true
+  field_sterm: true
+  layout_builder__layout: true

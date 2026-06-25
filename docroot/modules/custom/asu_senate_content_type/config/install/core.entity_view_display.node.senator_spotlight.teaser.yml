@@ -1,0 +1,59 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.senator_spotlight.body
+    - field.field.node.senator_spotlight.feeds_item
+    - field.field.node.senator_spotlight.field_academic_unit
+    - field.field.node.senator_spotlight.field_academic_year
+    - field.field.node.senator_spotlight.field_asu_affiliated_questions
+    - field.field.node.senator_spotlight.field_asu_search_profile
+    - field.field.node.senator_spotlight.field_campus
+    - field.field.node.senator_spotlight.field_first_name
+    - field.field.node.senator_spotlight.field_image
+    - field.field.node.senator_spotlight.field_last_name
+    - field.field.node.senator_spotlight.field_month
+    - field.field.node.senator_spotlight.field_professional_title
+    - field.field.node.senator_spotlight.field_school_or_department
+    - field.field.node.senator_spotlight.field_senate_affiliated_question
+    - field.field.node.senator_spotlight.field_senate_year
+    - field.field.node.senator_spotlight.layout_builder__layout
+    - node.type.senator_spotlight
+  module:
+    - text
+    - user
+id: node.senator_spotlight.teaser
+targetEntityType: node
+bundle: senator_spotlight
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  feeds_item: true
+  field_academic_unit: true
+  field_academic_year: true
+  field_asu_affiliated_questions: true
+  field_asu_search_profile: true
+  field_campus: true
+  field_first_name: true
+  field_image: true
+  field_last_name: true
+  field_month: true
+  field_professional_title: true
+  field_school_or_department: true
+  field_senate_affiliated_question: true
+  field_senate_year: true
+  layout_builder__layout: true

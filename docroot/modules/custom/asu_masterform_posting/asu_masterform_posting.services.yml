@@ -1,0 +1,8 @@
+services:
+  capacityAccess:
+    class: '\Drupal\asu_masterform_posting\Service\masterFormAccess'
+
+  asu_masterform_posting.pii_redirect_subscriber:
+    class: Drupal\asu_masterform_posting\EventSubscriber\PIIRedirectSubscriber
+    tags:
+      - { name: event_subscriber }

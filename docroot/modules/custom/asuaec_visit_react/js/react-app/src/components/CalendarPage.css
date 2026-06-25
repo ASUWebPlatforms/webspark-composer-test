@@ -1,0 +1,716 @@
+/*--- Layout ---*/
+.calendar-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+.offcanvas-calendar {
+  flex: 1;
+  margin-right: 140px;
+}
+.right-col {
+  flex: 2;
+}
+.event-list {
+  margin-top: 20px;
+  width: 100%;
+}
+.event-list h2 {
+  text-align: center;
+}
+.event-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+.event-list li {
+  padding: 8px;
+}
+
+/*--- Grays out Calendar cells without events ---*/
+.grayed-out-date {
+  color: #d0d0d0 !important;
+}
+
+/*--- Calendar date cells with events ---*/
+
+.react-calendar__tile {
+  padding: 1rem;
+  font-size: 1.5rem;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.react-calendar__tile abbr {
+  transition: font-size 0.15s ease;
+}
+
+/* Event days (but NOT selected/active days): light ASU gold */
+.react-calendar__tile:not(.grayed-out-date):not(.react-calendar__tile--disabled):not(.react-calendar__tile--active):not(.react-calendar__tile--hasActive) {
+  background-color: #ffecb8 !important;
+}
+
+/* Selected date: force maroon tile + white text */
+.react-calendar__tile--active,
+.react-calendar__tile.selected-date,
+.react-calendar__tile--hasActive,
+.react-calendar__tile--active.selected-date,
+.react-calendar__tile--hasActive.selected-date {
+  background-color: #8c1d40 !important; /* ASU maroon */
+  color: #fff !important;
+}
+
+/* Ensure the number inside is white */
+.react-calendar__tile--active abbr,
+.react-calendar__tile--hasActive abbr {
+  color: #fff !important;
+}
+
+/* Keep hover from changing it */
+.react-calendar__tile--active:hover,
+.react-calendar__tile--hasActive:hover {
+  background-color: #8c1d40 !important;
+}
+
+/*--- Hover grow effect ---*/
+/* Hover grow effect for event days */
+.react-calendar__tile:not(.grayed-out-date):not(.react-calendar__tile--disabled):hover {
+  transform: scale(1.08);
+  z-index: 2; /* keeps it above neighbors */
+}
+
+/* Increase number size on hover */
+.react-calendar__tile:not(.grayed-out-date):not(.react-calendar__tile--disabled):hover abbr {
+  font-size: 1.7rem;
+}
+
+.react-calendar__tile:not(.grayed-out-date):not(.react-calendar__tile--disabled):hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Prevent selected tile from scaling */
+.react-calendar__tile--active:hover,
+.react-calendar__tile--hasActive:hover {
+  transform: scale(1);
+}
+
+/*--- Legend ---*/
+.calendar-legend {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  align-items: center;
+  margin-top: 18px;
+  margin-bottom: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #191919;
+}
+
+.legend-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.legend-swatch--available {
+  background: #ffe6a6; /* Light gold */
+  border: 3px solid #ffc627; /* ASU gold */
+}
+
+.legend-swatch--selected {
+  background: #8c1d40; /* ASU maroon */
+}
+
+/*--- Calendar navigation buttons ---*/
+.react-calendar__navigation {
+  display: none;
+}
+.highlight-black {
+  background-color: black;
+  color: white;
+  padding: 0.25rem 0.5rem;
+}
+.calendar-nav-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.calendar-nav-buttons button {
+  background-color: #ccc;
+  border: none;
+  padding: 0.25rem 0.75rem;
+  font-size: 1.25rem;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* Calendar - Disabled look - make disabled dates clearly non-interactive */
+.react-calendar__tile--disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none; /* belt-and-suspenders */
+}
+
+/*--- Accordion on the left side in Calendar page ---*/
+/* Remove the default triangle */
+.filter-accordion > summary {
+  list-style: none;
+}
+
+.filter-accordion > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Right-align the icon and make the summary a flex row */
+.acc-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* space between text and icon */
+  padding-right: 0.3rem;
+}
+
+/* Round black badge */
+.acc-icon {
+  margin-left: auto; /* push to right edge */
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #111;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* Default: show PLUS, hide MINUS */
+.acc-icon .fa-minus {
+  display: none;
+}
+
+/* When the accordion is open: swap icons */
+.filter-accordion[open] .acc-icon .fa-plus {
+  display: none;
+}
+.filter-accordion[open] .acc-icon .fa-minus {
+  display: inline-block;
+}
+
+label {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/*--- Left side hide/show ---*/
+/* Hide native marker */
+.filter-accordion > summary {
+  list-style: none;
+}
+.filter-accordion > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Right-aligned pill icon */
+.acc-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.acc-icon {
+  margin-left: auto;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #111;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+}
+/* Swap +/− based on open state */
+.acc-icon .fa-minus {
+  display: none;
+}
+.filter-accordion[open] .acc-icon .fa-plus {
+  display: none;
+}
+.filter-accordion[open] .acc-icon .fa-minus {
+  display: inline-block;
+}
+
+/* Disabled calendar overlay */
+.calendar-wrapper {
+  position: relative;
+}
+
+.calendar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /*background: #e8e8e8;*/
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10; /* above calendar */
+  pointer-events: all; /* block clicks */
+  margin: -10px;
+}
+
+.overlay-content {
+  background: #111;
+  color: #fff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  max-width: 300px;
+  text-align: left;
+  opacity: 1;
+}
+
+.overlay-content .gold-line {
+  border: 2px solid #ffb81c; /* ASU gold */
+  width: 50px;
+  margin-bottom: 1rem;
+}
+
+.overlay-content .highlight {
+  color: #ffb81c;
+}
+
+/*--- Gold filter indicator ---*/
+
+/* Chip list layout */
+.filters-popover .chip-list {
+  margin: 0;
+  padding: 12px;
+  list-style: none;
+  display: grid;
+  gap: 12px; /* space between chips */
+  min-width: 260px;
+}
+
+/* Full-width gold chip */
+.filters-popover .chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* pushes × to the right */
+  background: #ffc627; /* ASU gold */
+  color: #000; /* contrast on gold */
+  border-radius: 10px;
+  padding: 10px 12px 10px 16px;
+  width: 100%; /* same width for all chips */
+  min-height: 40px;
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* Label wraps nicely */
+.filters-popover .chip__label {
+  flex: 1 1 auto;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+/* Close button inside the gold chip */
+.filters-popover .chip__close {
+  flex: 0 0 auto;
+  appearance: none;
+  border: 0;
+  background: #111; /* small dark circle behind × */
+  color: #ffc627;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  border-radius: 50%;
+  text-align: center;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Hover/Focus */
+.filters-popover .chip__close:hover,
+.filters-popover .chip__close:focus {
+  outline: 2px solid #111;
+  outline-offset: 2px;
+  filter: brightness(1.1);
+}
+
+/* Keep a visible outline on the Clear all pill in every state */
+.fixed-outline,
+.fixed-outline:hover,
+.fixed-outline:focus,
+.fixed-outline:active {
+  background-color: transparent !important; /* prevent hover fill */
+  border: 1px solid #6c757d !important; /* match your outline color */
+  color: #222; /* readable text color */
+  box-shadow: none !important;
+}
+
+/* Keep border visible even when disabled, but tone it down */
+.fixed-outline:disabled {
+  background-color: transparent !important;
+  border-color: #9aa0a6 !important; /* softer border when disabled */
+  color: #9aa0a6 !important;
+  opacity: 1; /* don't fade the button */
+  cursor: not-allowed;
+}
+
+/* Keep the button + Clear inline, aligned, with a small gap */
+.filters-anchor {
+  display: inline-block;
+  align-items: center;
+  gap: 10px; /* space between gold pill and Clear all */
+}
+
+/* Make sure the popover overlays content and doesn’t push layout */
+.filters-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 2000; /* ensure it sits above the sections below */
+  min-width: 260px;
+
+  background-color: #fff; /* solid white background */
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Keep Clear-all alignment and outline in all states */
+.clear-inline {
+  height: 36px;
+  padding: 0 14px;
+  white-space: nowrap;
+}
+
+/* If Bootstrap tries to style outline on hover/active, force ours */
+.clear-inline,
+.clear-inline:hover,
+.clear-inline:focus,
+.clear-inline:active {
+  background-color: transparent !important;
+  border: 1px solid #6c757d !important;
+  color: #222 !important;
+  box-shadow: none !important;
+}
+
+/* Cursor + toned-down outline when disabled */
+.clear-inline:disabled {
+  background-color: transparent !important;
+  border-color: #9aa0a6 !important;
+  color: #9aa0a6 !important;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+/* Bar holding left pill and right "Clear all" */
+.filters-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* pushes Clear all to the far right */
+  gap: 12px;
+}
+
+/*--- Colored dots ---*/
+.event-dots {
+  display: inline-flex;
+  gap: 6px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot--inperson {
+  background: #8c1d40; /* ASU maroon */
+}
+.dot--inperson-academic {
+  background: #ff7f32;
+}
+.dot--barrett {
+  background: #00a3e0;
+}
+.dot--facility {
+  background: #e74973;
+}
+.dot--selfguided {
+  background: #78be20;
+}
+.dot--signature {
+  background: #ffc627;
+}
+.dot--classroom {
+  background: #4ab7c4;
+}
+
+/*--- Campus description ---*/
+.campus-desc-wrap {
+  display: inline-block;
+  position: relative;
+  margin-left: 6px;
+}
+
+.campus-info-btn {
+  border: none;
+  border-radius: 50%;
+  width: 1.3em;
+  height: 1.3em;
+  font-size: 0.8em;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  line-height: 1.2em;
+  cursor: pointer;
+  padding: 0;
+  background: #8c1d40;
+}
+
+/* Make campus info popup non-opeque. (5/29/2026) */
+.form-check-input:disabled ~ .form-check-label,
+.form-check-input[disabled] ~ .form-check-label {
+  opacity: 1 !important;
+}
+.campus-info-popover {
+  position: absolute;
+  z-index: 10;
+  top: 1.5em;
+  left: 0;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 0.75em;
+  max-width: 820px;
+  width: 520px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+.campus-info-popover .muted {
+  color: #666;
+}
+.campus-info-popover .small {
+  font-size: 0.9rem;
+}
+
+.form-check-input:checked {
+  background-color: #000;
+  border-color: #000;
+}
+
+h3 > .form-check-input {
+  margin-top: 0;
+}
+
+/*--- Day of the week ---*/
+
+/* Hide original text visually but keep it for screen readers,
+   and make the abbr fill the weekday cell for positioning. */
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Sunday"],
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Monday"],
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Tuesday"],
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Wednesday"],
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Thursday"],
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Friday"],
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Saturday"] {
+  color: transparent; /* hide original letters */
+  position: relative; /* positioning context for ::after */
+  display: block; /* allow width/height to be used */
+  width: 100%;
+  height: 100%;
+  line-height: inherit;
+  text-align: center; /* fallback alignment */
+}
+
+/* Insert visible replacement "Su" with explicit color (so it isn't transparent) */
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Sunday"]::after {
+  content: "Su";
+}
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Monday"]::after {
+  content: "Mo";
+}
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Tuesday"]::after {
+  content: "Tu";
+}
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Wednesday"]::after {
+  content: "We";
+}
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Thursday"]::after {
+  content: "Th";
+}
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Friday"]::after {
+  content: "Fr";
+}
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Saturday"]::after {
+  content: "Sa";
+}
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Sunday"]::after,
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Monday"]::after,
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Tuesday"]::after,
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Wednesday"]::after,
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Thursday"]::after,
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Friday"]::after,
+.calendar-wrapper .react-calendar__month-view__weekdays__weekday abbr[aria-label="Saturday"]::after {
+  position: absolute;
+  inset: 0; /* top:0; right:0; bottom:0; left:0; */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #191919;
+  pointer-events: none;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.react-calendar__month-view__weekdays {
+  margin-bottom: 5px;
+}
+
+/*--- Light gray thin border for Calendar ---*/
+
+/* Apply a single thin border to all day tiles */
+.react-calendar__month-view__days__day,
+.react-calendar__month-view__days__day.grayed-out-date {
+  border: 1px solid #d0d0d0; /* thin solid border */
+  box-sizing: border-box; /* ensures borders fit within cell size */
+  margin: 0; /* remove inline margin gaps */
+}
+
+/* Remove any duplicate borders caused by flex layout */
+.react-calendar__month-view__days {
+  border-collapse: collapse;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.react-calendar__tile {
+  border-right: none; /* prevent double vertical borders */
+  border-bottom: none; /* prevent double horizontal borders */
+}
+
+/* Add borders only at the outer edges */
+.react-calendar__tile:nth-child(7n) {
+  border-right: 1px solid #d0d0d0; /* last column */
+}
+
+.react-calendar__tile:nth-last-child(-n + 7) {
+  border-bottom: 1px solid #d0d0d0; /* last row */
+}
+
+.calendar-nav-buttons {
+  margin-top: 1rem !important;
+}
+
+/* Spacing between "October 2025" and days of the week */
+.calendar-wrapper h2 {
+  margin-bottom: 30px;
+}
+
+/*--- Underlines in left-side filters ---*/
+.offcanvas-calendar h2 {
+  border-bottom: solid thin #d0d0d0;
+  padding-bottom: 10px;
+}
+details.filter-accordion {
+  border-bottom: solid thin #d0d0d0;
+}
+
+/*--- Loading... ---*/
+.calendar-wrapper {
+  position: relative; /* needed for overlay positioning */
+}
+.calendar-loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  z-index: 5;
+  pointer-events: all; /* blocks clicks while loading */
+}
+/* Make loading overlay appear above the “disabled” overlay */
+.calendar-loading-overlay {
+  z-index: 30 !important;
+}
+/* Wait cursor while loading */
+body.wait-cursor,
+body.wait-cursor * {
+  cursor: wait !important;
+}
+
+/* Barrett description pop up - "i" button */
+.campus-info-btn.barrett + .campus-info-popover,
+.campus-desc-wrap .campus-info-btn.barrett ~ .campus-info-popover {
+  /* narrower + responsive */
+  width: min(420px, 80vw);
+  max-width: 420px;
+
+  /* open to the LEFT of the icon to avoid right overflow */
+  left: auto;
+  right: 0;
+}
+
+/* Message above the Continue button */
+.continue-wrap {
+  margin-top: 1rem;
+}
+.continue-message {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Graduate popup for ASU in LA (6/20/2026) */
+.graduate-popup-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.62);
+}
+.graduate-popup-dialog {
+  width: min(560px, 100%);
+  padding: 2rem;
+  border-radius: 8px;
+  background: #fff;
+  color: #191919;
+  text-align: center;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.35);
+}
+.graduate-popup-message {
+  margin: 0 0 1.5rem;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+.graduate-popup-ok {
+  border: 1px solid #8c1d40;
+  border-radius: 999px;
+  padding: 0.75rem 2.5rem;
+  background: #8c1d40;
+  color: #fff;
+  font-weight: 700;
+}
+.graduate-popup-ok:hover,
+.graduate-popup-ok:focus {
+  background: #6f1733;
+  border-color: #6f1733;
+}

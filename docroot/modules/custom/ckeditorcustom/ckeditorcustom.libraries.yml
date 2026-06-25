@@ -1,0 +1,6 @@
+ckeditorcustom:
+  js:
+    js/ckeditorcustom.js: {}
+  dependencies:
+    - core/jquery
+    - core/ckeditor

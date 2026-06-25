@@ -1,0 +1,69 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.international_advisors.body
+    - field.field.node.international_advisors.field_africa_countries
+    - field.field.node.international_advisors.field_antarctica
+    - field.field.node.international_advisors.field_asian_countries
+    - field.field.node.international_advisors.field_australia
+    - field.field.node.international_advisors.field_central_america_country
+    - field.field.node.international_advisors.field_europe_countries
+    - field.field.node.international_advisors.field_intl_adv_image
+    - field.field.node.international_advisors.field_intl_appointment_link
+    - field.field.node.international_advisors.field_intl_country
+    - field.field.node.international_advisors.field_intl_email
+    - field.field.node.international_advisors.field_intl_first_name
+    - field.field.node.international_advisors.field_intl_image
+    - field.field.node.international_advisors.field_intl_last_name
+    - field.field.node.international_advisors.field_intl_phone
+    - field.field.node.international_advisors.field_middle_east_countries
+    - field.field.node.international_advisors.field_north_america_countries
+    - field.field.node.international_advisors.field_oceania_countries
+    - field.field.node.international_advisors.field_region
+    - field.field.node.international_advisors.field_south_america_country
+    - field.field.node.international_advisors.layout_builder__layout
+    - node.type.international_advisors
+  module:
+    - text
+    - user
+id: node.international_advisors.teaser
+targetEntityType: node
+bundle: international_advisors
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_africa_countries: true
+  field_antarctica: true
+  field_asian_countries: true
+  field_australia: true
+  field_central_america_country: true
+  field_europe_countries: true
+  field_intl_adv_image: true
+  field_intl_appointment_link: true
+  field_intl_country: true
+  field_intl_email: true
+  field_intl_first_name: true
+  field_intl_image: true
+  field_intl_last_name: true
+  field_intl_phone: true
+  field_middle_east_countries: true
+  field_north_america_countries: true
+  field_oceania_countries: true
+  field_region: true
+  field_south_america_country: true
+  layout_builder__layout: true

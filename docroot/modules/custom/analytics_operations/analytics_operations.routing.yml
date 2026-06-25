@@ -1,0 +1,191 @@
+analytics_operations.index:
+  path: /admin/config/analytics_operations
+  defaults:
+    _title: Analytics Operations
+    _controller: \Drupal\analytics_operations\Controller\AnalyticsOperationsController::index
+  requirements:
+    _role: administrator+site_builder
+
+analytics_operations.operation_update_body_format:
+  path: /admin/config/analytics_operations/operation/update-body-format
+  defaults:
+    _title: Update - Body formats
+    _form: \Drupal\analytics_operations\Form\UpdateBodyFormatForm
+  requirements:
+    _role: administrator+site_builder
+
+analytics_operations.operation_create_group_relationships:
+  path: /admin/config/analytics_operations/operation/create-group-relationship
+  defaults:
+    _title: Create - Group relationships
+    _form: \Drupal\analytics_operations\Form\CreateGroupRelationshipForm
+  requirements:
+    _role: administrator+site_builder
+
+analytics_operations.operation_update_group_owner:
+  path: /admin/config/analytics_operations/operation/update-group-owner
+  defaults:
+    _title: Update - Group owners
+    _form: \Drupal\analytics_operations\Form\UpdateGroupOwnerForm
+  requirements:
+    _role: administrator+site_builder
+
+analytics_operations.operation_create_report_sync:
+  path: /admin/config/analytics_operations/operation/create-report-sync
+  defaults:
+    _title: Create - Reports via AWS
+    _form: \Drupal\analytics_operations\Form\CreateReportSyncForm
+  requirements:
+    _role: administrator+site_builder
+
+analytics_operations.operation_update_hidden_from_search:
+  path: /admin/config/analytics_operations/operation/update-hidden-from-search
+  defaults:
+    _title: Update - Hidden from Global Search
+    _form: \Drupal\analytics_operations\Form\UpdateHiddenFromSearchForm
+  requirements:
+    _role: administrator+site_builder
+
+analytics_operations.operation_update_demo_group:
+  path: /admin/config/analytics_operations/operation/update-demo-group
+  defaults:
+    _title: Update - Demo Group members
+    _form: \Drupal\analytics_operations\Form\UpdateDemoGroupForm
+  requirements:
+    _role: administrator+site_builder
+
+# analytics_operations.operation_update_table_column_relationships:
+#   path: /admin/config/analytics_operations/operation/update-table-column-relationships
+#   defaults:
+#     _title: Update - Table and Columns relationships
+#     _form: \Drupal\analytics_operations\Form\UpdateTableColumnRelationshipsForm
+#   requirements:
+#     _role: administrator+site_builder
+
+analytics_operations.operation_update_published_status:
+  path: /admin/config/analytics_operations/operation/update-published-status
+  defaults:
+    _title: Update - Group content published status
+    _form: \Drupal\analytics_operations\Form\UpdatePublishedStatusForm
+  requirements:
+    _role: administrator+site_builder
+
+analytics_operations.operation_update_content_type_publish_status:
+  path: /admin/config/analytics_operations/operation/update-content-type-publish-status
+  defaults:
+    _title: Update - Node published status
+    _form: \Drupal\analytics_operations\Form\UpdateContentTypePublishStatusForm
+  requirements:
+    _role: administrator+site_builder
+
+analytics_operations.operation_update_report_metadata:
+  path: /admin/config/analytics_operations/operation/update-report-metadata
+  defaults:
+    _title: Update - Report metadata
+    _form: \Drupal\analytics_operations\Form\UpdateReportMetadataForm
+  requirements:
+    _role: administrator+site_builder
+
+analytics_operations.operation_delete_duplicate_reports:
+  path: /admin/config/analytics_operations/operation/delete-duplicate-reports
+  defaults:
+    _title: Delete - Duplicate reports
+    _form: \Drupal\analytics_operations\Form\DeleteDuplicateReportsForm
+  requirements:
+    _role: administrator+site_builder
+
+# analytics_operations.operation_update_report_user_content:
+#   path: /admin/config/analytics_operations/operation/update-report-user-content
+#   defaults:
+#     _title: Update - Reports user content post refresh
+#     _form: \Drupal\analytics_operations\Form\UpdateReportUserContentForm
+#   requirements:
+#     _role: administrator+site_builder
+
+# analytics_operations.operation_create_user_favorites:
+#   path: /admin/config/analytics_operations/operation/create-user-favorites
+#   defaults:
+#     _title: Create - Create user favorites from the existing website
+#     _form: \Drupal\analytics_operations\Form\CreateUserFavoritesForm
+#   requirements:
+#     _role: administrator+site_builder
+
+analytics_operations.operation_update_groupless_reports:
+  path: /admin/config/analytics_operations/operation/update-groupless-reports
+  defaults:
+    _title: Update - Ensure reports without a group are unpublished and hiddden from search
+    _form: \Drupal\analytics_operations\Form\UpdateGrouplessReportsForm
+  requirements:
+    _role: administrator+site_builder
+
+analytics_operations.operation_update_flagging_fields:
+  path: /admin/config/analytics_operations/operation/update-flagging-fields
+  defaults:
+    _title: Update - Add missing field data for Flaggings
+    _form: \Drupal\analytics_operations\Form\UpdateFlaggingFieldsForm
+  requirements:
+    _role: administrator+site_builder
+
+analytics_operations.operation_update_report_search_status:
+  path: /admin/config/analytics_operations/operation/update-report-search-status
+  defaults:
+    _title: Update - Report search status
+    _form: \Drupal\analytics_operations\Form\UpdateReportSearchStatusForm
+  requirements:
+    _role: administrator+site_builder
+
+# analytics_operations.operation_update_node_alias_option:
+#   path: /admin/config/analytics_operations/operation/update-node-alias-option
+#   defaults:
+#     _title: Update - Node URL Alias option
+#     _form: \Drupal\analytics_operations\Form\UpdateNodeAliasOptionForm
+#   requirements:
+#     _role: administrator+site_builder
+
+# analytics_operations.operation_create_missing_report_redirects:
+#   path: /admin/config/analytics_operations/operation/create-missing-report-redirects
+#   defaults:
+#     _title: Create - Create missing report redirects
+#     _form: \Drupal\analytics_operations\Form\CreateMissingReportRedirectsForm
+#   requirements:
+#     _role: administrator+site_builder
+
+analytics_operations.operation_update_duplicate_user_favorites:
+  path: /admin/config/analytics_operations/operation/update-duplicate-user-favorites
+  defaults:
+    _title: Update - Duplicate users favorites
+    _form: \Drupal\analytics_operations\Form\UpdateDuplicateUsersFavoritesForm
+  requirements:
+    _role: administrator+site_builder
+
+analytics_operations.operation_update_group_relationships:
+  path: /admin/config/analytics_operations/operation/update-group-relationship
+  defaults:
+    _title: Update - Group relationships
+    _form: \Drupal\analytics_operations\Form\UpdateGroupRelationshipForm
+  requirements:
+    _role: administrator+site_builder
+
+analytics_operations.operation_update_saml_metadata:
+  path: /admin/config/analytics_operations/operation/update-saml-metadata
+  defaults:
+    _title: Update - SAML metadata
+    _form: \Drupal\analytics_operations\Form\UpdateSAMLMetadataForm
+  requirements:
+    _role: administrator+site_builder
+
+analytics_operations.operation_create_group:
+  path: /admin/config/analytics_operations/operation/create-group
+  defaults:
+    _title: Create - Group
+    _form: \Drupal\analytics_operations\Form\CreateGroupForm
+  requirements:
+    _role: administrator+site_builder
+
+analytics_operations.operation_update_node_author:
+  path: /admin/config/analytics_operations/operation/update-node-author
+  defaults:
+    _title: Update - Node author
+    _form: \Drupal\analytics_operations\Form\UpdateNodeAuthorForm
+  requirements:
+    _role: administrator+site_builder

@@ -1,0 +1,466 @@
+<?php
+
+/**
+ * @file
+ * Install hooks for the Elevate Experience Import module.
+ *
+ * Provisions everything the monthly Experience CSV import needs: two new
+ * vocabularies, the reclassified experience_type terms, the new fields on the
+ * Experience content type, and the two Feeds importers (with Tamper plugins).
+ *
+ * All operations are idempotent so the hook can be re-run safely via
+ * elevate_experience_import_update_* if the structure ever needs to change.
+ */
+
+use Drupal\feeds\Entity\FeedType;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\Entity\Vocabulary;
+
+/**
+ * Implements hook_install().
+ */
+function elevate_experience_import_install() {
+  _elevate_experience_import_provision_taxonomy();
+  _elevate_experience_import_provision_fields();
+  _elevate_experience_import_provision_program_credit();
+  _elevate_experience_import_provision_displays();
+  _elevate_experience_import_provision_feed_types();
+  _elevate_experience_import_provision_favorite_flag();
+}
+
+/**
+ * Creates the "favorite" flag for Experiences and grants it to authenticated
+ * users (anonymous users are prompted to log in instead).
+ */
+function _elevate_experience_import_provision_favorite_flag() {
+  $flag_storage = \Drupal::entityTypeManager()->getStorage('flag');
+  if (!$flag_storage->load('favorite')) {
+    $flag_storage->create([
+      'id' => 'favorite',
+      'label' => 'Favorite',
+      'entity_type' => 'node',
+      'bundles' => ['experience'],
+      'flag_type' => 'entity:node',
+      'link_type' => 'reload',
+      'global' => FALSE,
+      'flag_short' => 'Add to favorites',
+      'flag_long' => '',
+      'flag_message' => 'Experience added to your favorites.',
+      'unflag_short' => 'Remove from favorites',
+      'unflag_long' => '',
+      'unflag_message' => 'Experience removed from your favorites.',
+      'unflag_denied_text' => '',
+      'flagTypeConfig' => [
+        'show_as_field' => FALSE,
+        'show_on_form' => FALSE,
+        'show_contextual_link' => FALSE,
+      ],
+      'linkTypeConfig' => [],
+    ])->save();
+  }
+
+  // Authenticated users may flag/unflag; anonymous users may not.
+  $authenticated = \Drupal::entityTypeManager()->getStorage('user_role')->load('authenticated');
+  if ($authenticated) {
+    $authenticated->grantPermission('flag favorite');
+    $authenticated->grantPermission('unflag favorite');
+    $authenticated->save();
+  }
+}
+
+/**
+ * Add the Program taxonomy, field_program, field_for_credit and align term
+ * names with the Experience Finder design; then backfill imported nodes.
+ */
+function elevate_experience_import_update_9001() {
+  _elevate_experience_import_provision_program_credit();
+  $count = _elevate_experience_import_backfill_program_credit();
+  return "Provisioned program/credit data model and backfilled {$count} nodes.";
+}
+
+/**
+ * Provision the "favorite" flag and grant it to authenticated users.
+ */
+function elevate_experience_import_update_9002() {
+  \Drupal::service('module_installer')->install(['flag']);
+  _elevate_experience_import_provision_favorite_flag();
+  return 'Provisioned the favorite flag for Experiences.';
+}
+
+/**
+ * Creates vocabularies and the reclassified experience_type terms.
+ */
+function _elevate_experience_import_provision_taxonomy() {
+  foreach (['subitems' => 'Subitems', 'college' => 'College/Department'] as $vid => $label) {
+    if (!Vocabulary::load($vid)) {
+      Vocabulary::create(['vid' => $vid, 'name' => $label])->save();
+    }
+  }
+
+  $reclassified = [
+    'Jobs, Work & Career Development',
+    'Internships & Field Experience',
+    'Research',
+    'Community, Service & Leadership',
+    'Global Experiences',
+  ];
+  $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  foreach ($reclassified as $name) {
+    if (!$storage->loadByProperties(['vid' => 'experience_type', 'name' => $name])) {
+      Term::create(['vid' => 'experience_type', 'name' => $name])->save();
+    }
+  }
+}
+
+/**
+ * Provisions the "Program specific options" data model.
+ *
+ * Adds a Program vocabulary (+ Work+Life Design Certificate term), a
+ * field_program reference and a field_for_credit boolean on Experience, and
+ * aligns the reclassified experience_type term names with the design ("&").
+ */
+function _elevate_experience_import_provision_program_credit() {
+  // Program vocabulary + the first program term.
+  if (!Vocabulary::load('program')) {
+    Vocabulary::create(['vid' => 'program', 'name' => 'Program'])->save();
+  }
+  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  if (!$term_storage->loadByProperties(['vid' => 'program', 'name' => 'Work+Life Design Certificate'])) {
+    Term::create(['vid' => 'program', 'name' => 'Work+Life Design Certificate'])->save();
+  }
+
+  // field_program (entity reference -> program, multi).
+  if (!FieldStorageConfig::loadByName('node', 'field_program')) {
+    FieldStorageConfig::create([
+      'field_name' => 'field_program',
+      'entity_type' => 'node',
+      'type' => 'entity_reference',
+      'cardinality' => -1,
+      'settings' => ['target_type' => 'taxonomy_term'],
+    ])->save();
+  }
+  if (!FieldConfig::loadByName('node', 'experience', 'field_program')) {
+    FieldConfig::create([
+      'field_name' => 'field_program',
+      'entity_type' => 'node',
+      'bundle' => 'experience',
+      'label' => 'Program',
+      'settings' => ['handler' => 'default:taxonomy_term', 'handler_settings' => ['target_bundles' => ['program' => 'program'], 'auto_create' => TRUE]],
+    ])->save();
+  }
+
+  // field_for_credit (boolean).
+  if (!FieldStorageConfig::loadByName('node', 'field_for_credit')) {
+    FieldStorageConfig::create([
+      'field_name' => 'field_for_credit',
+      'entity_type' => 'node',
+      'type' => 'boolean',
+      'cardinality' => 1,
+    ])->save();
+  }
+  if (!FieldConfig::loadByName('node', 'experience', 'field_for_credit')) {
+    FieldConfig::create([
+      'field_name' => 'field_for_credit',
+      'entity_type' => 'node',
+      'bundle' => 'experience',
+      'label' => 'For credit',
+      'settings' => [],
+    ])->save();
+  }
+
+  // Add both to the form display.
+  $form = \Drupal::service('entity_display.repository')->getFormDisplay('node', 'experience', 'default');
+  $form->setComponent('field_program', ['type' => 'entity_reference_autocomplete_tags', 'weight' => 25]);
+  $form->setComponent('field_for_credit', ['type' => 'boolean_checkbox', 'weight' => 26]);
+  $form->save();
+
+  // Align reclassified term names with the design (use "&").
+  $renames = [
+    'Internships and Field Experience' => 'Internships & Field Experience',
+    'Community, Service and Leadership' => 'Community, Service & Leadership',
+  ];
+  foreach ($renames as $old => $new) {
+    foreach ($term_storage->loadByProperties(['vid' => 'experience_type', 'name' => $old]) as $term) {
+      $term->setName($new)->save();
+    }
+  }
+}
+
+/**
+ * Backfills field_program and field_for_credit on already-imported nodes.
+ *
+ * Certificate courses (referencing field_college, no general-only fields) are
+ * tagged with the Work+Life Design Certificate program and marked for credit.
+ * Any node with a meaningful credits value is also marked for credit.
+ *
+ * @return int
+ *   Number of nodes updated.
+ */
+function _elevate_experience_import_backfill_program_credit() {
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $programs = $term_storage->loadByProperties(['vid' => 'program', 'name' => 'Work+Life Design Certificate']);
+  $program = $programs ? reset($programs) : NULL;
+
+  // Certificate nodes are exactly those owned by the certificate feed.
+  $cert_nids = [];
+  $cert_feeds = \Drupal::entityTypeManager()->getStorage('feeds_feed')->loadByProperties(['type' => 'experience_certificate']);
+  foreach ($cert_feeds as $feed) {
+    $ids = \Drupal::database()->select('node__feeds_item', 'fi')
+      ->fields('fi', ['entity_id'])
+      ->condition('feeds_item_target_id', $feed->id())
+      ->execute()->fetchCol();
+    $cert_nids = array_merge($cert_nids, $ids);
+  }
+  $cert_nids = array_flip($cert_nids);
+
+  $count = 0;
+  $nids = \Drupal::entityQuery('node')->condition('type', 'experience')->accessCheck(FALSE)->execute();
+  foreach (array_chunk($nids, 100) as $chunk) {
+    foreach ($node_storage->loadMultiple($chunk) as $node) {
+      $is_cert = isset($cert_nids[$node->id()]);
+      $for_credit = $is_cert || _elevate_experience_import_credits_indicate_credit($node->get('field_credits')->value);
+      $node->set('field_for_credit', $for_credit);
+      if ($is_cert && $program) {
+        $node->set('field_program', [['target_id' => $program->id()]]);
+      }
+      $node->save();
+      $count++;
+    }
+  }
+  return $count;
+}
+
+/**
+ * Determines whether a free-text credits value indicates a credit-bearing item.
+ */
+function _elevate_experience_import_credits_indicate_credit($credits) {
+  $credits = trim((string) $credits);
+  if ($credits === '') {
+    return FALSE;
+  }
+  $normalized = mb_strtolower($credits);
+  if (in_array($normalized, ['0', 'n/a', 'na', 'none', 'no credit'], TRUE)) {
+    return FALSE;
+  }
+  // Anything else (a number, range, "Varies", etc.) is treated as for-credit.
+  return TRUE;
+}
+
+/**
+ * Creates the new fields on node.experience and widens field_location.
+ */
+function _elevate_experience_import_provision_fields() {
+  $storages = [
+    'field_credits' => ['type' => 'string', 'cardinality' => 1, 'settings' => ['max_length' => 255]],
+    'field_contact_name' => ['type' => 'string', 'cardinality' => 1, 'settings' => ['max_length' => 255]],
+    'field_contact_email' => ['type' => 'email', 'cardinality' => 1, 'settings' => []],
+    'field_subitems' => ['type' => 'entity_reference', 'cardinality' => -1, 'settings' => ['target_type' => 'taxonomy_term']],
+    'field_college' => ['type' => 'entity_reference', 'cardinality' => -1, 'settings' => ['target_type' => 'taxonomy_term']],
+  ];
+  foreach ($storages as $name => $def) {
+    if (!FieldStorageConfig::loadByName('node', $name)) {
+      FieldStorageConfig::create([
+        'field_name' => $name,
+        'entity_type' => 'node',
+        'type' => $def['type'],
+        'cardinality' => $def['cardinality'],
+        'settings' => $def['settings'],
+      ])->save();
+    }
+  }
+
+  $instances = [
+    'field_credits' => ['label' => 'Credits', 'settings' => []],
+    'field_contact_name' => ['label' => 'Contact name', 'settings' => []],
+    'field_contact_email' => ['label' => 'Contact email', 'settings' => []],
+    'field_subitems' => [
+      'label' => 'Subitems',
+      'settings' => ['handler' => 'default:taxonomy_term', 'handler_settings' => ['target_bundles' => ['subitems' => 'subitems'], 'auto_create' => TRUE]],
+    ],
+    'field_college' => [
+      'label' => 'College/Department',
+      'settings' => ['handler' => 'default:taxonomy_term', 'handler_settings' => ['target_bundles' => ['college' => 'college'], 'auto_create' => TRUE]],
+    ],
+  ];
+  foreach ($instances as $name => $def) {
+    if (!FieldConfig::loadByName('node', 'experience', $name)) {
+      FieldConfig::create([
+        'field_name' => $name,
+        'entity_type' => 'node',
+        'bundle' => 'experience',
+        'label' => $def['label'],
+        'settings' => $def['settings'],
+      ])->save();
+    }
+  }
+
+  // CSV A can carry multiple locations per row.
+  $location = FieldStorageConfig::loadByName('node', 'field_location');
+  if ($location && $location->getCardinality() !== -1) {
+    $location->setCardinality(-1)->save();
+  }
+}
+
+/**
+ * Adds the new fields to the default form and view displays.
+ */
+function _elevate_experience_import_provision_displays() {
+  $repo = \Drupal::service('entity_display.repository');
+  $form = $repo->getFormDisplay('node', 'experience', 'default');
+  foreach ([
+    'field_credits' => ['type' => 'string_textfield', 'weight' => 20],
+    'field_contact_name' => ['type' => 'string_textfield', 'weight' => 21],
+    'field_contact_email' => ['type' => 'email_default', 'weight' => 22],
+    'field_subitems' => ['type' => 'entity_reference_autocomplete_tags', 'weight' => 23],
+    'field_college' => ['type' => 'entity_reference_autocomplete_tags', 'weight' => 24],
+  ] as $name => $widget) {
+    $form->setComponent($name, $widget);
+  }
+  $form->save();
+
+  $view = $repo->getViewDisplay('node', 'experience', 'default');
+  foreach ([
+    'field_credits' => ['type' => 'string', 'weight' => 20, 'label' => 'inline'],
+    'field_contact_name' => ['type' => 'string', 'weight' => 21, 'label' => 'inline'],
+    'field_contact_email' => ['type' => 'basic_string', 'weight' => 22, 'label' => 'inline'],
+    'field_subitems' => ['type' => 'entity_reference_label', 'weight' => 23, 'label' => 'inline'],
+    'field_college' => ['type' => 'entity_reference_label', 'weight' => 24, 'label' => 'inline'],
+  ] as $name => $component) {
+    $view->setComponent($name, $component);
+  }
+  $view->save();
+}
+
+/**
+ * Creates the two Feeds importers with their mappings and Tamper plugins.
+ */
+function _elevate_experience_import_provision_feed_types() {
+  $tamper_manager = \Drupal::service('feeds_tamper.feed_type_tamper_manager');
+
+  $src = function ($machine, $value, $label) {
+    return ['value' => $value, 'label' => $label, 'machine_name' => $machine, 'type' => 'csv'];
+  };
+  $ref = function ($target, $source, $autocreate = FALSE, $bundle = FALSE) {
+    return [
+      'target' => $target,
+      'map' => ['target_id' => $source],
+      'settings' => ['reference_by' => 'name', 'autocreate' => $autocreate ? 1 : 0, 'autocreate_bundle' => $bundle ?: 0],
+    ];
+  };
+  $explode = function (FeedType $ft, array $sources) use ($tamper_manager) {
+    $meta = $tamper_manager->getTamperMeta($ft);
+    foreach ($sources as $source) {
+      $meta->addTamper(['plugin' => 'explode', 'source' => $source, 'weight' => 0, 'label' => 'Explode', 'separator' => '|', 'limit' => NULL]);
+    }
+  };
+
+  $processor_configuration = [
+    'values' => ['type' => 'experience'],
+    'langcode' => 'en',
+    'insert_new' => 1,
+    'update_existing' => 2,
+    'update_non_existent' => '_keep',
+    'skip_hash_check' => FALSE,
+    // Validation runs as the feed owner; the data is trusted CSV.
+    'authorize' => FALSE,
+    'expire' => -1,
+    'owner_id' => 1,
+  ];
+
+  // --- Feed type 1: experience_general (CSV A, with header row). ---
+  if (!FeedType::load('experience_general')) {
+    $sources = [
+      $src('experience_name', 'Experience Name', 'Experience Name'),
+      $src('link', 'Link', 'Link'),
+      $src('reclassified_experience_type', 'Reclassified Experience Type', 'Reclassified Experience Type'),
+      $src('subitems', 'Subitems', 'Subitems'),
+      $src('credits', 'Credits', 'Credits'),
+      $src('description', 'Description', 'Description'),
+      $src('location_modality', 'Location/Modality', 'Location/Modality'),
+      $src('career_interest_collection', 'Career Interest Collection', 'Career Interest Collection'),
+      $src('college_department', 'College/Department', 'College/Department'),
+      $src('contact_name', 'Contact Name', 'Contact Name'),
+      $src('contact_email', 'Contact Email', 'Contact Email'),
+    ];
+    $custom_sources = [];
+    foreach ($sources as $s) {
+      $custom_sources[$s['machine_name']] = $s;
+    }
+    $ft = FeedType::create([
+      'id' => 'experience_general',
+      'label' => 'Experience – General (CSV)',
+      'description' => 'Monthly import of general Experiences from the "Elevate 2.0 Experiences" CSV.',
+      'help' => '',
+      'import_period' => -1,
+      'fetcher' => 'upload',
+      'fetcher_configuration' => ['allowed_extensions' => 'csv', 'directory' => 'public://feeds'],
+      'parser' => 'csv',
+      'parser_configuration' => ['delimiter' => ';', 'no_headers' => 0, 'line_limit' => 100],
+      'processor' => 'entity:node',
+      'processor_configuration' => $processor_configuration,
+      'custom_sources' => $custom_sources,
+      'mappings' => [
+        ['target' => 'title', 'map' => ['value' => 'experience_name'], 'unique' => ['value' => 1], 'settings' => []],
+        ['target' => 'body', 'map' => ['value' => 'description', 'summary' => ''], 'settings' => ['format' => 'basic_html', 'language' => NULL]],
+        ['target' => 'field_new_cta_link', 'map' => ['uri' => 'link', 'title' => ''], 'settings' => ['language' => NULL]],
+        $ref('field_experience_type', 'reclassified_experience_type'),
+        $ref('field_collection', 'career_interest_collection'),
+        $ref('field_location', 'location_modality', TRUE, 'location'),
+        $ref('field_college', 'college_department', TRUE, 'college'),
+        $ref('field_subitems', 'subitems', TRUE, 'subitems'),
+        ['target' => 'field_credits', 'map' => ['value' => 'credits'], 'settings' => []],
+        ['target' => 'field_contact_name', 'map' => ['value' => 'contact_name'], 'settings' => []],
+        ['target' => 'field_contact_email', 'map' => ['value' => 'contact_email'], 'settings' => []],
+      ],
+    ]);
+    $ft->save();
+    $explode($ft, ['reclassified_experience_type', 'career_interest_collection', 'location_modality', 'college_department', 'subitems']);
+    $ft->save();
+  }
+
+  // --- Feed type 2: experience_certificate (CSV B, header on line 3). ---
+  if (!FeedType::load('experience_certificate')) {
+    $sources = [
+      $src('course_title', '0', 'Course Number & Title'),
+      $src('subitems', '1', 'Subitems'),
+      $src('description', '2', 'Course Description'),
+      $src('experience_type', '3', 'Experience Type'),
+      $src('credits', '4', 'Credits'),
+      $src('college', '5', 'College'),
+      $src('link', '6', 'Link'),
+    ];
+    $custom_sources = [];
+    foreach ($sources as $s) {
+      $custom_sources[$s['machine_name']] = $s;
+    }
+    $ft = FeedType::create([
+      'id' => 'experience_certificate',
+      'label' => 'Experience – Certificate Courses (CSV)',
+      'description' => 'Monthly import of certificate courses from the "Elevate 2.0 Experiences cert" CSV.',
+      'help' => '',
+      'import_period' => -1,
+      'fetcher' => 'upload',
+      'fetcher_configuration' => ['allowed_extensions' => 'csv', 'directory' => 'public://feeds'],
+      'parser' => 'csv',
+      'parser_configuration' => ['delimiter' => ';', 'no_headers' => 1, 'line_limit' => 100],
+      'processor' => 'entity:node',
+      'processor_configuration' => $processor_configuration,
+      'custom_sources' => $custom_sources,
+      'mappings' => [
+        ['target' => 'title', 'map' => ['value' => 'course_title'], 'unique' => ['value' => 1], 'settings' => []],
+        ['target' => 'body', 'map' => ['value' => 'description', 'summary' => ''], 'settings' => ['format' => 'basic_html', 'language' => NULL]],
+        ['target' => 'field_new_cta_link', 'map' => ['uri' => 'link', 'title' => ''], 'settings' => ['language' => NULL]],
+        $ref('field_experience_type', 'experience_type'),
+        ['target' => 'field_credits', 'map' => ['value' => 'credits'], 'settings' => []],
+        $ref('field_college', 'college', TRUE, 'college'),
+        $ref('field_subitems', 'subitems', TRUE, 'subitems'),
+      ],
+    ]);
+    $ft->save();
+    $explode($ft, ['college', 'subitems']);
+    $ft->save();
+  }
+}

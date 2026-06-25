@@ -1,0 +1,27 @@
+{#
+@file
+The template for the default minimal teaser.
+
+If a cotnent type is missing a template, this template will be used as a fallback.
+
+Available variables:
+- id: The id of the accordion.
+- contentID: The id of the accordion content.
+- title: The title of the accordion.
+- subtitle: The subtitle of the accordion.
+- content: The content of the accordion.
+#}
+
+{% set data = {
+  'title': node.title.value,
+  'content': node.type.entity.label|title,
+  'button': {
+    'url': node|entity_url,
+    'color': 'maroon',
+    'text': 'View',
+  }
+} %}
+
+<article class="node__teaser--minimal">
+  {{ include('@analytics/teaser-minimal.html.twig', data) }}
+</article>

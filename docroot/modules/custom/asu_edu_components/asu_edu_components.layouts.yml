@@ -1,0 +1,101 @@
+asu_edu_components_two_column_fixed_width:
+  label: 'Two column fixed width'
+  category: 'ASU.edu'
+  class: 'Drupal\asu_edu_components\Layout\MultiColumnFixedWidthLayout'
+  classes:
+    style:
+      label: 'Style'
+      multiple: true
+      required: false
+      options:
+        'gray-1-bg': 'Gray 1 Background'
+        'gray-2-bg': 'Gray 2 Background'
+        'gray-7-bg': 'Gray 7 Background'
+        'white-bg': 'White Background'
+        'bg morse-code-white': 'Morse Code White Background'
+        'bg morse-code-black': 'Morse Code Black Background'
+        'bg network-white': 'Network Code White Background'
+        'bg network-black': 'Network Code Black Background'
+        'bg topo-white': 'Topo White Background'
+        'bg topo-black': 'Topo Black Background'
+      description: 'Select the background for this region.'
+  path: layouts/two_column_fixed_width
+  template: two-column-fixed-width
+  regions:
+    top:
+      label: Top
+    left:
+      label: Left
+    right:
+      label: Right
+  default_region: left
+  icon_map:
+    - [left, right]
+
+asu_edu_components_three_column_fixed_width:
+  label: 'Three column fixed width'
+  category: 'ASU.edu'
+  class: 'Drupal\asu_edu_components\Layout\MultiColumnFixedWidthLayout'
+  classes:
+    style:
+      label: 'Style'
+      multiple: true
+      required: false
+      options:
+        'gray-1-bg': 'Gray 1 Background'
+        'gray-2-bg': 'Gray 2 Background'
+        'gray-7-bg': 'Gray 7 Background'
+        'white-bg': 'White Background'
+        'bg morse-code-white': 'Morse Code White Background'
+        'bg morse-code-black': 'Morse Code Black Background'
+        'bg network-white': 'Network Code White Background'
+        'bg network-black': 'Network Code Black Background'
+        'bg topo-white': 'Topo White Background'
+        'bg topo-black': 'Topo Black Background'
+      description: 'Select the background for this region.'
+  path: layouts/three_column_fixed_width
+  template: three-column-fixed-width
+  regions:
+    left:
+      label: Left
+    center:
+      label: Center
+    right:
+      label: Right
+  default_region: left
+  icon_map:
+    - [left, center, right]
+    
+asu_edu_components_three_column_homepage:
+  label: 'Three column homepage'
+  category: 'ASU.edu'
+  library: asu_edu_components/asu_edu_components
+  classes:
+    style:
+      label: 'Style'
+      multiple: true
+      required: false
+      options:
+        'gray-1-bg': 'Gray 1 Background'
+        'gray-2-bg': 'Gray 2 Background'
+        'gray-7-bg': 'Gray 7 Background'
+        'white-bg': 'White Background'
+        'bg morse-code-white': 'Morse Code White Background'
+        'bg morse-code-black': 'Morse Code Black Background'
+        'bg network-white': 'Network Code White Background'
+        'bg network-black': 'Network Code Black Background'
+        'bg topo-white': 'Topo White Background'
+        'bg topo-black': 'Topo Black Background'
+      description: 'Select the background for this region.'
+  path: layouts/three_column_homepage
+  template: three-column-homepage
+  regions:
+    left:
+      label: Left
+    center:
+      label: Center
+    right:
+      label: Right
+  default_region: left
+  icon_map:
+    - [left, center, right]

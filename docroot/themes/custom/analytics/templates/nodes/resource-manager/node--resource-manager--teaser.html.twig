@@ -1,0 +1,11 @@
+<article class="resource-manager__teaser">
+  {% include '@partials/teasers/teaser.html.twig' with {
+    'title': teaser_data.title,
+    'body': teaser_data.group,
+    'button': {
+      'src': teaser_data.url,
+      'text': 'View manager',
+      'color': 'gold',
+    },
+  } %}
+</article>

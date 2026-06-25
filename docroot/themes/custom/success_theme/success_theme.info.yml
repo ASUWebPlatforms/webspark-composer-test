@@ -1,0 +1,20 @@
+name: 'Success Theme'
+type: theme
+description: 'Success theme based on webspark'
+core_version_requirement: ^10
+package: Custom
+
+# Define base theme
+base theme: renovation
+
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer
+
+# Specify libraries and stylesheets
+libraries:
+  - success_theme/global-styling

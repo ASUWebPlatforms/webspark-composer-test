@@ -1,0 +1,60 @@
+{# Generate tab headings #}
+<nav class="uds-tabbed-panels{% if is_dark %} uds-tabbed-panels-dark{% endif %}">
+  <div class="nav nav-tabs" id="nav-tab" role="tablist"  data-scroll-position="0">
+    {% for tab in tabs %}
+      {% if loop.first %}
+        <a class="nav-item nav-link active"
+           id="nav-{{ tab.heading|replace({' ' : '-'})|lower }}-tab"
+           data-toggle="tab"
+           href="#nav-{{ tab.heading|replace({' ' : '-'})|lower }}"
+           role="tab"
+           aria-controls="nav-{{ tab.heading|replace({' ' : '-'})|lower }}"
+           aria-selected="true">
+          {{ tab.heading }}
+        </a>
+      {% else %}
+        <a class="nav-item nav-link"
+           id="nav-{{ tab.heading|replace({' ' : '-'})|lower }}-tab"
+           data-toggle="tab"
+           href="#nav-{{ tab.heading|replace({' ' : '-'})|lower }}"
+           role="tab"
+           aria-controls="nav-{{ tab.heading|replace({' ' : '-'})|lower }}"
+           aria-selected="false">
+          {{ tab.heading }}
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+    <a class="scroll-control-prev" href="#carouselExampleControls" role="button" data-scroll="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="scroll-control-next" href="#carouselExampleControls" role="button" data-scroll="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+</nav>
+
+{# Generate tab content #}
+<div class="tab-content" id="nav-tabContent">
+  {% for tab in tabs %}
+    {% if loop.first %}
+      <div class="tab-pane fade{% if is_dark %} text-white{% endif %} show active"
+           id="nav-{{ tab.heading|replace({' ' : '-'})|lower }}"
+           role="tabpanel"
+           aria-labelledby="nav-{{ tab.heading|replace({' ' : '-'})|lower }}-tab">
+        {{ tab.copy|raw }}
+      </div>
+    {% else %}
+      <div class="tab-pane fade{% if is_dark %} text-white{% endif %}"
+           id="nav-{{ tab.heading|replace({' ' : '-'})|lower }}"
+           role="tabpanel"
+           aria-labelledby="nav-{{ tab.heading|replace({' ' : '-'})|lower }}-tab">
+        {{ tab.copy|raw }}
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+{{ attach_library('renovation/tabbed-panels') }}
+

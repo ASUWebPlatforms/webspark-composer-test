@@ -1,0 +1,20 @@
+{
+  "name": "asuwatts/radix_custom",
+  "description": "A Drupal 8/9 custom module that adds more layouts to the Radix Layouts library.",
+  "type": "drupal-custom-module",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Travis Butterfield",
+      "email": "tbutterf@asu.edu"
+    },
+    {
+      "name": "Robert LeBlanc",
+      "email": "rmlebla1@asu.edu"
+    }
+  ],
+  "require": {
+    "php": ">=7.3",
+    "drupal/core": "^8.8.0 || ^9.0 || ^10.0"
+  }
+}

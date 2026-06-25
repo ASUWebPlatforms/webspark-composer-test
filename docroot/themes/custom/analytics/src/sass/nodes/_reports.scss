@@ -1,0 +1,7 @@
+.report-meta {
+  .collapse:not(.show) + button {
+    .fa-chevron-up {
+      @apply tw-rotate-180;
+    }
+  }
+}

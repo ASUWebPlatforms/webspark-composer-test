@@ -1,0 +1,17 @@
+<nav aria-label="breadcrumbs" class="container px-0 {{ spacing_top }} {{ spacing_bottom }}">
+  {% if links is not empty %}
+    <ol class="breadcrumb {{ bg_color }}">
+      {% for link in links %}
+        {% if (link.url.routeName == '<nolink>') or (link.url.routeName == '<none>') %}
+          <li class="breadcrumb-item {{ not item.url ? ' active' }}" aria-current="page">
+            {{ link.text }}
+          </li>
+        {% else %}
+          <li class="breadcrumb-item">
+            <a href="{{ link.url }}">{{ link.text }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ol>
+  {% endif %}
+</nav>

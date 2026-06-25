@@ -1,0 +1,139 @@
+.js-form-item.form-item.js-form-type-radio {
+    border: 1px solid #D0D0D0;
+    padding: 10px;
+
+}
+
+form.uds-form .form-check input[type=radio]+label:before{
+    display: none !important;
+}
+
+form.uds-form .form-check input[type=radio]:checked+label:after{
+    display: none !important;
+}
+
+.fit-group{
+    display: none !important;
+    transition:all 1s;
+}
+
+.js-form-item-how-would-you-rather-learn- > label, .js-form-item-which-view-appeals-to-you-the-most- > label, .js-form-item-how-would-you-rather-learn-grad-oprion > label{
+    margin-left: 0px !important;
+    width: 100% !important;
+}
+
+/*#edit-would-you-rather-study .form-item-would-you-rather-study, #edit-asu-has-several-options-that-would-fit-you-select-the-one-that-i .form-item-asu-has-several-options-that-would-fit-you-select-the-one-that-i, #edit-what-s-your-top-interest-area- .form-item-what-s-your-top-interest-area, #edit-would-you-rather-study-grad .form-item-would-you-rather-study-grad, #edit-would-you-rather-live-and-learn-in-a-place-where- .js-form-item-would-you-rather-live-and-learn-in-a-place-where-, #edit-what-s-your-top-interest-area-online .form-item-what-s-your-top-interest-area-online, #edit-would-you-rather-study-grad .form-item-would-you-rather-study-grad {
+    width: 40% !important;
+    display: inline-block !important;
+    margin: 10px;
+}
+
+#edit-which-view-appeals-to-you-the-most- .js-form-item-which-view-appeals-to-you-the-most-, #edit-how-would-you-rather-learn- .js-form-item-how-would-you-rather-learn-, #edit-how-would-you-rather-learn-grad-oprion .js-form-item-how-would-you-rather-learn-grad-oprion, #edit-which-view-appeals-to-you-the-mostgrad-options- .form-item-which-view-appeals-to-you-the-mostgrad-options-{
+    width: 30% !important;
+    display: inline-block !important;
+    margin: 6px;
+}*/
+
+.cfimg{
+    /*margin-left: 8px;*/
+    width: 100%;
+}
+
+cfimg2{
+    margin-left: 8px;
+    width: 100%;
+}
+
+.fieldset-legend{
+    font-size: 1.8rem !important;
+}
+
+.form-item-would-you-rather-study .form-check input[type=radio]+label{
+    display: block !important;
+
+}
+
+.svg-inline--fa.fa-w-16{
+    width: auto !important;
+}
+
+.js-form-item-asu-has-several-options-that-would-fit-you-select-the-one-that-i .text-muted, .js-form-item-online-option-asu-has-several-options-that-would-fit-you-select .text-muted{
+    font-weight: 700;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+   /* margin-left: 1rem; */
+    font-size: 1rem !important;
+    /*color: #191919 !important;*/
+}
+
+.js-form-item-asu-has-several-options-that-would-fit-you-select-the-one-that-i .description, .js-form-item-online-option-asu-has-several-options-that-would-fit-you-select .description {
+    display: none !important;
+}
+
+.js-form-item-asu-has-several-options-that-would-fit-you-select-the-one-that-i label[for="edit-asu-has-several-options-that-would-fit-you-select-the-one-that-i-asu-local"]{
+  /* display: none !important; */
+}
+
+.checkbox_next{
+    cursor: pointer;
+}
+
+form.uds-form .form-check input[type=radio]+label{
+    display: block !important;
+}
+
+@media screen and (min-width: 992px){
+    #edit-what-excites-you-about-graduate-studies-check-all-that-apply- .js-form-type-checkbox, #edit-what-excites-you-about-the-college-experience-check-all-that-app .js-form-type-checkbox, #edit-what-are-you-the-most-nervous-about-check-all-that-apply- .js-form-type-checkbox{
+        width: 30%;
+        display: inline-flex;
+        border: 1px solid #D0D0D0;
+        padding: 20px;
+        height: 100px;
+    }
+
+    #edit-what-excites-you-about-the-college-experience-check-all-that-app .js-form-type-checkbox{
+        height: 130px !important;
+    }
+
+    #edit-what-excites-you-about-graduate-studies-check-all-that-apply- .js-form-type-checkbox .form-check-input, #edit-what-excites-you-about-the-college-experience-check-all-that-app .js-form-type-checkbox .form-check-input,  #edit-what-are-you-the-most-nervous-about-check-all-that-apply- .js-form-type-checkbox .form-check-input{
+        position: relative !important;
+        margin-left: 10px;
+    }
+
+    #edit-would-you-rather-study .form-item-would-you-rather-study, #edit-asu-has-several-options-that-would-fit-you-select-the-one-that-i .form-item-asu-has-several-options-that-would-fit-you-select-the-one-that-i, #edit-what-s-your-top-interest-area- .form-item-what-s-your-top-interest-area, #edit-would-you-rather-study-grad .form-item-would-you-rather-study-grad, #edit-would-you-rather-live-and-learn-in-a-place-where- .js-form-item-would-you-rather-live-and-learn-in-a-place-where-, #edit-what-s-your-top-interest-area-online .form-item-what-s-your-top-interest-area-online, #edit-would-you-rather-study-grad .form-item-would-you-rather-study-grad, #edit-online-option-asu-has-several-options-that-would-fit-you-select .form-item-online-option-asu-has-several-options-that-would-fit-you-select, #edit-online-option-asu-has-several-options-that-would-fit-you-select .form-item-online-option-asu-has-several-options-that-would-fit-you-select, #edit-asu-local-havasu-options .form-item-asu-local-havasu-options, #edit-would-you-rather-live-and-learn-in-a-place-where-grad-options .js-form-item-would-you-rather-live-and-learn-in-a-place-where-grad-options {
+        width: 40% !important;
+        display: inline-block !important;
+        margin: 10px;
+    }
+
+    .info-text{
+        font-weight: 500;
+    }
+
+    #edit-which-view-appeals-to-you-the-most- .js-form-item-which-view-appeals-to-you-the-most-, #edit-how-would-you-rather-learn- .js-form-item-how-would-you-rather-learn-, #edit-how-would-you-rather-learn-grad-oprion .js-form-item-how-would-you-rather-learn-grad-oprion, #edit-which-view-appeals-to-you-the-mostgrad-options- .form-item-which-view-appeals-to-you-the-mostgrad-options-{
+        width: 30% !important;
+        display: inline-block !important;
+        margin: 6px;
+    }
+
+    .checkbox_next{
+       margin-left: 45%;
+       margin-right: 45%;
+    }
+
+    .js-form-item.form-item.js-form-type-radio {
+        width: 50%;
+    }
+
+    .cfimg{
+      height: 170px;
+    }
+
+}
+
+#please_wait{
+    width: 30%;
+    margin-right: auto;
+    margin-left: auto;
+}

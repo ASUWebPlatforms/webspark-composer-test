@@ -1,0 +1,16 @@
+asu_opt_calculator.calc_admin_settings:
+  path: '/admin/config/content/opt-dates'
+  defaults:
+    _form: '\Drupal\asu_opt_calculator\Form\DatesOfOptSettingsForm'
+    _title: 'Set OPT graduation dates'
+  requirements:
+    _permission: 'administer asu_opt_calculator'
+
+
+asu_opt_calculator.opt_page:
+  path: '/opt_calculator'
+  defaults:
+    _form: '\Drupal\asu_opt_calculator\Form\OptForm'
+    _title: 'OPT calculator'
+  requirements:
+    _permission: 'access content'

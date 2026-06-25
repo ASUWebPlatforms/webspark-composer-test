@@ -1,0 +1,157 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a single Drupal page while offline.
+ *
+ * All available variables are mirrored in page.html.twig.
+ * Some may be blank but they are provided for consistency.
+ *
+ * @see template_preprocess_maintenance_page()
+ *
+ * @ingroup themeable
+ */
+#}
+<body class="maintenance-page">
+        
+  <div class="dialog-off-canvas-main-canvas" data-off-canvas-main-canvas>
+    <div class="container">
+      <main role="main" style="padding-top:50px; padding-bottom:5px">
+        <header role="banner">
+          <div id="ws2HeaderContainer"></div>
+          {% if logo %}
+            <a href="{{ front_page }}" title="{{ 'Home'|t }}" rel="home">
+              <img src="{{ logo }}" alt="{{ 'Home'|t }}"/>
+            </a>
+          {% endif %}
+        </header>
+        <h1>Site under maintenance</h1>
+        https://www.asu.edu is currently under maintenance. We should be back shortly. Thank you for your patience.
+        <p>&nbsp;</p>
+      </main>
+    </div> 
+
+    <footer role="contentinfo">
+      <div class="wrapper" id="wrapper-footer-innovation">
+        <div class="container" id="footer-innovation">
+          <div class="row">
+            <div class="col">
+              <div class="d-flex footer-innovation-links">
+                <nav class="nav" aria-label="University Services">
+                  <a
+                    class="nav-link"
+                    href="https://www.asu.edu/about/locations-maps"
+                    data-ga-footer-type="internal link"
+                    data-ga-footer-section="secondary footer"
+                    data-ga-footer="maps and locations"
+                    data-ga-footer-component=""
+                  >Maps and Locations</a>
+                  <a
+                    class="nav-link"
+                    href="https://www.asu.edu/asujobs"
+                    data-ga-footer-type="internal link"
+                    data-ga-footer-section="secondary footer"
+                    data-ga-footer="jobs"
+                    data-ga-footer-component=""
+                  >Jobs</a>
+                  <a
+                    class="nav-link"
+                    href="https://isearch.asu.edu/"
+                    data-ga-footer-type="internal link"
+                    data-ga-footer-section="secondary footer"
+                    data-ga-footer="directory"
+                    data-ga-footer-component=""
+                  >Directory</a>
+                  <a
+                    class="nav-link"
+                    href="https://www.asu.edu/about/contact"
+                    data-ga-footer-type="internal link"
+                    data-ga-footer-section="secondary footer"
+                    data-ga-footer="contact asu"
+                    data-ga-footer-component=""
+                  >Contact ASU</a>
+                  <a
+                    class="nav-link"
+                    href="https://my.asu.edu/"
+                    data-ga-footer-type="internal link"
+                    data-ga-footer-section="secondary footer"
+                    data-ga-footer="my asu"
+                    data-ga-footer-component=""
+                  >My ASU</a>
+                </nav>
+                <a
+                  class="img-link"
+                  href="https://www.asu.edu/rankings"
+                  data-ga-footer-type="internal link"
+                  data-ga-footer-section="secondary footer"
+                  data-ga-footer="#1 in the u.s. for innovation"
+                  data-ga-footer-component=""
+                >
+                  <img src="/modules/composer/webspark-module-asu_footer/img/200420-GlobalFooter-No1InnovationLockup.png" loading="lazy" height="188" width="863" alt="Number one in the U.S. for innovation. #1 ASU, #2 Stanford, #3 MIT. - U.S. News and World Report, 8 years, 2016-2023">
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrapper" id="wrapper-footer-colophon">
+        <div class="container" id="footer-colophon">
+          <div class="row">
+            <div class="col">
+              <div class="footer-legal-links">
+                <nav class="nav colophon" aria-label="University Legal and Compliance">
+                  <a
+                    class="nav-link"
+                    href="https://www.asu.edu/about/copyright-trademark"
+                    data-ga-footer-type="internal link"
+                    data-ga-footer-section="tertiary footer"
+                    data-ga-footer="copyright and trademark"
+                    data-ga-footer-component=""
+                  >Copyright and Trademark</a>
+                  <a
+                    class="nav-link"
+                    href="https://www.asu.edu/accessibility/"
+                    data-ga-footer-type="internal link"
+                    data-ga-footer-section="tertiary footer"
+                    data-ga-footer="accessibility"
+                    data-ga-footer-component=""
+                  >Accessibility</a>
+                  <a
+                    class="nav-link"
+                    href="https://www.asu.edu/about/privacy"
+                    data-ga-footer-type="internal link"
+                    data-ga-footer-section="tertiary footer"
+                    data-ga-footer="privacy"
+                    data-ga-footer-component=""
+                  >Privacy</a>
+                  <a
+                    class="nav-link"
+                    href="https://www.asu.edu/about/terms-of-use"
+                    data-ga-footer-type="internal link"
+                    data-ga-footer-section="tertiary footer"
+                    data-ga-footer="terms of use"
+                    data-ga-footer-component=""
+                  >Terms of Use</a>
+                  <a
+                    class="nav-link"
+                    href="https://www.asu.edu/emergency/"
+                    data-ga-footer-type="internal link"
+                    data-ga-footer-section="tertiary footer"
+                    data-ga-footer="emergency"
+                    data-ga-footer-component=""
+                  >Emergency</a>
+                  <a
+                    class="nav-link"
+                    href="https://eoss.asu.edu/health/announcements/coronavirus"
+                    data-ga-footer-type="internal link"
+                    data-ga-footer-section="tertiary footer"
+                    data-ga-footer="covid-19 information"
+                  >COVID-19 Information</a>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>

@@ -1,0 +1,5 @@
+services:
+  health_degree_migration.taxonomy_term_preserve_subscriber:
+    class: Drupal\health_degree_migration\EventSubscriber\TaxonomyTermPreserveSubscriber
+    tags:
+      - { name: event_subscriber }

@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: area_of_interest_grad
+label: 'Area of interest - Grad'
+category: ASU
+likert: false
+options: ''

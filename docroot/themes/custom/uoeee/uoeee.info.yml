@@ -1,0 +1,17 @@
+name: UOEEE Theme
+type: theme
+base theme: renovation
+description: UOEEE subtheme
+package: UOEEE site
+core: 10.x
+core_version_requirement: ^10
+libraries:
+  - uoeee/global-styling
+
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer

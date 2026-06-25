@@ -1,0 +1,7 @@
+@import '../../sass/extends/cards';
+// Set content width to 75 characters.
+.accordion {
+  p {
+    max-width: 75ch;
+  }
+}

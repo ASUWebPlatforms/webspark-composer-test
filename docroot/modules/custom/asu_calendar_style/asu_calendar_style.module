@@ -1,0 +1,10 @@
+<?php
+
+use \Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function asu_calendar_style_preprocess_node(&$variables) {
+    $variables['#attached']['library'][] = 'asu_calendar_style/fullcalendar_style';
+}

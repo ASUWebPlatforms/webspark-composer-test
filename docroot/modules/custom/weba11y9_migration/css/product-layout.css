@@ -1,0 +1,135 @@
+/**
+ * @file
+ * Product content type Layout Builder styling.
+ *
+ * Matches production's fieldset/card structure:
+ * <fieldset class="card mb-3 form-control"> with
+ * <legend class="m-0 card-header"> for section headings.
+ */
+
+/* Field labels: normal weight matching production's computed font-weight: 400.
+ * Layout (d-flex, flex-wrap, align-items-baseline) and spacing (mt-3, me-1)
+ * are handled by Bootstrap utility classes in the Twig template. */
+.product-field__label {
+  color: #191919;
+}
+
+/* Title: match production's h1.article sizing, line-height, and margin. */
+.node.product h1 {
+  font-size: 3rem;
+  line-height: 1.083;
+  margin-bottom: 1em;
+}
+
+/* Card border on product sections.
+ * Matches production's Bootstrap card border: rgba(0,0,0,0.176).
+ * Applied to all layout regions, then removed for the header section. */
+.node.product .layout__region--first {
+  border: 1px solid rgba(0, 0, 0, 0.176);
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+
+/* Header section (contains breadcrumb) has no border/padding. */
+.node.product .layout__region--first:has(.block-webspark-module-asu-breadcrumb) {
+  border: none;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+/* Section heading block: card-header style matching production's
+ * <legend class="m-0 card-header"><span class="fieldset-legend">.
+ * Production has no border-bottom on the legend. */
+.node.product .layout__region--first > .product-section-heading {
+  background-color: rgba(255, 255, 255, 0.03);
+  padding: 2rem 2rem 1rem;
+  margin: 0;
+}
+
+.node.product .product-section-heading h2 {
+  font-size: 1.5rem;
+  font-weight: normal;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Card body: horizontal padding matching production's spacious layout.
+ * Vertical spacing handled by .product-field margin-top. */
+.node.product .layout__region--first > .block:not(.product-section-heading) {
+  padding: 0 2rem;
+}
+
+/* First field block after heading needs top padding. */
+.node.product .layout__region--first > .product-section-heading + .block {
+  padding-top: 1rem;
+}
+
+/* Last field block needs bottom padding (2rem matches production). */
+.node.product .layout__region--first > .block:last-child {
+  padding-bottom: 2rem;
+}
+
+/* VPAT container: the outer block wrapper needs no border or extra padding.
+ * The inner fieldset (Drupal #type=fieldset) gets Bootstrap .card classes
+ * from the Renovation theme, which provide the sub-card border. */
+.node.product .layout__region--first > .product-vpat-container {
+  border: none;
+  padding: 0;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+/* Comments field: flex layout (d-flex, align-items-start, overflow-hidden)
+ * handled by Bootstrap utility classes in the Twig template.
+ * Label (gold) on the left, content on the right. */
+.product-field--field-comments > .product-field__label {
+  flex-shrink: 0;
+  background-color: #ffc626;
+  padding: 0.2rem 0.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 6rem 0 1.5rem 0;
+}
+
+/* Comment items wrapper: contains article + form stacked vertically,
+ * takes remaining flex space next to the gold label. */
+.product-field--field-comments .product-field__items {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.product-field--field-comments form.comment-comment-form {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Hide comment avatar column (col-md-2) matching production's access-style.css. */
+.product-field--field-comments article.js-comment .col-md-2 {
+  display: none;
+}
+
+/* Comment content takes full width when avatar is hidden. */
+.product-field--field-comments article.js-comment .col-md-10 {
+  flex: 1 1 100%;
+  max-width: 100%;
+}
+
+/* Reply button: gray button matching production's access-style.css. */
+.product-field--field-comments article.js-comment .links a[href*="reply"] {
+  display: inline-block;
+  background-color: #888;
+  color: #fff !important;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  border-radius: 0;
+  line-height: 1.5;
+}
+
+.product-field--field-comments article.js-comment .links a[href*="reply"]:hover {
+  background-color: #666;
+  color: #fff !important;
+}

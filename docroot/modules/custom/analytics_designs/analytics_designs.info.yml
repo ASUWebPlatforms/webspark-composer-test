@@ -1,0 +1,11 @@
+name: Analytics Designs
+description: Provides routing, templating, and other front-end logic for the Analytics website.
+package: Analytics
+type: module
+version: 1.0.0
+core_version_requirement: ^9 || ^10
+components:
+  namespaces:
+    designs: templates
+dependencies:
+  - drupal:group

@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: asu_entry_terms
+label: 'ASU entry terms'
+category: ''
+likert: false
+options: |-
+  2227: '2022 Fall'
+  2231: '2023 Spring'

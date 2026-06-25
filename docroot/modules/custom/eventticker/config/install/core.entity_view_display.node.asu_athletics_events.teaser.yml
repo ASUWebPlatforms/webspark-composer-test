@@ -1,0 +1,42 @@
+uuid: f8d6a3fc-3951-4c60-b4a5-79d922cd034f
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.asu_athletics_events.body
+    - field.field.node.asu_athletics_events.feeds_item
+    - field.field.node.asu_athletics_events.field_event_date_and_time
+    - field.field.node.asu_athletics_events.field_event_link
+    - field.field.node.asu_athletics_events.field_location
+    - field.field.node.asu_athletics_events.field_opponent
+    - field.field.node.asu_athletics_events.layout_builder__layout
+    - node.type.asu_athletics_events
+  module:
+    - text
+    - user
+id: node.asu_athletics_events.teaser
+targetEntityType: node
+bundle: asu_athletics_events
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  feeds_item: true
+  field_event_date_and_time: true
+  field_event_link: true
+  field_location: true
+  field_opponent: true
+  layout_builder__layout: true

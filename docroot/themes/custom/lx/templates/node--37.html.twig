@@ -1,0 +1,201 @@
+{#
+/**
+ * @file
+ * Template for the page title.
+ */
+#}
+{{ attach_library('lx/lx-resource-filter') }}
+
+<style>
+  #lx-resource-custom-app{
+    width: 100%;
+  }
+  .card-img-top {
+    height: 8.5rem;
+  }
+
+  .filter-heading h5{
+    border-top: solid 1px #a3a3a3;
+    padding-top: 8px;
+  }
+
+  .filter-heading ul{
+    margin-left: -30px;
+  }
+  
+  .filter-heading li{
+    list-style: none;
+  }
+
+  .fa-plus-circle{
+    float: right;
+  }
+  
+  .fa-minus-circle{
+    float: right;
+  }
+
+  .filter-icon-tooltip {
+    position: relative;
+    display: inline-block;
+    font-size: 12px;
+    margin-left: 2px;
+  }
+
+  .filter-icon-tooltip .filter-icon-tooltiptext {
+    visibility: hidden;
+    min-width: 120px;
+    background-color: #353535;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 12px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+  }
+
+  .filter-icon-tooltip:hover .filter-icon-tooltiptext {
+    visibility: visible;
+  }
+
+  .sticky-filter {
+    position: sticky;
+    height: fit-content;
+    top: 90px;
+    bottom: auto;
+  }
+  
+@media screen and (min-width: 0px) and (max-width: 580px) {
+
+  img {
+    height: 380px;
+    width: 580px;
+  }
+  .main-content {
+    flex-direction: column-reverse;
+    min-width: 200px;
+  }
+  .filters {
+    flex: 1;
+  }
+  .text-content {
+    flex: 1;
+  }
+}
+
+.logo {
+  height: 0 rem !important; 
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: -1;
+}
+img {
+  background: linear-gradient(to bottom black, black);
+}
+
+#xkit {
+  position: absolute;
+  top: 60%;
+  left: 30%;
+  background-color: white;
+  color: black;
+}
+
+#intro {
+  position: absolute;
+  top: 63%;
+  left: 30%;
+  background-color: black;
+  color: white;
+}
+
+#intro-text {
+  text-align: justify;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: row;
+}
+
+.text-content {
+  flex: 70%;
+  padding: 20px;
+}
+
+.filters {
+  flex: 30%;
+  margin-left: 60px;
+}
+
+.button {
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+  padding: 2px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.no-spaces {
+  margin: 3px;
+  display: inline-block;
+}
+
+.spaces {
+  margin: 30px;
+  display: inline-block;
+}
+
+#no-space1 {
+  margin: 0px;
+}
+
+#button1 {
+  display: inline;
+}
+
+.demo {
+  list-style-type: none;
+}
+
+.istyle {
+  list-style-type: none;
+}
+
+@media screen and (min-width: 0px) and (max-width: 480px) {
+  .main-content {
+    flex-direction: column-reverse;
+    min-width: 200px;
+  }
+  .filters {
+    flex: 1;
+  }
+  .text-content {
+    flex: 1;
+  }
+}        
+</style>
+
+    <div class="uds-hero-sm logo">
+        <img class="hero" src="https://lx.asu.edu/sites/default/files/2022-06/210527-BrandGuide-Banner-ElementsoftheBrand.jpeg" alt="logo" style="width: 100%;">
+        <div role="doc-subtitle"> <span class="highlight-white">Teaching & Learning</span></div>
+        <h1><span class="highlight-gold">{{node.label}}</span></h1>
+    </div>
+    <div class="layout__fixed-width">
+        <div class="container">
+            <div class="layout__region layout__region--first">
+                <div class="spacing-top-48 spacing-bottom-48 block block-layout-builder block-inline-blocktext-content clearfix">
+                    <div class="main-content"> 
+                      <div id="lx-resource-custom-app"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

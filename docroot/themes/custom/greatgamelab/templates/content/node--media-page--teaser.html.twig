@@ -1,0 +1,62 @@
+{#
+/**
+ * @file
+ * Custom Template for a Media Node component.
+ */
+#}
+{%
+  set classes = [
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+  'card',
+  'cards-components',
+]
+%}
+
+{# Get the media entity and image dimensions #}
+{% set media_image = node.field_media.entity.field_media_image %}
+{% set image_width = media_image|first.width %}
+{% set image_height = media_image|first.height %}
+
+{# Set container dimensions #}
+{% set container_width = 384 %}
+{% set container_height = 200 %}
+{% set container_class = 'card-img-container ggl-logo-container' %}
+{% set image_class = 'card-img-top uds-img borderless logo-image' %}
+
+{# Calculate ratios and check conditions #}
+{% if image_width and image_height and image_height > 0 and container_height > 0 %}
+    {# Only apply overflow class if image is actually larger than container in either dimension #}
+    {% if image_width > container_width or image_height > container_height %}
+        {% set image_class = image_class ~ ' ggl-overflow' %}
+    {% endif %}
+{% endif %}
+
+<article{{ attributes.addClass(classes) }}>
+  <div class="{{ container_class }}">
+    <img
+      src="{{ file_url(media_image.entity.uri.value) }}"
+      alt="{{ media_image.alt }}"
+      loading="lazy"
+      decoding="async"
+      fetchpriority="auto"
+      class="{{ image_class }}"
+      data-testid="card-image"
+    />
+  </div>
+  <div class="card-header" data-testid="card-title">
+    <h3 class="card-title">{{ node.label }}</h3>
+  </div>
+  <div class="card-body" data-testid="card-body">
+    <div>
+      {{ content.field_date_published }}
+    </div>
+  </div>
+  <div class="card-buttons">
+    <div class="card-button" data-testid="card-button">
+      <a class="btn btn-gold" href="{{ url }}" target="_top">
+        Read more
+      </a>
+    </div>
+  </div>
+</article>

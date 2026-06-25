@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: area_of_interest_ugrad_online
+label: 'Area of interest - Undergrad Online'
+category: ASU
+likert: false
+options: ''

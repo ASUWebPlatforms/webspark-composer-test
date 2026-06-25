@@ -1,0 +1,352 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the asupesc_degree_webservice module.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Creates some default entries on this module custom table.
+ *
+ * @see hook_install()
+ *
+ * @ingroup asupesc_degree_webservice
+ */
+
+/**
+ * Implements hook_schema().
+ *
+ * Defines the database tables used by this module.
+ *
+ * @see hook_schema()
+ *
+ * @ingroup asupesc_degree_webservice
+ */
+function asupesc_degree_webservice_schema() {
+  // Undergrad
+  $schema['asu_ugrad_interest_category_degrees'] = [
+    'description' => 'Degree data',
+    'fields' => [
+      'categoryid' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 8,
+        'description' => 'ASU category ID',
+      ],
+      'categoryname' => [
+        'type' => 'varchar',
+        'length' => 255,
+        //'not null' => TRUE,
+        'description' => 'Category name',
+      ],
+      'categorycampuscode' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'Campus code',
+      ],
+      'categoryprogramname' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'Program name',
+      ],
+      'categoryprogramurl' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'Program url',
+      ],
+      'categoryprogramcode' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'Program code',
+      ],
+      'categoryprogramDesrc100' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'Another form of program name',
+      ],
+      'categoryprogramAcadOrg' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'College academic org',
+      ],
+      'categorydepartmentCode' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'Department code',
+      ],
+      'categorymajorname' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'Major name',
+      ],
+      'categorymajorcode' => [
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+        'description' => 'Major code',
+      ],
+      'categorymajorWebappURL' => [
+        'type' => 'varchar',
+        'length' => 512,
+        'description' => 'Major webapp url',
+      ],
+      'categorydegree' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => 'Degree category',
+      ],
+      'categoryAsuCustomText' => [
+        'type' => 'varchar',
+        'length' => 1024,
+        'description' => 'Custom text',
+      ],
+      'categoryAsuNactvAppOvrd' => [
+        'type' => 'varchar',
+        'length' => 8,
+        'description' => 'AsuNactvAppOvrd',
+      ],
+    ],
+    'primary key' => array(
+        'categoryid',
+        'categorymajorcode',
+    ),
+  ];
+
+   // Grad
+   $schema['asu_grad_interest_category_degrees'] = [
+     'description' => 'Degree data',
+     'fields' => [
+       'categoryid' => [
+         'type' => 'varchar',
+         'length' => 8,
+         'not null' => TRUE,
+         'description' => 'ASU category ID',
+       ],
+       'categoryname' => [
+         'type' => 'varchar',
+         'length' => 255,
+         //'not null' => TRUE,
+         'description' => 'Category name',
+       ],
+       'categorycampuscode' => [
+         'type' => 'varchar',
+         'length' => 255,
+         'description' => 'Campus code',
+       ],
+       'categoryprogramname' => [
+         'type' => 'varchar',
+         'length' => 255,
+         'description' => 'Program name',
+       ],
+       'categoryprogramurl' => [
+         'type' => 'varchar',
+         'length' => 255,
+         'description' => 'Program url',
+       ],
+       'categoryprogramcode' => [
+         'type' => 'varchar',
+         'length' => 255,
+         'description' => 'Program code',
+       ],
+       'categoryprogramDesrc100' => [
+         'type' => 'varchar',
+         'length' => 255,
+         'description' => 'Another form of program name',
+       ],
+       'categoryprogramAcadOrg' => [
+         'type' => 'varchar',
+         'length' => 255,
+         'description' => 'College academic org',
+       ],
+       'categorydepartmentCode' => [
+         'type' => 'varchar',
+         'length' => 255,
+         'description' => 'Department code',
+       ],
+       'categoryDegreeDescShort' => [
+         'type' => 'varchar',
+         'length' => 255,
+         'description' => 'Degree Short description',
+       ],
+       'categoryDegreeDescLong' => [
+         'type' => 'varchar',
+         'length' => 255,
+         'description' => 'Degree formal description',
+       ],
+       'categorymajorname' => [
+         'type' => 'varchar',
+         'length' => 255,
+         'description' => 'Major name',
+       ],
+       'categorymajorcode' => [
+         'type' => 'varchar',
+         'length' => 64,
+         'not null' => TRUE,
+         'description' => 'Major code',
+       ],
+       'categorymajorWebappURL' => [
+         'type' => 'varchar',
+         'length' => 255,
+         'description' => 'Major webapp url',
+       ],
+       'categorygradtype' => [
+         'type' => 'varchar',
+         'length' => 255,
+         'description' => 'Graduate type',
+       ],
+      'categorygraduateAllApplyDates' => [
+        'type' => 'varchar',
+        'length' => 1024,
+        'description' => 'graduateAllApplyDates',
+      ],
+      'categoryAsuCustomText' => [
+        'type' => 'varchar',
+        'length' => 1024,
+        'description' => 'Custom text',
+      ],
+      'categoryAsuNactvAppOvrd' => [
+        'type' => 'varchar',
+        'length' => 8,
+        'description' => 'AsuNactvAppOvrd',
+      ],
+
+     ],
+     'primary key' => array(
+        'categoryid',
+        'categorymajorcode',
+     ),
+   ];
+
+   // Online
+   $schema['asu_online_degrees'] = array(
+    'description' => t('ASU Online degrees'),
+    'fields' => array(
+        'onlineid' => array(
+        'description' => t('Primary key value.'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        ),
+        'onlinecode' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => t('ASU Online code'),
+        ),
+        'onlinetitle' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => t('Abbreviated Title'),
+        ),
+        'onlinecategory' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => t('Category'),
+        ),
+
+        'onlineinterestarea' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => t('Areas of interest'),
+        ),
+        'onlineprogcode' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => t('Program code'),
+        ),
+        'onlineplancode' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => t('Plan code'),
+        ),
+        'onlinesubplancode' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => t('Subplan code'),
+        ),
+        'onlineshortdesc' => array(
+        'type' => 'varchar',
+        'length' => 1024,
+        'description' => t('Short description'),
+        ),
+        'onlineurl' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => t('ASU Online URL'),
+        ),
+        'onlinecrmdestination' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => t('CRM destination'),
+        ),
+
+     ),
+    'primary key' => array('onlineid'),
+
+  );
+
+
+
+    return $schema;
+}
+
+/**
+ * Increase asu_grad_interest_category_degrees.categoryAsuCustomText to 1024.
+ */
+function asupesc_degree_webservice_update_9001() {
+  $schema = \Drupal::database()->schema();
+
+  if ($schema->tableExists('asu_grad_interest_category_degrees')) {
+    $spec = [
+      'type' => 'varchar',
+      'length' => 1024,
+      'not null' => FALSE,
+      'description' => 'Custom text (increased from 512 to 1024)',
+    ];
+    try {
+      $schema->changeField(
+        'asu_grad_interest_category_degrees',
+        'categoryAsuCustomText',
+        'categoryAsuCustomText',
+        $spec
+      );
+      \Drupal::logger('asupesc_degree_webservice')
+        ->notice('Updated asu_grad_interest_category_degrees.categoryAsuCustomText to VARCHAR(1024).');
+    } catch (\Exception $e) {
+      \Drupal::logger('asupesc_degree_webservice')
+        ->error('Failed to update categoryAsuCustomText: @msg', ['@msg' => $e->getMessage()]);
+      throw $e;
+    }
+  }
+}
+
+/**
+ * Increase asu_ugrad_interest_category_degrees.categoryAsuCustomText to 1024.
+ */
+function asupesc_degree_webservice_update_9002() {
+  $schema = \Drupal::database()->schema();
+
+  if ($schema->tableExists('asu_ugrad_interest_category_degrees')) {
+    $spec = [
+      'type' => 'varchar',
+      'length' => 1024,
+      'not null' => FALSE,
+      'description' => 'Custom text (increased from 512 to 1024)',
+    ];
+
+    try {
+      $schema->changeField(
+        'asu_ugrad_interest_category_degrees',
+        'categoryAsuCustomText',
+        'categoryAsuCustomText',
+        $spec
+      );
+      \Drupal::logger('asupesc_degree_webservice')->notice('Updated asu_ugrad_interest_category_degrees.categoryAsuCustomText to VARCHAR(1024).');
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('asupesc_degree_webservice')->error('Failed to update asu_ugrad_interest_category_degrees.categoryAsuCustomText: @msg', ['@msg' => $e->getMessage()]);
+      throw $e;
+    }
+  }
+}

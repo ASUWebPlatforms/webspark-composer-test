@@ -1,0 +1,11 @@
+csrd_utils_hrc:
+  version: 1.0.3
+  css:
+    layout:
+      src/css/csrd_utils_hrc.css: {}
+  js:
+    src/js/index.js: { }
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings

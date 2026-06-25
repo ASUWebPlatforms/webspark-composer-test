@@ -1,0 +1,25 @@
+From 7dee871577ee898eac5b8f97344c35c78b45d839 Mon Sep 17 00:00:00 2001
+From: Alexander Persky <apersky@asu.edu>
+Date: Wed, 31 Dec 2025 14:12:04 -0700
+Subject: [PATCH] Add media and sizes
+
+---
+ core/lib/Drupal/Component/Utility/Xss.php | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/core/lib/Drupal/Component/Utility/Xss.php b/core/lib/Drupal/Component/Utility/Xss.php
+index c77d27d14c0..31b55fd08cf 100644
+--- a/core/lib/Drupal/Component/Utility/Xss.php
++++ b/core/lib/Drupal/Component/Utility/Xss.php
+@@ -216,6 +216,8 @@ protected static function attributes($attributes) {
+         'property',
+         'class',
+         'datetime',
++        'media',
++        'sizes',
+       ],
+       'strip_attribute_names' => ['style'],
+       'max_attribute_length' => 96,
+--
+2.51.0
+

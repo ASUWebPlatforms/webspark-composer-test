@@ -1,0 +1,61 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\taxonomy\Entity\vocabulary;
+use Drupal\taxonomy\Entity\term;
+
+/**
+ * Implements hook_menu() to add a route for the dropdown page.
+ */
+function aas2bas_search_menu() {
+    $items['taxonomy-drop'] = [
+        'title' => 'Taxonomy Dropdown',
+        'page callback' => 'aas2bas_search_taxonomy_dropdown',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    ];
+    return $items;
+}
+
+/**
+ * Callback function for the dropdown page.
+ */
+function aas2bas_search_taxonomy_dropdown() {
+    $form = \Drupal::formBuilder()->getForm('aas2bas_search_dropdown_form');
+    return $form;
+}
+
+/**
+ * Form to render taxonomy dropdown.
+ */
+function aas2bas_search_dropdown_form(array &$form, FormStateInterface $form_state) {
+    // Load terms from a specific vocabulary.
+    $vocabulary_name = 'aas2bas_colleges'; // Machine name for taxonomy vocabulary.
+    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vocabulary_name);
+
+    $options = [];
+    foreach ($terms as $term) {
+        $options[$term->tid] = $term->name;
+    }
+
+    $form['taxonomy_dropdown'] = [
+        '#type' => 'select',
+        '#title' => t('Select a college'),
+        '#options' => $options,
+        '#empty_option' => t('-- Select --'),
+    ];
+    $form['submit'] = [
+        '#type' => 'submit',
+        '#value' => t('Submit'),
+    ];
+    return $form;
+}
+
+/**
+ * Submit handler for the taxonomy dropdown form.
+ */
+function aas2bas_search_dropdown_form_submit(array &$form, FormStateInterface $form_state) {
+    // Handle the selected term ID.
+    $selected_tid = $form_state->getValue('taxonomy_dropdown');
+    \Drupal::messenger()->addMessage(t('Selected term ID: @tid', ['@tid' => $selected_tid]));
+}

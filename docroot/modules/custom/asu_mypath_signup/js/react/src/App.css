@@ -1,0 +1,496 @@
+input{
+    font-size: inherit;
+    display: block;
+}
+
+.invalid-error{
+    color: #b72a2a;
+}
+
+.consent-checkbox{
+    float: left;
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
+.campusOptionCheck{
+    margin-bottom: 0rem !important;
+}
+
+.page-0{
+    display: none !important;
+}
+
+.page-1{
+    margin-right:30px !important;
+}
+
+.noResultsList{
+    list-style-type: none !important;
+}
+
+.mypath-consent-wording{
+    font-size: 12px;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    color: #191919;
+    height: 300px;
+    overflow: auto; 
+}
+
+.react-text-muted{
+    font-size: 14px;
+    color: #191919;
+}
+
+#my-app-target{
+    margin-bottom: 48px;
+    margin-top: 48px;
+}
+
+.consent{
+    background: #ffffff;
+    padding: 10px;
+    border: 1px solid;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.programModalButton{
+    width: 80%;
+    height: 42px;
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 16px 12px;
+    border: 1px solid #191919 !important;
+    color: #191919;
+    align-content: center;
+    /* background-image: url(data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3E%3C/svg%3E);  */
+}
+
+.porgOptionsDiv{
+    margin: 0px 0px 20px 0px;
+    border-bottom: 1px solid #cccccc;
+    padding-bottom: 20px;
+}
+
+INPUT::-webkit-input-placeholder, 
+INPUT:-moz-placeholder {
+    color:#747474 !important;
+}
+
+input[placeholder], [placeholder], *[placeholder]
+{
+    color:#747474 !important;
+}
+
+.css-qbdosj-Input:after {
+    color:#747474 !important;
+}
+
+.inactive{
+    display: none !important;
+}
+
+.active{
+    display: block !important;
+    position: relative;
+}
+
+.programInformationInitial{
+    margin-bottom:20px;
+}
+
+.nxt-button{
+    margin-right:20px;
+}
+
+ .programModal{
+    /*padding:30px;*/
+    max-height: 800px;
+    overflow-y: auto;
+} 
+
+.prog_all_option{
+    margin-top: 36px;
+} 
+
+.error{
+    color: #b72a2a;
+    font-size: 0.8rem;
+}
+
+.error-field{
+    border: 1px outset #b72a2a;
+}
+
+.FullProgData{
+    margin-bottom: 20px;
+}
+
+input:focus{
+    box-shadow: none; 
+    box-shadow: 0 0 0 1px #fff,0 0 0 1px #b72a2a!important;
+    min-width: 150px !important;
+}
+
+Input:after{
+    min-width: 150px !important;
+    box-shadow: 0 0 0 1px #fff,0 0 0 3px #191919!important;
+    color: #191919!important;
+}
+ 
+
+
+.prog_options_list{
+    margin-top: 36px;
+}
+
+.Modalclose{
+    text-align: right;
+    padding:10px;
+    font-size: 1.3em !important;
+    cursor: pointer;
+}
+
+.react-btn{
+    padding: 0.3rem 0.5rem !important;
+}
+
+.highlight-gold{
+    background: #ffc627;
+    box-shadow: -0.15em 0 0 #ffc627, 0.15em 0 0 #ffc627;
+    color: #191919;
+    width: fit-content !important;
+}
+
+.prograHelp{
+    font-weight:bold;
+    font-size: 1rem;;
+}
+
+.modal-custom-header{
+    display: flex;
+}
+
+.header-left{
+    width: 95%;
+}
+
+.programDataFromTransferGuideSite{
+    background: #cccccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    margin-top: 50px;
+}
+
+.innerProgData{
+    margin: 20px;
+}
+
+.hiddenProgSelection{
+    display: none;
+}
+
+.MyPathAsuForm{
+    margin-top:20px;
+    margin-bottom: 20px;
+}
+
+input[name=campusData] {
+    height: 0px !important;
+}
+
+.campusOptionCheck {
+    margin-bottom: 8px !important;
+}
+
+.right-form{
+    border: 1px solid;
+    padding:40px;
+    background: #ffffff !important;
+    margin-top: 2rem;
+}
+
+.campusOptionCheck label{
+    font-weight: normal !important;
+}
+
+.myPathModal{
+  /*position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;*/
+  
+  /*position: fixed;
+  top: 40%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 2000 !important;*/
+
+  position: fixed;
+  background-color: rgba(25, 25, 25, .75);
+  justify-content: center;
+  left: 0;
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  right: 0;
+  top: 0;
+  z-index: 2000;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    height:auto;
+    overflow: auto;
+    z-index: 1010;
+    padding-left: 48px;
+    padding-right: 48px;
+    padding-top: 32px;
+    
+}
+
+.fa-exclamation-triangle{
+    font-size: 2em;
+    color: #ffc627 !important;
+}
+
+/* Spinner styles */
+.spinner {
+    border: 4px solid #8c1d40;
+    border-top: 4px dotted #8c1d40;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+}
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media screen and (max-width: 920px){
+    .progSelectButton{
+      margin-top: 10px;
+    }
+
+    .custom-rfi-button{
+        margin-bottom: 5px;
+        margin-right: 5px;
+    }
+
+    .consent-submit-button{
+        width: 95% !important;
+        white-space: pre-wrap !important;
+        margin: 5px !important
+    }
+
+    .myPathSubmitBtns{
+        display: flex;
+        border-top: 1px solid #d0d0d0;
+        padding-top: 24px;
+    }
+
+    .mypath-uds-list{
+        padding-bottom: 32px !important;
+    }
+    
+}
+
+@media screen and (min-width: 920px){
+
+    .modal-content {
+        width: 75%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .innerModalDiv{
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+       
+    }
+
+    .MyPathAsuForm, .flexFields, .prog_all_option, .porgOptionsDiv{
+        display: flex;
+    }
+
+    .flexFields .js-form-item{
+        width: 50%;
+    }
+
+    .left-form{
+        margin-right: 20px;
+    }
+
+    .form-item-phone, .form-item-first-name{
+        margin-right: 2rem !important;
+    }
+
+    .filterOptions{
+        /*  width:25%;
+         margin: 8px; */
+         width: 30%;
+         margin-right: 15px !important;
+     }
+
+    .progSelectLabbel{
+        width: 80%;
+    }
+
+    .progSelectButton{
+        /*width: 20%;*/
+        text-align: right;
+    }
+
+    #my-app-target{
+        padding-left :30px;
+        padding-right :30px;
+    }
+
+    .myPathSubmitBtns{
+        display: inline-block;
+    }
+}
+
+.Ordata {
+    margin-top: 40px;
+    margin-right: 20px;
+    font-size: 1rem;
+}
+
+form.uds-form input{
+    width: 100%;
+}
+
+ #institutionField div, #selectInput div, #selectCollege div, .js-form-item input, #termDataField div{
+    border-radius: 0px !important;
+    /*color: #191919;*/
+} 
+
+.js-form-item input{
+    border-radius: 0px !important;
+    color: #191919;
+}
+
+
+.modal-custom-field{
+    height: 42px;
+}
+
+ #selectInput .css-t3ipsp-control, #selectCollege .css-t3ipsp-control{
+    height: 42px;
+    border: 1px solid #191919 !important;
+}
+
+/*form.uds-form input:focus, form.uds-form select:focus, form.uds-form textarea:focus{
+    border: none !important;
+}*/
+
+
+.filterOptions input, .filterOptions > .css-13cymwt-control{
+    color: #191919 !important;
+}
+
+.react-international-phone-country-selector-button {
+    border-radius: 0px !important;
+    border: 1px solid #191919 !important;
+ }
+
+  input#react-select-2-input{
+    width: 100%;
+  }
+
+
+  input#react-select-2-input:focus, input#react-select-3-input:focus, input#react-select-4-input:focus, input#react-select-5-input:focus, input#react-select-6-input:focus{
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  #react-select-1-input, #react-select-2-input, #react-select-3-input, #react-select-4-input, #react-select-5-input, #react-select-6-input, #react-select-7-input, #react-select-8-input, #react-select-9-input{
+    border: none !important;
+  }
+
+  .react-form-item input:not([name="campusData"],[id="react-select-5-input"]) {
+    height: 42px !important;
+    border: 1px solid #191919 !important;
+  }
+
+  .react-international-phone-input-container .react-international-phone-country-selector-button {
+    height: 42px !important;
+  }
+
+  .error{
+    font-size: 14px;
+  }
+
+  .custom-text-muted{
+    padding-left: 10px;
+    color: #747474;
+  }
+
+  /* #termDataField .css-13cymwt-control, #institutionField .css-13cymwt-control{
+     border: 1px solid #747474 !important;
+  } */
+
+  #termDataField .css-13cymwt-control, #institutionField .css-13cymwt-control{
+    border: 1px solid #191919 !important;
+    height: 42px;
+ }
+
+  form.uds-form input:focus, form.uds-form select:focus, form.uds-form textarea:focus{
+    box-shadow: none !important;
+  }
+
+  :focus {
+    box-shadow: 0 0 8px #747474 !important;
+    outline: 0;
+}
+
+  #termDataField .css-13cymwt-control:focus{
+    border: 1px solid #191919 !important;
+    box-shadow: none !important;
+  }
+
+  .css-t3ipsp-control{
+    box-shadow: none !important;
+    height: 42px;
+    align-content: center;
+    border-color: #191919 !important;
+    
+  }
+
+  .css-t3ipsp-control > input, .css-t3ipsp-control input:focus{
+    border: none !important;
+  }
+
+  .css-t3ipsp-control:hover {
+    border-color: #191919 !important;
+  }
+
+  .css-13cymwt-control:hover{
+    border-color: #191919 !important;
+  }
+
+  .css-13cymwt-control{
+    border-color: #747474 !important;
+    height: 42px;
+  }

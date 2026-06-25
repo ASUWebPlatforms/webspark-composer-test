@@ -1,0 +1,25 @@
+name: Lib training subtheme
+description: "Subtheme to customize the library training site using Webspark as base"
+screenshot: screenshot.png
+core_version_requirement: ^8.7.7 || ^9.0 || ^10.0
+# version: VERSION
+engine: twig
+type: theme
+base theme: renovation
+
+libraries:
+  - lib_subwebspark/global-styles
+  - lib_subwebspark/fontawesome-kit
+
+ckeditor5-stylesheets:
+  - css/cke5-style.css 
+
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  sidebar_left: Left Sidebar
+  sidebar_right: Right Sidebar
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer

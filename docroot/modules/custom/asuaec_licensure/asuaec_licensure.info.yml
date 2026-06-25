@@ -1,0 +1,5 @@
+name: ASU AEC Professional licensure
+type: module
+description: 'ASU AEC custom module for Professional licensure view related items'
+package: ASU
+core_version_requirement: ^9 || ^10 || ^11

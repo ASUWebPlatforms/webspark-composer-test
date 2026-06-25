@@ -1,0 +1,22 @@
+ecommerce-library:
+  version: 1.x
+  js:
+    js/asuaec_ecommerce.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupalSettings
+  css:
+    theme:
+      css/asuaec_ecommerce.css: {}
+
+ecommerce-library-transcript:
+  version: 1.x
+  js:
+    js/asuaec_ecommerce_transcript.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupalSettings

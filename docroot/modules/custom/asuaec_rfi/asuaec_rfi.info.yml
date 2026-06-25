@@ -1,0 +1,9 @@
+name: ASU AEC RFI
+type: module
+description: 'Includes Main RFI related tasks'
+package: ASU
+core_version_requirement: ^9 || ^10 || ^11
+dependencies:
+  - webform
+  - asuaec_webform_optionsdata
+configure: asuaec_rfi.settings

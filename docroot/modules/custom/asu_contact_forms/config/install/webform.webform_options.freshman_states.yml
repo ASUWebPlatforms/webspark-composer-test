@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: freshman_states
+label: 'Freshman states'
+category: 'Freshman states'
+likert: false
+options: ''

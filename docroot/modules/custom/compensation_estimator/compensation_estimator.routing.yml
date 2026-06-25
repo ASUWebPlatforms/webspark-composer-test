@@ -1,0 +1,14 @@
+compensation_estimator.calform:
+  path: '/employment/working-asu/compensation/compensationestimator'
+  defaults: 
+    _form: '\Drupal\compensation_estimator\Form\CompensationEstimatorForm'
+    _title: 'Compensation estimator'
+  requirements:
+    _permission: 'access content'
+compensation_estimator.admin_settings:
+  path: '/admin/config/compensation_estimator'
+  defaults:
+    _form: '\Drupal\compensation_estimator\Form\CompensationEstimatorConfigForm'
+    _title: 'compensation estimator configuration screen'
+  requirements:
+    _permission: 'administer site configuration'

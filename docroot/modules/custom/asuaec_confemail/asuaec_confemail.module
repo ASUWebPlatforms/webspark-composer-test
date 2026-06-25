@@ -1,0 +1,22 @@
+<?php
+/**
+ * @param $key
+ * @param $message
+ * @param $params
+ *
+ * Implements hook_mail().
+ * For emailing, we need hook_mail. Works with submitForm() in BridgingSuccessEmail.php.
+ */
+function asuaec_confemail_mail($key, &$message, $params) {
+    $options = array(
+        'langcode' => $message['langcode'],
+    );
+    switch ($key) {
+        case 'confemail':
+            $message['from'] = \Drupal::config('system.site')->get('mail');
+            $message['subject'] = t('@subject', ['@subject' => $params['subject']], $options);
+            $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed'; // Needed this to display images.
+            $message['body'][] = $params['message'];
+            break;
+    }
+}

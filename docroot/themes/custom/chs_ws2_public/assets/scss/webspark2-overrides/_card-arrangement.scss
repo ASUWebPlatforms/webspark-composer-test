@@ -1,0 +1,25 @@
+.uds-card-arrangement {
+    width: 100%;  
+}
+
+a.c-card {
+    height: 100%;
+}
+
+.bg[class*="black"] {
+    .uds-card-arrangement {
+        .card {
+            background-color: transparent;
+            color: $white;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+
+            .card-icon-top {
+                color: $gold;
+            }
+
+            .card-header {
+                background-color: transparent;
+            }
+        }
+    }
+}

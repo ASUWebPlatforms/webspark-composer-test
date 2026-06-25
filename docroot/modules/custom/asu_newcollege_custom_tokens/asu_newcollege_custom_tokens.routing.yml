@@ -1,0 +1,31 @@
+entity.asu_newcollege_custom_token.collection:
+  path: '/admin/config/asu-newcollege/custom-tokens'
+  defaults:
+    _entity_list: 'asu_newcollege_custom_token'
+    _title: 'Custom Tokens'
+  requirements:
+    _permission: 'administer asu newcollege custom tokens'
+
+entity.asu_newcollege_custom_token.add_form:
+  path: '/admin/config/asu-newcollege/custom-tokens/add'
+  defaults:
+    _entity_form: 'asu_newcollege_custom_token.add'
+    _title: 'Add Custom Token'
+  requirements:
+    _permission: 'administer asu newcollege custom tokens'
+
+entity.asu_newcollege_custom_token.edit_form:
+  path: '/admin/config/asu-newcollege/custom-tokens/{asu_newcollege_custom_token}/edit'
+  defaults:
+    _entity_form: 'asu_newcollege_custom_token.edit'
+    _title: 'Edit Custom Token'
+  requirements:
+    _permission: 'administer asu newcollege custom tokens'
+
+entity.asu_newcollege_custom_token.delete_form:
+  path: '/admin/config/asu-newcollege/custom-tokens/{asu_newcollege_custom_token}/delete'
+  defaults:
+    _entity_form: 'asu_newcollege_custom_token.delete'
+    _title: 'Delete Custom Token'
+  requirements:
+    _permission: 'administer asu newcollege custom tokens'

@@ -1,0 +1,4 @@
+services:
+  asu_graduate_faculty.graduate_query_service:
+    class: Drupal\asu_graduate_faculty\GraduateQueryService
+    arguments: ['@database']

@@ -1,0 +1,4 @@
+'administer leadership_custom':
+  'title': 'Administer Leadership Custom Features'
+  'description': 'Configure fields for custom feature blocks'
+  restrict access: true

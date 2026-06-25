@@ -1,0 +1,19 @@
+name: McCain Library and Museum
+type: theme
+description: 'Custom sub-theme based on the Webspark Renovation theme.'
+core_version_requirement: ^10
+base theme: renovation
+version: 2.0
+
+libraries:
+  - mccain/global-styling
+
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  sidebar_first: 'Sidebar First'
+  sidebar_second: 'Sidebar Second'
+  page_bottom: 'Page Bottom'
+  mega_footer: 'Mega Footer'
+  footer: 'Footer'

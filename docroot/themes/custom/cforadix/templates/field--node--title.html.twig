@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Default template for a node title field.
+ *
+ * H1 DUPLICATE FIX:
+ *   - Slideshow with visible title: title_heading_level = 'hide' (not rendered)
+ *   - inline_block:hero or article hero: title_heading_level = 'h2'
+ *   - No hero: title_heading_level = 'h1'
+ */
+#}
+{% if title_heading_level|default('h1') != 'hide' %}
+  {% for item in items %}
+    <{{ title_heading_level|default('h1') }} class="article">{{ item.content['#context'].value }}</{{ title_heading_level|default('h1') }}>
+  {% endfor %}
+{% endif %}

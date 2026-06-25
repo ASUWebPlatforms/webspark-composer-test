@@ -1,0 +1,35 @@
+.section {
+    display: inline-block;
+    max-width: 560px;
+    margin: 20px;
+    text-align: center;
+    vertical-align: top;
+}
+
+.player-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.expand {
+    color: #fff;
+    font-size: 24px;
+}
+
+.expandContainer {
+    position: absolute;
+    padding: 20px;
+}
+
+.close {
+    color: #fff;
+    font-size: 32px;
+}
+
+.closeContainer {
+    position: absolute;
+    padding: 40px;
+    margin-top: 20px;
+}

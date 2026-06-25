@@ -1,0 +1,14 @@
+asuaec_visit.dayevents:
+  path: '/dayevents/{date}/{campus}/{persontype}/{bucket}'
+  defaults:
+    _controller: '\Drupal\asuaec_visit\Controller\AsuAecVisitDayEventsController::process'
+  requirements:
+    _permission: 'access content'
+
+asuaec_visit.minicalendar:
+  path: '/minicalendar/{yearmonth}/{campus}/{persontype}/{bucket}'
+  defaults:
+    _controller: '\Drupal\asuaec_visit\Controller\AsuAecVisitMiniCalendarController::process'
+  requirements:
+    _permission: 'access content'
+

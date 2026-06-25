@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: semester
+label: Semester
+category: 'Graduate form fields'
+likert: false
+options: '2221: Spring'

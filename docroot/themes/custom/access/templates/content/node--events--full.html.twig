@@ -1,0 +1,93 @@
+{#
+/**
+ * @file
+ * Template for a Node component.
+ */
+#}
+
+{%
+  set classes = [
+  'node',
+  node.isPromoted() ? 'node--promoted',
+  node.isSticky() ? 'node--sticky',
+  not node.isPublished() ? 'node--unpublished',
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+]
+%}
+
+<div class="8-4 uds-flex-order-default">
+  <div class="container">
+    <div class="row">
+        
+        <!-- Main content -->
+        <div class="layout__region layout__region--first col-md-8">
+
+       {{ drupal_block('system_breadcrumb_block') }}
+
+        <h1 class="article">{{ drupal_title() }}</h1>
+
+        <div class="event-node-img block">
+          <img src="{{ node.field_event_image.entity.uri.value | image_style('events_640x293') }}" alt="{{ node.field_event_image.alt }}"> 
+        </div>
+
+        <!-- #event header -->
+        <div class="event-top-info">
+        
+          <div class="event-col-1">
+            <div class="event-node-date block">{{ content.field_event_date }}</div> 
+          </div>        
+        
+          <div class="event-col-2">
+						<div class="event-col-wrapper">
+						
+							<div class="event-node-campus"> {{ content.field_event_location }} </div>
+		
+							{% if content.field_event_online_url|render|striptags|trim is not empty %}
+								<div class="event-node-url block">
+								<a href="{{ content.field_event_online_url }}">Link to online event</a>
+								</div>
+							{% endif %}
+	
+							{% if content.field_event_address|render|striptags|trim is not empty %}
+									<div class="event-node-address block">
+										{{ content.field_event_address }}
+									</div>
+							{% endif %}
+						</div>
+          </div>
+          <!-- #end event-col-2 -->
+          
+        </div>
+        <!-- #end event header -->
+
+        <div class="main-body">
+          {{ content.body.0 }}
+        </div>
+
+        <!-- Event footer -->
+        {% if content.field_event_info_url|render|striptags|trim is not empty %}
+          <div class="event-node-more block">
+            <a class="btn-maroon btn btn-primary" href="{{ content.field_event_info_url }}">Get more info</a>
+          </div>
+        {% endif %}
+
+        {% if content.field_event_registration_url|render|striptags|trim is not empty %}
+          <div class="event-node-register block">
+            <a class="btn-maroon btn btn-primary" href="{{ content.field_event_registration_url }}">Register now!</a>
+          </div>
+        {% endif %}
+
+ 
+         </div>
+        <!-- /#main content -->
+        
+        <!-- Psuedo sidebar -->
+        <div class="layout__region layout__region--second col-md-4">
+          <p>&nbsp;</p>
+        </div>
+        <!-- /# end psuedo sidebar -->
+        
+    </div>
+  </div>
+</div>

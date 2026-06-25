@@ -1,0 +1,9 @@
+name: 'Health Degree Search'
+type: module
+description: 'Provides custom functionality for degree search.'
+core_version_requirement: ^9 || ^10
+package: Custom
+dependencies:
+  - search_api
+  - facets
+  - taxonomy

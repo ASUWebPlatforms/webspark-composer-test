@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_south_america_country
+    - node.type.international_advisors
+    - taxonomy.vocabulary.south_america_countries
+id: node.international_advisors.field_south_america_country
+field_name: field_south_america_country
+entity_type: node
+bundle: international_advisors
+label: 'South America country'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      south_america_countries: south_america_countries
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,20 @@
+# config/install/asu_graduate_faculty.settings.yml
+content: '<h3>Get connected to ASU Graduate Faculty</h3><p>Graduate faculty at Arizona State University are recipients of numerous national and international prizes, including Nobels, Pulitzers, and Presidential Early Career Awards for Scientists and Engineers. Faculty also includes Guggenheim Fellows, Fulbright American Scholars, and members of prestigious scholarly bodies.</p>
+		<p>The Graduate Faculty Finder connects you to thousands of research professors and scholars from ASU and ASU affiliates like the Mayo Clinic, TGen, Barrow Neurological Institute, Banner Health and more.</p>
+		<h5 id="headers">For Students</h5>
+		<p>If you are looking for graduate faculty to serve as dissertation committee chairs or members, formal or informal mentors, or to offer interdisciplinary perspectives on your research, the Graduate Faculty Finder will connect you to the right scholar.</p>
+		<h5 id="headers">For Faculty</h5>		
+		<p>If you are faculty who would like to become included in the Graduate Faculty Finder, please take the following two steps:<ol><li style="margin-bottom:0em;">Review the <a href="https://graduate.asu.edu/sites/default/files/graduate-faculty-guidelines.pdf" target="_blank">Graduate Faculty Guidelines</a> to make sure it’s right for you.</li><li>Visit the <a href="https://graduate.asu.edu/graduate-faculty/faq" target="_blank">Graduate Faculty FAQ</a> for instructions on how to be added to the Graduate Faculty Finder.</li></ol></p>
+		<h5 id="headers">For Staff</h5>
+		<p>If you need a one-time or blanket faculty committee approval for non-PhD programs, please use the forms below:<br/><br/>
+		<a href="https://secure.na4.documents.adobe.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhClA6k5ra3UoccWpeVzzdIcrCnO7T9vvgVe744OJOOex9jrW70STNAheRO0i3CjMuI*" target="_blank">Individual Student Committee Approval Request</a><br/>
+		<a href="https://secure.na4.documents.adobe.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhDCE_jt1sKsS9Gp1vTyMgs2TGMX3TTrCyyI248Z4bA3-owuUt7OMizOkgnq2i7pV8Y*" target="_blank">5-Year Program Committee Approval Request</a><br/>
+		<a href="https://secure.na4.documents.adobe.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhDYRDGDfdcs9LjMSEc3EDyxrDLy5Yx3O0497ETfjx2whz3EHw5TvD6zfX-a_qqMSzk*" target="_blank">Request membership to graduate faculty</a></p>
+		<p>For general guidance, please consult <a href="https://graduate.asu.edu/sites/default/files/when_to_use_which_committee_request_form.pdf" target="_blank">graduate Faculty and Student Committee Requests</a>.</p>
+		<p>Please note that the documents have been revised to gather the necessary information to complete the request more efficiently.  For assistance in filling out committee approval review forms, please see <a href="https://graduate.asu.edu/sites/default/files/2022-05/How to Guide-Submitting Committee Approval Requests.pdf" target="_blank"> How to Submit Committee Approval Requests</a>.</p>'
+name_title: 'Search by Name'
+name_description: 'You may search by the faculty''s first name, last name, first and last name, or any variation thereof. (Letters only)'
+phd_program_title: 'Search by PhD Program'
+phd_program_description: 'Choose a degree from the dropdown to view the Graduate Faculty for that program.'
+category_title: 'Search by Category'
+category_description: 'Choose an area of interest from the dropdown to view the Graduate Faculty for that area.'

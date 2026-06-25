@@ -1,0 +1,4 @@
+'administer chs_custom':
+  'title': 'Administer ASU CHS Custom Features'
+  'description': 'Configure settings for custom feature blocks'
+  restrict access: true

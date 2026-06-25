@@ -1,0 +1,27 @@
+.btn, .uds-modal-close-btn {
+    width: 100% !important;
+    /*
+    width: max-content!important;
+    width: -webkit-max-content!important;
+    width: -webkit-max-content!important;
+    */
+}
+
+button {
+    padding: 1px 6px !important;
+}
+
+a > div, a:hover > div {
+    text-decoration: none;
+    color: black;
+}
+
+/* ceschedule block table */
+#ceschedule {
+    width:100%;
+  }
+  
+  #ceschedule th, #ceschedule td {
+    padding: 5px;
+    text-align: center;
+  }

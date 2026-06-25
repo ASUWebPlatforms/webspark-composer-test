@@ -1,0 +1,69 @@
+{#
+/**
+ * @file
+ * Experience Finder page wrapper: dark hero with exposed filters, the results
+ * card grid + pager, and the "Learning is an action word" promo section.
+ */
+#}
+{{ attach_library('elevate_experience_import/experience_finder') }}
+<div{{ attributes.addClass('experience-finder') }}>
+
+  <section class="experience-finder__hero">
+    <div class="experience-finder__hero-inner">
+      <button type="button" class="experience-finder__collapse" data-ef-collapse>
+        {{ 'Collapse'|t }} <span aria-hidden="true">&times;</span>
+      </button>
+      <h1 class="experience-finder__hero-title">{{ 'Welcome to the Experience Finder'|t }}</h1>
+      {% if exposed %}
+        <div class="experience-finder__filters">{{ exposed }}</div>
+      {% endif %}
+    </div>
+  </section>
+
+  <div class="experience-finder__results">
+    <div class="experience-finder__results-head">
+      {% if title %}<h2 class="experience-finder__results-title">{{ title }}</h2>{% endif %}
+      <button type="button" class="experience-finder__favorites" data-experience-favorites-toggle aria-pressed="false">
+        <span class="experience-finder__favorites-heart" aria-hidden="true">&hearts;</span> {{ 'Favorites'|t }}
+      </button>
+    </div>
+
+    {{ attachment_before }}
+
+    {% if rows %}
+      <div class="experience-finder__grid">{{ rows }}</div>
+    {% elseif empty %}
+      <div class="experience-finder__empty">{{ empty }}</div>
+    {% endif %}
+
+    {{ attachment_after }}
+    {% if pager %}<div class="experience-finder__pager">{{ pager }}</div>{% endif %}
+  </div>
+
+  <section class="experience-finder__promo">
+    <div class="experience-finder__promo-inner">
+      <h2 class="experience-finder__promo-heading"><span>{{ 'Learning is an action word.'|t }}</span></h2>
+      <p class="experience-finder__promo-lead">
+        {{ 'At Arizona State University, we recognize the exceptional impact experiential learning opportunities can have on student academic outcomes, growth in skillsets, and success in college and beyond and aim to help each student achieve these goals.'|t }}
+      </p>
+      <div class="experience-finder__promo-grid">
+        {% set promos = [
+          {'title': 'See our list of top job opportunities and paid internships'|t, 'url': '#'},
+          {'title': 'Experience for credit in the Work+Life Design Certificate'|t, 'url': '#'},
+          {'title': 'Popular experiences for entrepreneurs'|t, 'url': '#'},
+          {'title': 'Start here for international experience opportunities'|t, 'url': '#'}
+        ] %}
+        {% for promo in promos %}
+          <div class="experience-finder__promo-card">
+            <div class="experience-finder__promo-card-media" aria-hidden="true"></div>
+            <div class="experience-finder__promo-card-body">
+              <h3 class="experience-finder__promo-card-title">{{ promo.title }}</h3>
+              <a class="experience-finder__promo-card-link" href="{{ promo.url }}">{{ 'See the list'|t }}</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+</div>

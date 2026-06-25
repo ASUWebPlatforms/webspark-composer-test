@@ -1,0 +1,12 @@
+onecol_health_degree_hero_section:
+  label: 'One Column Health Degree hero section'
+#  path: layouts/onecol_health_degree_hero_section
+  template: layouts/onecol-health-degree-hero-section
+#  library: webspark_module_renovation_layouts/onecol_article_hero_section
+  category: 'Columns: 1'
+  default_region: first
+#  icon_map:
+#    - [first]
+  regions:
+    first:
+      label: First

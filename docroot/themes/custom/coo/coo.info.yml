@@ -1,0 +1,18 @@
+name: COO
+type: theme
+description: This is a sub theme of webspark theme renovation to implement style customizations on the COO site.
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+# Defines the base theme
+base theme: renovation
+
+libraries:
+  - coo/global-styling
+
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer

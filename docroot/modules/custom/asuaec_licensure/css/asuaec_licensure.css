@@ -1,0 +1,23 @@
+/* Hide the original search result for college/school dropdown */
+.college-school-block > .views-row {
+    display: none;
+}
+/* Hide the original text input field */
+input[name="title"] {
+    display: none;
+}
+input[name="field_program_college_school_target_id"] {
+    display: none;
+}
+
+/* Hide Red box - Webspark update fix on 3/22/2024 */
+.program-block  .alert.view-empty,
+.college-school-block .alert.view-empty
+{
+    display: none;
+}
+
+/* Hide the original Views result for College/school dropdown list */
+.college-school-block > .view-content {
+    display: none;
+}

@@ -1,0 +1,58 @@
+<?php
+
+use Drupal\Core\Render\Markup;
+
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function renovationcustom_asu_newsroom_preprocess_html(&$variables) {
+  // Get the current path
+  $current_path = \Drupal::service('path.current')->getPath();
+  $internal_path = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
+
+  $path_args = explode('/', $current_path);
+  if (isset($path_args[1]) && isset($path_args[2]) && ($path_args[1] == 'node') && (is_numeric($path_args[2]))) {
+    $variables['attributes']['class'][] = 'page-node-' . $path_args[2];
+  }
+
+  // Assign it to body class
+  $variables['attributes']['class'][] = str_replace("/", " ", $internal_path);
+
+}
+
+/**
+ * Implements hook_preprocess_addtoany_standard().
+ */
+function renovationcustom_asu_newsroom_preprocess_addtoany_standard(&$variables) {
+  $currentPath = \Drupal::service('path.current')->getPath();
+  if (strpos($currentPath, '/revisions/')) {
+    $node = \Drupal::routeMatch()->getParameter('node');
+    $variables["link_title"] = Markup::create($node->label());
+  }
+}
+
+/**
+ * Implements hook_preprocess_form_element().
+ */
+function renovationcustom_asu_newsroom_preprocess_views_view_field(&$variables) {
+
+  // Print all the keys to see what you have available
+  //print_r(array_keys($variables));
+
+  // Name of the field
+  //echo $variables['field']->field;
+  $variables['new_variable'] = "";
+
+  // Do something based on the name of the field
+  if ($variables['field']->field == 'field_media_image') {
+
+    // Modify the actual output
+    $variables['output'] = $variables['output'];
+
+    // And OR add new variable that will be readable in your TWIG file
+    $variables['new_variable'] =  "";
+
+  }
+
+}

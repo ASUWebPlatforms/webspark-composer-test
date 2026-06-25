@@ -1,0 +1,13 @@
+diff --git a/web/modules/webspark/webspark_blocks/config/install/field.storage.media.field_caption.yml b/web/modules/webspark/webspark_blocks/config/install/field.storage.media.field_caption.yml
+index 18e9e1b9..fe3616f1 100644
+--- a/web/modules/webspark/webspark_blocks/config/install/field.storage.media.field_caption.yml
++++ b/web/modules/webspark/webspark_blocks/config/install/field.storage.media.field_caption.yml
+@@ -8,7 +8,7 @@ field_name: field_caption
+ entity_type: media
+ type: string
+ settings:
+-  max_length: 255
++  max_length: 1000
+   case_sensitive: false
+   is_ascii: false
+ module: core

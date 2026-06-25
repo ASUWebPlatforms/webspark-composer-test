@@ -1,0 +1,60 @@
+id: news
+label: 'Import news from existing site'
+source:
+  plugin: url
+  data_parser_plugin: json
+  data_fetcher_plugin: http
+  urls: https://azwaterblueprint.asu.edu/news/json
+  item_selector: ''
+  fields:
+    - name: id
+      selector: nid
+    - name: title
+      selector: title
+    - name: created
+      selector: created
+    - name: type
+      selector: type
+    - name: body
+      selector: body
+    - name: summary
+      selector: summary
+    - name: image
+      selector: image
+  ids:
+    id:
+      type: integer
+destination:
+  plugin: entity:node
+  default_bundle: article
+process:
+  status:
+    plugin: default_value
+    default_value: 1
+  title: title
+  body/value: body
+  body/format:
+    plugin: default_value
+    default_value: full_html
+  body/summary: summary
+  created: created
+  field_date:
+    - plugin: format_date
+      source: created
+      from_format: 'U'
+      to_format: 'Y-m-d'
+  field_tags:
+    - plugin: entity_generate
+      value_key: name
+      bundle_key: vid
+      bundle: tags
+      entity_type: taxonomy_term
+      ignore_case: true
+      source: type
+  field_media:
+    - plugin: add_media
+      source: image
+      bundle: story_hero
+      file_dest_uri: public://news
+      remote_url_base: https://azwaterblueprint.asu.edu
+

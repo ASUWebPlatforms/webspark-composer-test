@@ -1,0 +1,10 @@
+name: wpc_metatag_plugins
+type: module
+description: Additional metatag plugins that work with the metatag module.
+core_version_requirement: '^9 || ^10'
+dependencies:
+  - drupal:field
+  - token:token
+  - metatag
+test_dependencies:
+  - devel:devel

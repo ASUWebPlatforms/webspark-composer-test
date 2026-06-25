@@ -1,0 +1,17 @@
+name: AWII
+type: theme
+description: This is a awii sub theme of the webspark theme renovation
+core_version_requirement: ^8 || ^9 || ^10
+# Defines the base theme
+base theme: renovation
+
+libraries:
+  - awii/global-styling
+
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer

@@ -1,0 +1,8 @@
+name: ASU AEC Viewbook Webform Handler
+type: module
+description: 'Includes Viewbook Webform Handler related tasks: Post to middleware and send confirmation email'
+package: ASU
+core_version_requirement: ^9 || ^10 || ^11
+dependencies:
+  - webform
+configure: asuaec_viewbook_webformhandler.asuaec_viewbook_webformhandler_settings

@@ -1,0 +1,6 @@
+name: ASU module to export courses
+type: module
+description: 'Provides a form page to export courses'
+package: ASU
+author: Archana Vannela
+core_version_requirement: ^8.8 || ^9 || ^10 || ^11

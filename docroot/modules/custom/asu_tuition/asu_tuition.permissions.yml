@@ -1,0 +1,7 @@
+administer asu tuition:
+  title: 'Administer ASU tuition estimator'
+  description: 'Perform administration tasks for the ASU tuition estimator.'
+access asu tuition:
+  title: 'Access ASU tuition estimator'
+access asu tuition cp:
+  title: 'Access ASU tuition estimator (corporate partnership)'

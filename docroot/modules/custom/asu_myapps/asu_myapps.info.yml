@@ -1,0 +1,6 @@
+name: ASU My Apps
+description: Manage access and download functionality for the My Apps website.
+package: ASU - MyApps
+type: module
+version: 1.0.0
+core_version_requirement: ^8 || ^9 || ^10

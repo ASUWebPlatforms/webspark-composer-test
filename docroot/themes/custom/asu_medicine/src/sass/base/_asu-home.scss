@@ -1,0 +1,64 @@
+.asu-home {
+  #wrapper-footer-columns {
+    display: none;
+  }
+
+  .block-inline-blockasu-edu-section-with-cta-buttons {
+    a {
+      &.btn {
+        &:nth-child(3) {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    .layout--three-column-homepage {
+      .layout__region--right {
+        .block-inline-blockmenu-sidebar {
+          #sidebar-left {
+            border: none;
+
+            .nav-link-container {
+              padding: 0;
+              border: none;
+
+              a {
+                padding: $uds-size-font-tiny 0;
+                &:hover {
+                  color: #8c1d40;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    .layout--three-column-homepage {
+      .layout__region--right {
+        .block-inline-blockmenu-sidebar {
+          .sidebar-toggler {
+            padding-top: $uds-size-spacing-2;
+            padding-bottom: $uds-size-spacing-2;
+
+            & > p {
+              text-indent: -9999px;
+              line-height: 0;
+            }
+            & > p::after {
+              content: "Select one...";
+              text-indent: 0;
+              display: block;
+              line-height: initial;
+              color: $uds-color-base-gray-5;
+            }
+          }
+        }
+      }
+    }
+  }
+}

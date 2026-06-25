@@ -1,0 +1,28 @@
+.block--stats-banner {
+  min-height: 496px;
+  background: url(#{$assetPath}/abstract_burst.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center bottom;
+  padding: 120px 20px;
+  .statistic-card {
+    padding: 20px 0;
+    &:nth-child(n+2) { 
+      padding-left: 50px;
+      @media (max-width: 576px) { 
+        padding-left: 0;
+      }
+    }
+    .statistic-card--statistic {
+      font-size: 6.875rem;
+      line-height: 1em;
+      @media (min-width: 576px) and (max-width: 991.98px) { 
+        font-size: 4.875rem;
+      }
+    }
+    .statistic-card--summary {
+      color: #FAFAFA;
+      margin-top: auto;
+    }
+  }
+}

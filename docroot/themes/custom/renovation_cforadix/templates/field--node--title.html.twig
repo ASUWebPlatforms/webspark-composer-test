@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Default template for a node title field.
+ */
+#}
+
+{% if not is_inline %}
+  {% include "field.html.twig" %}
+{% else %}
+  {% for item in items %}
+    <h1 class="article">{{ item.content['#context'].value }}</h1>
+  {% endfor %}
+{% endif %}
+
+

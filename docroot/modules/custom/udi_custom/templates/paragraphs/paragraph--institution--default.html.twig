@@ -1,0 +1,13 @@
+
+{% set image = file_url(content.field_media[0]['#media'].field_media_image.entity.uri.value) %}
+
+<div class="institution-item text-center justify-content-between p-1 mb-2" id="item-{{ paragraph.uuid.value }}">
+    <div class="institution-item--logo text-center d-flex align-items-center justify-content-center">
+    <img src="{{ image }}">
+    </div>
+    <div class="institution-item--title mt-2">
+      {{ content.field_heading|render|striptags|trim }}
+    </div>
+</div>
+
+

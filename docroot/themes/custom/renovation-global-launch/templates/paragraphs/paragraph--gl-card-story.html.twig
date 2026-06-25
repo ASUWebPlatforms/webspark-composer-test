@@ -1,0 +1,32 @@
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished',
+    'card card-story'
+  ]
+%}
+{% block paragraph %}
+  <div{{ attributes.addClass(classes) }}>
+    {% block content %}
+    	
+    		{# class set in .renovation_global_launch.theme file preprocessor #}
+    		{{ content.field_card_image }}
+    	
+    	<div class="card-header">
+    		<h3 class="card-title">{{content.field_title_gl}}</h3>
+    	</div>
+    	<div class="card-body">
+    		{{content.field_body_gl}}
+    	</div>
+    	<div class="card-buttons">
+    		<div class="card-button">
+	    		<a href="{{content.field_link_gl.0['#url']}}" class="btn btn-gold">{{content.field_link_gl.0['#title']}}</a>
+    		</div>
+    	</div>
+      
+    {% endblock %}
+  </div>
+{% endblock paragraph %}
+

@@ -1,0 +1,105 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.asu_tuition_residency.field_description
+    - field.field.node.asu_tuition_residency.field_display
+    - field.field.node.asu_tuition_residency.field_residency
+    - field.field.node.asu_tuition_residency.field_weight
+    - node.type.asu_tuition_residency
+  module:
+    - node
+id: asu_tuition_residency_data
+label: 'ASU tuition residency data'
+description: 'ASU tuition residency data'
+help: ''
+import_period: -1
+fetcher: upload
+fetcher_configuration:
+  allowed_extensions: 'txt csv tsv xml opml'
+  directory: 'private://feeds'
+parser: csv
+parser_configuration:
+  delimiter: ','
+  no_headers: false
+  line_limit: 100
+processor: 'entity:node'
+processor_configuration:
+  langcode: en
+  insert_new: 1
+  update_existing: 2
+  update_non_existent: _keep
+  expire: -1
+  owner_feed_author: false
+  owner_id: 0
+  authorize: false
+  skip_hash_check: false
+  values:
+    type: asu_tuition_residency
+custom_sources:
+  residency:
+    value: residency
+    machine_name: residency
+    type: csv
+    label: residency
+  descr:
+    value: descr
+    machine_name: descr
+    type: csv
+    label: descr
+  display:
+    value: display
+    machine_name: display
+    type: csv
+    label: display
+  weight:
+    value: weight
+    machine_name: weight
+    type: csv
+    label: weight
+  residencyt:
+    value: residency
+    machine_name: residencyt
+    type: csv
+    label: residency
+  title:
+    value: Title
+    machine_name: title
+    type: csv
+    label: Title
+mappings:
+  -
+    target: field_residency
+    map:
+      value: residencyt
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_description
+    map:
+      value: descr
+    settings:
+      language: null
+  -
+    target: field_display
+    map:
+      value: display
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_weight
+    map:
+      value: weight
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: title
+    map:
+      value: title
+    unique:
+      value: '1'
+    settings:
+      language: null

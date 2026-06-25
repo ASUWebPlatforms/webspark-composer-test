@@ -1,0 +1,5 @@
+name: UOEEE REST API
+description: UOEEE Rest resource
+package: UOEEE
+type: module
+core_version_requirement: ^10

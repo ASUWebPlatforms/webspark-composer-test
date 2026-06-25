@@ -1,0 +1,71 @@
+<?php
+
+/**
+ * @file
+ */
+
+function shapingedu_custom_page_attachments(array &$page) {
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+  $page['#attached']['library'][] = 'shapingedu_custom/shapingedu-global';
+}
+
+function shapingedu_custom_theme($existing, $type, $theme, $path) {
+
+  return [
+    // Ghost block to apply styles and scripts
+    'shapingedu_block' => [
+      'variables' => [],
+    ],
+
+    'image__event_card' => [
+      'template' => 'image--event-card',
+      'base hook' => 'image'
+    ],
+
+    'media__event_image__default' => [
+      'template' => 'media--event-image--default',
+      'base hook' => 'media'
+    ],
+
+    'page__node__shapingedu_blog' => [
+      'template' => 'page--node--shapingedu-blog',
+      'base hook' => 'page'
+    ],
+
+    'views_view_unformatted__blog__block_1' => [
+      'template' => 'views-view-unformatted--blog--block-1',
+      'base hook' => 'views_view'
+    ],
+
+    'views_view_unformatted__blog__block_2' => [
+      'template' => 'views-view-unformatted--blog--block-2',
+      'base hook' => 'views_view'
+    ],
+
+    'views_view_unformatted__shapingedu_events__block_1' => [
+      'template' => 'views-view-unformatted--shapingedu-events--block-1',
+      'base hook' => 'views_view'
+    ],
+
+    'views_view_unformatted__shapingedu_events__block_2' => [
+      'template' => 'views-view-unformatted--shapingedu-events--block-2',
+      'base hook' => 'views_view'
+    ],
+
+    'views_view_unformatted__shapingedu_events__block_3' => [
+      'template' => 'views-view-unformatted--shapingedu-events--block-3',
+      'base hook' => 'views_view'
+    ],
+
+    'views_view_unformatted__shapingedu_events__block_4' => [
+      'template' => 'views-view-unformatted--shapingedu-events--block-4',
+      'base hook' => 'views_view'
+    ],
+  ];
+}
+
+/**
+ * @} End.
+ */

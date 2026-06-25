@@ -1,0 +1,5 @@
+name: 'Custom Styles'
+type: module
+description: 'A module for custom styling.'
+core_version_requirement: ^10
+package: Custom

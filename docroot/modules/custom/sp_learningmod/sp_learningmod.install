@@ -1,0 +1,633 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the sp_learningmod module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function sp_learningmod_schema()
+{
+  $schema = [];
+
+  $schema['sp_learningmod_budget'] = [
+    'description' => 'Stores user budget values.',
+    'fields' => [
+      'uid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The user ID.',
+      ],
+      'budget' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 100,
+        'description' => 'The user budget value.',
+      ],
+    ],
+    'primary key' => ['uid'],
+  ];
+
+  $schema['sp_learningmod_visited_nodes'] = [
+    'description' => 'Tracks which nodes users have visited.',
+    'fields' => [
+      'uid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The user ID.',
+      ],
+      'nid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The node ID.',
+      ],
+      'visited_at' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Timestamp when the node was visited.',
+      ],
+    ],
+    'primary key' => ['uid', 'nid'],
+    'indexes' => [
+      'uid' => ['uid'],
+      'nid' => ['nid'],
+    ],
+  ];
+
+  $schema['sp_learningmod_selected_responses'] = [
+    'description' => 'Stores user selected responses for their plan.',
+    'fields' => [
+      'uid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The user ID.',
+      ],
+      'response_nid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The response node ID.',
+      ],
+    ],
+    'primary key' => ['uid', 'response_nid'],
+    'indexes' => [
+      'uid' => ['uid'],
+    ],
+  ];
+
+  $schema['sp_learningmod_submitted_plans'] = [
+    'description' => 'Tracks submitted plans.',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The user ID.',
+      ],
+      'submitted_at' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Timestamp when plan was submitted.',
+      ],
+    ],
+    'primary key' => ['id'],
+    'indexes' => [
+      'uid' => ['uid'],
+    ],
+  ];
+
+  $schema['sp_learningmod_council_progress'] = [
+    'description' => 'Tracks council meeting quiz progress.',
+    'fields' => [
+      'uid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The user ID.',
+      ],
+      'current_question' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Current question number in the quiz.',
+      ],
+      'completed' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Whether quiz is completed.',
+      ],
+      'passed' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Whether user passed the quiz.',
+      ],
+      'feedback_shown' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Whether feedback has been shown for current question.',
+      ],
+      'updated' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Timestamp of last update.',
+      ],
+    ],
+    'primary key' => ['uid'],
+  ];
+
+  $schema['sp_learningmod_council_answers'] = [
+    'description' => 'Stores council meeting quiz answers.',
+    'fields' => [
+      'uid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The user ID.',
+      ],
+      'question_number' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The question number/index.',
+      ],
+      'answer' => [
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => FALSE,
+        'description' => 'The user answer.',
+      ],
+      'is_correct' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Whether the answer was correct.',
+      ],
+      'created' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Timestamp when answer was saved.',
+      ],
+    ],
+    'primary key' => ['uid', 'question_number'],
+    'indexes' => [
+      'uid' => ['uid'],
+    ],
+  ];
+
+  $schema['sp_learningmod_warning_state'] = [
+    'description' => 'Stores warning display state for users (replaces session).',
+    'fields' => [
+      'uid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The user ID.',
+      ],
+      'warning_shown' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Whether first warning has been shown.',
+      ],
+      'final_warning_shown' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Whether final warning has been shown.',
+      ],
+    ],
+    'primary key' => ['uid'],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function sp_learningmod_install()
+{
+  \Drupal::messenger()->addMessage(t('SP Learning Module has been installed.'));
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function sp_learningmod_uninstall()
+{
+  // Clean up any remaining data
+  \Drupal::messenger()->addMessage(t('SP Learning Module has been uninstalled.'));
+}
+
+/**
+ * Add warning_state table for cache-friendly warning tracking.
+ */
+function sp_learningmod_update_9001()
+{
+  $schema = \Drupal::database()->schema();
+
+  if (!$schema->tableExists('sp_learningmod_warning_state')) {
+    $table = [
+      'description' => 'Stores warning display state for users (replaces session).',
+      'fields' => [
+        'uid' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => 'The user ID.',
+        ],
+        'warning_shown' => [
+          'type' => 'int',
+          'size' => 'tiny',
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Whether first warning has been shown.',
+        ],
+        'final_warning_shown' => [
+          'type' => 'int',
+          'size' => 'tiny',
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Whether final warning has been shown.',
+        ],
+      ],
+      'primary key' => ['uid'],
+    ];
+
+    $schema->createTable('sp_learningmod_warning_state', $table);
+
+    return t('Created sp_learningmod_warning_state table.');
+  }
+
+  return t('Table sp_learningmod_warning_state already exists.');
+}
+
+/**
+ * Add visited_at timestamp to visited_nodes table.
+ */
+function sp_learningmod_update_9002()
+{
+  $schema = \Drupal::database()->schema();
+
+  if (!$schema->fieldExists('sp_learningmod_visited_nodes', 'visited_at')) {
+    $spec = [
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      'default' => 0,
+      'description' => 'Timestamp when the node was visited.',
+    ];
+
+    $schema->addField('sp_learningmod_visited_nodes', 'visited_at', $spec);
+
+    return t('Added visited_at field to sp_learningmod_visited_nodes table.');
+  }
+
+  return t('Field visited_at already exists.');
+}
+
+/**
+ * Fix council_answers table - change question_id to question_number and add is_correct.
+ */
+function sp_learningmod_update_9003()
+{
+  $schema = \Drupal::database()->schema();
+  $connection = \Drupal::database();
+  $messages = [];
+
+  if ($schema->tableExists('sp_learningmod_council_answers')) {
+    $has_question_id = $schema->fieldExists('sp_learningmod_council_answers', 'question_id');
+    $has_question_number = $schema->fieldExists('sp_learningmod_council_answers', 'question_number');
+
+    if ($has_question_id && !$has_question_number) {
+      $schema->dropTable('sp_learningmod_council_answers');
+      $messages[] = 'Dropped old sp_learningmod_council_answers table.';
+    }
+  }
+
+  if (!$schema->tableExists('sp_learningmod_council_answers')) {
+    $table = [
+      'description' => 'Stores council meeting quiz answers.',
+      'fields' => [
+        'uid' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => 'The user ID.',
+        ],
+        'question_number' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => 'The question number/index.',
+        ],
+        'answer' => [
+          'type' => 'text',
+          'size' => 'medium',
+          'not null' => FALSE,
+          'description' => 'The user answer.',
+        ],
+        'is_correct' => [
+          'type' => 'int',
+          'size' => 'tiny',
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Whether the answer was correct.',
+        ],
+      ],
+      'primary key' => ['uid', 'question_number'],
+      'indexes' => [
+        'uid' => ['uid'],
+      ],
+    ];
+
+    $schema->createTable('sp_learningmod_council_answers', $table);
+    $messages[] = 'Created sp_learningmod_council_answers table with correct schema.';
+  }
+
+  if (
+    $schema->tableExists('sp_learningmod_council_answers') &&
+    !$schema->fieldExists('sp_learningmod_council_answers', 'is_correct')
+  ) {
+    $schema->addField('sp_learningmod_council_answers', 'is_correct', [
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => TRUE,
+      'default' => 0,
+      'description' => 'Whether the answer was correct.',
+    ]);
+    $messages[] = 'Added is_correct field.';
+  }
+
+  return empty($messages) ? t('No changes needed.') : t(implode(' ', $messages));
+}
+
+/**
+ * Fix council_progress table - rename current_step to current_question and add updated field.
+ */
+function sp_learningmod_update_9004()
+{
+  $schema = \Drupal::database()->schema();
+  $connection = \Drupal::database();
+  $messages = [];
+
+  if ($schema->tableExists('sp_learningmod_council_progress')) {
+    $has_current_step = $schema->fieldExists('sp_learningmod_council_progress', 'current_step');
+    $has_current_question = $schema->fieldExists('sp_learningmod_council_progress', 'current_question');
+
+    if ($has_current_step && !$has_current_question) {
+      $schema->dropTable('sp_learningmod_council_progress');
+      $messages[] = 'Dropped old sp_learningmod_council_progress table.';
+    }
+  }
+
+  if (!$schema->tableExists('sp_learningmod_council_progress')) {
+    $table = [
+      'description' => 'Tracks council meeting quiz progress.',
+      'fields' => [
+        'uid' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => 'The user ID.',
+        ],
+        'current_question' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Current question number in the quiz.',
+        ],
+        'completed' => [
+          'type' => 'int',
+          'size' => 'tiny',
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Whether quiz is completed.',
+        ],
+        'passed' => [
+          'type' => 'int',
+          'size' => 'tiny',
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Whether user passed the quiz.',
+        ],
+        'feedback_shown' => [
+          'type' => 'int',
+          'size' => 'tiny',
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Whether feedback has been shown for current question.',
+        ],
+        'updated' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Timestamp of last update.',
+        ],
+      ],
+      'primary key' => ['uid'],
+    ];
+
+    $schema->createTable('sp_learningmod_council_progress', $table);
+    $messages[] = 'Created sp_learningmod_council_progress table with correct schema.';
+  }
+
+  if (
+    $schema->tableExists('sp_learningmod_council_progress') &&
+    !$schema->fieldExists('sp_learningmod_council_progress', 'feedback_shown')
+  ) {
+    $schema->addField('sp_learningmod_council_progress', 'feedback_shown', [
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => TRUE,
+      'default' => 0,
+      'description' => 'Whether feedback has been shown for current question.',
+    ]);
+    $messages[] = 'Added feedback_shown field.';
+  }
+
+  if (
+    $schema->tableExists('sp_learningmod_council_progress') &&
+    !$schema->fieldExists('sp_learningmod_council_progress', 'updated')
+  ) {
+    $schema->addField('sp_learningmod_council_progress', 'updated', [
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      'default' => 0,
+      'description' => 'Timestamp of last update.',
+    ]);
+    $messages[] = 'Added updated field.';
+  }
+
+  return empty($messages) ? t('No changes needed.') : t(implode(' ', $messages));
+}
+
+/**
+ * Add feedback_shown field to council_progress table.
+ */
+function sp_learningmod_update_9005()
+{
+  $schema = \Drupal::database()->schema();
+
+  if (
+    $schema->tableExists('sp_learningmod_council_progress') &&
+    !$schema->fieldExists('sp_learningmod_council_progress', 'feedback_shown')
+  ) {
+    $schema->addField('sp_learningmod_council_progress', 'feedback_shown', [
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => TRUE,
+      'default' => 0,
+      'description' => 'Whether feedback has been shown for current question.',
+    ]);
+    return t('Added feedback_shown field to sp_learningmod_council_progress table.');
+  }
+
+  return t('Field feedback_shown already exists or table does not exist.');
+}
+
+/**
+ * Add created field to council_answers table.
+ */
+function sp_learningmod_update_9006()
+{
+  $schema = \Drupal::database()->schema();
+
+  if (
+    $schema->tableExists('sp_learningmod_council_answers') &&
+    !$schema->fieldExists('sp_learningmod_council_answers', 'created')
+  ) {
+    $schema->addField('sp_learningmod_council_answers', 'created', [
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      'default' => 0,
+      'description' => 'Timestamp when answer was saved.',
+    ]);
+    return t('Added created field to sp_learningmod_council_answers table.');
+  }
+
+  return t('Field created already exists or table does not exist.');
+}
+
+function sp_learningmod_update_9007()
+{
+  $schema = \Drupal::database()->schema();
+  $messages = [];
+
+  if (
+    $schema->tableExists('sp_learningmod_council_progress') &&
+    !$schema->fieldExists('sp_learningmod_council_progress', 'passed')
+  ) {
+    $schema->addField('sp_learningmod_council_progress', 'passed', [
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => TRUE,
+      'default' => 0,
+      'description' => 'Whether user passed the quiz.',
+    ]);
+    $messages[] = 'Added passed field to council_progress.';
+  }
+
+  if (
+    $schema->tableExists('sp_learningmod_council_progress') &&
+    !$schema->fieldExists('sp_learningmod_council_progress', 'completed')
+  ) {
+    $schema->addField('sp_learningmod_council_progress', 'completed', [
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => TRUE,
+      'default' => 0,
+      'description' => 'Whether quiz is completed.',
+    ]);
+    $messages[] = 'Added completed field to council_progress.';
+  }
+
+  return empty($messages) ? t('All fields already exist.') : t(implode(' ', $messages));
+}
+
+/**
+ * Add submitted_at field to sp_learningmod_submitted_plans table.
+ */
+function sp_learningmod_update_9008()
+{
+  $schema = \Drupal::database()->schema();
+
+  if (!$schema->tableExists('sp_learningmod_submitted_plans')) {
+    // Si la tabla no existe por alguna razón, créala completa.
+    $schema->createTable('sp_learningmod_submitted_plans', [
+      'description' => 'Tracks submitted plans.',
+      'fields' => [
+        'id' => [
+          'type' => 'serial',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+        'uid' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => 'The user ID.',
+        ],
+        'submitted_at' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Timestamp when plan was submitted.',
+        ],
+      ],
+      'primary key' => ['id'],
+      'indexes' => [
+        'uid' => ['uid'],
+      ],
+    ]);
+
+    return t('Created sp_learningmod_submitted_plans table.');
+  }
+
+  if (!$schema->fieldExists('sp_learningmod_submitted_plans', 'submitted_at')) {
+    $schema->addField('sp_learningmod_submitted_plans', 'submitted_at', [
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      'default' => 0,
+      'description' => 'Timestamp when plan was submitted.',
+    ]);
+
+    return t('Added submitted_at field to sp_learningmod_submitted_plans.');
+  }
+
+  return t('submitted_at already exists.');
+}

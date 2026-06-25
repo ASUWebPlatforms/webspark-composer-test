@@ -1,0 +1,142 @@
+<?php
+
+use GuzzleHttp\Exception\GuzzleException;
+use SimpleSAML\Metadata\SAMLParser;
+use SimpleSAML\Utils;
+use Symfony\Component\VarExporter\Exception\ExceptionInterface;
+use Symfony\Component\VarExporter\VarExporter;
+
+/**
+ * Implements hook_cron().
+ *
+ * @throws GuzzleException
+ */
+// TODO: Complete testing of this method. Once works, need to set it to automatically run each day at a set time say 5:00am
+// TODO: once the automatic works, build out a way to manually refresh this data by the click of a button, and no cron
+function analytics_saml_updater_cron(): void
+{
+  $config = Drupal::config('analytics_saml_updater.settings');
+  $url = $config->get('analytics_saml_updater_metadata_url');
+  $file = $config->get('analytics_saml_updater_metadata_file');
+  $destination = Drupal::service('file_system')->realpath($file);
+
+  $xml_content = analytics_saml_updater_download_xml($url);
+
+  if ($xml_content && file_exists($destination)) {
+    try {
+      $php_content = analytics_saml_updater_convert_xml_to_php($xml_content);
+
+      if ($php_content) {
+        file_put_contents($destination, $php_content);
+        Drupal::logger('analytics_saml_updater')->info('SAML metadata updated successfully.');
+      } else {
+        Drupal::logger('analytics_saml_updater')->error('Failed to update SAML metadata.');
+      }
+    } catch (\SimpleSAML\Error\Exception|ExceptionInterface $e) {
+      Drupal::logger('analytics_saml_updater')->error($e->getMessage());
+    }
+  } else {
+    Drupal::logger('analytics_saml_updater')->error('Failed to download XML metadata.');
+  }
+}
+
+/**
+ * Downloads the XML file.
+ *
+ * @param string $url
+ *
+ * @return bool|string
+ * @throws GuzzleException
+ */
+function analytics_saml_updater_download_xml(string $url): bool|string
+{
+  try {
+    $client = Drupal::httpClient();
+    $response = $client->get($url);
+    if ($response->getStatusCode() == 200) {
+      return $response->getBody()->getContents();
+    }
+  } catch (Exception $e) {
+    Drupal::logger('analytics_saml_updater')->error('Error downloading XML: @message', ['@message' => $e->getMessage()]);
+    Drupal::messenger()->addError('Error downloading XML, check logs for more details.');
+  }
+  return false;
+}
+
+/**
+ * Converts XML content to PHP using SimpleSAML's XML to PHP metadata converter.
+ *
+ * A bulk of the code is taken directly from:
+ * SimpleSAML\Module\admin\Controller\Federation::metadataConverter
+ *
+ * @param string $xmldata
+ *
+ * @return SAMLParser[]|string|void|null
+ * @throws ExceptionInterface
+ * @throws \SimpleSAML\Error\Exception
+ */
+function analytics_saml_updater_convert_xml_to_php(string $xmldata)
+{
+  if (!empty($xmldata)) {
+    // Create a temporary file for the XML content
+    $temp_xml = tempnam(sys_get_temp_dir(), 'saml_xml_');
+    file_put_contents($temp_xml, $xmldata);
+
+    $xmlUtils = new Utils\XML();
+    $xmlUtils->checkSAMLMessage($xmldata, 'saml-meta');
+
+    try {
+      $entities = SAMLParser::parseDescriptorsString($xmldata);
+    } catch (Exception $e) {
+      $entities = null;
+      Drupal::logger('analytics_saml_updater')->error('Error converting XML to PHP: @message', ['@message' => $e->getMessage()]);
+      Drupal::messenger()->addError('Error converting XML to PHP, check logs for more details.');
+    }
+
+    if ($entities !== null) {
+      // Get all metadata for the entities
+      foreach ($entities as &$entity) {
+        $entity = [
+          'saml20-sp-remote' => $entity->getMetadata20SP(),
+          'saml20-idp-remote' => $entity->getMetadata20IdP(),
+        ];
+      }
+
+      // Transpose from $entities[entityid][type] to $output[type][entityid]
+      $arrayUtils = new Utils\Arrays();
+      $output = $arrayUtils->transpose($entities);
+
+      // Merge all metadata of each type to a single string which should be added to the corresponding file
+      foreach ($output as $type => &$entities) {
+        $text = '';
+        foreach ($entities as $entityId => $entityMetadata) {
+          if ($entityMetadata === null) {
+            continue;
+          }
+
+          /**
+           * Remove the entityDescriptor element because it is unused,
+           * and only makes the output harder to read
+           */
+          unset($entityMetadata['entityDescriptor']);
+
+          /**
+           * Remove any expire from the metadata. This is not so useful
+           * for manually converted metadata and frequently gives rise
+           * to unexpected results when copy-pasted statically
+           */
+          unset($entityMetadata['expire']);
+
+          $text .= "<?php\n";
+          $text .= '$metadata[' . var_export($entityId, true) . '] = ' . VarExporter::export($entityMetadata) . ";\n";
+        }
+
+        $entities = $text;
+      }
+    }
+
+    // Clean up the temporary file
+    unlink($temp_xml);
+    return $entities;
+  }
+}

@@ -1,0 +1,167 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.asu_tuition_residency.body
+    - field.field.node.asu_tuition_residency.feeds_item
+    - field.field.node.asu_tuition_residency.field_description
+    - field.field.node.asu_tuition_residency.field_display
+    - field.field.node.asu_tuition_residency.field_residency
+    - field.field.node.asu_tuition_residency.field_weight
+    - field.field.node.asu_tuition_residency.layout_builder__layout
+    - node.type.asu_tuition_residency
+  module:
+    - layout_builder
+    - layout_discovery
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: true
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          0d14ffe1-7303-4d8f-b762-88d166ede767:
+            uuid: 0d14ffe1-7303-4d8f-b762-88d166ede767
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'extra_field_block:node:asu_tuition_residency:links'
+            additional: {  }
+            weight: 0
+          18e3c1ca-9d3f-4d28-a7e4-cd80f2dded7f:
+            uuid: 18e3c1ca-9d3f-4d28-a7e4-cd80f2dded7f
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_residency:body'
+              formatter:
+                label: hidden
+                type: text_default
+                settings: {  }
+                third_party_settings: {  }
+            additional: {  }
+            weight: 1
+          a87338cc-c073-4594-acdc-e7ca38c47ab1:
+            uuid: a87338cc-c073-4594-acdc-e7ca38c47ab1
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_residency:field_residency'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 2
+          2fc1c44d-1981-47b4-b07c-ac162d1f468c:
+            uuid: 2fc1c44d-1981-47b4-b07c-ac162d1f468c
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_residency:field_description'
+              formatter:
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+                type: basic_string
+            additional: {  }
+            weight: 3
+          2c9f9e40-b5f8-4dda-b95d-e1f68618fac0:
+            uuid: 2c9f9e40-b5f8-4dda-b95d-e1f68618fac0
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_residency:field_display'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 4
+          74511ad6-a92f-45b6-b43d-9449391eca2d:
+            uuid: 74511ad6-a92f-45b6-b43d-9449391eca2d
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_residency:field_weight'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 5
+        third_party_settings: {  }
+id: node.asu_tuition_residency.default
+targetEntityType: node
+bundle: asu_tuition_residency
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_description:
+    weight: 103
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+  field_display:
+    weight: 104
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_residency:
+    weight: 102
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_weight:
+    weight: 105
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  feeds_item: true
+  layout_builder__layout: true

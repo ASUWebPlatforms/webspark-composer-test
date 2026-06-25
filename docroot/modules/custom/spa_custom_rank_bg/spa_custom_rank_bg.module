@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function spa_custom_rank_bg_preprocess_node(&$variables) {
+  $variables['#attached']['library'][] = 'spa_custom_rank_bg/bg';
+}

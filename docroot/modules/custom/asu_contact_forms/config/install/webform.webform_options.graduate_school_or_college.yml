@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: graduate_school_or_college
+label: 'Graduate school or college'
+category: 'Graduate form fields'
+likert: false
+options: 'test: ''Business, W. P. Carey School of'''

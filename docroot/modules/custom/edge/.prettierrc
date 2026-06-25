@@ -1,0 +1,39 @@
+{
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": false,
+  "quoteProps": "as-needed",
+  "jsxSingleQuote": false,
+  "trailingComma": "es5",
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "arrowParens": "always",
+  "requirePragma": false,
+  "insertPragma": false,
+  "proseWrap": "preserve",
+  "htmlWhitespaceSensitivity": "css",
+  "vueIndentScriptAndStyle": false,
+  "endOfLine": "lf",
+  "embeddedLanguageFormatting": "auto",
+  "singleAttributePerLine": true,
+  "overrides": [
+    {
+      "files": ["*.inc", "*.install", "*.module", "*.php", "*.test", "*.theme"],
+      "options": {
+        "plugins": ["@prettier/plugin-php"],
+        "parser": "php",
+        "braceStyle": "1tbs",
+        "trailingCommaPHP": true
+      }
+    },
+    {
+      "files": ["*.twig", "*.html.twig"],
+      "options": {
+        "parser": "melody",
+        "plugins": ["prettier-plugin-twig"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+name: ASU Quiz questionaire
+type: module
+description: 'Provides ASU Quiz questionaire form settings.'
+package: ASU
+core_version_requirement: ^8.8 || ^9 || ^10

@@ -1,0 +1,28 @@
+# Main theme library.
+style:
+  version: VERSION
+  css:
+    theme:
+      assets/css/asu_edu_tucson.style.css: { }
+      assets/css/cali-overrides.css: { }
+  js:
+    assets/js/asu_edu_tucson.script.js: { }
+  dependencies:
+    - renovation/style
+    - renovation/tables
+    - core/drupalSettings
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+    - core/drupal.dialog.ajax
+    - core/once
+
+optimizely:
+  header: true
+  js:
+    https://cdn.optimizely.com/js/28272300019.js: { type: external, minified: true }
+
+animated-quote:
+  version: VERSION
+  js:
+    src/components/quotes/animated-quote.js: { }

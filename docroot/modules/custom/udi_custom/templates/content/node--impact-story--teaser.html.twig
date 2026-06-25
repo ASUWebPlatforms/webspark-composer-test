@@ -1,0 +1,41 @@
+{#
+/**
+ * @file
+ * Template for a Node.
+ */
+#}
+{%
+  set classes = [
+  'node',
+  node.isPromoted() ? 'node--promoted',
+  node.isSticky() ? 'node--sticky',
+  not node.isPublished() ? 'node--unpublished',
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+  'impact-story--teaser',
+  'col',
+  'col-xs-12',
+  'col-sm-4',
+]
+%}
+
+{% set image = file_url(content.field_image[0]['#media'].field_media_image.entity.uri.value) %}
+
+<article{{ attributes.addClass(classes) }}>
+  {{ title_suffix }}
+  {% block content %}
+  <div class="card m-2 no-border">
+    <div class="impact-story--teaser--image mb-5">
+          <img src="{{ image }}">
+    </div>
+    <div class="impact-story--teaser--body card-body ">
+      <div class="story--headline">
+      <h3>{{ label|render|striptags|trim }}</h3>
+      </div>
+      <div class="story-content">
+        <p>{{ content.body|render|striptags|trim }}</p>
+      </div>
+    </div>
+  </div>
+    {% endblock %}
+</article>

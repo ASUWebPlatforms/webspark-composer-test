@@ -1,0 +1,1298 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Install, update and uninstall functions for the asu_tuition module.
+ */
+
+/**
+* Implementation of hook_install().
+*/
+function asu_tuition_install() {
+// Use schema API to create database table.
+drupal_install_schema('asu_tuition');
+}
+
+
+
+/**
+* Implementation of hook_uninstall().
+*/
+function asu_tuition_uninstall() {
+// Remove tables.
+drupal_uninstall_schema('asu_tuition');
+}
+
+/**
+* Implementation of hook_schema().
+*/
+function asu_tuition_schema() {
+	$schema = [];
+    $schema['asu_tuition_acad_career'] = array(
+    'description' => t('ASU tuition academic careers'),
+    'fields' => array(
+      'id' => array(
+        'description' => t('ID'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => FALSE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'acad_career' => array(
+        'description' => t('Academic career'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'acad_career_group' => array(
+        'description' => t('Academic career group'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'descr' => array(
+        'description' => t('Description'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'textfield',
+        ),
+      ),
+      'display' => array(
+        'description' => t('Display'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'weight' => array(
+        'description' => t('Weight'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => FALSE,
+        ),
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'acad_career' => array('acad_career'),
+    ),
+    'indexes' => array(
+      'display' => array('display'),
+      'acad_career_group' => array('acad_career_group'),
+    ),
+  );
+
+  $schema['asu_tuition_acad_level'] = array(
+    'description' => t('ASU tuition academic levels'),
+    'fields' => array(
+      'id' => array(
+        'description' => t('ID'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => FALSE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'acad_level' => array(
+        'description' => t('Academic level'),
+        'type' => 'char',
+        'length' => '3',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'acad_career' => array(
+        'description' => t('Academic career'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'descr' => array(
+        'description' => t('Description'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'textfield',
+        ),
+      ),
+      'display' => array(
+        'description' => t('Display'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'weight' => array(
+        'description' => t('Weight'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => FALSE,
+        ),
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'acad_level' => array('acad_level'),
+    ),
+    'indexes' => array(
+      'display' => array('display'),
+    ),
+  );
+
+  $schema['asu_tuition_acad_prog'] = array(
+    'description' => t('ASU tuition academic programs'),
+    'fields' => array(
+      'id' => array(
+        'description' => t('ID'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => FALSE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'institution' => array(
+        'description' => t('Institution'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'default' => 'ASU00',
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'acad_career' => array(
+        'description' => t('Academic career'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'acad_prog' => array(
+        'description' => t('Academic program'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'descr' => array(
+        'description' => t('Description'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'textfield',
+        ),
+      ),
+      'url' => array(
+        'description' => t('URL'),
+        'type' => 'varchar',
+        'length' => '2048',
+        'not null' => FALSE,
+        'required' => FALSE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'textfield',
+        ),
+      ),
+      'display' => array(
+        'description' => t('Display'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'institution_acad_prog' => array('institution', 'acad_prog'),
+    ),
+    'indexes' => array(
+      'acad_career' => array('acad_career'),
+      'acad_prog' => array('acad_prog'),
+      'display' => array('display'),
+    ),
+  );
+
+  $schema['asu_tuition_acad_prog_campus'] = array(
+    'description' => t('ASU tuition academic program - campus crosswalk'),
+    'fields' => array(
+      'id' => array(
+        'description' => t('ID'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => FALSE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'acad_prog' => array(
+        'description' => t('Academic program'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'campus' => array(
+        'description' => t('Campus'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'default' => '',
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'wue' => array(
+        'description' => 'Flag indicating whether program-campus combination is WUE eligible (1 = yes, 0 = no).',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'size' => 'small',
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'acad_prog_campus' => array('acad_prog', 'campus'),
+    ),
+    'indexes' => array(
+      'acad_prog' => array('acad_prog'),
+      'campus' => array('campus'),
+      'wue' => array('wue'),
+    ),
+  );
+
+  $schema['asu_tuition_acad_year'] = array(
+    'description' => t('ASU tuition academic years'),
+    'fields' => array(
+      'id' => array(
+        'description' => t('ID'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => FALSE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'acad_year' => array(
+        'description' => t('Academic year'),
+        'type' => 'char',
+        'length' => '4',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'descr' => array(
+        'description' => t('Description'),
+        'type' => 'char',
+        'length' => '9',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'textfield',
+        ),
+      ),
+      'fall_term' => array(
+        'description' => t('Fall term'),
+        'type' => 'char',
+        'length' => '4',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'spring_term' => array(
+        'description' => t('Spring term'),
+        'type' => 'char',
+        'length' => '4',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'summer_term' => array(
+        'description' => t('Summer term'),
+        'type' => 'char',
+        'length' => '4',
+        'not null' => FALSE,
+        'required' => FALSE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'display' => array(
+        'description' => t('Display'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'weight' => array(
+        'description' => t('Weight'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => FALSE,
+        ),
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'acad_year' => array('acad_year'),
+    ),
+    'indexes' => array(
+      'display' => array('display'),
+      'fall_term' => array('fall_term'),
+      'spring_term' => array('spring_term'),
+      'summer_term' => array('summer_term'),
+    ),
+  );
+
+  $schema['asu_tuition_admit_term'] = array(
+    'description' => t('ASU tuition admit terms'),
+    'fields' => array(
+      'id' => array(
+        'description' => t('ID'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => FALSE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'admit_term' => array(
+        'description' => t('Admit term'),
+        'type' => 'char',
+        'length' => '4',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'descr' => array(
+        'description' => t('Description'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'textfield',
+        ),
+      ),
+      'acad_year' => array(
+        'description' => t('Academic year'),
+        'type' => 'char',
+        'length' => '4',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'display' => array(
+        'description' => t('Display'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'weight' => array(
+        'description' => t('Weight'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => FALSE,
+        ),
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'admit_term' => array('admit_term'),
+    ),
+    'indexes' => array(
+      'acad_year' => array('acad_year'),
+      'display' => array('display'),
+    ),
+  );
+
+  $schema['asu_tuition_campus'] = array(
+    'description' => t('ASU tuition campuses'),
+    'fields' => array(
+      'id' => array(
+        'description' => t('ID'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => FALSE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'campus' => array(
+        'description' => t('Campus'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'descr' => array(
+        'description' => t('Description'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'textfield',
+        ),
+      ),
+      'display' => array(
+        'description' => t('Display'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'weight' => array(
+        'description' => t('Weight'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => FALSE,
+        ),
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'campus' => array('campus'),
+    ),
+    'indexes' => array(
+      'display' => array('display'),
+    ),
+  );
+
+  $schema['asu_tuition_fee_code'] = array(
+    'description' => t('ASU tuition fee codes'),
+    'fields' => array(
+      'id' => array(
+        'description' => t('ID'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => FALSE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'institution' => array(
+        'description' => t('Institution'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'default' => 'ASU00',
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'fee_code' => array(
+        'description' => t('Fee code'),
+        'type' => 'char',
+        'length' => '6',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'descr' => array(
+        'description' => t('Description'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'textfield',
+        ),
+      ),
+      'fee_type' => array(
+        'description' => t('Fee type'),
+        'type' => 'char',
+        'length' => '3',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'campus' => array(
+        'description' => t('Campus'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'default' => '',
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'residency' => array(
+        'description' => t('Residency'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'default' => '',
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'acad_career' => array(
+        'description' => t('Career'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'default' => '',
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'acad_prog' => array(
+        'description' => t('ASU tuition academic program'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'default' => '',
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'base_term' => array(
+        'description' => t('Base term'),
+        'type' => 'char',
+        'length' => '4',
+        'not null' => TRUE,
+        'default' => '',
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'note' => array(
+        'description' => t('Note'),
+        'type' => 'text',
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => FALSE,
+        ),
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'unique_key' => array('institution', 'fee_code', 'fee_type', 'campus', 'residency', 'acad_career', 'acad_prog', 'base_term'),
+    ),
+    'indexes' => array(
+      'acad_career' => array('acad_career'),
+      'acad_prog' => array('acad_prog'),
+      'base_term' => array('base_term'),
+      'campus' => array('campus'),
+      'fee_code' => array('fee_code'),
+      'fee_type' => array('fee_type'),
+      'residency' => array('residency'),
+    ),
+  );
+
+  $schema['asu_tuition_fee_rate'] = array(
+    'description' => t('ASU tuition fee rates'),
+    'fields' => array(
+      'id' => array(
+        'description' => t('ID'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => FALSE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'institution' => array(
+        'description' => t('Institution'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'default' => 'ASU00',
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'acad_year' => array(
+        'description' => t('Academic year'),
+        'type' => 'char',
+        'length' => '4',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'strm' => array(
+        'description' => t('Term'),
+        'type' => 'char',
+        'length' => '4',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'fee_code' => array(
+        'description' => t('Fee code'),
+        'type' => 'char',
+        'length' => '6',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'fee_type' => array(
+        'description' => t('Fee type'),
+        'type' => 'char',
+        'length' => '3',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'enrlld_hrs' => array(
+        'description' => t('Enrolled hours'),
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'fee_rate' => array(
+        'description' => t('Fee rate'),
+        'type' => 'numeric',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'precision' => '10',
+        'scale' => '2',
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => FALSE,
+        ),
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'unique_key' => array('institution', 'acad_year', 'strm', 'fee_code', 'enrlld_hrs'),
+    ),
+    'indexes' => array(
+      'acad_year' => array('acad_year'),
+      'enrlld_hrs' => array('enrlld_hrs'),
+      'fee_code' => array('fee_code'),
+      'strm' => array('strm'),
+      'fee_type' => array('fee_type'),
+    ),
+  );
+
+  $schema['asu_tuition_rate_type'] = array(
+    'description' => t('ASU tuition rate types'),
+    'fields' => array(
+      'id' => array(
+        'description' => t('ID'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => FALSE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'rate_type' => array(
+        'description' => t('Rate type'),
+        'type' => 'char',
+        'length' => '3',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'descr' => array(
+        'description' => t('Description'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'program_fee_dropdown' => array(
+        'description' => t('Program Fee Dropdown?'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'weight' => array(
+        'description' => t('Weight'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'query_string' => array(
+        'description' => t('Query string'),
+        'type' => 'text',
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => FALSE,
+        ),
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'rate_type' => array('rate_type'),
+    ),
+  );
+
+  $schema['asu_tuition_residency'] = array(
+    'description' => t('ASU tuition residencies'),
+    'fields' => array(
+      'id' => array(
+        'description' => t('ID'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => FALSE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'residency' => array(
+        'description' => t('Residency'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'descr' => array(
+        'description' => t('Description'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'textfield',
+        ),
+      ),
+      'display' => array(
+        'description' => t('Display'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'weight' => array(
+        'description' => t('Weight'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => FALSE,
+        ),
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'residency' => array('residency'),
+    ),
+    'indexes' => array(
+      'display' => array('display'),
+    ),
+  );
+
+  $schema['asu_tuition_tuition_group'] = array(
+    'description' => t('ASU tuition tuition groups'),
+    'fields' => array(
+      'id' => array(
+        'description' => t('ID'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => FALSE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'institution' => array(
+        'description' => t('Institution'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'default' => 'ASU00',
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'stdnt_group' => array(
+        'description' => t('Student group'),
+        'type' => 'char',
+        'length' => '4',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'base_term' => array(
+        'description' => t('Base term'),
+        'type' => 'char',
+        'length' => '4',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'admit_term' => array(
+        'description' => t('Admit term'),
+        'type' => 'char',
+        'length' => '4',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'commitment' => array(
+        'description' => t('Commitment years'),
+        'type' => 'char',
+        'length' => '1',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'acad_level' => array(
+        'description' => t('Academic level'),
+        'type' => 'char',
+        'length' => '3',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'end_term' => array(
+        'description' => t('End term'),
+        'type' => 'char',
+        'length' => '4',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'acad_level' => array('acad_level'),
+      'admit_term' => array('admit_term'),
+      'base_term' => array('base_term'),
+      'end_term' => array('end_term'),
+      'institution' => array('institution'),
+      'stdnt_group' => array('stdnt_group'),
+    ),
+  );
+
+  $schema['asu_tuition_corporate_partner'] = array(
+    'description' => t('ASU corporate partnership'),
+    'fields' => array(
+      'id' => array(
+        'description' => t('ID'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => FALSE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'institution' => array(
+        'description' => t('Institution'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'default' => 'ASU00',
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'corporate_partner' => array(
+        'description' => t('Corporate partner'),
+        'type' => 'char',
+        'length' => '4',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'descr' => array(
+        'description' => t('Description'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'textfield',
+        ),
+      ),
+      'display' => array(
+        'description' => t('Display'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'weight' => array(
+        'description' => t('Weight'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'query_string' => array(
+        'description' => t('Query string'),
+        'type' => 'text',
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => FALSE,
+        ),
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'inst_partner' => array('institution', 'corporate_partner'),
+    ),
+    'indexes' => array(
+      'display' => array('display'),
+    ),
+  );
+
+  $schema['asu_tuition_corporate_partner_award'] = array(
+    'description' => t('ASU corporate partnership scholarship amount'),
+    'fields' => array(
+      'id' => array(
+        'description' => t('ID'),
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => FALSE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'institution' => array(
+        'description' => t('Institution'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'default' => 'ASU00',
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'acad_year' => array(
+        'description' => t('Academic year'),
+        'type' => 'char',
+        'length' => '4',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'corporate_partner' => array(
+        'description' => t('Corporate partner'),
+        'type' => 'char',
+        'length' => '4',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'acad_career' => array(
+        'description' => t('Career'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'default' => '',
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'residency' => array(
+        'description' => t('Residency'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'default' => '',
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'campus' => array(
+        'description' => t('Campus'),
+        'type' => 'char',
+        'length' => '5',
+        'not null' => TRUE,
+        'default' => '',
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'award_code' => array(
+        'description' => t('Award code'),
+        'type' => 'char',
+        'length' => '6',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'select',
+        ),
+      ),
+      'descr' => array(
+        'description' => t('Description'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'required' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => 'textfield',
+        ),
+      ),
+      'query_string' => array(
+        'description' => t('Query string'),
+        'type' => 'text',
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => FALSE,
+        ),
+      ),
+      'note' => array(
+        'description' => t('Note'),
+        'type' => 'text',
+        'not null' => TRUE,
+        'asu_tuition' => array(
+          'editable' => TRUE,
+          'filter_type' => FALSE,
+        ),
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'unique_key' => array('institution', 'acad_year', 'corporate_partner', 'acad_career', 'residency', 'campus', 'award_code'),
+    ),
+    'indexes' => array(
+      'acad_year' => array('acad_year'),
+      'corporate_partner' => array('corporate_partner'),
+      'acad_career' => array('acad_career'),
+      'residency' => array('residency'),
+      'campus' => array('campus'),
+      'award_code' => array('award_code'),
+    ),
+  );
+
+  // Build a module-specific cache table based on the system cache table.
+  //$schema['cache_asu_tuition'] = drupal_get_module_schema('system', 'cache');
+
+  return $schema;
+}

@@ -1,0 +1,5 @@
+services:
+  analytics_designs.twig_extension:
+    class: Drupal\analytics_designs\TwigExtension\AnalyticsDesignsTwigExtension
+    tags:
+      - { name: twig.extension }

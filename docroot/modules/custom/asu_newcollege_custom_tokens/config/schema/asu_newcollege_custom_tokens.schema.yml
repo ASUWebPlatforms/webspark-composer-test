@@ -1,0 +1,28 @@
+asu_newcollege_custom_tokens.token.*:
+  type: config_entity
+  label: 'Custom Token'
+  mapping:
+    id:
+      type: string
+      label: 'Machine name'
+    label:
+      type: label
+      label: 'Label'
+    description:
+      type: string
+      label: 'Description'
+    type:
+      type: string
+      label: 'Token type (text, date, or html)'
+    text_value:
+      type: text
+      label: 'Text value'
+    date_value:
+      type: string
+      label: 'Date value (YYYY-MM-DD)'
+    date_format:
+      type: string
+      label: 'PHP date format string'
+    html_value:
+      type: text
+      label: 'HTML value'

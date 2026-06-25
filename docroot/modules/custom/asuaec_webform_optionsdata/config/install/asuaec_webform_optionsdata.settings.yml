@@ -1,0 +1,5 @@
+# Changed to use Admin page (/admin/config/asu/webform_optionsdata) on 4/25/2022
+#asuaec_webform_optionsdata_formmanager_webservice_url: 'https://webapp4.asu.edu/formmanager/ws'
+#asuaec_webform_optionsdata_datapotluck_webservice_url: 'https://api.myasuplat-dpl.asu.edu/api/codeset/'
+#asuaec_webform_optionsdata_cron_interval: '2629800000' # 1 month
+#asuaec_webform_optionsdata_cron_interval: '120000' # 2 min for testing

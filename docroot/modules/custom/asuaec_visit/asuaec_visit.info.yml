@@ -1,0 +1,5 @@
+name: ASU AEC Visit custom
+type: module
+description: 'ASU AEC custom module for Visit site'
+package: ASU
+core_version_requirement: ^8 || ^9 || ^10  || ^11

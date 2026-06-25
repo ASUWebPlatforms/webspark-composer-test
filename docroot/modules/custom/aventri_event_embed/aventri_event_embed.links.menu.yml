@@ -1,0 +1,6 @@
+aventri_event_embed.config:
+ title: 'Aventri event embed global settings.'
+ route_name: aventri_event_embed.config
+ description: 'Aventri event embed global settings. Set your account ID here.'
+ parent: system.admin_config_system
+ weight: 99

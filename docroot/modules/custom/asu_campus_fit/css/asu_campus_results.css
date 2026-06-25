@@ -1,0 +1,59 @@
+.svg-inline--fa.fa-w-14 {
+    width: 0.875em !important;
+}
+
+.next_campus{
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.dynamic_campus{
+    border: 1px solid #d0d0d0;
+    color: #191919;
+    padding: 1.5rem;
+}
+
+.fit-group{
+    display: none !important;
+    transition:all 1s;
+}
+
+.fit_email_result{
+    cursor: pointer;
+}
+
+.duplicate_campus_link{
+    cursor: pointer;
+}
+
+.campusfit-degrees-right-block a, .mr-div{
+    border: none !important;
+    font-size: 0.9rem !important;
+}
+
+.extra-degrees-buttons{
+    /*display: inline-flex;*/
+    margin: 5px;
+    font-size: 0.6rem !important;
+}
+
+.more-degrees-heading{
+    background: #191919 !important;
+    box-shadow: -.15em 0 0 #191919, .15em 0 0 #191919;
+    color: #fafafa;
+    padding: 3px;
+}
+
+.custom-mil-res-content{
+    row-gap: 1.5rem;
+    display: flex;
+}
+
+.custom-mil-res-content .card-wrapper{
+    display: grid;
+    margin: 20px;
+}
+
+.degreeCard{
+    background: #ffffff !important;
+}

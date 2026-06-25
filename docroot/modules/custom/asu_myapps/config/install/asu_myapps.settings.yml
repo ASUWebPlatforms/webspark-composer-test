@@ -1,0 +1,3 @@
+# Secrets are managed by the Pantheon Secrets Manager Plugin.
+# Use this only to set non-secret settings.
+asu_myapps_disable_csrf: 0

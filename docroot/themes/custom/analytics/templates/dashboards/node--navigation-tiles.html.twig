@@ -1,0 +1,41 @@
+{#
+/**
+ * @file
+ * Template for Navigation Tiles.
+ */
+#}
+
+{% set classes = [
+  'node',
+  node.isPromoted() ? 'node--promoted',
+  node.isSticky() ? 'node--sticky',
+  not node.isPublished() ? 'node--unpublished',
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+] %}
+{% set data = {
+  'heading': node.label,
+  'image': node.field_banner_image|file_url,
+} %}
+
+<article{{ attributes.addClass(classes) }}>
+  {{ include('@analytics/hero-image.html.twig', data, with_context = false) }}
+
+  {% block content %}
+    {% if node.body.value %}
+      <div class="tw-my-8">
+        <div class="container">
+          {{ content.body }}
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="tw-my-8">
+      <div class="container">
+        <div class="row g-3">
+          {{ content|without('body') }}
+        </div>
+      </div>
+    </div>
+  {% endblock %}
+</article>

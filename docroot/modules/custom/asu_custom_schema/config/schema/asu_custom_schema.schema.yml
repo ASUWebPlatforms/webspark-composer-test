@@ -1,0 +1,10 @@
+asu_custom_schema.bundle.*:
+  type: config_object
+  label: 'ASU Custom Schema bundle settings'
+  mapping:
+    bundle:
+      type: string
+      label: 'Bundle machine name'
+    enabled:
+      type: boolean
+      label: 'Schema enabled for this bundle'

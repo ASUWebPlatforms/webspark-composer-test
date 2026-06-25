@@ -1,0 +1,10 @@
+name: Course Evaluation Administration (ceadmin)
+description: Univesity End of Term Course Evaluation administration app built in vue3 - UOEEE - ceadmin
+package: UOEEE
+type: module
+version: 3.03
+core_version_requirement: ^10
+dependencies:
+  - drupal:block
+libraries:
+  - ceadmin/ceadmin-app

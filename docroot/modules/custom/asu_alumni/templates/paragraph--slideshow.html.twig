@@ -1,0 +1,15 @@
+{% if content.field_slides|render is not empty %}
+    <div class="mb-4">
+    {% if content.field_slidershow_title|render is not empty %}
+        <h2>
+            <span class="highlight-gold">
+                {{ content.field_slidershow_title.0['#context'].value }}
+            </span>
+        </h2>
+    {% endif %}
+    {% if content.field_slideshow_description|render is not empty %}
+       {{ content.field_slideshow_description }}
+    {% endif %}
+        {{ content.field_slides }}
+    </div>
+{% endif %}

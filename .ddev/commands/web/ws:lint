@@ -1,0 +1,10 @@
+#!/bin/bash
+## Description: Lint Webspark against all code quality tools
+## Usage: ws:lint
+## Example: ddev ws:lint
+
+./vendor/bin/phpstan analyze --memory-limit=512M docroot/profiles/contrib/webspark/modules docroot/profiles/contrib/webspark/themes/renovation docroot/profiles/webspark
+./vendor/bin/phpcs -n -d memory_limit=512M --standard=Drupal,DrupalPractice --extensions=php,module,inc,install,test,profile,theme,css,info,txt,md,yml --ignore=node_modules,bower_components,vendor --colors docroot/profiles/contrib/webspark/modules docroot/profiles/contrib/webspark/themes/renovation docroot/profiles/webspark
+./vendor/bin/phpcbf -n -d memory_limit=512M --standard=Drupal,DrupalPractice --extensions=php,module,inc,install,test,profile,theme,css,info,txt,md,yml --ignore=node_modules,bower_components,vendor --colors docroot/profiles/contrib/webspark/modules docroot/profiles/contrib/webspark/themes/renovation docroot/profiles/webspark
+yarn eslint docroot/profiles/contrib/webspark/modules/**/*.js docroot/profiles/contrib/webspark/themes/renovation/**/*.js
+yarn stylelint 'docroot/profiles/contrib/webspark/modules/**/*.{scss,css}' 'docroot/profiles/contrib/webspark/themes/renovation/**/*.{scss,css}' --cache --color

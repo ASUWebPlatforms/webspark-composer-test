@@ -1,0 +1,94 @@
+{#
+/**
+ * @file
+ * Default theme implementation for a cell of a Calendar View table.
+ *
+ * Available variables:
+ * - elements: Original variables passed to this template.
+ * - attributes: HTML attributes for the wrapper.
+ * - timestamp: The datetime value.
+ * - date: The formatted date value.
+ * - empty: Wether or not this day as content.
+ * - content: Custom content.
+ * - rows: A list of view rows including the following:
+ *   - content: The content as a render array.
+ *   - attributes: The date field name used to get this content.
+ *   - from: A timestamp.
+ *   - to: Another timestamp (empty for single value date field).
+ *   - item: The date field item. Useful to get date type (e.g. 'created', 'changed', 'date', 'datetime', 'allday').
+ *   - calendar_filter: The date field used to retrieve this content.
+ *
+ * Custom variabled added:
+ * - date_string_formatted: YYYY-MM-DD
+ * - legend_toggle_string - Contains css classes to add. ex: inperson inperson-academic
+ * - legend_toggle - Array of Legend/toggle if we need it later.
+ * - has_event - "has-event" or "no-event"
+ *
+ * @see template_preprocess_calendar_view_day()
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+    'calendar-view-day',
+    empty ? 'empty',
+  ]
+%}
+<div {{ attributes.addClass(classes) }}>
+  {# Calendar day #}
+  {% if not empty %}
+    {# When clicking on day, show Day agenda on the right side #}
+{#    <div class="calendar-view-day__number"><a href="/admin/views/ajax/visitd9_day_agenda/block_1/{{ date_string_formatted }}/7" class="use-ajax">{{ timestamp|date('j') }}</a></div>#}{# <--- Coldn't pass category ID such as 7.  #}
+
+{#    <div class="calendar-view-day__number thedate {{ date_string_formatted }}"><a href="/dayevents/{{ date_string_formatted }}/{{ cat }}">{{ timestamp|date('j') }}</a>(Controller)</div>#}
+    <div class="calendar-view-day__number thedate {{ date_string_formatted }} {{ legend_toggle_string }} {{ has_event }}" date="{{ date_string_formatted }}">{{ timestamp|date('j') }}<div class="dots"></div></div>
+
+
+  {% else %}
+    <div class="calendar-view-day__number">{{ timestamp|date('j') }}</div>
+  {% endif %}
+
+  {# Custom content, usually passed by other modules #}
+  {% block content %}
+    {% if not empty %}
+      <div class="calendar-view-day__content">
+        {{ content }}
+      </div>
+    {% endif %}
+  {% endblock %}
+
+  {# Event by hour #}
+  {% if hours.display %}
+    {# @todo All day events #}
+    <div class="calendar-view-day__allday"></div>
+
+    <ul class="calendar-view-day__hours">
+      {# Given datetime events #}
+      {% for h in range(hours.start, hours.end) %}
+        {% set time_now = timestamp['#value'] + (3600 * h) %}
+        <li class="calendar-view-day__hour">
+          <time datetime="{{ time_now|date('Y-m-d\TH:i:s') }}">{{ '%02d:00'|format(h) }}</time>
+          <div>{{ rows[time_now] }}</div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {# Simple list #}
+  {% if not hours.display and rows %}
+
+{# To remove content from Mini calendar, comment out below: #}
+    <ul class="calendar-view-day__rows">
+      {% for timestamp,results in rows %}
+        {% for row in results %}
+          {% set row_classes = [ default_row_class ? 'views-row'] %}
+          <li{{ row.attributes.addClass(row_classes, 'cale  ndar-view-day__row') }}>
+            {{- row.content -}}
+          </li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+
+  {% endif %}
+</div>

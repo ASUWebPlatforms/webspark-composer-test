@@ -1,0 +1,27 @@
+<nav class="nav-tabs-scrolling">
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    {% for tab in tabs %}
+      {% if loop.first %}
+        <a class="nav-item nav-link active" id="{{ tab.heading|replace({' ' : '-'})|lower }}" data-toggle="tab" href="#nav-{{ tab.heading|replace({' ' : '-'})|lower }}" role="tab" aria-controls="nav-{{ tab.heading|replace({' ' : '-'})|lower }}" aria-selected="true">{{ tab.heading }}</a>
+      {% else %}
+        <a class="nav-item nav-link" id="{{ tab.heading|replace({' ' : '-'})|lower }}" data-toggle="tab" href="#nav-{{ tab.heading|replace({' ' : '-'})|lower }}" role="tab" aria-controls="nav-{{ tab.heading|replace({' ' : '-'})|lower }}" aria-selected="false">{{ tab.heading }}</a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</nav>
+
+<div class="tab-content" id="nav-tabContent">
+  {% for tab in tabs %}
+    {% if loop.first %}
+      <div class="tab-pane fade show active" id="nav-{{ tab.heading|replace({' ' : '-'})|lower }}" role="tabpanel" aria-labelledby="nav-{{ tab.heading|replace({' ' : '-'})|lower }}-tab">
+        {{ tab.copy|raw }}
+      </div>
+    {% else %}
+      <div class="tab-pane fade" id="nav-{{ tab.heading|replace({' ' : '-'})|lower }}" role="tabpanel" aria-labelledby="nav-{{ tab.heading|replace({' ' : '-'})|lower }}-tab">
+        {{ tab.copy|raw }}
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+

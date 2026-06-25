@@ -1,0 +1,5 @@
+name: ASU Document Creation
+type: module
+description: 'Provides a service for creating Word/LaTex documents.'
+package: ASU
+core_version_requirement: ^9 || ^10

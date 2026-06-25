@@ -1,0 +1,30 @@
+.jmlm-forms {
+    .btn-primary {
+        background: #ffc627;
+        color: #000;
+        border-color: #ffc627;
+    }
+}
+
+.jmlm-lower-cta {
+    form {
+        .form-item {
+            label {
+                &.js-form-required {
+                    &:after {
+                        content: '*';
+                    }
+                }
+            }
+        }
+        .uds-field-required {
+            display: none;
+        }
+        &:before {
+            content: '* required field';
+            display: block;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+    }
+}

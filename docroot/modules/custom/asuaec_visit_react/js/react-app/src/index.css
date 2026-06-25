@@ -1,0 +1,10 @@
+/*form.uds-form .phone-input-custom > input {
+  border-radius: 0;
+  height: auto;
+  padding-left: 48px !important;
+  width: 100%;
+}*/
+/* In Event Details section, indent Nested events (Additional tour and Barrett under Exp ASU) */
+.nested-events {
+  margin-left: 20px;
+}

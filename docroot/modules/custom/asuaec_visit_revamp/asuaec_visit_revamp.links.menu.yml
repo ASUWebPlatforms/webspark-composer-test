@@ -1,0 +1,6 @@
+asuaec_visit_revamp.config:
+  title: 'Visit Revamp Config'
+  route_name: visit_revamp_config_form
+  parent: system.admin_config_development
+  description: 'Configure post URLs for Visit Revamp'
+  weight: 100

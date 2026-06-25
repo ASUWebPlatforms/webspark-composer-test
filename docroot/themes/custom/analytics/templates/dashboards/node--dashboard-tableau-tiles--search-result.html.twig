@@ -1,0 +1,20 @@
+{% set preview = null %}
+{% if node.field_description.value %}
+  {% set preview = node.field_description.value|slice(0, 65) ~ (node.field_description.value|length > 65 ? '...') %}
+{% endif %}
+{% set data = {
+  'title': node.title.value,
+  'url': node|entity_url,
+  'description': preview,
+  'pills': [
+    { 'title': null, 'data': [node.field_data_area.0.entity] },
+    { 'title': null, 'data': [node.field_subject_domain.0.entity] },
+    { 'title': null, 'data': [node.field_purpose.0.entity] },
+  ],
+  'group': node.field_group.entity.id.value,
+  'allowAccessRequest': node.field_group.entity.field_allow_requests.value
+} %}
+
+<article class="node__tableau-tiles--search-result">
+  {{ include('@analytics/teaser-search-result.twig', data) }}
+</article>

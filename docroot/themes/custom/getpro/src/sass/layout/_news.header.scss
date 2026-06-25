@@ -1,0 +1,13 @@
+// Button alignment for front page news header
+.fp--view--news--header {
+  display: inline-flex;
+  -moz-box-pack: end;
+  justify-content: flex-end;
+}
+// Manually padding added since padding options aren't available for Views blocks in Webspark.
+.view--news--top {
+  padding-top: 2rem;
+}
+.view--news--cards {
+  padding-bottom: 3rem;
+}

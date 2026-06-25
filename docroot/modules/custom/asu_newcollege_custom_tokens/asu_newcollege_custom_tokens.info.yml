@@ -1,0 +1,8 @@
+name: 'ASU New College Custom Tokens'
+type: module
+description: 'Provides manageable custom text and date tokens for use in rich text fields.'
+core_version_requirement: ^10
+package: 'ASU New College'
+dependencies:
+  - drupal:token
+  - drupal:token_filter

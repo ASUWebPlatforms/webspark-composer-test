@@ -1,0 +1,204 @@
+.asu-academics {
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    .block-inline-blockasu-edu-section-with-cta-buttons.asu-edu-static {
+      .uds-card-and-image {
+        padding: $uds-size-spacing-6 $uds-size-spacing-12;
+
+        p {
+          margin-bottom: 0;
+          line-height: $uds-size-font-large;
+        }
+      }
+    }
+  }
+}
+
+.asu-giving {
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    .block-inline-blockasu-edu-section-with-cta-buttons.asu-edu-static {
+      .uds-card-and-image {
+        padding: $uds-size-spacing-6 $uds-size-spacing-12;
+
+        h4 {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}
+
+.asu-home {
+  .block-inline-blockasu-edu-section-with-cta-buttons {
+    a {
+      &.btn {
+        &:nth-child(3) {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}
+
+.block-inline-blockasu-edu-section-with-cta-buttons,
+.block-inline-blockasu-edu-overlay-parallax {
+  position: relative;
+
+  .btn + .btn {
+    margin-left: 0;
+  }
+
+  &.asu-edu-alignment-right {
+    .card-content {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  picture {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  a {
+    &.btn {
+      margin-right: 16px;
+
+      &:nth-child(3) {
+        margin-top: 16px;
+      }
+    }
+  }
+}
+
+.block-inline-blockasu-edu-section-with-cta-buttons.asu-edu-static {
+  .card-title {
+    margin-bottom: $uds-size-spacing-2;
+  }
+
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    .uds-card-and-image {
+      padding: $uds-size-spacing-12;
+      background-position: center;
+      margin: 0;
+    }
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    .uds-card-and-image {
+      justify-content: flex-start;
+    }
+  }
+}
+
+.block-inline-blockasu-edu-overlay-parallax {
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    .card-content {
+      .card-horizontal {
+        .card-content-wrapper {
+          padding-top: 0 !important;
+        }
+      }
+
+      .card-title {
+        line-height: $uds-size-font-xxl;
+      }
+    }
+  }
+}
+
+.parallax-container {
+  position: relative;
+  overflow: hidden;
+  height: unset;
+
+  .card-content-wrapper {
+    .card-header {
+      padding-bottom: $uds-size-spacing-2;
+    }
+
+    @media screen and (min-width: $uds-grid-container-max-width-lg) {
+      padding: $uds-size-spacing-6;
+
+      .card-header {
+        padding: 0;
+      }
+
+      .card-body {
+        padding: 0;
+      }
+
+      .card-button {
+        padding: 0 0 $uds-size-spacing-6 0;
+      }
+
+      p {
+        margin: $uds-size-spacing-4 0 $uds-size-spacing-3 0;
+      }
+    }
+
+  }
+
+  img {
+    position: absolute;
+  }
+
+  .parallax-container-content {
+    width: 600px;
+    position: absolute;
+    top: 150px;
+
+    background-color: white;
+    padding: $uds-size-spacing-6;
+
+    h2 {
+      margin: 0;
+    }
+
+    p {
+      margin: $uds-size-spacing-4 0 $uds-size-spacing-3 0;
+    }
+
+    @media screen and (max-width: $uds-breakpoint-md) {
+      padding: $uds-size-spacing-2;
+      width: 450px;
+
+      p {
+        margin: $uds-size-spacing-2 0 $uds-size-spacing-1 0;
+      }
+    }
+
+    .btn-maroon {
+      margin-right: $uds-size-spacing-2;
+    }
+  }
+}
+
+.block-inline-blockasu-edu-overlay-parallax {
+  background-size: cover;
+  background-position: center;
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    background-size: 350%;
+    background-repeat: no-repeat;
+    background-position: 25% top;
+    height: auto;
+
+    .pt-16 {
+      padding-top: 22rem !important;
+    }
+  }
+
+  .parallax-container-content {
+    height: 500px;
+    right: 75px;
+    @media screen and (max-width: $uds-breakpoint-md) {
+      right: 25px;
+      height: 450px;
+    }
+  }
+}

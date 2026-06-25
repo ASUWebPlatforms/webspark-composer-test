@@ -1,0 +1,9 @@
+name: 'UTO Events Migrate'
+type: module
+description: 'Import events from aventri feed'
+package: Custom
+dependencies:
+  - migrate
+  - migrate_tools
+  - migrate_plus
+core_version_requirement: '^8 || ^9 || ^10'

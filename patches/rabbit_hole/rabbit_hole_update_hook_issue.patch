@@ -1,0 +1,48 @@
+diff --git a/rabbit_hole.install b/rabbit_hole.install
+index a835ddb..b64fedf 100644
+--- a/rabbit_hole.install
++++ b/rabbit_hole.install
+@@ -383,21 +383,36 @@ function rabbit_hole_update_8111() {
+  */
+ function rabbit_hole_update_8112() {
+   $entity_type_manager = \Drupal::entityTypeManager();
++
+   /** @var \Drupal\rabbit_hole\BehaviorSettingsInterface[] $behavior_settings */
+-  $behavior_settings = $entity_type_manager->getStorage('behavior_settings')
+-    ->loadMultiple();
++  $behavior_settings = $entity_type_manager->getStorage('behavior_settings')->loadMultiple();
+ 
+   foreach ($behavior_settings as $behavior_setting) {
+-    $entity_type_name = $behavior_setting->get('entity_type_id');
+-    if (empty($entity_type_name)) {
++    $entity_type_id = $behavior_setting->get('entity_type_id');
++    $bundle = $behavior_setting->get('entity_id');
++
++    // Fix cases like "entity_bundle:node" → "node"
++    if (str_starts_with($entity_type_id, 'entity_bundle:')) {
++      $entity_type_id = str_replace('entity_bundle:', '', $entity_type_id);
++    }
++
++    // If the entity type doesn't exist, skip.
++    if (!$entity_type_manager->hasDefinition($entity_type_id)) {
++      \Drupal::logger('rabbit_hole')->warning('Skipping unknown entity_type_id: @id', ['@id' => $entity_type_id]);
+       continue;
+     }
+-    $entity_type_id = $entity_type_manager->getStorage($entity_type_name)->getEntityType()->getBundleOf() ?? $entity_type_name;
+-    $bundle = $behavior_setting->get('entity_id');
+ 
+-    $behavior_setting->set('id', $entity_type_id . '.' . ($bundle ?? $entity_type_id));
++    // Set correct targetEntityType and bundle.
+     $behavior_setting->set('targetEntityType', $entity_type_id);
+     $behavior_setting->set('bundle', $bundle ?? $entity_type_id);
++
++    // Do NOT set ID — that causes UUID collisions!
++    // $behavior_setting->set('id', ...); ← leave this out.
++
+     $behavior_setting->save();
++    \Drupal::logger('rabbit_hole')->notice('Updated behavior_settings for @type:@bundle', [
++        '@type' => $entity_type_id,
++        '@bundle' => $bundle,
++    ]);
+   }
+ }

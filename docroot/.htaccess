@@ -1,0 +1,2136 @@
+#
+# Apache/PHP/Drupal settings:
+#
+
+# Protect files and directories from prying eyes.
+<FilesMatch "\.(engine|inc|install|make|module|profile|po|sh|.*sql|theme|twig|tpl(\.php)?|xtmpl|yml)(~|\.sw[op]|\.bak|\.orig|\.save)?$|^(\.(?!well-known).*|Entries.*|Repository|Root|Tag|Template|composer\.(json|lock)|web\.config)$|^#.*#$|\.php(~|\.sw[op]|\.bak|\.orig|\.save)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+  </IfModule>
+</FilesMatch>
+
+# Don't show directory listings for URLs which map to a directory.
+Options -Indexes
+
+# Set the default handler.
+DirectoryIndex index.php index.html index.htm
+
+# Add correct encoding for SVGZ.
+AddType image/svg+xml svg svgz
+AddEncoding gzip svgz
+
+# Most of the following PHP settings cannot be changed at runtime. See
+# sites/default/default.settings.php and
+# Drupal\Core\DrupalKernel::bootEnvironment() for settings that can be
+# changed at runtime.
+
+# PHP 7, Apache 1 and 2.
+<IfModule mod_php7.c>
+  php_value assert.active                   0
+</IfModule>
+
+# Requires mod_expires to be enabled.
+<IfModule mod_expires.c>
+  # Enable expirations.
+  ExpiresActive On
+
+  # Cache all files for 2 weeks after access (A).
+  ExpiresDefault A1209600
+
+  <FilesMatch \.php$>
+    # Do not allow PHP scripts to be cached unless they explicitly send cache
+    # headers themselves. Otherwise all scripts would have to overwrite the
+    # headers set by mod_expires if they want another caching behavior. This may
+    # fail if an error occurs early in the bootstrap process, and it may cause
+    # problems if a non-Drupal PHP file is installed in a subdirectory.
+    ExpiresActive Off
+  </FilesMatch>
+</IfModule>
+
+# Set a fallback resource if mod_rewrite is not enabled. This allows Drupal to
+# work without clean URLs. This requires Apache version >= 2.2.16. If Drupal is
+# not accessed by the top level URL (i.e.: http://example.com/drupal/ instead of
+# http://example.com/), the path to index.php will need to be adjusted.
+<IfModule !mod_rewrite.c>
+  FallbackResource /index.php
+</IfModule>
+
+# Various rewrite rules.
+<IfModule mod_rewrite.c>
+  RewriteEngine on
+
+  # Webspark Stack primary domain rules
+  RewriteCond %{HTTP_HOST} ^admissions.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://admission.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^www.law.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://law.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^uto.asu.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^et.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://tech.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^global-launch.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://globallaunch.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^futuresoflearning.asu.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^www.education.asu.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^americareads.asu.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^futureoflearning.asu.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^oofsi.education.asu.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^chilab.asu.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^communityengagement.education.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://education.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^fashion.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://asufidm.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^sundevildining.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://sundevilhospitality.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^watts.asu.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^wattscollege.asu.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^vote.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://publicservice.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^www.bios.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^bios.edu$ [NC]
+  RewriteRule ^(.*)$ https://bios.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^digitalmedia.asu.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^mediaarts.asu.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^ame.asu.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^artsmediaandengineering.asu.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^ame2.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://artsmediaengineering.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^genai.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://ai.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^azwaterinnovation.org$ [NC]
+  RewriteRule ^(.*)$ https://azwaterinnovation.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^mobileapp.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://m.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^www.geoalliance.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://geoalliance.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^www.sundevilclub.com$ [NC]
+  RewriteRule ^(.*)$ https://sundevilclub.com/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^aventri.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://stova.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^webservice.asu.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^drupal.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://webservices.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^urbancollaborative.org$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^www.urbancollaborative.org$ [NC]
+  RewriteRule ^(.*)$ https://urbancollaborative.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^child-wellbeing.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://childwellbeing.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^hrc.clas.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://hrc.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^cloudscholar.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://cloudscholars.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^blockchain.lab.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://blockchain.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^my.copp.asu.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^copp-community.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://community.publicservice.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^english.clas.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://english.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asunews.asu.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^asunow.asu.edu$ [NC]
+  RewriteRule ^(.*)$ https://news.asu.edu/$1 [R=301,L]
+
+  # =================== Webspark Stack file redirects ========================
+  # Note: These file redirects fix hard-coded `sites/default/files` paths and
+  # point them to the correct `sites/g/files/.../files` paths.
+  # They are usually comprised of a simple redirect for the custom domain
+  # and then a more complex regex redirect to cover all dev/test/live acquia
+  # environments. These rules account for both the asufactory1.acquia.asu.edu
+  # and the asufactory1.acsitefactory.com domains.
+  # ==========================================================================
+
+  # Redirect for websparkci. There is no custom domain for this site.
+  # Only apply to the two allowed domains
+  RewriteCond %{HTTP_HOST} ^websparkci[.-]?(test-|dev-)?asufactory1\.(acquia\.asu\.edu|acsitefactory\.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://websparkci-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz166/files/$1 [R=301,L]
+
+  # Redirect for embryo.asu.edu
+  RewriteCond %{HTTP_HOST} ^embryo\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz181/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^embryoproject[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://embryoproject-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz181/files/$1 [R=301,L]
+
+  # Redirect for admission.asu.edu
+  RewriteCond %{HTTP_HOST} ^admission\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz146/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^admissionasu[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://admissionasu-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz146/files/$1 [R=301,L]
+
+  # Redirect for aipi.asu.edu
+  RewriteCond %{HTTP_HOST} ^aipi\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz4546/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^aipid10[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://aipid10-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz4546/files/$1 [R=301,L]
+
+  # Redirect for eoss.asu.edu
+  RewriteCond %{HTTP_HOST} ^eoss\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz141/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^eoss[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://eoss-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz141/files/$1 [R=301,L]
+
+  # Redirect for wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^(www\.)?wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz246/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^camp-carey.com$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz246/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^(www\.)?ems\.wpcarey\.asu\.com$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz246/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcwpcarey[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcwpcarey-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz246/files/$1 [R=301,L]
+
+  # Redirect for vetengagement.asu.edu
+  RewriteCond %{HTTP_HOST} ^vetengagement\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz2286/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^webspark2cisavetengagement[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://webspark2cisavetengagement-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz2286/files/$1 [R=301,L]
+
+  # Redirect for myapps.asu.edu
+  RewriteCond %{HTTP_HOST} ^myapps\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz581/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^myappsws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://myappsws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz581/files/$1 [R=301,L]
+
+  # Redirect for housing.asu.edu
+  RewriteCond %{HTTP_HOST} ^housing\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz251/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^housingd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://housingd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz251/files/$1 [R=301,L]
+
+  # Redirect for students.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^students\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz596/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcstudents[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcstudents-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz596/files/$1 [R=301,L]
+
+  # Redirect for chs.asu.edu
+  RewriteCond %{HTTP_HOST} ^chs\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz611/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^graduate\.chs\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz611/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^students\.chs\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz611/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^chsws2public[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://chsws2public-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz611/files/$1 [R=301,L]
+
+  # Redirect for nursingandhealth.asu.edu
+  RewriteCond %{HTTP_HOST} ^nursingandhealth\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz261/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^gracecenter\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz261/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d9nursingandhealth[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d9nursingandhealth-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz261/files/$1 [R=301,L]
+
+  # Redirect for campus.asu.edu
+  RewriteCond %{HTTP_HOST} ^campus\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz616/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^campusd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://campusd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz616/files/$1 [R=301,L]
+
+  # Redirect for graduate.asu.edu
+  RewriteCond %{HTTP_HOST} ^graduate\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz641/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^graduatefcws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://graduatefcws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz641/files/$1 [R=301,L]
+
+  # Redirect for newcollege.asu.edu
+  RewriteCond %{HTTP_HOST} ^newcollege\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz266/files/$1 [R=301,L]
+  # current version
+  RewriteCond %{HTTP_HOST} ^ncias[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://ncias-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz266/files/$1 [R=301,L]
+  # unlaunched new version (as of Oct 21, 2025)
+  RewriteCond %{HTTP_HOST} ^newcollegews2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://newcollegews2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz266/files/$1 [R=301,L]
+
+  # Redirect for futuresoflearning.asu.edu and other domains
+  RewriteCond %{HTTP_HOST} ^(futuresoflearning|education|americareads|futureoflearning|chilab)\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz656/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^(oofsi|communityengagement)\.education\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz656/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^educationws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://educationws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz656/files/$1 [R=301,L]
+
+  # Redirect for fitness.asu.edu
+  RewriteCond %{HTTP_HOST} ^fitness\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz661/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^fitnessd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://fitnessd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz661/files/$1 [R=301,L]
+
+  # Redirect for provost.asu.edu
+  RewriteCond %{HTTP_HOST} ^provost\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz671/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^provostasu[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://provostasu-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz671/files/$1 [R=301,L]
+
+  # Redirect for musicdancetheatre.asu.edu
+  RewriteCond %{HTTP_HOST} ^musicdancetheatre\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz676/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^hdamdt[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://hdamdt-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz676/files/$1 [R=301,L]
+
+  # Redirect for herbergerinstitute.asu.edu
+  RewriteCond %{HTTP_HOST} ^herbergerinstitute\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz681/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^hdahida[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://hdahida-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz681/files/$1 [R=301,L]
+
+  # Redirect for asufidm.asu.edu and other domains
+  RewriteCond %{HTTP_HOST} ^(asufidm|fashion)\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz686/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^projectrunway[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://projectrunway-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz686/files/$1 [R=301,L]
+
+  # Redirect for brandguide.asu.edu
+  RewriteCond %{HTTP_HOST} ^brandguide\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz696/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^brandguided9stable[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://brandguided9stable-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz696/files/$1 [R=301,L]
+
+  # Redirect for watts.asu.edu and other domains
+  RewriteCond %{HTTP_HOST} ^(watts|wattscollege|vote|publicservice)\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz276/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asuwatts[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asuwatts-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz276/files/$1 [R=301,L]
+
+  # Redirect for knowledge.wpcarey.asu.edu and other domains
+  RewriteCond %{HTTP_HOST} ^(knowledge|blogs|news)\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz706/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcnews[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcnews-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz706/files/$1 [R=301,L]
+
+  # Redirect for design.asu.edu
+  RewriteCond %{HTTP_HOST} ^design\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz711/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^hdatds[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://hdatds-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz711/files/$1 [R=301,L]
+
+  # Redirect for accessibility.asu.edu
+  RewriteCond %{HTTP_HOST} ^accessibility\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^webaccessibility\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz666/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^weba11y9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://weba11y9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz666/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^accessibility\.asu\.edu$ [NC]
+  RewriteRule ^add/(.*)$ /sites/g/files/litvpz666/files/add/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^accessibility\.asu\.edu$ [NC]
+  RewriteRule ^advaccess/(.*)$ /sites/g/files/litvpz666/files/advaccess/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^accessibility\.asu\.edu$ [NC]
+  RewriteRule ^intro-course/(.*)$ /sites/g/files/litvpz666/files/intro-course/$1 [R=301,L]
+
+  # Redirect for issc.asu.edu
+  RewriteCond %{HTTP_HOST} ^issc\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz646/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^isscd10[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://isscd10-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz646/files/$1 [R=301,L]
+
+  # Redirect for law.asu.edu and other domains
+  RewriteCond %{HTTP_HOST} ^(www\.)?law\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz156/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^sdoccol[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://sdoccol-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz156/files/$1 [R=301,L]
+
+  # Redirect for analytics.asu.edu
+  RewriteCond %{HTTP_HOST} ^analytics\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz471/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asuanalytics[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asuanalytics-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz471/files/$1 [R=301,L]
+
+  # Redirect for alumni.asu.edu and other domains
+  RewriteCond %{HTTP_HOST} ^(www\.)?alumni\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz591/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^alumnid9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://alumnid9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz591/files/$1 [R=301,L]
+
+  # Redirect for uto.asu.edu and other domains
+  RewriteCond %{HTTP_HOST} ^(uto|et|tech)\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz4026/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asuutod9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asuutod9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz601/files/$1 [R=301,L]
+
+  # Redirect for askanearthspacescientist.asu.edu
+  RewriteCond %{HTTP_HOST} ^askanearthspacescientist\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1316/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^aaeassws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://aaeassws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1316/files/$1 [R=301,L]
+
+  # Redirect for uoeee.asu.edu
+  RewriteCond %{HTTP_HOST} ^uoeee\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz631/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^uoeeeasuws2d9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://uoeeeasuws2d9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz631/files/$1 [R=301,L]
+
+  # Redirect for global-launch.asu.edu and other domains
+  RewriteCond %{HTTP_HOST} ^(global-launch|globallaunch)\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz636/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^globallaunchwebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://globallaunchwebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz636/files/$1 [R=301,L]
+
+  # Redirect for students.asu.edu
+  RewriteCond %{HTTP_HOST} ^students\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3166/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^studentsasu[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://studentsasu-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3166/files/$1 [R=301,L]
+
+  # Redirect for yourfuture.asu.edu
+  RewriteCond %{HTTP_HOST} ^yourfuture\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3146/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^yourfutureasu[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://yourfutureasu-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3146/files/$1 [R=301,L]
+
+  # Redirect for tuition.asu.edu
+  RewriteCond %{HTTP_HOST} ^tuition\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3151/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^tuitionasu[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://tuitionasu-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3151/files/$1 [R=301,L]
+
+  # Redirect for sundevilhospitality.asu.edu
+  RewriteCond %{HTTP_HOST} ^sundevilhospitality\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz701/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^diningd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://diningd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz701/files/$1 [R=301,L]
+
+  # Redirect for art.asu.edu
+  RewriteCond %{HTTP_HOST} ^art\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz716/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^hdasoa[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://hdasoa-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz716/files/$1 [R=301,L]
+
+  # Redirect for californiacollege.asu.edu
+  RewriteCond %{HTTP_HOST} ^californiacollege\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz721/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d9californiacollege[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d9californiacollege-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz721/files/$1 [R=301,L]
+
+  # Redirect for asufidmfashionclub.asu.edu
+  RewriteCond %{HTTP_HOST} ^asufidmfashionclub\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz281/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asufidmfashionclub[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asufidmfashionclub-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz281/files/$1 [R=301,L]
+
+  # Redirect for bios.asu.edu
+  RewriteCond %{HTTP_HOST} ^(www\.)?bios\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz726/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^biosws2\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz726/files/$1 [R=301,L]
+
+  # Redirect for economist.asu.edu
+  RewriteCond %{HTTP_HOST} ^economist\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz731/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^economistd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://economistd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz731/files/$1 [R=301,L]
+
+  # Redirect for socialwork.asu.edu
+  RewriteCond %{HTTP_HOST} ^socialwork\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz286/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^socialworkwebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://socialworkwebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz286/files/$1 [R=301,L]
+
+  # Redirect for students.barretthonors.asu.edu
+  RewriteCond %{HTTP_HOST} ^students\.barretthonors\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz736/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^barrettstudent[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://barrettstudent-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz736/files/$1 [R=301,L]
+
+  # Redirect for getprotected.asu.edu
+  RewriteCond %{HTTP_HOST} ^getprotected\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz751/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^gpws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://gpws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz751/files/$1 [R=301,L]
+
+  # Redirect for onsa.asu.edu
+  RewriteCond %{HTTP_HOST} ^onsa\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz776/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^barrettonsa[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://barrettonsa-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz776/files/$1 [R=301,L]
+
+  # Redirect for asufidmmuseum.asu.edu
+  RewriteCond %{HTTP_HOST} ^asufidmmuseum\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz291/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asufidmmuseum[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asufidmmuseum-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz291/files/$1 [R=301,L]
+
+  # Redirect for studentlife.asu.edu
+  RewriteCond %{HTTP_HOST} ^studentlife\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz761/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d9studentlife[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d9studentlife-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz761/files/$1 [R=301,L]
+
+  # Redirect for staffcouncil.asu.edu
+  RewriteCond %{HTTP_HOST} ^staffcouncil\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz771/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^staffws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://staffws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz771/files/$1 [R=301,L]
+
+  # Redirect for goee.asu.edu
+  RewriteCond %{HTTP_HOST} ^goee\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3261/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asuengineeringonline\.com$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3261/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asuengineeringonlinegoeews2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asuengineeringonlinegoeews2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3261/files/$1 [R=301,L]
+
+  # Redirect for cisa.asu.edu
+  RewriteCond %{HTTP_HOST} ^cisa\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz691/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^webspark2cisahome[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://webspark2cisahome-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz691/files/$1 [R=301,L]
+
+  # Redirect for president.asu.edu
+  RewriteCond %{HTTP_HOST} ^(www\.)?president\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3266/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^officeofthepresidentd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://officeofthepresidentd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3266/files/$1 [R=301,L]
+
+  # Redirect for digitalmedia.asu.edu
+  RewriteCond %{HTTP_HOST} ^digitalmedia\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^mediaarts\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^ame\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^artsmediaengineering\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^artsmediaandengineering\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^ame2\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz746/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^hdaame[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://hdaame-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz746/files/$1 [R=301,L]
+
+  # Redirect for eoss-forms.asu.edu
+  RewriteCond %{HTTP_HOST} ^eoss-forms\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz786/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^eossformsws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://eossformsws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz786/files/$1 [R=301,L]
+
+  # Redirect for print.asu.edu
+  RewriteCond %{HTTP_HOST} ^print\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz741/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^printlab[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://printlab-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz741/files/$1 [R=301,L]
+
+  # Redirect for genai.asu.edu, ai.asu.edu
+  RewriteCond %{HTTP_HOST} ^genai\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^ai\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz756/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^aiasu[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://aiasu-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz756/files/$1 [R=301,L]
+
+  # Redirect for lx.asu.edu
+  RewriteCond %{HTTP_HOST} ^lx\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz766/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^utolx[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://utolx-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz766/files/$1 [R=301,L]
+
+  # Redirect for havasu.asu.edu
+  RewriteCond %{HTTP_HOST} ^havasu\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz781/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^havasud10[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://havasud10-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz781/files/$1 [R=301,L]
+
+  # Redirect for csrd.asu.edu
+  RewriteCond %{HTTP_HOST} ^csrd\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz806/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^csrdwebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://csrdwebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz806/files/$1 [R=301,L]
+
+  # Redirect for ccj.asu.edu
+  RewriteCond %{HTTP_HOST} ^ccj\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz171/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^ccjd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://ccjd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz171/files/$1 [R=301,L]
+
+  # Redirect for conhi.asu.edu
+  RewriteCond %{HTTP_HOST} ^conhi\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz296/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^conhi3[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://conhi3-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz296/files/$1 [R=301,L]
+
+  # Redirect for film.asu.edu
+  RewriteCond %{HTTP_HOST} ^film\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz791/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^hdafilm[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://hdafilm-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz791/files/$1 [R=301,L]
+
+  # Redirect for courseapproval.asu.edu
+  RewriteCond %{HTTP_HOST} ^courseapproval\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3291/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d9courseapproval[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d9courseapproval-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3291/files/$1 [R=301,L]
+
+  # Redirect for graduateapps.asu.edu
+  RewriteCond %{HTTP_HOST} ^graduateapps\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3286/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^graduateapps[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://graduateapps-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3286/files/$1 [R=301,L]
+
+  # Redirect for usenate.asu.edu
+  RewriteCond %{HTTP_HOST} ^usenate\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3301/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^usenated9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://usenated9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3301/files/$1 [R=301,L]
+
+  # Redirect for academicpersonnel.asu.edu
+  RewriteCond %{HTTP_HOST} ^academicpersonnel\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3296/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^facultyasu[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://facultyasu-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3296/files/$1 [R=301,L]
+
+  # Redirect for spa.asu.edu
+  RewriteCond %{HTTP_HOST} ^spa\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz801/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^spawebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://spawebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz801/files/$1 [R=301,L]
+
+  # Redirect for wellness.asu.edu
+  RewriteCond %{HTTP_HOST} ^wellness\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz796/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wellnessd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wellnessd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz796/files/$1 [R=301,L]
+
+  # Redirect for employees.chs.asu.edu
+  RewriteCond %{HTTP_HOST} ^employees\.chs\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz811/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^chsws2employees[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://chsws2employees-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz811/files/$1 [R=301,L]
+
+  # Redirect for udi.asu.edu
+  RewriteCond %{HTTP_HOST} ^udi\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz816/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asuudifcws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asuudifcws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz816/files/$1 [R=301,L]
+
+  # Redirect for asura.asu.edu
+  RewriteCond %{HTTP_HOST} ^asura\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz301/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asura3[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asura3-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz301/files/$1 [R=301,L]
+
+  # Redirect for scrd.asu.edu
+  RewriteCond %{HTTP_HOST} ^scrd\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz821/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^crdwebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://crdwebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz821/files/$1 [R=301,L]
+
+  # Redirect for students.herbergerinstitute.asu.edu
+  RewriteCond %{HTTP_HOST} ^students\.herbergerinstitute\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz826/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^hdastudents[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://hdastudents-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz826/files/$1 [R=301,L]
+
+  # Redirect for azwaterinnovation.asu.edu
+  RewriteCond %{HTTP_HOST} ^azwaterinnovation\.org$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^azwaterinnovation\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz831/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^awiid9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://awiid9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz831/files/$1 [R=301,L]
+
+  # Redirect for greekvillage.asu.edu
+  RewriteCond %{HTTP_HOST} ^greekvillage\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1041/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^greekvillaged9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://greekvillaged9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1041/files/$1 [R=301,L]
+
+  # Redirect for mobileapp.asu.edu
+  RewriteCond %{HTTP_HOST} ^m\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^mobileapp\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz836/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asumobileapp[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asumobileapp-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz836/files/$1 [R=301,L]
+
+  # Redirect for morrisoninstitute.asu.edu
+  RewriteCond %{HTTP_HOST} ^morrisoninstitute\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz841/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^mippwebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://mippwebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz841/files/$1 [R=301,L]
+
+  # Redirect for csc.asu.edu
+  RewriteCond %{HTTP_HOST} ^csc\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz846/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^csc-2024(\.|-)?(test-|dev-)?asufactory1\.(acquia\.asu\.edu|acsitefactory\.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz846/files/$1 [R=301,L]
+
+  # Redirect for leadershipacademy.asu.edu
+  RewriteCond %{HTTP_HOST} ^leadershipacademy\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz851/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^leadershipacademyd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://leadershipacademyd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz851/files/$1 [R=301,L]
+
+  # Redirect for cemhs.asu.edu
+  RewriteCond %{HTTP_HOST} ^(www\.)?cemhs\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz856/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^cemhswebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://cemhswebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz856/files/$1 [R=301,L]
+
+  # Redirect for azwaterblueprint.asu.edu
+  RewriteCond %{HTTP_HOST} ^azwaterblueprint\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3316/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asuwaterblueprint[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asuwaterblueprint-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3316/files/$1 [R=301,L]
+
+  # Redirect for msb2025.asu.edu
+  RewriteCond %{HTTP_HOST} ^msb2025\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz351/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^msb2025[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://msb2025-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz351/files/$1 [R=301,L]
+
+  # Redirect for california.asu.edu
+  RewriteCond %{HTTP_HOST} ^california\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz881/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d9california[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d9california-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz881/files/$1 [R=301,L]
+
+  # Redirect for webservices.asu.edu
+  RewriteCond %{HTTP_HOST} ^webservice\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^webservices\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^drupal\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1031/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^utowebservices[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://utowebservices-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1031/files/$1 [R=301,L]
+
+  # Redirect for asuhealth.asu.edu
+  RewriteCond %{HTTP_HOST} ^asuhealth\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz886/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asuhealth[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asuhealth-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz886/files/$1 [R=301,L]
+
+  # Redirect for universityevents.asu.edu
+  RewriteCond %{HTTP_HOST} ^universityevents\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1206/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^universityeventsws9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://universityeventsws9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1206/files/$1 [R=301,L]
+
+  # Redirect for techdatasociety.asu.edu
+  RewriteCond %{HTTP_HOST} ^techdatasociety\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1216/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^ctdswebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://ctdswebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1216/files/$1 [R=301,L]
+
+  # Redirect for calhoun.faculty.asu.edu
+  RewriteCond %{HTTP_HOST} ^calhoun\.faculty\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3321/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^calhound9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://calhound9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3321/files/$1 [R=301,L]
+
+  # Redirect for desertskies.music.asu.edu
+  RewriteCond %{HTTP_HOST} ^desertskies\.music\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1466/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^desertskiessymposium[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://desertskiessymposium-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1466/files/$1 [R=301,L]
+
+  # Redirect for globalappliedhealth.asu.edu
+  RewriteCond %{HTTP_HOST} ^globalappliedhealth\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1201/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^gcahrwebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://gcahrwebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1201/files/$1 [R=301,L]
+
+  # Redirect for sirc.asu.edu
+  RewriteCond %{HTTP_HOST} ^sirc\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1156/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^sircd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://sircd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1156/files/$1 [R=301,L]
+
+  # Redirect for mccainlibrary.asu.edu
+  RewriteCond %{HTTP_HOST} ^mccainlibrary\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1341/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^mccainlibrary[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://mccainlibrary-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1341/files/$1 [R=301,L]
+
+  # Redirect for geoalliance.asu.edu
+  RewriteCond %{HTTP_HOST} ^(www\.)?geoalliance\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz866/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^azgeoalliance[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://azgeoalliance-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz866/files/$1 [R=301,L]
+
+  # Redirect for leadership.asu.edu
+  RewriteCond %{HTTP_HOST} ^portal\.leadership\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^leadership\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1226/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^leadershipnetwork[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://leadershipnetwork-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1226/files/$1 [R=301,L]
+
+  # Redirect for washingtondc.asu.edu
+  RewriteCond %{HTTP_HOST} ^washingtondc\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz891/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^washingtondcws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://washingtondcws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz891/files/$1 [R=301,L]
+
+  # Redirect for homecoming.asu.edu
+  RewriteCond %{HTTP_HOST} ^homecoming\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz941/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^homecomingd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://homecomingd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz941/files/$1 [R=301,L]
+
+  # Redirect for humanities.asu.edu
+  RewriteCond %{HTTP_HOST} ^humanities\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1196/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^humanitiesd10[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://humanitiesd10-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1196/files/$1 [R=301,L]
+
+  # Redirect for lifelonglearning.asu.edu
+  RewriteCond %{HTTP_HOST} ^lifelonglearning\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1136/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^olliwebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://olliwebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1136/files/$1 [R=301,L]
+
+  # Redirect for aida.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^aida\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1236/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcaidai[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcaidai-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1236/files/$1 [R=301,L]
+
+  # Redirect for universityaffairs.asu.edu
+  RewriteCond %{HTTP_HOST} ^universityaffairs\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1256/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^universityaffairs[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://universityaffairs-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1256/files/$1 [R=301,L]
+
+  # Redirect for smartchallenges.asu.edu
+  RewriteCond %{HTTP_HOST} ^smartchallenges\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz871/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^smartchallengesasu[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://smartchallengesasu-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz871/files/$1 [R=301,L]
+
+  # Redirect for esportslounge.asu.edu
+  RewriteCond %{HTTP_HOST} ^esportslounge\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz326/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^esportslounge[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://esportslounge-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz326/files/$1 [R=301,L]
+
+  # Redirect for success.asu.edu
+  RewriteCond %{HTTP_HOST} ^success\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3306/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^studentsuccessd10[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://studentsuccessd10-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3306/files/$1 [R=301,L]
+
+  # Redirect for sexualviolenceprevention.asu.edu
+  RewriteCond %{HTTP_HOST} ^sexualviolenceprevention\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz961/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^svpws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://svpws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz961/files/$1 [R=301,L]
+
+  # Redirect for acceleratedmasters.asu.edu
+  RewriteCond %{HTTP_HOST} ^acceleratedmasters\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz321/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^acceleratedmasters[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://acceleratedmasters-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz321/files/$1 [R=301,L]
+
+  # Redirect for asu-myfuture.asu.edu
+  RewriteCond %{HTTP_HOST} ^myfuture\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz896/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asumyfuture[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asumyfuture-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz896/files/$1 [R=301,L]
+
+  # Redirect for starbucks.corporate.asu.edu
+  RewriteCond %{HTTP_HOST} ^starbucks.corporate\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz861/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^starbucksd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://starbucksd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz861/files/$1 [R=301,L]
+
+  # Redirect for autism.asu.edu
+  RewriteCond %{HTTP_HOST} ^autism\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz951/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^autismaspergersresearchprogram[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://autismaspergersresearchprogram-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz951/files/$1 [R=301,L]
+
+  # Redirect for www.sundevilclub.com, sundevilclub.com
+  RewriteCond %{HTTP_HOST} ^(www\.)?sundevilclub\.com$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz876/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^sdclubd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://sdclubd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz876/files/$1 [R=301,L]
+
+  # Redirect for fab-lab.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^fab-lab\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1246/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcfablab[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcfablab-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1246/files/$1 [R=301,L]
+
+  # Redirect for hrc.clas.asu.edu, hrc.asu.edu
+  RewriteCond %{HTTP_HOST} ^hrc\.clas\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^hrc\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1176/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^hrcd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://hrcd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1176/files/$1 [R=301,L]
+
+  # Redirect for howtodesignthefuture.asu.edu
+  RewriteCond %{HTTP_HOST} ^howtodesignthefuture\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1321/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^designfuture23[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://designfuture23-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1321/files/$1 [R=301,L]
+
+  # Redirect for prehealth.asu.edu
+  RewriteCond %{HTTP_HOST} ^prehealth\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz901/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d10prehealth[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d10prehealth-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz901/files/$1 [R=301,L]
+
+  # Redirect for shapingedu.asu.edu
+  RewriteCond %{HTTP_HOST} ^shapingedu\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz311/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^shapingedud9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://shapingedud9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz311/files/$1 [R=301,L]
+
+  # Redirect for childwellbeing.asu.edu, child-wellbeing.asu.edu
+  RewriteCond %{HTTP_HOST} ^childwellbeing\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^child-wellbeing\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1171/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^childwelfared9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://childwelfared9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1171/files/$1 [R=301,L]
+
+  # Redirect for aventri.asu.edu, stova.asu.edu
+  RewriteCond %{HTTP_HOST} ^aventri\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^stova\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz306/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^stova[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://stova-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz306/files/$1 [R=301,L]
+
+  # Redirect for gradstudents.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^gradstudents\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz911/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcgradstudents[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcgradstudents-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz911/files/$1 [R=301,L]
+
+  # Redirect for psa.asu.edu
+  RewriteCond %{HTTP_HOST} ^psa\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz931/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^psawebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://psawebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz931/files/$1 [R=301,L]
+
+  # Redirect for advancedleadershipinitiative.asu.edu
+  RewriteCond %{HTTP_HOST} ^advancedleadershipinitiative\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz2291/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^advancedleadershipinitiative[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://advancedleadershipinitiative-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz2291/files/$1 [R=301,L]
+
+  # Redirect for csteps.asu.edu
+  RewriteCond %{HTTP_HOST} ^csteps\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1151/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^cstepswebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://cstepswebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1151/files/$1 [R=301,L]
+
+  # Redirect for gce.asu.edu, governmentaffairs.asu.edu
+  RewriteCond %{HTTP_HOST} ^gce\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^governmentaffairs\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz2306/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^officeofgovernmentcommunityeng[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://officeofgovernmentcommunityeng-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz2306/files/$1 [R=301,L]
+
+  # Redirect for asuspeechandhearingclinic.org
+  RewriteCond %{HTTP_HOST} ^asuspeechandhearingclinic\.org$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1121/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^speechhearingclinic[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://speechhearingclinic-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1121/files/$1 [R=301,L]
+
+  # Redirect for fwa.org.asu.edu
+  RewriteCond %{HTTP_HOST} ^fwa\.org\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3546/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^fwad10[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://fwad10-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3546/files/$1 [R=301,L]
+
+  # Redirect for tln.asu.edu
+  RewriteCond %{HTTP_HOST} ^tln\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1161/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^trustedlearnernetwork[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://trustedlearnernetwork-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1161/files/$1 [R=301,L]
+
+  # Redirect for prelaw.asu.edu
+  RewriteCond %{HTTP_HOST} ^prelaw\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1081/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^prelawd10[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://prelawd10-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1081/files/$1 [R=301,L]
+
+  # Redirect for pocket.asu.edu
+  RewriteCond %{HTTP_HOST} ^pocket\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1296/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asupocketd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asupocketd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1296/files/$1 [R=301,L]
+
+  # Redirect for firefighterhydration.asu.edu
+  RewriteCond %{HTTP_HOST} ^firefighterhydration\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1516/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^femaws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://femaws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1516/files/$1 [R=301,L]
+
+  # Redirect for bass.barrett.asu.edu
+  RewriteCond %{HTTP_HOST} ^bass\.barrett\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz2301/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^barrettadvisingschedulingsystm[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://barrettadvisingschedulingsystm-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz2301/files/$1 [R=301,L]
+
+  # Redirect for csl.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^csl\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1051/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcsl[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcsl-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1051/files/$1 [R=301,L]
+
+  # Redirect for ramseyexecutive.asu.edu
+  RewriteCond %{HTTP_HOST} ^ramseyexecutive\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1061/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^breewebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://breewebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1061/files/$1 [R=301,L]
+
+  # Redirect for devil2devil.asu.edu
+  RewriteCond %{HTTP_HOST} ^devil2devil\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz391/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^devil2devil[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://devil2devil-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz391/files/$1 [R=301,L]
+
+  # Redirect for finance-conference.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^finance-conference\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3416/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcfinanceconference[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcfinanceconference-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3416/files/$1 [R=301,L]
+
+  # Redirect for cord.asu.edu
+  RewriteCond %{HTTP_HOST} ^cord\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1071/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^cordwebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://cordwebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1071/files/$1 [R=301,L]
+
+  # Redirect for ccpr.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^ccpr\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1326/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcccpr[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcccpr-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1326/files/$1 [R=301,L]
+
+  # Redirect for democracy.asu.edu
+  RewriteCond %{HTTP_HOST} ^democracy\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1501/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^democracyd10[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://democracyd10-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1501/files/$1 [R=301,L]
+
+  # Redirect for real-estate.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^real-estate.\wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1306/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpccretp[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpccretp-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1306/files/$1 [R=301,L]
+
+  # Redirect for askananthropologist.asu.edu
+  RewriteCond %{HTTP_HOST} ^askananthropologist\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3311/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^askananthro[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://askananthro-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3311/files/$1 [R=301,L]
+
+  # Redirect for employee.uc.asu.edu, employee.cisa.asu.edu
+  RewriteCond %{HTTP_HOST} ^employee\.uc\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^employee\.cisa\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1091/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^webspark2cisaemployee[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://webspark2cisaemployee-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1091/files/$1 [R=301,L]
+
+  # Redirect for cfo.asu.edu
+  RewriteCond %{HTTP_HOST} ^cfo\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz186/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^oocfowebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://oocfowebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz186/files/$1 [R=301,L]
+
+  # Redirect for cie.wpcarey.asu.edu, cri.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^cie\.wpcarey\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^cri\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3456/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpccri[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpccri-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3456/files/$1 [R=301,L]
+
+  # Redirect for decisioncenter.asu.edu
+  RewriteCond %{HTTP_HOST} ^decisioncenter\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1106/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^decisioncenterwebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://decisioncenterwebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1106/files/$1 [R=301,L]
+
+  # Redirect for cvpcs.asu.edu
+  RewriteCond %{HTTP_HOST} ^cvpcs\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1111/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^cvpcswebspark2b[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://cvpcswebspark2b-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1111/files/$1 [R=301,L]
+
+  # Redirect for intranet.barrett.asu.edu
+  RewriteCond %{HTTP_HOST} ^intranet\.barrett\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1131/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^barrettintranetws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://barrettintranetws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1131/files/$1 [R=301,L]
+
+  # Redirect for cox.asu.edu
+  RewriteCond %{HTTP_HOST} ^cox\.barrett\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz256/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^coxasu[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://coxasu-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz256/files/$1 [R=301,L]
+
+  # Redirect for eadvisor.asu.edu
+  RewriteCond %{HTTP_HOST} ^eadvisor\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1181/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^eadvisord10[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://eadvisord10-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1181/files/$1 [R=301,L]
+
+  # Redirect for greatgamelab.asu.edu
+  RewriteCond %{HTTP_HOST} ^greatgamelab\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1476/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^greatgamelab[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://greatgamelab-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1476/files/$1 [R=301,L]
+
+  # Redirect for urbaninnovation.asu.edu
+  RewriteCond %{HTTP_HOST} ^urbaninnovation\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1286/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^cuiwebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://cuiwebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1286/files/$1 [R=301,L]
+
+  # Redirect for employees.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^employees\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1186/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcemployees[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcemployees-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1186/files/$1 [R=301,L]
+
+  # Redirect for changemaker.asu.edu
+  RewriteCond %{HTTP_HOST} ^changemaker\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1191/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^changemakerd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://changemakerd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1191/files/$1 [R=301,L]
+
+  # Redirect for hbateman.faculty.asu.edu
+  RewriteCond %{HTTP_HOST} ^hbateman\.faculty\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1386/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^hbatemanws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://hbatemanws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1386/files/$1 [R=301,L]
+
+  # Redirect for portfolios.art.asu.edu
+  RewriteCond %{HTTP_HOST} ^portfolios\.art\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3536/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^hdasoaportfolio[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://hdasoaportfolio-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3536/files/$1 [R=301,L]
+
+  # Redirect for icap.education.asu.edu
+  RewriteCond %{HTTP_HOST} ^icap\.education\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz366/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^icap[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://icap-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz366/files/$1 [R=301,L]
+
+  # Redirect for jphyatt.lab.asu.edu
+  RewriteCond %{HTTP_HOST} ^jphyatt\.lab\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1616/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^jphyatttest[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://jphyatttest-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1616/files/$1 [R=301,L]
+
+  # Redirect for worldsforchange.herbergerinstitute.asu.edu
+  RewriteCond %{HTTP_HOST} ^worldsforchange\.herbergerinstitute\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1461/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^hdawfcc[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://hdawfcc-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1461/files/$1 [R=301,L]
+
+  # Redirect for communications.herbergerinstitute.asu.edu
+  RewriteCond %{HTTP_HOST} ^communications\.herbergerinstitute\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1621/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^hidacommarkt[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://hidacommarkt-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1621/files/$1 [R=301,L]
+
+  # Redirect for lts.asu.edu
+  RewriteCond %{HTTP_HOST} ^lts\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3361/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^centeredge[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://centeredge-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3361/files/$1 [R=301,L]
+
+  # Redirect for gctt.asu.edu
+  RewriteCond %{HTTP_HOST} ^gctt\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3451/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcgctt[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcgctt-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3451/files/$1 [R=301,L]
+
+  # Redirect for coo.asu.edu
+  RewriteCond %{HTTP_HOST} ^coo\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz331/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^coo[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://coo-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz331/files/$1 [R=301,L]
+
+  # Redirect for view.asu.edu
+  RewriteCond %{HTTP_HOST} ^view\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1211/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^viewsasu[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://viewsasu-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1211/files/$1 [R=301,L]
+
+  # Redirect for emergence.asu.edu
+  RewriteCond %{HTTP_HOST} ^emergence\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1221/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^emergencelab[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://emergencelab-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1221/files/$1 [R=301,L]
+
+  # Redirect for csw.asu.edu
+  RewriteCond %{HTTP_HOST} ^csw\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1231/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d10csw[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d10csw-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1231/files/$1 [R=301,L]
+
+  # Redirect for fosteryouth.asu.edu
+  RewriteCond %{HTTP_HOST} ^fosteryouth\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1241/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^fosteryouthd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://fosteryouthd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1241/files/$1 [R=301,L]
+
+  # Redirect for entrepreneurship.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^entrepreneurship\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3411/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcentrepreneur[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcentrepreneur-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3411/files/$1 [R=301,L]
+
+  # Redirect for internet-edge.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^internet-edge\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3441/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpciescl[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpciescl-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3441/files/$1 [R=301,L]
+
+  # Redirect for access.asu.edu/
+  RewriteCond %{HTTP_HOST} ^access\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3571/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^accessd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://accessd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3571/files/$1 [R=301,L]
+
+  # Redirect for us-asean.asu.edu
+  RewriteCond %{HTTP_HOST} ^us-asean\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3611/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^aseancenter[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://aseancenter-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3611/files/$1 [R=301,L]
+
+  # Redirect for asuforyou.asu.edu
+  RewriteCond %{HTTP_HOST} ^asuforyou\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3606/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asuforyou[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asuforyou-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3606/files/$1 [R=301,L]
+
+  # Redirect for forensics.asu.edu
+  RewriteCond %{HTTP_HOST} ^forensics\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3591/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^ncsif[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://ncsif-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3591/files/$1 [R=301,L]
+
+  # Redirect for ncstudents.asu.edu (unlaunched as of Oct 21, 2025).
+  RewriteCond %{HTTP_HOST} ^ncstudents\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3596/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^ncstudents[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://ncstudents-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3596/files/$1 [R=301,L]
+
+  # Redirect for ncemployees.asu.edu (unlaunched as of Oct 21, 2025).
+  RewriteCond %{HTTP_HOST} ^ncemployees\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3621/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^ncemployees[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://ncemployees-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3621/files/$1 [R=301,L]
+
+  # Redirect for newsroom.asu.edu
+  RewriteCond %{HTTP_HOST} ^newsroom\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3676/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asunewsroomws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asunewsroomws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3676/files/$1 [R=301,L]
+
+  # Redirect for cloudscholars.asu.edu, cloudscholar.asu.edu
+  RewriteCond %{HTTP_HOST} ^cloudscholar\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^cloudscholars\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1261/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^cloudscholarsasu[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://cloudscholarsasu-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1261/files/$1 [R=301,L]
+
+  # Redirect for lodestar.asu.edu publicallies.asu.edu
+  RewriteCond %{HTTP_HOST} ^publicallies\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^lodestar\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3541/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^lodestar[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://lodestar-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3541/files/$1 [R=301,L]
+
+  # Redirect for registrar.asu.edu
+  RewriteCond %{HTTP_HOST} ^registrar\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3436/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^registrard9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://registrard9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3436/files/$1 [R=301,L]
+
+  # Redirect for graduation.asu.edu
+  RewriteCond %{HTTP_HOST} ^graduation\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3431/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^graduationd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://graduationd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3431/files/$1 [R=301,L]
+
+  # Redirect for veterans.asu.edu
+  RewriteCond %{HTTP_HOST} ^veterans\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3426/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^veteransasu[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://veteransasu-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3426/files/$1 [R=301,L]
+
+  # Redirect for medicine.asu.edu
+  RewriteCond %{HTTP_HOST} ^medicine\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1251/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^schoolofmedicine[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://schoolofmedicine-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1251/files/$1 [R=301,L]
+
+  # Redirect for studentcreative.asu.edu
+  RewriteCond %{HTTP_HOST} ^studentcreative\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1271/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^studentcreativews2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://studentcreativews2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1271/files/$1 [R=301,L]
+
+  # Redirect for unitedway.asu.edu
+  RewriteCond %{HTTP_HOST} ^unitedway\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1276/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^uwws2121[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://uwws2121-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1276/files/$1 [R=301,L]
+
+  # Redirect for uafd.asu.edu
+  RewriteCond %{HTTP_HOST} ^uafd\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1416/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^uafd2121[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://uafd2121-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1416/files/$1 [R=301,L]
+
+  # Redirect for analytics.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^analytics\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1406/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcactionableanalytics[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcactionableanalytics-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1406/files/$1 [R=301,L]
+
+  # Redirect for ufcw99.asu.edu
+  RewriteCond %{HTTP_HOST} ^ufcw99\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1611/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^ufcw99d10[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://ufcw99d10-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1611/files/$1 [R=301,L]
+
+  # Redirect for cfar.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^cfar\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz651/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcbepo[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcbepo-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz651/files/$1 [R=301,L]
+
+  # Redirect for supply-networks.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^supply-networks\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1491/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpccasnra[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpccasnra-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1491/files/$1 [R=301,L]
+
+  # Redirect for ceesp.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^ceesp\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1391/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcceesp[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcceesp-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1391/files/$1 [R=301,L]
+
+  # Redirect for csmb.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^csmb\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1646/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpccsmb[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpccsmb-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1646/files/$1 [R=301,L]
+
+  # Redirect for dsi.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^dsi\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1421/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcdsi[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcdsi-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1421/files/$1 [R=301,L]
+
+  # Redirect for fell.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^fell\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1581/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcfell[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcfell-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1581/files/$1 [R=301,L]
+
+  # Redirect for governance.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^governance\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1451/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcgovernance[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcgovernance-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1451/files/$1 [R=301,L]
+
+  # Redirect for hsrc.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^hsrc\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1531/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpchsscr[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpchsscr-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1531/files/$1 [R=301,L]
+
+  # Redirect for scec.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^scec\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1496/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcscec[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcscec-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1496/files/$1 [R=301,L]
+
+  # Redirect for blockchain.asu.edu, blockchain.lab.asu.edu
+  RewriteCond %{HTTP_HOST} ^blockchain\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^blockchain\.lab\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1266/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcblockchain[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcblockchain-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1266/files/$1 [R=301,L]
+
+  # Redirect for icgs2024.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^icgs2024\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz336/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^icgs2024[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://icgs2024-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz336/files/$1 [R=301,L]
+
+  # Redirect for justenergy.globalfutures.asu.edu
+  RewriteCond %{HTTP_HOST} ^justenergy\.globalfutures\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz356/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^jetc[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://jetc-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz356/files/$1 [R=301,L]
+
+  # Redirect for logistics.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^logistics\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1366/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpclogistics[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpclogistics-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1366/files/$1 [R=301,L]
+
+  # Redirect for iccbm18.asu.edu
+  RewriteCond %{HTTP_HOST} ^iccbm18\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz361/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^iccbm18[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://iccbm18-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz361/files/$1 [R=301,L]
+
+  # Redirect for scihub.asu.edu
+  RewriteCond %{HTTP_HOST} ^scihub\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1371/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d9scihub[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d9scihub-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1371/files/$1 [R=301,L]
+
+  # Redirect for universitycityexchange.asu.edu
+  RewriteCond %{HTTP_HOST} ^universitycityexchange\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1381/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^ucxws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://ucxws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1381/files/$1 [R=301,L]
+
+  # Redirect for aisss.asu.edu
+  RewriteCond %{HTTP_HOST} ^aisss\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1281/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^aisssd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://aisssd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1281/files/$1 [R=301,L]
+
+  # Redirect for 2025ngrpc.asu.edu
+  RewriteCond %{HTTP_HOST} ^2025ngrpc\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz341/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^2025ngrpc[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://2025ngrpc-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz341/files/$1 [R=301,L]
+
+  # Redirect for clfsa.asu.edu
+  RewriteCond %{HTTP_HOST} ^clfsa\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1301/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d10clfsa[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d10clfsa-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1301/files/$1 [R=301,L]
+
+  # Redirect for rhodes.asu.edu
+  RewriteCond %{HTTP_HOST} ^rhodes\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz2266/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^rhodeslectureserieswebspark2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://rhodeslectureserieswebspark2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz2266/files/$1 [R=301,L]
+
+  # Redirect for vol.asura.asu.edu
+  RewriteCond %{HTTP_HOST} ^vol\.asura\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1311/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asuravol2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asuravol2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1311/files/$1 [R=301,L]
+
+  # Redirect for dmiw.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^dmiw\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1351/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcdmiw[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcdmiw-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1351/files/$1 [R=301,L]
+
+  # Redirect for freespeech.asu.edu
+  RewriteCond %{HTTP_HOST} ^freespeech\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1356/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^freespeechd10[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://freespeechd10-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1356/files/$1 [R=301,L]
+
+  # Redirect for asuevents.asu.edu
+  RewriteCond %{HTTP_HOST} ^asuevents\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3506/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asuevents[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asuevents-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3506/files/$1 [R=301,L]
+
+  # Redirect for changehighered.asu.edu
+  RewriteCond %{HTTP_HOST} ^changehighered\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1431/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^anewkindofuniversity[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://anewkindofuniversity-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1431/files/$1 [R=301,L]
+
+  # Redirect for culturalaffairs.asu.edu
+  RewriteCond %{HTTP_HOST} ^culturalaffairs\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1471/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asuca[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asuca-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1471/files/$1 [R=301,L]
+
+  # Redirect for tucson.asu.edu
+  RewriteCond %{HTTP_HOST} ^tucson\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1626/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asuintucson[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asuintucson-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1626/files/$1 [R=301,L]
+
+  # Redirect for lds.asu.edu
+  RewriteCond %{HTTP_HOST} ^lds\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1556/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asulds[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asulds-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1556/files/$1 [R=301,L]
+
+  # Redirect for asusponsor.asu.edu
+  RewriteCond %{HTTP_HOST} ^asusponsor\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1401/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asusponsorws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asusponsorws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1401/files/$1 [R=301,L]
+
+  # Redirect for libtraining.asu.edu
+  RewriteCond %{HTTP_HOST} ^libtraining\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3526/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^libtraining[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://libtraining-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3526/files/$1 [R=301,L]
+
+  # Redirect for militaryd10.asu.edu
+  RewriteCond %{HTTP_HOST} ^militaryd10\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3531/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^militaryd10[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://militaryd10-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3531/files/$1 [R=301,L]
+
+  # Redirect for nationalsecurityws2.asu.edu
+  RewriteCond %{HTTP_HOST} ^nationalsecurityws2\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1546/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^nationalsecurityws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://nationalsecurityws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1546/files/$1 [R=301,L]
+
+  # Redirect for new7starm.asu.edu
+  RewriteCond %{HTTP_HOST} ^new7starm\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1641/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^new7starm[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://new7starm-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1641/files/$1 [R=301,L]
+
+  # Redirect for provostssi.asu.edu
+  RewriteCond %{HTTP_HOST} ^provostssi\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3521/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^provostssi[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://provostssi-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3521/files/$1 [R=301,L]
+
+  # Redirect for publichealthtech.asu.edu
+  RewriteCond %{HTTP_HOST} ^publichealthtech\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz376/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^publichealthtech[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://publichealthtech-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz376/files/$1 [R=301,L]
+
+  # Redirect for socialscienced10.asu.edu
+  RewriteCond %{HTTP_HOST} ^socialscience\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3516/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^socialscienced10[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://socialscienced10-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3516/files/$1 [R=301,L]
+
+  # Redirect for sparkws212.asu.edu
+  RewriteCond %{HTTP_HOST} ^asusparkmethod\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1586/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^sparkws212[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://sparkws212-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1586/files/$1 [R=301,L]
+
+  # Redirect for texassymposium.asu.edu
+  RewriteCond %{HTTP_HOST} ^texassymposium\.events\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1651/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^texassymposium[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://texassymposium-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1651/files/$1 [R=301,L]
+
+  # Redirect for trusteesws2.asu.edu
+  RewriteCond %{HTTP_HOST} ^trustees\.bios\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://trustees.bios.asu.edu/sites/g/files/litvpz381/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^trustees\.bios\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz381/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^trustees.bios.edu$ [NC]
+  RewriteRule ^(.*)$ https://trustees.bios.asu.edu/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^trusteesws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://trusteesws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz381/files/$1 [R=301,L]
+
+  # Redirect for tsmc.asu.edu
+  RewriteCond %{HTTP_HOST} ^tsmc\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz386/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^tsmc[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://tsmc-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz386/files/$1 [R=301,L]
+
+  # Redirect for wpcmmm.asu.edu
+  RewriteCond %{HTTP_HOST} ^mmm\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1561/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcmmm[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcmmm-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1561/files/$1 [R=301,L]
+
+  # Redirect for popcenter-ws2
+  RewriteCond %{HTTP_HOST} ^popcenter\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3631/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^popcenterws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://popcenterws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3631/files/$1 [R=301,L]
+
+  # Redirect for pratt-lab
+  RewriteCond %{HTTP_HOST} ^pratt\.lab\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3651/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^prattlab[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://prattlab-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3651/files/$1 [R=301,L]
+
+  # Redirect for sala-lab-ws2
+  RewriteCond %{HTTP_HOST} ^sala\.lab\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3666/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^salalabws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://salalabws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3666/files/$1 [R=301,L]
+
+  # Redirect for skillbridge-ws2
+  RewriteCond %{HTTP_HOST} ^skillbridge\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3601/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^skillbridgews2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://skillbridgews2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3601/files/$1 [R=301,L]
+
+  # Redirect for ucollege-d9
+  RewriteCond %{HTTP_HOST} ^universitycollege\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3626/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^ucolleged9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://ucolleged9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3626/files/$1 [R=301,L]
+
+  # Redirect for my.copp.asu.edu, copp-community.asu.edu, community.publicservice.asu.edu
+  RewriteCond %{HTTP_HOST} ^my\.copp\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^copp-community\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^community\.publicservice\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1441/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^coppcommunityws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://coppcommunityws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1441/files/$1 [R=301,L]
+
+  # Redirect for centerforresilientfamilies.org, crf.reachinstitute.asu.edu, centerforresilientfamilies.com
+  RewriteCond %{HTTP_HOST} ^centerforresilientfamilies\.org$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^crf\.reachinstitute\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^centerforresilientfamilies\.com$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz371/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^crf[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://crf-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz371/files/$1 [R=301,L]
+
+  # Redirect for cultureripples.asu.edu
+  RewriteCond %{HTTP_HOST} ^cultureripples\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1576/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^cultureripplesws2[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://cultureripplesws2-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1576/files/$1 [R=301,L]
+
+  # Redirect for uoia.asu.edu
+  RewriteCond %{HTTP_HOST} ^uoia\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1436/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d10institutionalanalysis[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d10institutionalanalysis-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1436/files/$1 [R=301,L]
+
+  # Redirect for iop.asu.edu
+  RewriteCond %{HTTP_HOST} ^iop\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3511/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d10iop[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d10iop-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3511/files/$1 [R=301,L]
+
+  # Redirect for supplychainresilience.wpcarey.asu.edu
+  RewriteCond %{HTTP_HOST} ^supplychainresilience\.wpcarey\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz1536/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^wpcscr[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://wpcscr-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz1536/files/$1 [R=301,L]
+
+  # Redirect for asunow.asu.edu, news.asu.edu, asunews.asu.edu
+  RewriteCond %{HTTP_HOST} ^asunow\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^news\.asu\.edu$ [NC,OR]
+  RewriteCond %{HTTP_HOST} ^asunews\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz161/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^asunewsd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://asunewsd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz161/files/$1 [R=301,L]
+
+  # Redirect for barretthonors.asu.edu
+  RewriteCond %{HTTP_HOST} ^barretthonors\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz586/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^barrettprospective[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://barrettprospective-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz586/files/$1 [R=301,L]
+
+  # Redirect for facts.asu.edu
+  RewriteCond %{HTTP_HOST} ^facts\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3576/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d10facts[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d10facts-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3576/files/$1 [R=301,L]
+
+  # Redirect for inclusion.asu.edu
+  RewriteCond %{HTTP_HOST} ^inclusion\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3581/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d10inclusiveexcellence[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d10inclusiveexcellence-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3581/files/$1 [R=301,L]
+
+  # Redirect for pit.asu.edu
+  RewriteCond %{HTTP_HOST} ^pit\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3586/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d10pit[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d10pit-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3586/files/$1 [R=301,L]
+
+  # Redirect for eventreg.asu.edu
+  RewriteCond %{HTTP_HOST} ^eventreg\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3616/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^eventregd9[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://eventregd9-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3616/files/$1 [R=301,L]
+
+  # Redirect for rodencrater.courses.asu.edu
+  RewriteCond %{HTTP_HOST} ^rodencrater\.courses\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3671/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^jtrccompanion2025[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://jtrccompanion2025-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3671/files/$1 [R=301,L]
+
+  # Redirect for my-feed.asu.edu
+  RewriteCond %{HTTP_HOST} ^my-feed\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3636/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^myfeedd10[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://myfeedd10-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3636/files/$1 [R=301,L]
+
+  # Redirect for visit.asu.edu
+  RewriteCond %{HTTP_HOST} ^visit\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz151/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^visitasu[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://visitasu-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz151/files/$1 [R=301,L]
+
+  # Redirect for fsa.asu.edu
+  RewriteCond %{HTTP_HOST} ^fsa\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3661/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^facultyassociation[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://facultyassociation-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3661/files/$1 [R=301,L]
+
+  # Redirect for catalog.asu.edu
+  RewriteCond %{HTTP_HOST} ^catalog\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ /sites/g/files/litvpz4586/files/$1 [R=301,L]
+  RewriteRule ^files/majormap(.*)$ /sites/g/files/litvpz4586/files/legacy_files/majormap$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^catalogd10[.-]?(test-|dev-)?asufactory1.(acquia.asu.edu|acsitefactory.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://catalogd10-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz4586/files/$1 [R=301,L]
+  RewriteRule ^files/majormap(.*)$ https://catalogd10-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz4586/files/legacy_files/majormap$1 [R=301,L]
+
+  # Redirect for global.asu.edu
+  RewriteCond %{HTTP_HOST} ^global\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz3976/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d10global[.-]?(test-|dev-)?asufactory1\.(acquia\.asu\.edu|acsitefactory\.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d10global-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz3976/files/$1 [R=301,L]
+
+  # Redirect for goglobal.asu.edu
+  RewriteCond %{HTTP_HOST} ^goglobal\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz4706/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d10goglobal[.-]?(test-|dev-)?asufactory1\.(acquia\.asu\.edu|acsitefactory\.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d10goglobal-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz4706/files/$1 [R=301,L]
+
+  # Redirect for elevate.asu.edu
+  RewriteCond %{HTTP_HOST} ^elevate\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz4626/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d10elevate[.-]?(test-|dev-)?asufactory1\.(acquia\.asu\.edu|acsitefactory\.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d10elevate-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz4626/files/$1 [R=301,L]
+
+  # Redirect for emerituscollege.asu.edu
+  RewriteCond %{HTTP_HOST} ^emerituscollege\.asu\.edu$ [NC]
+  RewriteRule ^sites/(default/files|g/files/litvpz1861/files)/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz4831/files/$2 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d10emerituscollege[.-]?(test-|dev-)?asufactory1\.(acquia\.asu\.edu|acsitefactory\.com)$ [NC]
+  RewriteRule ^sites/(default/files|g/files/litvpz1861/files)/(.*)$ https://d10emerituscollege-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz4831/files/$2 [R=301,L]
+
+  # Redirect for amazoncareerchoice.asu.edu
+  RewriteCond %{HTTP_HOST} ^amazoncareerchoice\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz4076/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^amazoncareerd10[.-]?(test-|dev-)?asufactory1\.(acquia\.asu\.edu|acsitefactory\.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://amazoncareerd10-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz4076/files/$1 [R=301,L]
+
+  # Redirect for clinicalpartnerships.asu.edu
+  RewriteCond %{HTTP_HOST} ^clinicalpartnerships\.asu\.edu$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://%{HTTP_HOST}/sites/g/files/litvpz4891/files/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^d10clinicalpartnerships[.-]?(test-|dev-)?asufactory1\.(acquia\.asu\.edu|acsitefactory\.com)$ [NC]
+  RewriteRule ^sites/default/files/(.*)$ https://d10clinicalpartnerships-%1asufactory1.acquia.asu.edu/sites/g/files/litvpz4891/files/$1 [R=301,L]
+
+  #------------------------------------------------------------------------------
+  # Rewrite acsitefactory.com to acquia.asu.edu
+  #------------------------------------------------------------------------------
+  # Rewrite rule for dev/test sites on stack 1
+  # FROM: http://domain.dev-asufactory1.acsitefactory.com
+  # TO: https://domain-dev-asufactory1.acquia.asu.edu
+  RewriteCond %{HTTP_HOST} ^([^.]+)\.([^-]+)-asufactory1\.acsitefactory\.com$ [NC]
+  RewriteRule ^(.*)$ https://%1-%2-asufactory1.acquia.asu.edu/$1 [R=301,L]
+
+  # Rewrite rule for production sites on stack 1
+  # FROM: http://domain.asufactory1.acsitefactory.com
+  # TO: https://domain-asufactory1.acquia.asu.edu
+  RewriteCond %{HTTP_HOST} ^([^.]+)\.asufactory1\.acsitefactory\.com$ [NC]
+  RewriteRule ^(.*)$ https://%1-asufactory1.acquia.asu.edu/$1 [R=301,L]
+  #------------------------------------------------------------------------------
+
+  # Set "protossl" to "s" if we were accessed via https://.  This is used later
+  # if you enable "www." stripping or enforcement, in order to ensure that
+  # you don't bounce between http and https.
+  RewriteRule ^ - [E=protossl]
+  RewriteCond %{HTTPS} on
+  RewriteRule ^ - [E=protossl:s]
+
+  # Make sure Authorization HTTP header is available to PHP
+  # even when running as CGI or FastCGI.
+  RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+  # Block access to "hidden" directories whose names begin with a period. This
+  # includes directories used by version control systems such as Subversion or
+  # Git to store control files. Files whose names begin with a period, as well
+  # as the control files used by CVS, are protected by the FilesMatch directive
+  # above.
+  #
+  # NOTE: This only works when mod_rewrite is loaded. Without mod_rewrite, it is
+  # not possible to block access to entire directories from .htaccess because
+# <DirectoryMatch> is not allowed here.
+  #
+  # If you do not have mod_rewrite installed, you should remove these
+  # directories from your webroot or otherwise protect them from being
+  # downloaded.
+  RewriteRule "/\.|^\.(?!well-known/)" - [F]
+
+  # If your site can be accessed both with and without the 'www.' prefix, you
+  # can use one of the following settings to redirect users to your preferred
+  # URL, either WITH or WITHOUT the 'www.' prefix. Choose ONLY one option:
+  #
+  # To redirect all users to access the site WITH the 'www.' prefix,
+  # (http://example.com/foo will be redirected to http://www.example.com/foo)
+  # uncomment the following:
+  # RewriteCond %{HTTP_HOST} .
+  # RewriteCond %{HTTP_HOST} !^www\. [NC]
+  # RewriteRule ^ http%{ENV:protossl}://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  #
+  # To redirect all users to access the site WITHOUT the 'www.' prefix,
+  # (http://www.example.com/foo will be redirected to http://example.com/foo)
+  # uncomment the following:
+  # RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  # RewriteRule ^ http%{ENV:protossl}://%1%{REQUEST_URI} [L,R=301]
+
+  # Modify the RewriteBase if you are using Drupal in a subdirectory or in a
+  # VirtualDocumentRoot and the rewrite rules are not working properly.
+  # For example if your site is at http://example.com/drupal uncomment and
+  # modify the following line:
+  # RewriteBase /drupal
+  #
+  # If your site is running in a VirtualDocumentRoot at http://example.com/,
+  # uncomment the following line:
+  # RewriteBase /
+
+  # Redirect common PHP files to their new locations.
+  RewriteCond %{REQUEST_URI} ^(.*)?/(install\.php) [OR]
+  RewriteCond %{REQUEST_URI} ^(.*)?/(rebuild\.php)
+  RewriteCond %{REQUEST_URI} !core
+  RewriteRule ^ %1/core/%2 [L,QSA,R=301]
+
+  # Rewrite install.php during installation to see if mod_rewrite is working
+  RewriteRule ^core/install\.php core/install.php?rewrite=ok [QSA,L]
+
+  # Pass all requests not referring directly to files in the filesystem to
+  # index.php.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !=/favicon.ico
+  RewriteCond %{REQUEST_URI} !^/simplesaml
+  RewriteRule ^ index.php [L]
+
+  # For security reasons, deny access to other PHP files on public sites.
+  # Note: The following URI conditions are not anchored at the start (^),
+  # because Drupal may be located in a subdirectory. To further improve
+  # security, you can replace '!/' with '!^/'.
+  # Allow access to PHP files in /core (like authorize.php or install.php):
+  RewriteCond %{REQUEST_URI} !/core/[^/]*\.php$
+  # Allow access to test-specific PHP files:
+  RewriteCond %{REQUEST_URI} !/core/modules/system/tests/https?\.php
+  # Allow access to Statistics module's custom front controller.
+  # Copy and adapt this rule to directly execute PHP files in contributed or
+  # custom modules or to run another PHP application in the same directory.
+  RewriteCond %{REQUEST_URI} !/core/modules/statistics/statistics\.php$
+  # ACSF requirement: allow access to apc_rebuild.php.
+  RewriteCond %{REQUEST_URI} !/sites/g/apc_rebuild.php$
+
+  RewriteCond %{REQUEST_URI} !^/simplesaml
+  # Deny access to any other PHP files that do not match the rules above.
+  # Specifically, disallow autoload.php from being served directly.
+  RewriteRule "^(.+/.*|autoload)\.php($|/)" - [F]
+
+  # Rules to correctly serve gzip compressed CSS and JS files.
+  # Requires both mod_rewrite and mod_headers to be enabled.
+  <IfModule mod_headers.c>
+    # Serve gzip compressed CSS files if they exist and the client accepts gzip.
+    RewriteCond %{HTTP:Accept-encoding} gzip
+    RewriteCond %{REQUEST_FILENAME}\.gz -s
+    RewriteRule ^(.*)\.css $1\.css\.gz [QSA]
+
+    # Serve gzip compressed JS files if they exist and the client accepts gzip.
+    RewriteCond %{HTTP:Accept-encoding} gzip
+    RewriteCond %{REQUEST_FILENAME}\.gz -s
+    RewriteRule ^(.*)\.js $1\.js\.gz [QSA]
+
+    # Serve correct content types, and prevent double compression.
+    RewriteRule \.css\.gz$ - [T=text/css,E=no-gzip:1,E=no-brotli:1]
+    RewriteRule \.js\.gz$ - [T=text/javascript,E=no-gzip:1,E=no-brotli:1]
+
+    <FilesMatch "(\.js\.gz|\.css\.gz)$">
+      # Serve correct encoding type.
+      Header set Content-Encoding gzip
+      # Force proxies to cache gzipped & non-gzipped css/js files separately.
+      Header append Vary Accept-Encoding
+    </FilesMatch>
+  </IfModule>
+</IfModule>
+
+# Various header fixes.
+<IfModule mod_headers.c>
+  # Disable content sniffing, since it's an attack vector.
+  Header always set X-Content-Type-Options nosniff
+  # Disable Proxy header, since it's an attack vector.
+  RequestHeader unset Proxy
+</IfModule>

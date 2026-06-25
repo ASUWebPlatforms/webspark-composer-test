@@ -1,0 +1,13 @@
+asu_quiz.admin_settings:
+  title: 'Perosna quiz confirmation content'
+  description: 'Control Persona quiz content'
+  route_name: asu_quiz.admin_settings
+  parent: system.admin_config_system
+  weight: 10
+  
+asu_quiz.persona_form_settings:
+  title: 'Perosna quiz webform persona options settings page'
+  description: 'Control Persona quiz content form'
+  route_name: asu_quiz.persona_form_settings
+  parent: system.admin_config_system
+  weight: 11

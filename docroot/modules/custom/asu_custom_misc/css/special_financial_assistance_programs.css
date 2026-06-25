@@ -1,0 +1,7 @@
+/* Prevent scrolling too far */
+#nav-home-tab,
+#nav-profile-tab,
+#nav-contact-tab
+{
+  scroll-margin-top: 100px;
+}

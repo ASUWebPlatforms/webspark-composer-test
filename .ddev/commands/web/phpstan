@@ -1,0 +1,6 @@
+#!/bin/bash
+## Description: Run PHPStan
+## Usage: phpstan
+## Example: ddev phpstan [options] [file...]
+
+./vendor/bin/phpstan analyze --memory-limit=512M "$@"

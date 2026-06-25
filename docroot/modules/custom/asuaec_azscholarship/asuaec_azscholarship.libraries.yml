@@ -1,0 +1,7 @@
+azscholarship-landingpage-library:
+  version: 1.x
+  dependencies:
+    - core/jquery
+    - core/once
+  js:
+    js/asuaec_azscholarship.js: { }

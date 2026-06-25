@@ -1,0 +1,477 @@
+/*
+Card adjustments
+*/
+body .card:not(.card.card-foldable)>div:first-of-type:not(.card-image-content) {padding-top:16px;}
+.card-header .card-title{color:#191919;}
+.card-body .card-text{color:#191919;}
+.card-story .card-link{text-decoration:underline;}
+a.noline{text-decoration:none;margin-bottom:30px;}
+.box-link-category{background-color: #ffc627;font-size: .9em;display: table;margin: -26px auto 13px auto;   position: relative;padding: 0 6px;text-align: center;text-transform: uppercase;color: #191919;}
+a.Listen .box-link-category,
+a.Watch .box-link-category{margin-top:-34px;}
+.card ul{color:#191919;padding-left:15px;}
+.grid .row .col{padding-bottom:30px;}
+/*
+General
+*/
+.edit-link{background-color:#F00;}
+.edit-link a{color:#000;transition:all .25s ease-in-out 0s;}
+.edit-link a:hover{color:#333;}
+
+
+/*
+Home
+*/
+.the-story p {font-size: 1.3em;margin: 0 auto 2.2em auto;text-align: center;max-width:75%;}
+.the-story h2{font-size:50px;line-height:3rem;max-width:100%;}
+.uds-video-hero .container h1 {max-width: 100% !important;}
+
+.browse-timeline-by-date p{max-width:100%;}
+.browse-timeline-by-date ul.timeline-years {width: 100%;margin-bottom: 2em;padding-left: 0;text-align: center;}
+.browse-timeline-by-date  ul.timeline-years li {display: inline;text-align: center;}
+.browse-timeline-by-date ul.timeline-years li a {color: #191919;font-weight: 400;margin-right: 10px;padding:0rem;}
+
+.uds-video-hero .content{width:100%;}
+.down-arrow{text-align:center;}
+.down-arrow a{color:#000;background-color:#ffc627;display:inline-block;border-radius:50%;width:48px;} 
+
+.more-link{font-weight:bold;padding-top:50px;padding-right:15px;text-align:right;}
+
+/*
+Home Timeline
+*/
+.timeline-align-left {font-weight: bold;padding-left: 17%;padding-bottom: 30px;text-align: left;width: 83%;}
+
+.view-timeline-year-sections-2-thru-x .views-row.even .views-field-nothing {
+    display: inline-block;
+    font-weight: bold;
+    padding-left: 17%;
+    padding-bottom: 30px;
+    padding-top: 30px;
+    text-align: left;
+    width: 70%;
+}
+ 
+.view-timeline-year-sections-2-thru-x .views-row.odd .views-field-nothing {
+    font-weight: bold;
+    padding-left: 30%;
+    padding-bottom: 30px;
+    padding-top: 30px;
+    text-align: right;
+    width: 83%;
+}
+.view-timeline-year-sections-2-thru-x .views-row.even .views-field-nothing-1 {
+    display: inline-block;
+    font-weight: bold;
+    padding-left: 17%;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    text-align: left;
+    width: 70%;
+}
+.view-timeline-year-sections-2-thru-x .views-row.odd .views-field-nothing-1 {
+    font-weight: bold;
+    padding-left: 30%;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    text-align: right;
+    width: 83%;
+}
+.views-row.odd div.timelinehr {
+    height: 75px;
+    background-image: url(/sites/default/files/image/timeline-divider-bottom.jpg),url(/sites/default/files/image/timeline-divider-top.jpg);
+    background-position: bottom right,top left;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-size: 9px 40px,1px 36px;
+    margin-left: 37.8%;
+    margin-right: 35px;
+    width: 57.3%;
+}
+.views-row.even div.timelinehr {
+    height: 75px;
+    background-image: url(/sites/default/files/image/timeline-divider-bottom.jpg),url(/sites/default/files/image/timeline-divider-top.jpg);
+    background-position: bottom left,top right;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-size: 9px 40px,1px 36px;
+    margin-left: 35px;
+    margin-right: 0px;
+    width: 57%;
+}
+.views-row.even hr.timelinehr {
+    width: 56.4%;
+    margin-top: -40px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+    margin-left: 39px;
+    margin-right: 0px;
+    float: left;
+}
+.page-node-1 .view-timeline-year-sections-2-thru-x .views-row.odd .timeline-title {
+    float: right;
+    width: 70%;
+    padding-left: 5px;
+    padding-left: 0%;
+}
+.page-node-1 .view-timeline-year-sections-2-thru-x .views-row.even .timeline-title {
+    float: left;
+    width:71%;
+    padding-right: 5px;
+    padding-left: 0%;
+}
+.page-node-1 .view-timeline-year-sections-2-thru-x .views-row.even .file-video {
+    font-weight: bold;
+    padding-left: 0%;
+    padding-bottom: 30px;
+    padding-top: 30px;
+    text-align: left;
+    width: 100%;
+}
+.page-node-1 .view-timeline-year-sections-2-thru-x .views-row.odd .file-video {
+    font-weight: bold;
+    padding-left: 0%;
+    padding-bottom: 30px;
+    padding-top: 30px;
+    text-align: left;
+    width: 100%;
+}
+
+.page-node-1 .view-timeline-year-sections-2-thru-x .views-row.odd h3{text-align:right;}
+
+.views-row.odd hr.timelinehr {
+    width: 56.6%;
+    margin-top: -40px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+    margin-left: 35%;
+    margin-right: 35px;
+    float: right;
+}
+.page-node-1 .views-field-nothing {
+  padding: 30px 0;
+}
+.timeline-year-main-image img{width:100%;}
+.views-field-field-video-file img{width: 100%;}
+.views-field-field-video-file p{max-width:100%;width:100%;text-align: center;margin:1em 0;}
+.page-node-1 .uds-video-player{margin-bottom:30px;}
+.page-node-1 .uds-video-with-caption{border:0;}
+.timeline-title-small-image .small-image {
+    width: 30%;
+}
+.timeline-background-image .views-field-field-background-image img{width:100%;vertical-align:bottom;}
+.timeline-background-image .views-field-body p{text-align:center;max-width:100%;margin:1em 0;}
+/*
+Team
+*/
+.team .fs-image{padding-bottom:10px;}
+.team .circle{padding-bottom:10px;}
+.team .fs-title{font-size:1.3em;font-weight:bold;padding-bottom:0px;}
+.team .fs-link{font-weight:bold;}
+.team .views-field-nothing{padding-bottom:80px;}
+.team .col-md-3{padding-left:0px;padding-right:30px;}
+
+.circle img{border-radius:50%;}
+div.region-content :not(.btn) .circle a{border-bottom:none;}
+
+/*
+Video / Watch (Single Page)
+*/
+
+.img-overlay {
+    position: relative;
+    display:inline-block;
+}
+a.Watch .button-overlay {
+    position: absolute;
+    top: 59px;
+    left: 45%;
+    width: 100%;
+    max-width:11%;
+    height:100%;
+    max-height: 20%;
+    /*background-color: rgba(41,128,185,0.9);*/
+    background:url("/sites/all/themes/innovationcustom/images/video-btn.png");
+    color: #fff;
+    background-size:contain;
+    background-repeat:no-repeat;
+    content:' ';
+}
+a.Listen .button-overlay {
+    position: absolute;
+    top: 59px;
+    left: 45%;
+    width: 100%;
+    max-width:11%;
+    height:100%;
+    max-height: 20%;
+    /*background-color: rgba(41,128,185,0.9);*/
+    background:url("/sites/all/themes/innovationcustom/images/listen-btn.png");
+    color: #fff;
+    background-size:contain;
+    background-repeat:no-repeat;
+    content:' ';
+}
+a.Read .button-overlay {
+    position: absolute;
+    top: 59px;
+    left: 45%;
+    width: 100%;
+    max-width:11%;
+    height:100%;
+    max-height: 20%;
+    color: #fff;
+    background-size:contain;
+    background-repeat:no-repeat;
+    content:' ';
+}
+/*
+Lift
+*/
+.paragraph p {max-width:100%;width:100%;}
+body p {max-width:100%;width:100%;}
+/*
+Menu
+
+browse-news-and-resources-by-category-menu
+browse-news-and-resources-by-category-links*/
+.news-resources-menu{margin-bottom:5em;}
+.news-resources-menu li.nav-item {margin-top: 1em;margin-right: 0.3em;}
+.news-resources-menu ul.nav{justify-content:center;}
+a.btn-white {border-color: #ccc;}
+a.btn-white.is-active {background-color:#bfbfbf;}
+h2#browse-news-and-resources-by-category-menu{font-size:1.5em;text-align:center;}
+#browse-news-and-resources-by-category-wrapper{}
+
+/* 
+UDS Headings
+*/
+/*.uds-highlighted-heading h2{margin-bottom:30px;margin-top:70px;text-align:left;overflow:visible;border-top:1px solid #ccc;}
+.uds-highlighted-heading h2 span.highlight-gold{margin-top:-24px;display:block;z-index:10;padding:0 15px;float:left;}
+.uds-highlighted-heading h3{margin-bottom:30px;margin-top:70px;text-align:left;overflow:visible;border-top:1px solid #ccc;}
+.uds-highlighted-heading h3 span.highlight-gold{margin-top:-15px;display:block;z-index:10;padding:0 15px;float:left;}*/
+.uds-hero-sm a{display:none;}
+
+/*
+Councils Pages
+*/
+.councils-pages tr td p {margin: 0;}
+.councils-pages .uds-table>table tr :nth-child(n+1) {width:auto;}
+
+
+.views-field-field-intro-text {padding-left: 7%;padding-right: 7%;font-size: 2em;font-weight: 400;}
+.views-field-field-goals-image {text-align: center;padding-bottom:30px;padding-top:30px;}
+
+
+/* 
+ASU Mission and Goals
+*/
+.page-node-11 .views-field-body,
+.page-node-11 .views-field-field-body-column-2,
+.page-node-11 .views-field-field-body-column-3{font-size:1.2em;}
+.page-node-11 .views-field-title h2{margin-bottom:3rem;max-width:100%;text-align:center;}
+.page-node-11 .gray-1-bg{background-image:url(/sites/default/files/palm-walk-lowres_0.jpg);background-repeat:no-repeat;background-size:cover;padding-top:50px;padding-bottom:400px;}
+.page-node-11 .gray-1-bg .layout__region--first{max-width:1170px;width:100%;}
+.page-node-11 .gray-1-bg .mgnau-title {font-size: 10em;font-weight: bold;line-height: 1em;   text-shadow: 1px 1px 12px rgb(0 0 0);}
+hr.yellow-hr {background-color:transparent;display: block;height: 1px;border: 0;border-top: 3px solid #FFC627;margin: 3em 0;padding: 0;}
+.page-node-11 .gray-1-bg  h3 {color:#fff;background-color: rgba(0,0,0,0.55);font-size: 2.3em;margin-top: 0.4em;  padding: 10px 15px;text-shadow: none;text-shadow: 1px 1px 12px rgb(0 0 0);line-height:2.3rem;letter-spacing:.05rem;}
+.page-node-11 .gray-1-bg p {color:#fff;background-color: rgba(0,0,0,0.55);margin-top: 0.4em;padding: 10px 15px;  text-shadow: none;text-shadow: 1px 1px 12px rgb(0 0 0);max-width:100%;}
+.page-node-11 .gray-1-bg p.button {background-color: transparent;margin-top: 0;padding: 0;text-shadow: none;}
+.page-node-11 .bg.gray-2-bg.bg-top.bg-percent-100{background-color:#FFC627;padding-top:50px;}
+.page-node-11 .bg.gray-2-bg.bg-top.bg-percent-100.uds-flex-order-default{padding-top:0;padding-bottom:50px;}
+.page-node-11 .gray-2-bg .layout__region--first{width:100%;}
+.page-node-11 .eight-title{font-weight:bold;}
+.page-node-11 .eight-design-aspirations{font-size:2.5em;}
+.page-node-11 .eight-design-aspirations p{max-width:100%;line-height:1.5;}
+
+
+/*
+Meet President Crow
+*/
+.meet-president-crow-bio p{max-width:100%;}
+.meet-president-crow-featured-work p{max-width:100%;}
+.views-headshots p{margin:0 0 0.5em 0;}
+
+/* 
+Commitment
+*/
+body .commitment-card {border: 1px solid #ccc;padding: 2em;min-height: 550px;width: 100%;margin-bottom: 2em;   display: flex;flex-direction: column;height: 100%;position: relative;}
+body .commitment-number {background-color: #ffc627;border-radius: 50%;width: 53px;height: 53px;text-align: center;float: none;margin: 0 auto;}
+body .commitment-number p {margin:1em 0;text-align: center;font-weight: bold;padding: 0;}
+body .commitment-body {margin-top:1rem;margin-bottom:1rem;font-size: 1em;flex: 1 1 auto;flex-grow: 100;}
+body .commitment-new-update {text-align: center;}
+
+.page-node-776 .paragraph h2{max-width:700px;}
+
+/*
+Biography tabs
+*/
+.biography-tabs .views-bootstrap-tabs ul li a{border:1px solid #777;border-radius:8px;color:#191919;padding:.5em 1.8em;font-weight:bold;text-decoration:none;margin-right:.6em;}
+.biography-tabs .views-bootstrap-tabs ul li a:hover{background-color:#aaa;}
+.biography-tabs .views-bootstrap-tabs ul li a.active{background-color:#aaa;}
+.biography-tabs .views-bootstrap-tabs ul li.active a{background-color:#aaa;}
+
+/*
+Updates from President Crow
+*/
+.updates-from-president-crow .udpate-container {
+  margin-bottom: 75px;
+  margin-top: 75px;
+}
+.updates-from-president-crow h3 {
+  font-color: #333;
+  margin-top: 30px;
+}
+.updates .bg-bottom .container{margin:auto;width:500px;}
+.updates .update-container{padding-bottom:75px;padding-top:75px;border-bottom:1px solid #ccc;}
+.updates #views-bootstrap-updates-from-president-crow-block-4{padding-bottom:75px;padding-top:75px;}
+
+tr.even {
+  background-color: #f3f4ee;
+  border-color: #bebfb9;
+}
+.js .field--widget-entity-reference-paragraphs .field-multiple-table{border:1px solid #ccc;}
+
+/*
+President
+*/
+.pull-left {
+	float:left !important;	
+}
+.president-image{
+	padding-right:30px;
+	padding-bottom:20px;
+}
+.img-circle{
+	border-radius:32px;	
+}
+.past-presidents h2 {
+  margin-bottom: 0px;
+}
+.past-presidents-summary p {
+  margin-top: 0px;
+}
+.individual-president {
+  padding: 30px 7% 30px 7%;
+}
+.past-presidents-summary {
+  font-size: 1.5em;
+  font-weight: 400;
+  line-height: 1.2em;
+}
+.past-presidents p {
+	width:100%;
+	max-width:100%;}
+
+/*
+Views cards
+*/
+.views-view-grid .row-spaced .clearfix {
+  display: none;
+}
+
+
+@media (max-width: 1260px) {
+	.views-row.odd div.timelinehr{margin-left:36.6%;}
+}
+
+@media (max-width: 991.98px) {
+.page-node-1 .container {max-width:100%;}
+.timeline-align-left {font-weight: bold;padding-left:0%;padding-bottom: 30px;text-align: left;width: 100%;}
+.views-row.odd div.timelinehr, .views-row.even div.timelinehr {
+    height: 75px;
+    background-image: url(/sites/default/files/image/timeline-divider-bottom.jpg),url(/sites/default/files/image/timeline-divider-top.jpg);
+    background-position: bottom center,bottom center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-size: 9px 40px,1px 80px;
+    margin-left: 0px;
+    width: 100%;
+}
+.views-row.odd hr.timelinehr, .views-row.even hr.timelinehr {
+    display: none;
+}
+
+.view-timeline-year-sections-2-thru-x .views-row.even .views-field-nothing {
+  display: inline-block;
+  font-weight: bold;
+  padding-left: 0%;
+  padding-bottom: 30px;
+  padding-top: 30px;
+  text-align: left;
+  width: 100%;
+}
+.view-timeline-year-sections-2-thru-x .views-row.odd .views-field-nothing {
+  font-weight: bold;
+  padding-left: 0%;
+  padding-bottom: 30px;
+  padding-top: 30px;
+  text-align: left;
+  width: 100%;
+}
+.page-node-1 .view-timeline-year-sections-2-thru-x .views-row.even .monthyear,
+.page-node-1 .view-timeline-year-sections-2-thru-x .views-row.even .timeline-title-full,
+.page-node-1 .view-timeline-year-sections-2-thru-x .views-row.even .views-field-nothing-1,
+.page-node-1 .view-timeline-year-sections-2-thru-x .views-row.odd .monthyear,
+.page-node-1 .view-timeline-year-sections-2-thru-x .views-row.odd .timeline-title-full,
+.page-node-1 .view-timeline-year-sections-2-thru-x .views-row.odd .views-field-nothing-1
+{
+  font-weight: bold;
+  padding-left: 0;
+  padding-bottom: 0px;
+  padding-top: 0px;
+  text-align: left;
+  width: 100%;
+}
+.timeline-title-small-image .small-image {
+    width: 100%;
+    display: none;
+}
+.page-node-1 .view-timeline-year-sections-2-thru-x .views-row.odd h3 {
+  text-align: left;
+}
+.page-node-1 .view-timeline-year-sections-2-thru-x .views-row.odd .timeline-title-small-image, 
+.page-node-1 .view-timeline-year-sections-2-thru-x .views-row.odd .views-field-nothing-1 {
+    font-weight: bold;
+    padding-left: 0;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    text-align: left;
+    width: 100%;
+}
+.page-node-1 .view-timeline-year-sections-2-thru-x .views-row.odd .timeline-title {
+    float: left;
+    width: 100%;
+    padding-left: 5px;
+    padding-left: 0%;
+}
+.page-node-1 .view-timeline-year-sections-2-thru-x .views-row.even .timeline-title {
+    float: left;
+    width: 100%;
+    padding-right: 5px;
+    padding-left: 0%;
+}
+}
+@media (min-width: 578px) and (max-width:767px) {
+  div[class^="uds-hero"] .btn-row, div[class^="uds-hero"] .content, div[class^="uds-hero"] .h1, div[class^="uds-hero"] .hero-subtitle, div[class^="uds-hero"] [role="doc-subtitle"], div[class^="uds-hero"] a.btn, div[class^="uds-hero"] a.uds-modal-close-btn, div[class^="uds-hero"] h1 {
+    font-size: 2.25rem;line-height:2.25rem;
+}
+}
+@media (min-width: 601px) and (max-width: 767px) {
+.page-node-11 .gray-1-bg .mgnau-title {
+    font-size: 20vw;
+}
+div[class^="uds-hero"] .btn-row, div[class^="uds-hero"] .content, div[class^="uds-hero"] .h1, div[class^="uds-hero"] .hero-subtitle, div[class^="uds-hero"] [role="doc-subtitle"], div[class^="uds-hero"] a.btn, div[class^="uds-hero"] a.uds-modal-close-btn, div[class^="uds-hero"] h1 {
+  max-width: 100% !important;
+}
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  div[class^="uds-hero"] .btn-row, div[class^="uds-hero"] .content, div[class^="uds-hero"] .h1, div[class^="uds-hero"] .hero-subtitle, div[class^="uds-hero"] [role="doc-subtitle"], div[class^="uds-hero"] a.btn, div[class^="uds-hero"] a.uds-modal-close-btn, div[class^="uds-hero"] h1 {
+    max-width: 100% !important;font-size: 3rem;line-height:3.5rem;
+  }
+}
+@media (min-width: 1260px) {
+  div[class^="uds-hero"] .btn-row, div[class^="uds-hero"] .content, div[class^="uds-hero"] .h1, div[class^="uds-hero"] .hero-subtitle, div[class^="uds-hero"] [role="doc-subtitle"], div[class^="uds-hero"] a.btn, div[class^="uds-hero"] a.uds-modal-close-btn, div[class^="uds-hero"] h1 {
+    max-width: 100% !important;
+  }
+}

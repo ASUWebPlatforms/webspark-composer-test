@@ -1,0 +1,7 @@
+name: CKEditor Custom
+type: module
+description: Custom module for CKEditor
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+version: VERSION
+package: custom

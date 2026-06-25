@@ -1,0 +1,4 @@
+name: 'CSRD Utils hrc'
+type: module
+description: 'CSRD Utils for hrc(Hispanic Research Center).'
+core_version_requirement: ^9.3 || ^10

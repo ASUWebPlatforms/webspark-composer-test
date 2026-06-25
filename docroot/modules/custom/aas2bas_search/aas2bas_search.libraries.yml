@@ -1,0 +1,13 @@
+aas2bas_search_form_styles:
+  css:
+    theme:
+      css/aas2bas_style.css: {}
+  dependencies:
+    - core/drupal
+
+aas2bas_search_form_scripts:
+  js:
+    js/aas2bas_script.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

@@ -1,0 +1,69 @@
+/* NOT USED: Moved to Asset Injector on 10/18/2025 */
+#rfi-img,
+#rfi-img > .formatted-text,
+#rfi-img > .formatted-text > img
+{
+    height: 100%;
+}
+#rfi-img > .formatted-text > img {
+    object-fit: cover;
+}
+/* Grad entry term - Dynamic select */
+fieldset[data-drupal-selector=edit-grad-entry-term] {
+    border: none !important;
+}
+fieldset[data-drupal-selector=edit-grad-entry-term] > .card-header {
+    padding: 0;
+}
+fieldset[data-drupal-selector=edit-grad-entry-term]  > div:last-child.fieldset-wrapper {
+    padding: 0 !important;
+}
+
+.form-item-phone > .form-item--error-message {
+  color: red;
+}
+/* Webspark 2.10 update RFI form fix for Required red dot (2/15/2024) */
+.uds-form svg {
+  width: inherit;
+}
+/* Added on 5/31/2024 */
+form.uds-form select.is-invalid, form.uds-form textarea.is-invalid {
+  border: solid #b72a2a !important;
+  border-width: 1px 1px 8px !important;
+}
+input#edit-gdpr-consent-1.error + label::before {
+  border: solid #b72a2a !important;
+  border-width: 1px 1px 8px !important;
+}
+input#edit-gdpr-consent-online-1.error + label::before {
+  border: solid #b72a2a !important;
+  border-width: 1px 1px 8px !important;
+}
+/* Fix RFI image in Safari mobile */
+@media (max-width:767px) {
+  #rfi-img > .formatted-text > img {
+    height: auto;
+  }
+}
+/* Webspark 2.11 (D10) update RFI form fix (9/3/2024) */
+/* Fix Phone number field (9/3/2024) */
+.iti--allow-dropdown input, .iti--allow-dropdown input[type=tel] {
+  padding-left: 52px !important;
+}
+/* Overwrite ":valid" that browser automatically applies (10/29/2024) */
+form.uds-form input.is-invalid:enabled, form.uds-form select.is-invalid:enabled, form.uds-form textarea.is-invalid:enabled {
+  border-style: solid !important;
+  border-bottom: 1px solid rgb(183, 42, 42) !important;
+  border: solid rgb(183, 42, 42) !important;
+  border-width: 1px 1px 8px !important;
+}
+form.uds-form.was-validated input[name=phone].form-control:valid {
+    border: solid #000 !important;
+    border-width: 1px 1px 1px !important;
+}
+form.uds-form input[name=phone].is-invalid:enabled {
+  border-style: solid !important;
+  border-bottom: 1px solid #b72a2a !important;
+  border: solid #b72a2a !important;
+  border-width: 1px 1px 8px !important;
+}

@@ -1,0 +1,24 @@
+name: Analytics
+description: Custom sub-theme of Renovation for the Analytics website
+core_version_requirement: ^9 || ^10
+type: theme
+package: Analytics
+base theme: renovation
+regions:
+  header: Header
+  notifications: Notifications
+  pre_content: Pre Content
+  sidebar_first: Left sidebar
+  content: Content
+  sidebar_second: Right sidebar
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer
+libraries:
+  - renovation/style
+  - renovation/tables
+  - analytics/style
+components:
+  namespaces:
+    analytics: templates
+    partials: templates/_partials

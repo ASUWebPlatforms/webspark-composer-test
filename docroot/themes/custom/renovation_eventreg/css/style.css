@@ -1,0 +1,406 @@
+.layout__region--second {
+    padding: 12px;
+}
+
+.layout__region--first {
+    padding: 12px;
+}
+
+
+.white-link {
+    padding: 20px !important;
+    font-size: 16px !important;
+}
+
+.white-link a {
+    color: white !important;
+    font-size: 16px;
+}
+
+.layout__full-width .layout__region--first {
+    padding: 0px;
+}
+
+
+.views-element-container input[type="date"] {
+    position: relative;
+}
+
+.views-element-container input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    color: transparent;
+    background: transparent;
+}
+
+
+.node-event-registration-form-edit-form #edit-field-property-location {
+    display: none !important;
+} 
+
+.node-event-registration-form-form #edit-field-property-location {
+     display: none;
+}
+
+.node-event-registration-form-edit-form .group-event-audience .card-header legend {
+    font-weight: bold;
+}
+
+.node-event-registration-form-form .group-event-audience .card-header legend {
+    font-weight: bold;
+}
+
+div.description.description--label-help {
+    font-weight: normal;
+    font-size: 14px;
+    color: var(--bs-secondary-color) !important;
+    font-family: Arial, Helvetica, "Nimbus Sans L", "Liberation Sans", FreeSans, sans-serif;
+}
+
+.btn-primary {
+    margin-bottom: 10px;
+}
+
+.views-element-container td {
+    max-width: 400px !important;
+}
+
+.event-registry-field-group > summary {
+    padding-left: 15px;
+    text-decoration: none;
+    color: #8c1d40;
+	font-size: 20px;
+	font-family: Arial, Helvetica, "Nimbus Sans L", "Liberation Sans", FreeSans, sans-serif;
+
+}
+
+.date_and_time_widget input[type="date"] {
+    position: relative;
+}
+
+.date_and_time_widget input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    color: transparent;
+    background: transparent;
+}
+
+.date_and_time_widget input[type="time"] {
+    position: relative;
+}
+
+.date_and_time_widget input[type="time"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    color: transparent;
+    background: transparent;
+}
+
+.required-dot{
+    color: #8c1d40;
+    width: 10px;
+}
+
+
+#page-node-event-registration-form-temp hr {
+    height: 3px;
+    border-top: 3px solid #990033 !important;
+}
+
+.well {
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #fafafa;
+    border: 1px solid #e8e8e8;
+    border-radius: 0;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+#page-node-event-registration-form-temp .layout__region.layout__region--second  .views-element-container.block {
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #fafafa;
+    border: 1px solid #e8e8e8;
+    border-radius: 0;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+
+}
+
+
+#page-node-event-registration-form-temp .layout__region.layout__region--second .block-inline-blocktext-content{
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #fafafa;
+    border: 1px solid #e8e8e8;
+    border-radius: 0;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+#page-node-event-registration-form-temp .layout__region.layout__region--second .block-inline-blocktext-content.text-white{
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #ffe000;
+    border: 1px solid #e8e8e8;
+    border-radius: 0;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    color: #191919 !important;
+}
+
+
+.views-element-container fieldset {
+    max-width: 50%;
+}
+
+.views-element-container .card-body {
+    padding-bottom: 10px !important;
+}
+
+.views-element-container .card-body h4 {
+    font-size: 18px;
+}
+.views-element-container .card-header .fieldset-legend {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#safetyarchives-view .table-responsive {
+    float: left;
+    width: 100%;
+}
+
+#safetyarchives-view  fieldset {
+    width: 25%;
+    float: left;
+}
+
+
+#safetyarchives-view .js-form-type-select {
+    width: 25%;
+    float: left;
+    padding: 3px;
+
+}
+
+#safetyarchives-view .form-actions {
+    float: left;
+    width: 100%;
+}
+
+#view-safety-collaborators  .form-item.form-group {
+    width: 50%;
+    float: left;
+    padding: 5px;
+}
+
+.margin-top-24px {
+    margin-top: 24px;
+}
+
+.ws2-banner-info {
+    padding: 10px 10px 32px 10px;
+    margin: 16px 0px;
+}
+
+/* Media for larger devices */
+@media screen and (max-width: 962px) {
+    #safetyarchives-view fieldset {
+        width: 100%;
+        float: left;
+    }
+
+    #view-safety-collaborators  .form-item.form-group {
+        width: 100%;
+        padding: 0px;
+    }
+
+    .views-element-container fieldset {
+        max-width: 100%;
+    }
+    
+    #safetyarchives-view .js-form-type-select {
+        width: 100%;
+        float: left;
+        padding: 3px;
+    
+    }
+    .ws2-banner-info {
+        padding: 5px 5px 32px 5px;
+    }
+
+}
+
+.node--unpublished {
+    background-color: #f7dddd !important;
+}
+
+#edit-actions {
+    padding: 10px 0px;
+}
+
+.ws2-banner-info .close {
+    background-color: #fff;
+    color: #191919;
+    font-size: 1.25em;
+    font-weight: bold;
+    opacity: 0.8;
+    border: 1px solid #d0d0d0;
+    float: right;
+    text-decoration: none;
+    margin: 0 0 16px 16px;
+    text-decoration: none;
+    border-radius: 50%;
+    height: 35px;
+    width: 35px !important;
+    text-align: center;
+    position: absolute;
+}
+
+.ws2-banner-info .btn-black {
+    color: #fafafa;
+    background-color: #191919;
+    border-bottom: none;
+    border-bottom-color: transparent;
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+
+.ws2-banner-info .title {
+    font-weight: normal;
+}
+
+.ws2-banner-info .bell-icon {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.date_and_time_widget .card-header legend {
+    display: none;
+}
+
+
+.slideshow-container * {box-sizing: border-box;}
+.mySlides {display: none;}
+.slide-image {
+    vertical-align: middle;
+    width: 100%;
+    height: 595px;
+}
+
+/* Slideshow container */
+.slideshow-container {
+  max-width: 100%;
+  position: relative;
+  margin: auto;
+}
+
+/* Caption text */
+.slide-text {
+  color: #f2f2f2;
+  font-size: 18px;
+  padding: 30px 0px;
+  position: absolute;
+  bottom: 0px;
+  font-weight:bolder;
+  text-align: center;
+  /* background-color: rgb(0, 0, 0, 0.4); */
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.slide-text a {
+    float: left;
+    text-shadow: none;
+}
+
+
+/* The dots/bullets/indicators */
+.dot {
+  height: 3px;
+  width: 25px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 0%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active-slide {
+  background-color: #717171;
+}
+
+/* Fading animation */
+.slide-fades {
+  animation-name: slidefade;
+  animation-duration: 1s;
+}
+
+@keyframes slidefade {
+  from {opacity: .6} 
+  to {opacity: 1}
+}
+
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+  .text {font-size: 11px}
+}
+
+
+/* Next & previous buttons */
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    text-decoration: none;
+  }
+  
+  /* Position the "next button" to the right */
+  .next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+  }
+  
+  /* On hover, add a black background color with a little bit see-through */
+  .prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
+  }
+  
+  .form-wrapper {
+    margin-top: 10px;
+  }
+
+  .conditional-fields-hidden {
+    display: none;
+  }
+
+  .comment-links ul li {
+    float: left;
+    margin: 0px 20px 0px 0px;
+  }
+
+  .comment-links ul {
+    padding: 0px;
+  }

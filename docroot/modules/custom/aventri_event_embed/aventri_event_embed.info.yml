@@ -1,0 +1,5 @@
+name: Aventri Event Embed
+type: module
+description: Provides a block that allows you to embed an event from Aventri. Takes a widget id.
+package: Custom
+core_version_requirement: ^9 || ^10

@@ -1,0 +1,23 @@
+uuid: 0bdc81a4-5f46-47ce-a5c2-9f40268b566f
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.sda_athletic_ticker
+    - field.storage.block_content.field_sda_theme
+  module:
+    - options
+id: block_content.sda_athletic_ticker.field_sda_theme
+field_name: field_sda_theme
+entity_type: block_content
+bundle: sda_athletic_ticker
+label: 'sda theme'
+description: 'Select the color theme for the athletic ticker'
+required: true
+translatable: false
+default_value:
+  -
+    value: light
+default_value_callback: ''
+settings: {  }
+field_type: list_string

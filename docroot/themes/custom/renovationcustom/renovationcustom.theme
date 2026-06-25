@@ -1,0 +1,73 @@
+<?php
+
+use Drupal\Core\Link;
+use Drupal\Core\Render\Markup;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function renovationcustom_preprocess_html(&$variables) {
+  // Get the current path
+  $current_path = \Drupal::service('path.current')->getPath();
+  $internal_path = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
+
+  $path_args = explode('/', $current_path);
+  if (isset($path_args[1]) && isset($path_args[2]) && ($path_args[1] == 'node') && (is_numeric($path_args[2]))) {
+    $variables['attributes']['class'][] = 'page-node-' . $path_args[2];
+  }
+
+  // Assign it to body class
+  $variables['attributes']['class'][] = str_replace("/", " ", $internal_path);
+
+}
+
+/**
+ * Implements hook_preprocess_addtoany_standard().
+ */
+function renovationcustom_preprocess_addtoany_standard(&$variables) {
+  $currentPath = \Drupal::service('path.current')->getPath();
+  if (strpos($currentPath, '/revisions/')) {
+    $node = \Drupal::routeMatch()->getParameter('node');
+    $variables["link_title"] = Markup::create($node->label());
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for entity_print.
+ */
+function renovationcustom_preprocess_entity_print(array &$variables) {
+  $entityPrintCss = (string) $variables["entity_print_css"];
+
+  /** @var \Drupal\Core\Extension\ModuleExtensionList $module_list */
+  $module_list = \Drupal::service('extension.list.module');
+
+  /** @var \Drupal\Core\Extension\ThemeExtensionList $theme_list */
+  $theme_list = \Drupal::service('extension.list.theme');
+
+  $css = [
+    @file_get_contents($theme_list->getPath('renovation') . '/assets/css/renovation.style.css'),
+    @file_get_contents($theme_list->getPath('renovationcustom') . '/css/renovationcustom.style.css'),
+    @file_get_contents($module_list->getPath('system') . '/css/components/align.module.css'),
+    @file_get_contents($module_list->getPath('filter') . '/css/filter.caption.css')
+  ];
+
+  $variables['entity_print_css'] = Markup::create($entityPrintCss . '<style>' . implode(PHP_EOL, array_filter($css)) . '</style>');
+}
+
+/**
+ * Implements hook_preprocess_field().
+ */
+function renovationcustom_preprocess_field(&$variables) {
+  $element = $variables['element'];
+
+  if (!empty($element['#field_name']) && $element['#field_name'] == 'field_download_all_assets') {
+    $markup = '';
+    if ($variables["items"][0]["content"]["#markup"] == 1) {
+      $link = Link::fromTextAndUrl('Download article assets', Url::fromUserInput('/node/' . $variables["element"]["#object"]->id() . '/assets'));
+      $markup = '<div class="download-article-assets"><i class="fa-solid fa-file-arrow-down"></i> ' . $link->toString() . '</div>';
+    }
+    $variables["items"][0]["content"]["#markup"] = $markup;
+  }
+
+}

@@ -1,0 +1,9 @@
+apadmin-app:
+  version: 2.08
+  js:
+    apadmin-app/dist/apadmin_min.js: { preprocess: false  }
+  css:
+    component:
+      apadmin-app/dist/apadmin_min.css: { preprocess: false  }
+  dependencies:
+    - core/drupalSettings

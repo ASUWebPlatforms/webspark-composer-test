@@ -1,0 +1,110 @@
+<?php
+
+/**
+ * @file
+ */
+
+use Drupal\block_content\Entity\BlockContent;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\file\Entity\File;
+use Drupal\media\Entity\Media;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+use Drupal\crop\Entity\Crop;
+use Drupal\image\Entity\ImageStyle;
+use Drupal\Core\Form\FormStateInterface;
+
+function chs_custom_theme($existing, $type, $theme, $path) {
+
+  return [
+    // Ghost block to apply styles and scripts
+    'chs_block' => [
+      'variables' => [],
+    ],
+
+    // paragraphs
+
+    'paragraph__card_with_icon__portrait_chs' => [
+      'base hook' => 'paragraph',
+      'path' => \Drupal::service('extension.path.resolver')->getPath('module','chs_custom') . '/templates/paragraphs',
+    ],
+
+    // blocks
+    'block__inline_block__fc_animated_content_button' => [
+      'template' => 'blocks/block--inline-block--fc-animated-content-button',
+      'base hook' => 'block_content'
+    ],
+
+    // nodes
+    'node__news_chs-' => [
+      'template' => 'content/node--news-chs-',
+      'base hook' => 'node'
+    ],
+
+    // views
+    'views_view_fields__advisors_chs_content___display_page' => [
+      'template' => 'views/views-view-fields--advisors-chs-content---display-page',
+      'base hook' => 'views'
+    ],
+
+    'views_view_table__experiential_learning__block_1' => [
+      'template' => 'views/views-view-table--experiential-learning--block-1',
+      'base hook' => 'views'
+    ],
+
+    'views_view_unformatted__advisors_chs_content___display_page' => [
+      'template' => 'views/views-view-unformatted--advisors-chs-content---display-page',
+      'base hook' => 'views'
+    ],
+
+    'views_view__accordion_test__block_1' => [
+      'template' => 'views/views-view--accordion-test--block-1',
+      'base hook' => 'views'
+    ],
+
+    'views_accordion_view__accordion_test__block_1' => [
+      'template' => 'views/views-accordion-view--accordion-test--block-1',
+      'base hook' => 'views'
+    ],
+
+  ];
+}
+
+/**
+ * Implements hook_theme_suggestions_paragraph_alter().
+ */
+
+function chs_custom_theme_suggestions_paragraph_alter(array &$suggestions, array $variables) {
+  $paragraph = $variables['elements']['#paragraph'];
+  $view_mode = $variables['elements']['#view_mode'];
+
+  if ($paragraph->bundle() == 'card_with_icon' && $view_mode == 'portrait') {
+    $suggestions[] = 'paragraph__card_with_icon__portrait_chs';
+  }
+}
+
+function chs_custom_css_alter(&$css, \Drupal\Core\Asset\AttachedAssetsInterface $assets) {
+
+  $path = \Drupal::service('extension.path.resolver')->getPath('module','chs_custom') . '/css/chs-theme.css';
+  if (isset($css[$path])) {
+    // Use anything greater than 100 to have it load after the theme as CSS_AGGREGATE_THEME is set to 100.
+    $css[$path]['group'] = 300;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ *
+ */
+function chs_custom_preprocess_html(&$variables) {
+  $path = \Drupal::service('path.current')->getPath();
+  $path_args = explode('/', $path);
+  if (isset($path_args[1]) && isset($path_args[2]) && ($path_args[1] == 'node') && (is_numeric($path_args[2]))) {
+    $variables['attributes']['class'][] = 'page-node-' . $path_args[2];
+  }
+}
+
+
+/**
+ * @} End.
+ */

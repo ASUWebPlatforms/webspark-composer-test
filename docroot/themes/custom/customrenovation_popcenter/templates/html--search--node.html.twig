@@ -1,0 +1,47 @@
+{#
+/**
+ * @file
+ * Default theme implementation for the basic structure of a single Drupal page.
+ *
+ * Variables:
+ * - logged_in: A flag indicating if user is logged in.
+ * - root_path: The root path of the current page (e.g., node, admin, user).
+ * - node_type: The content type for the current node, if the page is a node.
+ * - head_title: List of text elements that make up the head_title variable.
+ *   May contain one or more of the following:
+ *   - title: The title of the page.
+ *   - name: The name of the site.
+ *   - slogan: The slogan of the site.
+ * - page_top: Initial rendered markup. This should be printed before 'page'.
+ * - page: The rendered page markup.
+ * - page_bottom: Closing rendered markup. This variable should be printed after
+ *   'page'.
+ * - db_offline: A flag indicating if the database is offline.
+ * - placeholder_token: The token for generating head, css, js and js-bottom
+ *   placeholders.
+ *
+ * @see template_preprocess_html()
+ *
+ * @ingroup themeable
+ */
+#}
+<!DOCTYPE html>
+<html{{html_attributes}}>
+  <head>
+    <head-placeholder token="{{ placeholder_token }}">
+    <title>{{ head_title|safe_join(' | ') }}</title>
+    <css-placeholder token="{{ placeholder_token }}">
+    <js-placeholder token="{{ placeholder_token }}">
+    {# Load FontAwesome 6 free icons. Also, load ASU Awesome. #}
+    {# Loading it this way resolves clashes that previously occurred with ASU Awesome. #}
+    <script defer src="/libraries/fontawesome/js/all.min.js"></script>
+    <script defer src="/profiles/contrib/webspark/themes/renovation/js/asuawesome.js"></script>
+  </head>
+  <body{{attributes}}>
+    {{ page_top }}
+<div class="row g-0 mt-4"><div class="col uds-full-width"><div class="bg-top bg-percent-100 layout__full-width bg-white"><div class="layout__region layout__region--first"><div class="block--type-hero block block-block-content block-block-content44461e52-0d0f-430c-ba2e-57ce0b11fd46 block-inline-blockhero"><div class="uds-hero-sm "><div class="hero-overlay"></div><img class="hero" src="/sites/default/files/2025-03/cpop-hero-1920x256-v5.jpg" alt="" loading="lazy" decoding="async" fetchpriority="high"><h1><span class="highlight-gold">Center for Problem-Oriented Policing</span></h1></div></div></div></div></div></div>
+    {{ page }}
+    {{ page_bottom }}
+    <js-bottom-placeholder token="{{ placeholder_token }}">
+  </body>
+</html>

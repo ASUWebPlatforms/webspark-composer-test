@@ -1,0 +1,244 @@
+<?php
+
+/**
+ * @file
+ * Hooks for the Elevate Experience Import module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_theme().
+ *
+ * Registers the Experience Finder view templates from this module so the front
+ * end can be themed without editing the contrib renovation theme.
+ */
+function elevate_experience_import_theme($existing, $type, $theme, $path) {
+  return [
+    'views_view__experience_finder' => ['base hook' => 'views_view'],
+    'views_view_fields__experience_finder' => ['base hook' => 'views_view_fields'],
+    'views_view__experience_finder_home' => ['base hook' => 'views_view'],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for views_view.
+ *
+ * Supplies the compact homepage Experience Finder block (rendered by
+ * views-view--experience-finder-home.html.twig) with the URL of the full
+ * results page for its "Or explore all experience" link. The exposed filter
+ * form itself is re-pointed at that page in the form_alter below.
+ */
+function elevate_experience_import_preprocess_views_view(array &$variables) {
+  if (($variables['view']->id() ?? '') !== 'experience_finder_home') {
+    return;
+  }
+  $variables['find_experiences_url'] = \Drupal\Core\Url::fromRoute('view.experience_finder.page_1')->toString();
+}
+
+/**
+ * Implements hook_views_pre_render().
+ *
+ * Attaches the Experience Finder styling/behaviour to the view.
+ */
+function elevate_experience_import_views_pre_render(\Drupal\views\ViewExecutable $view) {
+  if ($view->id() !== 'experience_finder') {
+    return;
+  }
+  $view->element['#attached']['library'][] = 'elevate_experience_import/experience_finder';
+
+  // Favourites: tell the front end whether the user can flag and where to post.
+  $current_user = \Drupal::currentUser();
+  // Use ASU's CAS login (/caslogin), returning to the finder afterwards.
+  $login_url = \Drupal\Core\Url::fromUri('internal:/caslogin', [
+    'query' => \Drupal::destination()->getAsArray(),
+  ])->toString();
+  $view->element['#attached']['drupalSettings']['experienceFinder'] = [
+    'authenticated' => $current_user->isAuthenticated(),
+    'loginUrl' => $login_url,
+    'listUrl' => \Drupal\Core\Url::fromRoute('elevate_experience_import.favorite_list')->toString(),
+    'toggleUrlBase' => \Drupal\Core\Url::fromRoute('elevate_experience_import.favorite_toggle', ['node' => 0])->toString(),
+  ];
+  $view->element['#cache']['contexts'][] = 'user.roles:authenticated';
+  // The "Favorites" toggle produces per-user, query-arg-dependent results.
+  $view->element['#cache']['contexts'][] = 'url.query_args:favorites';
+  if (\Drupal::request()->query->get('favorites') === '1') {
+    $view->element['#cache']['contexts'][] = 'user';
+    $view->element['#cache']['tags'][] = 'flagging_list:' . $current_user->id();
+  }
+
+  // Give every CTA link the "Get Started" label expected by the design (the
+  // imported links have no title of their own). Done in memory for rendering.
+  foreach ($view->result as $row) {
+    $entity = $row->_entity ?? NULL;
+    if ($entity && $entity->hasField('field_new_cta_link') && !$entity->get('field_new_cta_link')->isEmpty()) {
+      $entity->get('field_new_cta_link')->first()->set('title', (string) t('Get Started'));
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for views_view_fields.
+ *
+ * Computes a category-appropriate placeholder image for image-less Experience
+ * Finder cards. Deterministic per node, so it rides the per-node row cache.
+ */
+function elevate_experience_import_preprocess_views_view_fields(array &$variables) {
+  if ($variables['view']->id() !== 'experience_finder') {
+    return;
+  }
+  $node = $variables['row']->_entity ?? NULL;
+  if ($node instanceof \Drupal\node\NodeInterface) {
+    $variables['ef_placeholder'] = \Drupal\elevate_experience_import\PlaceholderImage::forNode($node);
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ *
+ * When the Experience Finder "Favorites" toggle is active (?favorites=1) and the
+ * user is logged in, restrict the results to the Experiences they have flagged.
+ */
+function elevate_experience_import_views_query_alter(\Drupal\views\ViewExecutable $view, \Drupal\views\Plugin\views\query\QueryPluginBase $query) {
+  if ($view->id() !== 'experience_finder' || $view->current_display !== 'page_1') {
+    return;
+  }
+  if (\Drupal::request()->query->get('favorites') !== '1') {
+    return;
+  }
+
+  $account = \Drupal::currentUser();
+  $nids = [];
+  if ($account->isAuthenticated()) {
+    $flaggings = \Drupal::entityTypeManager()->getStorage('flagging')->loadByProperties([
+      'flag_id' => \Drupal\elevate_experience_import\Controller\FavoriteController::FLAG_ID,
+      'uid' => $account->id(),
+    ]);
+    foreach ($flaggings as $flagging) {
+      $nids[] = $flagging->get('entity_id')->value;
+    }
+  }
+
+  // Force an empty result set when there are no favourites (or for anonymous).
+  $query->addWhere(0, 'node_field_data.nid', $nids ?: [0], 'IN');
+}
+
+/**
+ * Implements hook_views_data_alter().
+ *
+ * Exposes the custom "Program specific options" filter on Experience nodes.
+ */
+function elevate_experience_import_views_data_alter(array &$data) {
+  // Keyword search that also covers the filter taxonomies (extends "combine").
+  $data['views']['experience_keyword'] = [
+    'title' => t('Experience keyword search'),
+    'help' => t('Search Experience title, description and filter taxonomies.'),
+    'filter' => [
+      'id' => 'experience_keyword',
+      'no group by' => TRUE,
+    ],
+  ];
+
+  $data['node_field_data']['experience_program_specific'] = [
+    'title' => t('Program specific options'),
+    'help' => t('Filter Experiences by program / credit (Experience Finder).'),
+    'filter' => [
+      'field' => 'nid',
+      'id' => 'experience_program_specific_options',
+      'label' => t('Program specific options'),
+      'allow empty' => TRUE,
+    ],
+  ];
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Tailors the Experience Finder exposed filter form to the design: limits the
+ * Experience type options to the reclassified set, shortens the STEM label, and
+ * adds the default "All" option to the taxonomy dropdowns.
+ *
+ * The same treatment applies to the compact homepage block (experience_finder_home),
+ * which exposes the same two filters. That form is additionally re-pointed at the
+ * full /find-experiences results page so a selection lands there pre-checked.
+ */
+function elevate_experience_import_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id !== 'views_exposed_form') {
+    return;
+  }
+  $id = $form['#id'] ?? '';
+  $is_finder = $id === 'views-exposed-form-experience-finder-page-1';
+  $is_home = $id === 'views-exposed-form-experience-finder-home-block-1';
+  if (!$is_finder && !$is_home) {
+    return;
+  }
+
+  // The homepage block shares the finder's filters but submits to the results
+  // page, where the matching exposed filters pick the values back up.
+  if ($is_home) {
+    $form['#action'] = \Drupal\Core\Url::fromRoute('view.experience_finder.page_1')->toString();
+  }
+
+  // Experience type: only the five reclassified terms, in design order.
+  if (isset($form['field_experience_type_target_id'])) {
+    $order = [
+      'Jobs, Work & Career Development',
+      'Internships & Field Experience',
+      'Research',
+      'Community, Service & Leadership',
+      'Global Experiences',
+    ];
+    _elevate_experience_import_restrict_term_options($form['field_experience_type_target_id'], 'experience_type', $order);
+  }
+
+  // Career interests: show all collection terms in the design order, then
+  // shorten the STEM label.
+  if (isset($form['career_interests'])) {
+    $collection_order = [
+      'Arts, Design & Performance',
+      'Business',
+      'Communication & Media',
+      'Education',
+      'Entrepreneurship',
+      'Health & Wellness',
+      'Public, Social & Human Services',
+      'Sustainability, Environmental & Natural Resources',
+      'Science, Technology, Engineering & Math',
+    ];
+    _elevate_experience_import_restrict_term_options($form['career_interests'], 'collection', $collection_order);
+    foreach ($form['career_interests']['#options'] as $key => $label) {
+      if ((string) $label === 'Science, Technology, Engineering & Math') {
+        $form['career_interests']['#options'][$key] = t('STEM');
+      }
+    }
+  }
+}
+
+/**
+ * Restricts an exposed taxonomy options element to a named, ordered term set.
+ */
+function _elevate_experience_import_restrict_term_options(array &$element, $vid, array $ordered_names) {
+  if (!isset($element['#options'])) {
+    return;
+  }
+  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')
+    ->loadByProperties(['vid' => $vid]);
+  $name_to_id = [];
+  foreach ($terms as $term) {
+    $name_to_id[$term->label()] = $term->id();
+  }
+
+  $options = [];
+  // Preserve the "- Any -"/"All" placeholder if present.
+  foreach ($element['#options'] as $key => $label) {
+    if (!is_numeric($key)) {
+      $options[$key] = $label;
+    }
+  }
+  foreach ($ordered_names as $name) {
+    if (isset($name_to_id[$name])) {
+      $options[$name_to_id[$name]] = $name;
+    }
+  }
+  $element['#options'] = $options;
+}

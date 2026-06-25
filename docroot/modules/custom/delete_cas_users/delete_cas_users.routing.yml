@@ -1,0 +1,14 @@
+delete_user.form:
+ path: '/deletecasuser'
+ defaults:
+   _title: 'Delete'
+   _form: '\Drupal\delete_cas_users\Form\DeleteCasUserForm'
+ requirements:
+   _permission: 'access content'
+update_redirect.form:
+ path: '/redirecturlcustom'
+ defaults:
+   _title: 'Redirect'
+   _form: '\Drupal\delete_cas_users\Form\RedirectUrlForm'
+ requirements:
+   _permission: 'access content'

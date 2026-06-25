@@ -1,0 +1,17 @@
+@import "../../../../composer/webspark-theme-renovation/src/sass/design-tokens/extra-vars";
+@import '../../../../composer/webspark-theme-renovation/src/sass/design-tokens/variables';
+@import '../../../../composer/webspark-theme-renovation/src/sass/variables/colors';
+@import './webspark2-overrides/card-arrangement';
+@import './webspark2-overrides/hero';
+@import './webspark2-overrides/text';
+@import './webspark2-overrides/image-overlap';
+@import './webspark2-overrides/testimonial';
+@import './webspark2-overrides/card-carousel-container';
+@import './backgrounds/backgrounds';
+@import './blocks/asu-edu-anim-content-buttons';
+
+.node.page {
+  .bg:last-child {
+    margin-bottom: -56px;
+  }
+}

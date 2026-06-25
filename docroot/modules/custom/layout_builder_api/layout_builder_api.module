@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Layout Builder API module hooks.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_entity_update().
+ */
+function layout_builder_api_entity_update(EntityInterface $entity) {
+  if ($entity->getEntityTypeId() === 'node') {
+    // Invalidate cache when node is updated
+    $service = \Drupal::service('layout_builder_api.service');
+    $service->invalidateLayoutCache($entity->id());
+  }
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function layout_builder_api_entity_delete(EntityInterface $entity) {
+  if ($entity->getEntityTypeId() === 'node') {
+    // Invalidate cache when node is deleted
+    $service = \Drupal::service('layout_builder_api.service');
+    $service->invalidateLayoutCache($entity->id());
+  }
+}

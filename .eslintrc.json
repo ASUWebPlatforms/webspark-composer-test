@@ -1,0 +1,4 @@
+{
+  "extends": ["./docroot/core/.eslintrc.json"],
+  "ignorePatterns": ["**/node_modules/**/*"]
+}

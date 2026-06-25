@@ -1,0 +1,54 @@
+{% set media = card.media|merge({'#attributes' : {'data-parallax-factor': '1', 'data-parallax-type': 'scroll-to'}}) %}
+{{ media }}
+<div class="container">
+  <div class="row pt-16 pb-16 card-content">
+    <div class="col col-12 col-md-12 col-lg-6">
+      <div class="card card-horizontal">
+
+        <div class="card-content-wrapper">
+          {# Heading #}
+          <div class="card-header">
+            {% include '@renovation/headings/card-heading.twig' with {
+              html_tag : 'h2',
+              heading: card.heading,
+            } %}
+          </div>
+          {# Body text #}
+          <div class="card-body">
+            {{ card.body|raw }}
+          </div>
+          {# Links #}
+        {% if card.links %}
+          <div class="card-link">
+            {% for link in card.links %}
+              {% include '@renovation/links/cta-link.twig' with {
+                url: link.uri,
+                label: link.title,
+                options: link.options,
+                color: 'maroon'
+              } %}
+            {% endfor %}
+          </div>
+        {% endif %}
+          {# Buttons #}
+        {% if card.ctas %}
+          <div class="card-button">
+            {% for cta in card.ctas %}
+              {% include '@asu_edu/links/cta-link-with-ga.twig' with {
+                url: cta.uri,
+                label: cta.title,
+                target: cta.options.attributes.target,
+                color: cta.options.attributes.class,
+                component: component,
+                section: card.heading,
+              } %}
+            {% endfor %}
+          </div>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{{ attach_library('asu_edu/image-parallax') }}

@@ -1,0 +1,87 @@
+asuaec_rfi.json.categories.ugrad:
+  path: '/admin/asuaec_rfi/json/categories/ground/ugrad'
+  defaults:
+    _controller: '\Drupal\asuaec_rfi\Controller\JsonController::generateJsonCat'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfi.json.categories.grad:
+  path: '/admin/asuaec_rfi/json/categories/ground/grad'
+  defaults:
+    _controller: '\Drupal\asuaec_rfi\Controller\JsonController::generateJsonCat'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfi.json.categories.online.ugrad:
+  path: '/admin/asuaec_rfi/json/categories/online/ugrad'
+  defaults:
+    _controller: '\Drupal\asuaec_rfi\Controller\JsonController::generateJsonCat'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfi.json.categories.online.grad:
+  path: '/admin/asuaec_rfi/json/categories/online/grad'
+  defaults:
+    _controller: '\Drupal\asuaec_rfi\Controller\JsonController::generateJsonCat'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfi.json.degrees.ground.ugrad:
+  path: '/admin/asuaec_rfi/json/degrees/ground/ugrad/{interest}'
+  defaults:
+    _controller: '\Drupal\asuaec_rfi\Controller\JsonController::generateJsonDegree'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfi.json.degrees.ground.grad:
+  path: '/admin/asuaec_rfi/json/degrees/ground/grad/{interest}'
+  defaults:
+    _controller: '\Drupal\asuaec_rfi\Controller\JsonController::generateJsonDegree'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfi.json.degrees.online.ugrad:
+  path: '/admin/asuaec_rfi/json/degrees/online/ugrad/{interest}'
+  defaults:
+    _controller: '\Drupal\asuaec_rfi\Controller\JsonController::generateJsonDegree'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfi.json.degrees.online.grad:
+  path: '/admin/asuaec_rfi/json/degrees/online/grad/{interest}'
+  defaults:
+    _controller: '\Drupal\asuaec_rfi\Controller\JsonController::generateJsonDegree'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfi.json.term.grad:
+  path: '/admin/asuaec_rfi/json/term/grad/{plancode}'
+  defaults:
+    _controller: '\Drupal\asuaec_rfi\Controller\JsonController::generateJsonTerm'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfi.json.gradtype:
+  path: '/admin/asuaec_rfi/json/gradtype/{plancode}'
+  defaults:
+    _controller: '\Drupal\asuaec_rfi\Controller\JsonController::generateJsonGradtype'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfib.asuaec_rfi_settings:
+  path: '/admin/config/asuaec-rfi'
+  defaults:
+    _form: '\Drupal\asuaec_rfi\Form\RfiAdminSwitch'
+    _title: 'ASU AEC Custom RFI - Admin config page'
+  requirements:
+    _permission: 'administer site configuration'

@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: i1cFKtgGCaW1C1EiLXk0-rAvUcSciQGJ8Rop3zLlVFc
+id: asu_health_era
+label: 'ASU Health Era'
+revision: 0
+description: 'ASU Health era component'

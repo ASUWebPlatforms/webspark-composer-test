@@ -1,0 +1,27 @@
+<?php
+// Top of the file.
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function eventticker_views_pre_render(ViewExecutable $view) {
+  if (isset($view) && ($view->storage->id() == 'sda_events')) {
+    $view->element['#attached']['library'][] = 'eventticker/eventlib';
+  }
+}
+
+function eventticker_theme($existing, $type, $theme, $path) {
+  return array(
+    'views_view_unformatted__sda_events__block_1' => [
+      'template' => 'views/views-view-unformatted--sda-events--block-1',
+      'base hook' => 'views',
+    ],
+    'block__inline_block__sda_athletic_ticker' => [
+      'template' => 'block/block--inline-block--sda-athletic-ticker',
+      'base hook' => 'block',
+    ]
+  );
+}
+
+?>

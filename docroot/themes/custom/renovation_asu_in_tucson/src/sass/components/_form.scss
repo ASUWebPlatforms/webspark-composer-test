@@ -1,0 +1,58 @@
+#asu-edu-components-find-my-degree-program {
+  label {
+    font-size: $uds-size-spacing-2;
+  }
+
+  input#edit-search {
+    height: $uds-size-spacing-6;
+  }
+
+  input#edit-submit {
+    padding-left: $uds-size-spacing-4 !important;
+  }
+
+  select {
+    height: $uds-size-spacing-6;
+  }
+
+  fieldset {
+    border: none;
+
+    legend {
+      font-weight: $uds-font-weight-bold;
+    }
+
+    .card-header {
+      padding: 10px 0;
+    }
+
+    .card-body {
+      padding: 0;
+    }
+
+    .form-radios {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: 100%;
+      gap: $uds-size-spacing-4;
+
+      .form-check {
+        display: flex;
+        flex-direction: row;
+        flex-basis: 100%;
+        flex: 1;
+
+        .form-check-label {
+          font-weight: normal;
+          font-size: $uds-size-spacing-2;
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+}
+
+.layout-builder-discard-changes {
+  margin-bottom: $uds-size-spacing-2;
+}

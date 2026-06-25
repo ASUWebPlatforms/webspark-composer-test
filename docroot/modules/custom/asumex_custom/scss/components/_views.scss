@@ -1,0 +1,24 @@
+
+/*------------------------------------------------------------------
+Partner Search Form
+--------------------------------------------------------------------*/
+
+#views-exposed-form-content-display-project-project-list {
+  display: flex;
+  margin-bottom: 48px;
+  .form-group {
+    width: 50%;
+    padding-right: 24px;
+  }
+  .form-actions {
+    display: flex;
+    .btn {
+      &.btn-primary {
+        background: #191919;
+        font-size: .875rem;
+        padding: 0.5rem 2rem;
+        margin: 2.25rem 0.5rem;
+      }
+    }
+  }
+}

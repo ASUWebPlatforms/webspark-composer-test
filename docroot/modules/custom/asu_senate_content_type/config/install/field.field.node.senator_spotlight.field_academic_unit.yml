@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_academic_unit
+    - node.type.senator_spotlight
+    - taxonomy.vocabulary.academic_unit
+id: node.senator_spotlight.field_academic_unit
+field_name: field_academic_unit
+entity_type: node
+bundle: senator_spotlight
+label: 'Academic Unit'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      academic_unit: academic_unit
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

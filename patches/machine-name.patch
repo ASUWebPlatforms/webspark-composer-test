@@ -1,0 +1,27 @@
+diff --git a/AcsfToolsCommands.php b/AcsfToolsCommands.php
+index 9d8bc0f..f4e1d3e 100755
+--- a/AcsfToolsCommands.php
++++ b/AcsfToolsCommands.php
+@@ -513,11 +513,11 @@ class AcsfToolsCommands extends AcsfToolsUtils implements SiteAliasManagerAwareI
+ 
+           if ($options['format'] === self::FORMAT_PROGRESS) {
+             if ($process->isSuccessful()) {
+-              $this->output()->writeln("\n=> The command executed successfully for the site " . $sites[$key]['domain'] . '.');
++              $this->output()->writeln("\n=> The command executed successfully for the site " . $sites[$key]['machine_name'] . '.');
+               $this->output()->writeln($process->getOutput());
+               $this->output()->writeln($process->getErrorOutput());
+             } else {
+-              $this->output()->writeln("\n=> The command failed to execute for the site " . $sites[$key]['domain'] . '.');
++              $this->output()->writeln("\n=> The command failed to execute for the site " . $sites[$key]['machine_name'] . '.');
+               $this->output()->writeln($process->getErrorOutput());
+             }
+           }
+@@ -529,7 +529,7 @@ class AcsfToolsCommands extends AcsfToolsUtils implements SiteAliasManagerAwareI
+         // not started yet, start it.
+         if (!$process->isStarted() && (!intval($options['concurrency-limit']) || $options['concurrency-limit'] > $running)) {
+           if ($options['format'] === self::FORMAT_PROGRESS) {
+-            $this->output()->writeln("\n=> Executing command on " . $sites[$key]['domain']);
++            $this->output()->writeln("\n=> Executing command on " . $sites[$key]['machine_name']);
+           }
+           $process->start();
+ 

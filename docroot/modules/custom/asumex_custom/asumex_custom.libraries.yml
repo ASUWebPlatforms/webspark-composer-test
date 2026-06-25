@@ -1,0 +1,11 @@
+asumex:
+  version: 1.x
+  css:
+    theme:
+      css/asumex-theme.css: {}    
+
+mailchimp:
+  version: VERSION
+  css:
+    base:
+      '//cdn-images.mailchimp.com/embedcode/classic-10_7.css': { type: external }

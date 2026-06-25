@@ -1,0 +1,8 @@
+name: Compensation Estimator
+type: module
+description: 'a form that calculates an estimate of an employee’s total compensation, which includes not only salary but the dollar-value of ASU’s contribution to benefits'
+package: custom
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+version: VERSION
+configure: compensation_estimator.admin_settings

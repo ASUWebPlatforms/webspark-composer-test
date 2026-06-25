@@ -1,0 +1,5 @@
+@import '../../sass/extends/paragraphs';
+// Set content width to default to override the 75ch that bleeds into every component.
+p {
+  max-width: 700px;
+}

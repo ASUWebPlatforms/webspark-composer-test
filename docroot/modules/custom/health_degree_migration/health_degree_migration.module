@@ -1,0 +1,50 @@
+<?php
+function health_degree_migration_form_views_exposed_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // Check for your specific view and display.
+  if ($form_state->get('view')->id() == 'degree_search' && $form_state->get('view')->current_display == 'page_3') {
+
+    // Ensure both filters exist.
+    if (isset($form['field_degree_tags_target_id'], $form['field_tags_target_id'])) {
+
+      // Get the options from both taxonomy filters.
+      $taxonomy_filter_1 = $form['field_degree_tags_target_id']['#options'];
+      $taxonomy_filter_2 = $form['field_tags_target_id']['#options'];
+
+      // Combine the options from both filters.
+      $combined_options = $taxonomy_filter_1 + $taxonomy_filter_2; // Merge arrays, keeping unique keys.
+
+      // Ensure unique values and sort the combined options.
+      $combined_options = array_unique($combined_options);
+      asort($combined_options);
+
+      // Create a new dropdown element for the combined filter.
+      $form['combined_taxonomy_filter'] = [
+        '#type' => 'select',
+        '#title' => t('Combined Taxonomy Filter'),
+        '#options' => $combined_options,
+        '#empty_option' => t('- Select -'),
+      ];
+
+      // Set the original filters to hidden but still present in the form.
+      $form['field_degree_tags_target_id']['#access'] = FALSE;
+      $form['field_tags_target_id']['#access'] = FALSE;
+
+      // Add a custom submit handler for the combined filter.
+      $form['#submit'][] = 'health_degree_migration_combined_taxonomy_filter_submit';
+    }
+  }
+}
+
+/**
+ * Custom submit handler to apply combined filter to both taxonomy filters.
+ */
+function health_degree_migration_combined_taxonomy_filter_submit(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  $selected_value = $form_state->getValue('combined_taxonomy_filter');
+
+  if (!empty($selected_value)) {
+    // Apply the selected value to both hidden filters in the view query.
+    $form_state->setValue('field_degree_tags_target_id', $selected_value);
+    $form_state->setValue('field_tags_target_id', $selected_value);
+  }
+}
+

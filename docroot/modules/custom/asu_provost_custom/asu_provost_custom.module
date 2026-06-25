@@ -1,0 +1,13 @@
+<?php
+/**
+ * Implements hook_page_attachments_alter
+ *
+ * Include jQuery/JS for the page /node/10 (/about/staff page)
+ */
+function asu_provost_custom_page_attachments_alter(array &$page) {
+  // Get the current path.
+  $current_path = \Drupal::service('path.current')->getPath();
+  if ($current_path == '/node/10') {
+    $page['#attached']['library'][] = 'asu_provost_custom/provostcustom-aboutstaff-library';
+  }
+}

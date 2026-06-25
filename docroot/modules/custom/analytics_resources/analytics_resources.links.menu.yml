@@ -1,0 +1,6 @@
+analytics_resources.settings:
+  title: Analytics Resources
+  description: Configure settings for the Analytics Resources module
+  route_name: analytics_resources.settings
+  parent: system.admin_config_development
+  weight: 100

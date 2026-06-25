@@ -1,0 +1,169 @@
+#!/usr/bin/env bash
+
+##
+## Usage: asusf:checkout [branch-name] [--new] [--origin=<branch>] [--no-install] [--no-restore] [--no-snapshot]
+## Description: Snapshot the database, switch git branch, then run composer install.
+## Example: ddev asusf:checkout feature/my-change
+## Example: ddev asusf:checkout feature/my-change --new
+## Example: ddev asusf:checkout pr-123 --origin=feature/origin-branch
+## Example: ddev asusf:checkout --origin=feature/origin-branch
+## Example: ddev asusf:checkout feature/my-change --no-install
+##
+## Options:
+##   --new         Create the branch instead of checking out an existing one.
+##   --origin      Create a new local branch from origin/<branch>.
+##   --no-install  Skip composer install after switching branches.
+##   --no-restore  Skip automatic snapshot restore even if one exists for the target branch.
+##   --no-snapshot Skip automatic snapshot of the current database before switching.
+##
+
+set -euo pipefail
+
+# Define color codes
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+function show_help() {
+  sed -n 's/^##//p' "${0}"
+}
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" || "${1:-}" == "-?" ]]; then
+  show_help
+  exit 0
+fi
+
+if [[ -z "${DDEV_APPROOT:-}" ]]; then
+  echo -e "${RED}Error:${NC} DDEV_APPROOT is not set. Run this via ddev asusf:checkout from a DDEV project."
+  exit 1
+fi
+
+branch_name=""
+create_new=false
+from_origin_branch=""
+install_dependencies=true
+restore_snapshot=true
+create_snapshot=true
+
+for arg in "$@"; do
+  case "$arg" in
+    --new)
+      create_new=true
+      ;;
+    --origin=*)
+      from_origin_branch="${arg#--origin=}"
+      create_new=true
+      ;;
+    --no-install)
+      install_dependencies=false
+      ;;
+    --no-restore)
+      restore_snapshot=false
+      ;;
+    --no-snapshot)
+      create_snapshot=false
+      ;;
+    -h|--help)
+      show_help
+      exit 0
+      ;;
+    -*)
+      echo -e "${RED}Error:${NC} Unknown option '$arg'"
+      show_help
+      exit 1
+      ;;
+    *)
+      if [[ -z "$branch_name" ]]; then
+        branch_name="$arg"
+      else
+        echo -e "${RED}Error:${NC} Unexpected argument '$arg'"
+        show_help
+        exit 1
+      fi
+      ;;
+  esac
+done
+
+if [[ -z "$branch_name" ]]; then
+  if [[ -n "$from_origin_branch" ]]; then
+    branch_name="$from_origin_branch"
+  else
+    echo -e "${RED}Error:${NC} Missing branch name."
+    show_help
+    exit 1
+  fi
+fi
+
+if [[ "$create_new" == false && -n "$from_origin_branch" ]]; then
+  echo -e "${RED}Error:${NC} --origin requires creating a new branch."
+  exit 1
+fi
+
+cd "${DDEV_APPROOT}"
+
+# Slugify a branch name to match snapshot naming convention
+slugify_branch() {
+  echo "$1" | tr '[:upper:]/' '[:lower:]-' | sed -E 's/[^a-z0-9-]/-/g; s/-+/-/g; s/^-//; s/-$//'
+}
+
+# Derive a safe snapshot name: current branch + timestamp
+current_branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "detached")"
+safe_branch="$(slugify_branch "$current_branch")"
+snapshot_name="${safe_branch}--$(date +%m-%d-%Y-%H%M%S)"
+
+if [[ "$create_snapshot" == true ]]; then
+  echo -e "${YELLOW}Snapshotting database as:${NC} ${snapshot_name}"
+  ddev snapshot --name "${snapshot_name}"
+  echo -e "${GREEN}Snapshot saved.${NC} Restore later with: ddev snapshot restore ${snapshot_name}"
+else
+  echo -e "${YELLOW}Skipping snapshot (--no-snapshot).${NC}"
+fi
+
+# Switch branch
+if [[ "$create_new" == true ]]; then
+  if [[ -n "$from_origin_branch" ]]; then
+    echo -e "${YELLOW}Fetching origin branch:${NC} ${from_origin_branch}"
+    git -C "${DDEV_APPROOT}" fetch origin "${from_origin_branch}"
+    echo -e "${YELLOW}Creating new branch:${NC} ${branch_name} from origin/${from_origin_branch}"
+    git -C "${DDEV_APPROOT}" checkout -b "${branch_name}" "origin/${from_origin_branch}"
+  else
+    echo -e "${YELLOW}Creating new branch:${NC} ${branch_name}"
+    git -C "${DDEV_APPROOT}" checkout -b "${branch_name}"
+  fi
+else
+  echo -e "${YELLOW}Checking out branch:${NC} ${branch_name}"
+  git -C "${DDEV_APPROOT}" checkout "${branch_name}"
+fi
+
+# Auto-restore the most recent snapshot for the target branch if one exists
+if [[ "$restore_snapshot" == true && "$create_new" == false ]]; then
+  safe_target="$(slugify_branch "$branch_name")"
+  snapshots_dir="${DDEV_APPROOT}/.ddev/db_snapshots"
+  # Pick the newest matching snapshot file, then strip storage suffix to get
+  # the snapshot identifier expected by `ddev snapshot restore`.
+  latest_snapshot_file="$(ls -1t "$snapshots_dir" 2>/dev/null | grep "^${safe_target}--" | head -1 || true)"
+  latest_snapshot="${latest_snapshot_file%%-mysql_*.zst}"
+  if [[ -n "$latest_snapshot" ]]; then
+    echo -e "${YELLOW}Found snapshot for '${branch_name}':${NC} ${latest_snapshot}"
+    echo -e "${YELLOW}Restoring snapshot...${NC}"
+    ddev snapshot restore "${latest_snapshot}"
+    echo -e "${GREEN}Snapshot restored.${NC}"
+  else
+    echo -e "${YELLOW}No snapshot found for '${branch_name}' — continuing with current database.${NC}"
+  fi
+fi
+
+if [[ "$install_dependencies" == true ]]; then
+  if [[ -f "${DDEV_APPROOT}/composer.json" ]]; then
+    echo -e "${YELLOW}Running composer install...${NC}"
+    ddev composer install
+    echo -e "${GREEN}composer install complete.${NC}"
+  else
+    echo "No composer.json found, skipping composer install."
+  fi
+else
+  echo "Skipping composer install (--no-install)."
+fi
+
+echo -e "${GREEN}Done.${NC} Now on branch: $(git -C "${DDEV_APPROOT}" rev-parse --abbrev-ref HEAD)"

@@ -1,0 +1,5 @@
+name: ASU AEC Visit confirmation email for individual RSVP forms
+type: module
+description: 'ASU AEC Visit confirmation email for individual RSVP forms'
+package: ASU
+core_version_requirement: ^9 || ^10 || ^11

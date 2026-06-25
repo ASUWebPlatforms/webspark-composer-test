@@ -1,0 +1,16 @@
+.block--type-image-background-with-cta{
+  .uds-image-background-with-cta-container{
+    flex-direction: column;
+    
+    @media (min-width: 992px) {
+      margin: 0 10rem;
+    }
+    gap: 10px;
+    span {
+      margin-bottom: 1rem;
+    }
+  }
+  section{
+    max-height: 200px;
+  }
+}

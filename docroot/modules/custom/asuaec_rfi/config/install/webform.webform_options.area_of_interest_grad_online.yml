@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies: {  }
+id: area_of_interest_grad_online
+label: 'Area of interest - Grad Online'
+category: ASU
+likert: false
+options: |-
+  'Art and design': 'Art and design'
+  'Behavioral sciences': 'Behavioral sciences'
+  Business: Business
+  'Communication and digital media': 'Communication and digital media'
+  'Computer science and technology': 'Computer science and technology'
+  Education: Education
+  Engineering: Engineering
+  'Geographical sciences and urban planning': 'Geographical sciences and urban planning'
+  'Health and wellness': 'Health and wellness'
+  History: History
+  'Humanities Programs': 'Humanities Programs'
+  'Information technology': 'Information technology'
+  Language: Language
+  'Law, criminal justice and public service': 'Law, criminal justice and public service'
+  'Liberal arts': 'Liberal arts'
+  Management: Management
+  Nursing: Nursing
+  Nutrition: Nutrition
+  Psychology: Psychology
+  STEM: STEM
+  Science: Science
+  'Social Sciences': 'Social Sciences'
+  Sustainability: Sustainability

@@ -1,0 +1,21 @@
+{#
+@file
+The template for split content.
+
+Available variables:
+- background: Background colors to apply (gray-2-bg, gray-1-bg).
+- spacing: Top and bottom spacing to apply.
+- columnsLeft: Class to represent the amount of columns on the left side.
+- columnsRight: Class to represent the amount of columns on the right side.
+- contentLeft: Content to display in the left column.
+- contentRight: Content to display in the right column.
+#}
+
+<div class="{{ background }} {{ spacing|default('tw-py-24') }}">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 {{ columnsLeft|default('col-lg-8') }}">{{ contentLeft }}</div>
+      <div class="col-sm-12 {{ columnsRight|default('col-lg-4') }}">{{ contentRight }}</div>
+    </div>
+  </div>
+</div>

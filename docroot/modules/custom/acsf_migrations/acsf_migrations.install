@@ -1,0 +1,109 @@
+<?php
+
+/**
+ * Implements hook_update_N();
+ * Update the custom theme.
+ */
+function acsf_migrations_update_10003(&$sandbox) {
+  $theme = '';
+  if (isset($GLOBALS['gardens_site_settings']['flags']['sitename']) && !empty($GLOBALS['gardens_site_settings']['flags']['sitename'])) {
+    $sitename = $GLOBALS['gardens_site_settings']['flags']['sitename'];
+    if ($sitename == 'economist-d9') {
+      $theme = 'customrenovation_economist';
+    }
+    elseif ($sitename == 'office-of-the-president-d9') {
+      $theme = 'renovationcustom_office';
+    }
+    elseif ($sitename == 'bios-ws2') {
+      $theme = 'customrenovation_bios';
+    }
+		elseif ($sitename == 'ccjd9') {
+      $theme = 'customrenovation_ccjd9';
+    }
+    elseif ($sitename == 'mipp-webspark-2') {
+      $theme = 'customrenovation_mipp';
+    }
+    elseif ($sitename == 'leadership-academy-d9') {
+      $theme = 'customrenovation_leadership';
+    }
+    elseif ($sitename == 'cemhs-webspark-2') {
+      $theme = 'customrenovation_cemhs';
+    }
+  }
+  if ($theme != '') {
+    // Enable the theme.
+    \Drupal::service('theme_installer')->install([$theme]);
+
+    // Set as default theme.
+    \Drupal::configFactory()->getEditable('system.theme')
+      ->set('default', $theme)
+      ->save();
+  }
+}
+
+/**
+ * Implements hook_update_N();
+ */
+function acsf_migrations_update_10002() {
+  if (isset($GLOBALS['gardens_site_settings']['flags']['sitename']) && !empty($GLOBALS['gardens_site_settings']['flags']['sitename'])) {
+    $sitename = $GLOBALS['gardens_site_settings']['flags']['sitename'];
+    if ($sitename == 'wellness-d9') {
+      $database = \Drupal::database();
+      $database->update('node_access')
+        ->fields([
+          'realm' => 'nodeaccess_user',
+        ])
+        ->condition('realm', 'nodeaccess_uid')
+        ->execute();
+      $database->update('node_access')
+        ->fields([
+          'realm' => 'nodeaccess_role',
+        ])
+        ->condition('realm', 'nodeaccess_rid')
+        ->execute();
+    }
+  }
+}
+
+/**
+ * Delete Rabbit Hole behavior_settings for all content types
+ * and enable the radix_custom module.
+ */
+function acsf_migrations_update_10004() {
+  if (isset($GLOBALS['gardens_site_settings']['flags']['sitename']) && !empty($GLOBALS['gardens_site_settings']['flags']['sitename'])) {
+    $sitename = $GLOBALS['gardens_site_settings']['flags']['sitename'];
+    if ($sitename == 'office-of-the-president-d9') {
+      // Delete Rabbit Hole behavior settings for all content types.
+      $node_bundles = \Drupal::entityTypeManager()
+          ->getStorage('node_type')
+          ->loadMultiple();
+
+      foreach ($node_bundles as $bundle_id => $bundle) {
+        $config_id = "rabbit_hole.behavior_settings.node_type_{$bundle_id}";
+
+        if (!\Drupal::configFactory()->getEditable($config_id)->isNew()) {
+          \Drupal::configFactory()->getEditable($config_id)->delete();
+          \Drupal::logger('acsf_migrations')->notice('Deleted config: @id', ['@id' => $config_id]);
+        }
+      }
+
+      // Enable the radix_custom module if not already enabled.
+
+      $module_handler = \Drupal::moduleHandler();
+      $module_installer = \Drupal::service('module_installer');
+
+      if (!$module_handler->moduleExists('radix_custom')) {
+        try {
+          $module_installer->install(['radix_custom'], TRUE);
+          \Drupal::logger('acsf_migrations')->notice('radix_custom installed.');
+        }
+        catch (\Exception $e) {
+          \Drupal::logger('acsf_migrations')->error('Install error: @msg', ['@msg' => $e->getMessage()]);
+        }
+      }
+      else {
+        \Drupal::logger('acsf_migrations')->notice('radix_custom already installed.');
+      }
+    }
+  }
+}

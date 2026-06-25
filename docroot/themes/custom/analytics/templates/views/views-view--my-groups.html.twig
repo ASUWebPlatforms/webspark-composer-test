@@ -1,0 +1,12 @@
+{{ include('@analytics/view-my-content.html.twig') }}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const accordionItem = document.querySelector('.accordion-item');
+
+    if (accordionItem) {
+      const accordionBody = accordionItem.querySelector('.accordion-body');
+      accordionBody?.classList.add('show');
+    }
+  });
+</script>

@@ -1,0 +1,35 @@
+{#
+  Webspark-style degree card
+  - Image on top
+  - Title
+  - Learn more button
+#}
+<article class="card h-100 asu-degree-card">
+
+  {% if image_url %}
+    <img
+      src="{{ image_url }}"
+      class="card-img-top"
+      alt="{{ title|e }}"
+      loading="lazy"
+    >
+  {% endif %}
+
+  <div class="card-body d-flex flex-column">
+
+    <h3 class="card-title fw-bold mb-4">
+      {{ title }}
+    </h3>
+
+    {# Push button to bottom #}
+    <div class="mt-auto">
+      <a
+        href="{{ button_url }}"
+        class="btn btn-maroon btn-md"
+      >
+        {{ button_text ?: 'Learn more' }}
+      </a>
+    </div>
+
+  </div>
+</article>

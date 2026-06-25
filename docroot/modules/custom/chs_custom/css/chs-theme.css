@@ -1,0 +1,470 @@
+/*------------------------------------------------------------------
+CHS News
+--------------------------------------------------------------------*/
+.image-with-caption {
+  overflow: auto;
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 12.5px;
+  margin-top: 12.5px;
+  width: 100%;
+  display: block;
+}
+.image-with-caption > img {
+  width: 100%;
+  height: auto;
+}
+.image-with-caption .image {
+  width: 350px;
+  height: 350px;
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: block;
+  float: left;
+}
+.image-with-caption .description {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #767676;
+  font-size: 13px;
+  display: block;
+  float: left;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .image-with-caption {
+    width: 371px;
+    padding-top: 20px;
+  }
+
+  .image-with-caption.image-with-caption-border-left {
+    border: none;
+    border-left: 1px solid #eeeeee;
+    padding-left: 20px;
+    margin-left: 25px;
+  }
+
+  .image-with-caption.image-with-caption-border-right {
+    border: none;
+    border-right: 1px solid #eeeeee;
+    padding-right: 20px;
+    margin-right: 25px;
+  }
+
+  .image-with-caption.image-with-caption-float-left {
+    float: left;
+  }
+
+  .image-with-caption.image-with-caption-float-right {
+    float: right;
+  }
+}
+@media (max-width: 767px) {
+  .caption > .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .image-with-caption .image {
+    width: 100%;
+    height: 300px;
+  }
+
+  .image-with-caption .description {
+    margin-top: 2%;
+    margin-left: 0;
+    float: left;
+    width: 100%;
+  }
+}
+/*------------------------------------------------------------------
+Custom CHS Animated Content Buttons
+--------------------------------------------------------------------*/
+@media screen and (max-width: 992px) {
+  .block-inline-blockasu-edu-anim-content-buttons {
+    margin-left: 2rem;
+    margin-right: calc(2rem - 5px);
+  }
+}
+.block-inline-blockasu-edu-anim-content-buttons .animated-content-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.block-inline-blockasu-edu-anim-content-buttons .animated-content-section .content-section {
+  background-size: cover;
+  height: 600px;
+  width: 400px;
+  min-width: 300px;
+  position: relative;
+  transition: all 1s cubic-bezier(0.19, 1, 0.19, 1);
+  margin: 0 1rem;
+}
+.block-inline-blockasu-edu-anim-content-buttons .animated-content-section .content-section .link-area a {
+  display: block;
+}
+.block-inline-blockasu-edu-anim-content-buttons .animated-content-section .image-holder:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: linear-gradient(to top, rgba(25, 25, 25, 0.75) 0%, rgba(25, 25, 25, 0) 100%);
+}
+.block-inline-blockasu-edu-anim-content-buttons .animated-content-section .content-holder {
+  position: absolute;
+  bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  height: auto;
+}
+@media screen and (max-width: 992px) {
+  .block-inline-blockasu-edu-anim-content-buttons .animated-content-section {
+    flex-direction: column;
+  }
+  .block-inline-blockasu-edu-anim-content-buttons .animated-content-section .long-text {
+    display: none;
+  }
+  .block-inline-blockasu-edu-anim-content-buttons .animated-content-section h2,
+.block-inline-blockasu-edu-anim-content-buttons .animated-content-section .button-area {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+@media screen and (min-width: 992px) {
+  .block-inline-blockasu-edu-anim-content-buttons .animated-content-section .content-section:hover {
+    transform: scale(1.1);
+  }
+  .block-inline-blockasu-edu-anim-content-buttons .animated-content-section .hidden-details {
+    transition: all 1s cubic-bezier(0.19, 1, 0.19, 1);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+  }
+  .block-inline-blockasu-edu-anim-content-buttons .animated-content-section .content-section:hover .hidden-details {
+    max-height: 300px;
+    opacity: 1;
+  }
+  .block-inline-blockasu-edu-anim-content-buttons .animated-content-section .button-area a:hover {
+    margin-left: 0.25rem;
+  }
+}
+
+.uds-image-overlap .content-wrapper {
+  align-self: center;
+}
+
+/*------------------------------------------------------------------
+ UDS Text with Image 
+--------------------------------------------------------------------*/
+/*------------------------------------------------------------------
+ UDS Quote with Image Background
+--------------------------------------------------------------------*/
+.uds-quote-image-background {
+  padding: 5rem 2rem;
+}
+
+/*------------------------------------------------------------------
+ UDS Image Background with CTA
+--------------------------------------------------------------------*/
+.uds-image-background-with-cta {
+  height: 800px;
+}
+.uds-image-background-with-cta h1 {
+  line-height: 5rem;
+}
+
+/*------------------------------------------------------------------
+ UDS Testimonial Carousel
+--------------------------------------------------------------------*/
+.testimonial-carousel-container {
+  padding-bottom: 96px;
+  padding-top: 96px;
+}
+
+.asu-testimonial-on-image-container {
+  justify-content: center;
+}
+
+/*------------------------------------------------------------------
+ CHS Get Started buttons - width override
+--------------------------------------------------------------------*/
+.chs-wide-buttons .btn {
+  width: 100% !important;
+}
+
+/*------------------------------------------------------------------
+Contact sidebar custom styles
+--------------------------------------------------------------------*/
+.contact-sidebar .sb-action-link a {
+  color: #FFFFFF;
+  text-decoration: none;
+}
+.contact-sidebar .sb-action-link a:hover {
+  text-decoration: underline;
+}
+
+/*------------------------------------------------------------------
+Quote slider custom styles
+--------------------------------------------------------------------*/
+.bg-quote-slider {
+  background: url(images/quote-slider.jpg) no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+@media screen and (max-width: 992px) {
+  .block-inline-blockasu-edu-anim-content-buttons {
+    width: 100%;
+    margin: 0;
+  }
+}
+/*------------------------------------------------------------------
+Animated Slider Card custom styles
+--------------------------------------------------------------------*/
+.block-inline-blockasu-edu-anim-content-buttons .animated-content-section .content-holder {
+  left: auto;
+}
+
+/*------------------------------------------------------------------
+CHS Custom Hero Overrides
+--------------------------------------------------------------------*/
+div[class^=uds-hero] h1 {
+  line-height: 4.513rem;
+  max-width: 100%;
+}
+
+.uds-video-hero .highlight- {
+  background-color: #ffc627;
+  color: #191919;
+  box-shadow: -0.15em 0 0 #ffc627, 0.15em 0 0 #ffc627;
+}
+
+/*------------------------------------------------------------------
+1. Basic Card Utilities
+--------------------------------------------------------------------*/
+/*------------------------------------------------------------------
+10. Custom CHS Cards
+--------------------------------------------------------------------*/
+.uds-image-text-block-container {
+  border: none;
+}
+
+.chs-custom-text-image-set .uds-card-and-image {
+  height: 800px;
+}
+.chs-custom-text-image-set .uds-card-and-image .uds-card-and-image-container .card {
+  max-height: calc(800px - 4rem);
+}
+.chs-custom-text-image-set .uds-card-and-image .uds-card-and-image-container .card .card-body {
+  -webkit-box-orient: unset;
+  padding-bottom: 16px;
+}
+
+.uds-card-arrangement {
+  width: 100%;
+}
+
+a.c-card {
+  height: 100%;
+}
+
+.bg[class*=black] .uds-card-arrangement .card {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+.bg[class*=black] .uds-card-arrangement .card .card-icon-top {
+  color: #ffc627;
+}
+.bg[class*=black] .uds-card-arrangement .card .card-header {
+  background-color: transparent;
+}
+
+.glide.slider-start::after,
+.glide.slider-mid::after,
+.glide.slider-end::after {
+  background: none !important;
+}
+
+/*------------------------------------------------------------------
+Partner Logos
+--------------------------------------------------------------------*/
+.chs-partner-logo {
+  width: 385px;
+  height: 247px;
+}
+.chs-partner-logo .img-fluid {
+  max-height: 100%;
+}
+
+.views-field:focus,
+.views-field:focus {
+  box-shadow: none !important;
+}
+
+.ui-state-active a {
+  color: #8c1d40 !important;
+}
+.ui-state-active a:link {
+  color: #8c1d40 !important;
+}
+
+.ui-state-default a {
+  color: #8c1d40 !important;
+}
+.ui-state-default a:link {
+  color: #8c1d40 !important;
+}
+
+.ui-state-active {
+  background-color: #f6f6f6 !important;
+}
+
+.views-accordion-header,
+.ui-accordion-content {
+  border: 1px solid #d0d0d0;
+  border-left: 0.5rem solid #ffc627 !important;
+  color: #000 !important;
+  background-color: #fff !important;
+}
+
+.views-accordion-header {
+  margin: 1.5rem 0 0 !important;
+}
+
+.ui-icon {
+  background-image: none !important;
+  margin-left: 1rem;
+}
+
+.views-exposed-form-advisors-chs-content--display-page .form-actions {
+  margin-top: 32px;
+}
+
+/*------------------------------------------------------------------
+ Mailchimp - Custom
+--------------------------------------------------------------------*/
+#mc-embedded-subscribe {
+  margin: 0;
+}
+
+#mc_embed_signup .mc-field-group {
+  width: 100%;
+}
+#mc_embed_signup input {
+  border-radius: 0;
+}
+#mc_embed_signup input.subscribe {
+  border: 1px solid transparent;
+  border-radius: 400rem;
+  font-size: 1rem;
+}
+#mc_embed_signup .mc-group-name .mc-field-group {
+  padding: 0 0 3% 0;
+}
+#mc_embed_signup .mc-group-name .mc-field-group:first-child {
+  padding-right: 1rem;
+}
+#mc_embed_signup .mc-group-name .mc-field-group:last-child {
+  padding-left: 1rem;
+}
+
+/*------------------------------------------------------------------
+ Webform - Custom
+--------------------------------------------------------------------*/
+.webform-button--submit.btn.btn-primary {
+  color: #212529;
+  background: #ffc627;
+}
+.webform-button--submit.btn-maroon, .webform-button--submit.btn-maroon {
+  color: #212529;
+  border-color: #ffc627;
+}
+.webform-button--submit.btn-maroon:hover, .webform-button--submit.btn-maroon:hover {
+  color: #212529;
+  background-color: #ffc627;
+  border-color: #ffc627;
+}
+
+.bg-gold-sunburst {
+  background-color: #ffc627;
+  background-image: url(../images/sunburst.png);
+  background-repeat: no-repeat;
+  background-size: 360px auto;
+  background-position: right -250px center;
+}
+
+.bg-black-sunburst {
+  background-image: url(../images/sunburst.png);
+  background-repeat: no-repeat;
+  background-size: 360px auto;
+  background-position: right -250px center;
+  background-color: #191919;
+}
+.bg-black-sunburst .card-category {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.bg-black-sunburst .card-stat {
+  font-size: 110px;
+  max-width: 240px;
+  font-weight: bold;
+  color: #ffc627;
+}
+.bg-black-sunburst .card-stat p {
+  font-size: 16px;
+}
+
+.bg-maroon-info {
+  background-color: #8c1d40;
+  color: #ffffff;
+}
+.bg-maroon-info h3 .svg-inline--fa {
+  color: #ffc627;
+}
+.bg-maroon-info .svg-inline--fa {
+  color: #ffffff;
+}
+.bg-maroon-info a {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+/* UNIVERSAL STYLES
+-------------------------------------------------*/
+.lh-chs {
+  line-height: 5rem;
+  max-width: 100%;
+}
+
+@media screen and (max-width: 992px) {
+  .lh-chs {
+    line-height: 3rem;
+  }
+}
+hr.copy-divider {
+  width: 114px;
+}
+
+.extra-lead {
+  font-size: 30px;
+}
+@media (min-width: 992px) {
+  .extra-lead {
+    font-size: 80px;
+  }
+}
+
+/*# sourceMappingURL=chs-theme.css.map */

@@ -1,0 +1,149 @@
+<?php
+
+use Drupal\user\UserInterface;
+use Drupal\Component\Utility\Html;
+use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\DeprecationHelper;
+use Drupal\Core\Utility\Error;
+
+/**
+ * API function to get a person/profile record from Elastic.
+ *
+ * @param string|int $asurite An ASURITE.
+ *
+ * @return array Elastic record for profile.
+ */
+
+
+function form_customization_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+
+    // Check if the form ID matches the form you want to alter.
+    if ($form_id == 'rules_expression_edit') {
+      // Check if the 'message' field exists and update its properties.
+      if (isset($form['context_definitions']['message'])) {
+        // Update the title of the 'message' field.
+        // $form['context_definitions']['message']['#title'] = t('New Message Title');
+        // 
+         // $form['context_definitions']['message']['#type'] = 'text_format';
+         // $form['context_definitions']['message']['#rows'] = 9;
+         // $form['context_definitions']['message']['#default_value'] = "Hi Hello";
+         $form['context_definitions']['message']['setting']['#maxlength'] = '20000';
+      }
+    }
+
+    
+    /*
+    if($form_id == "node_event_registration_form_form"){
+        // dump($form['title']);
+        // dump($form);
+         $form['title']['widget'][0]['#required']=true;
+         $form['title']['widget']['#required']=true;
+         $form['field_special_event_type']['widget']['#required']=true;
+         $form['field_room_number_location']['widget']['#required']=false;
+         $form['field_room_number_location'][0]['widget']['#required']=false;
+         
+        //dump($form['title']);
+         // $form['title']['setting']['#required'] = true;
+         // dump($form['title']['widget']);
+         // dump($form['field_special_event_type']);
+         // dump($form['field_event_date']);
+        // dump($form);
+
+        // die();
+
+    }else {
+
+       // dump($form['field_event_date']);
+
+    } */
+   
+    
+  }
+
+  // function form_customization_mail_alter(&$message) {
+    
+    // $str = $message['body'][0];
+    // for($i=0;$i<strlen($str)-2;$i++){
+    //   if(strlen($str)-2 <= $i){          
+    //         continue;
+    //   }
+    //   if(substr($str,$i,2)=='{{'){
+    //     $end = strpos($str,"}}")+2 - $i;    
+    //     $req_text = substr($str,$i,$end);        
+    //     $str = str_replace($req_text, "NA", $str);        
+    //   }
+    // }
+    // $message['body'][0] = $str;
+    // dump($message['from']);
+    // dump($message['to']);
+    // dump($message['subject']);
+    // dump($message['module']);
+
+    // die();
+    // $current_user = \Drupal::currentUser();
+    // $uid = $current_user->id();
+    // \Drupal::database()->insert('custom_mail_log')
+    // ->fields([
+    //     'uid' => $uid,
+    //     'from' => $message['from'],
+    //     'to' => $message['to'],
+    //     'subject' => $message['subject'],
+    //     'module' => $message['module'],
+    // ])
+    // ->execute();
+    
+  // }
+
+  function form_customization_user_login(UserInterface $account) {
+    // dump($account);
+    // dump($account->id());
+    // dump($account->get('name')->value);
+    $userid= $account->id();
+    $userName= $account->get('name')->value;
+
+    \Drupal::logger('form_customization')->notice('User with ID @uid has logged in.', ['@uid' => $account->id()]);
+    \Drupal::logger('form_customization')->notice('@asuid has logged in.', ['@asuid' => $userName]);
+     // Do Elastic query ala https://search.asu.edu/api/v1/webdir-profiles/faculty-staff/filtered?asurite_ids=myasurite
+        // And populate $record.
+        $elastic_base_url = \Drupal::config('asu_user.settings')->get('asu_user_elastic_query_url');
+        $elastic_query_url = $elastic_base_url . '?asurite_ids=' . Html::escape($userName);
+      //  dump($elastic_query_url);
+        $client = \Drupal::httpClient();
+        try {
+            $response = $client->get($elastic_query_url);
+            
+            $data = $response->getBody()->getContents();            
+            $elastic_data = Json::decode($data);
+
+            if(count($elastic_data['results']) > 0){
+              $asu_firstName=$elastic_data['results'][0]['first_name']['raw'];
+              $asu_midName=$elastic_data['results'][0]['middle_name']['raw'];
+              $asu_lastName=$elastic_data['results'][0]['last_name']['raw'];
+
+              if($asu_midName != ""){
+                // $asu_lastName =$asu_midName." ".$asu_lastName; 
+                $asu_lastName =$asu_lastName; 
+              }
+
+              $user = \Drupal\user\Entity\User::load($userid);
+              // dump($user);
+              // dump($user->get('field_user_first_name')->value);
+              // dump($user->get('field_user_last_name')->value);
+              if ($user && $user->get('field_user_first_name')->value == "" && $user->get('field_user_last_name')->value == "") {
+                $user->set("field_user_first_name", $asu_firstName);
+                $user->set("field_user_last_name", $asu_lastName);
+                $user->save();
+              }            
+              
+              \Drupal::logger('form_customization')->notice('ASU Account Name: @uname', ['@uname' =>$asu_firstName.$asu_midName.$asu_lastName ]);
+
+            }else {
+              \Drupal::logger('form_customization')->notice('Not an ASU account');
+
+            }            
+        }catch (Exception $e) {
+            Error::logException(\Drupal::logger('asu_user'), $e);
+        }
+    
+  }
+?>

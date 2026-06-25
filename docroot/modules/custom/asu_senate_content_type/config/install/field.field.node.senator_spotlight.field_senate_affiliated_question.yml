@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_senate_affiliated_question
+    - node.type.senator_spotlight
+  module:
+    - text
+id: node.senator_spotlight.field_senate_affiliated_question
+field_name: field_senate_affiliated_question
+entity_type: node
+bundle: senator_spotlight
+label: 'Senate affiliated questions'
+description: 'Add questions affiliated with participation in the ASU Senate. '
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+  required_summary: false
+  allowed_formats: {  }
+field_type: text_with_summary

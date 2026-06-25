@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_code_residency
+    - node.type.asu_tuition_fee_code_data
+id: node.asu_tuition_fee_code_data.field_code_residency
+field_name: field_code_residency
+entity_type: node
+bundle: asu_tuition_fee_code_data
+label: Residency
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

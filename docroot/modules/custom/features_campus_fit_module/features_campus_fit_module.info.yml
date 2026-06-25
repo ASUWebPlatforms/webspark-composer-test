@@ -1,0 +1,6 @@
+name: 'Features campus fit quiz'
+type: module
+core_version_requirement: '^8.9 || ^9 || ^10'
+dependencies:
+  - asu_campus_fit
+  - webform

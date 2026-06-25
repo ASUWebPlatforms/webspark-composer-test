@@ -1,0 +1,35 @@
+{% set url = fields.view_node.content|render|striptags|trim %}
+{% set image_markup = fields.field_media.content %}
+{% set image =
+  image_markup|replace({
+    '<img': '<img class="card-img-top"'
+  })
+%}
+
+<article class="card card-story">
+  {{ image|raw }}
+  <div class="card-header">
+    <h3 class="card-title">
+      <a href="{{ url }}" title="{{ fields.title.content|striptags }}">
+        {{ fields.title.content }}
+      </a>
+    </h3>
+  </div>
+
+  <div class="card-body">
+    <p class="card-text">
+      {{ fields.body.content }}
+    </p>
+  </div>
+
+  <div class="card-buttons">
+    <div class="card-button">
+      {% include '@renovation/buttons/button-action.twig' with {
+        url: url,
+        target: '_self',
+        title: 'Read more',
+        button_color: 'btn-maroon'
+      } %}
+    </div>
+  </div>
+</article>

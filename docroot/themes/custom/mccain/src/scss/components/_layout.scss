@@ -1,0 +1,15 @@
+#wrapper-footer-columns {
+    background: #fff;
+    .footer-base {
+        background: #1e1e1e;
+        max-width: 1920px;
+        margin:auto;
+    }
+    @media (max-width: 575.98px) {
+        .asu-mccain-logo {
+            img {
+                max-width: 100%;
+            }
+        }
+    }
+}

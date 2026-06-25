@@ -1,0 +1,38 @@
+{#
+/**
+ * @file
+ * Template for a Block component.
+ *
+ * Available config:
+ * - html_tag: The HTML tag for the block.
+ * - utility_classes: An array of utility classes.
+ */
+#}
+{% set classes = [
+  'block book-pdf',
+  bundle ? 'block--' ~ bundle|clean_class,
+  id ? 'block--' ~ id|replace({"_": "-"})|clean_class,
+]|merge(utility_classes ? utility_classes : []) %}
+
+
+<div {{ attributes|without('id').addClass(classes) }}>
+
+
+	{{ title_prefix }}
+	{% if label %}
+		{% block label %}
+			<h3{{title_attributes}}>{{ label }}</h3>
+		{% endblock %}
+	{% endif %}
+	{{ title_suffix }}
+
+	{% block content %}
+		{% if content['print_link'] %}
+			<!-- <a href="{{ content['print_link']['#url'].toString() }}" class="btn btn-primary" >{{ content['print_link']['#title'] }}</a> -->
+			<a href="{{ content['print_link']['#url'].toString() }}" style="margin: 10px 0px;" class="btn btn-primary" ><i class='fas fa-file-pdf'></i> Download Book</a>
+			
+		{% endif %}
+		
+	{% endblock %}
+
+</div>

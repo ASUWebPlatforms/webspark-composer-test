@@ -1,0 +1,8 @@
+global-styling:
+  version: VERSION
+  css:
+    theme:
+      css/access-style.css: {}
+  js:
+      js/access-script.js: {}
+

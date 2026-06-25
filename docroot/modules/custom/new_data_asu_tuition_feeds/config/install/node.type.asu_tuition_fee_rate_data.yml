@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - autotitle
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+  autotitle:
+    enabled: false
+    field: body
+    fallback_title: 'Untitled []'
+    headings: {  }
+name: 'ASU tuition fee rate data'
+type: asu_tuition_fee_rate_data
+description: ''
+help: ''
+new_revision: false
+preview_mode: 1
+display_submitted: false

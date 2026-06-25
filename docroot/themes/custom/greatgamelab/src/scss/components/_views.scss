@@ -1,0 +1,260 @@
+/* Universal Views Styles */
+
+.views-view-responsive-grid__item-inner {
+    height: 100%;
+    .uds-img:is(img) {
+        border: none;
+        border-bottom: 1px solid #d0d0d0;
+        width: 100%;
+    }
+}
+
+/* Set Piece Videos */
+
+.view-content-display-set-piece-video-page {
+    .views-view-responsive-grid__item {
+        margin-bottom: 48px;
+        .views-field-field-set-piece-video {
+            margin-bottom: 48px; 
+        }
+    }
+}
+
+.set-piece-video-featured-block {
+    .views-view-responsive-grid__item-inner {
+      position: relative;
+    }
+  
+    .field-set-piece-video {
+      position: relative;
+  
+      img {
+        width: 100%;
+      }
+      a {
+        display: block;
+  
+        &::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 64px;
+          height: 64px;
+          background-image: url('../../assets/images/video-play.png');
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
+          z-index: 1;
+          transition: transform 0.2s ease;
+        }
+  
+        &:hover::before {
+          transform: translate(-50%, -50%) scale(1.1);
+        }
+      }
+    }
+  
+    .field-set-piece-title {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1;
+      padding: 20px;
+      background: linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0));
+    
+      h2 {
+        margin: 0;
+        &.text-white {
+          color: #ffffff !important;
+        }
+      }
+    }
+  
+    .views-view-responsive-grid__item-inner:hover {
+      .field-set-piece-title {
+        background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0));
+      }
+    }
+  }
+
+  /* Blog Article Custom Formatting */
+
+// Variables
+$form-bg-color: #E8E8E8;
+$form-padding: 1.5rem;
+$transition-speed: 0.2s;
+$label-font-size-small: 0.875rem;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+}
+
+// Target the specific view's exposed form
+#views-exposed-form-content-display-blog-articles-blog-article-list {
+  background-color: $form-bg-color;
+  padding: $form-padding;
+  margin-bottom: 96px;
+  
+  .form-inline {
+    @include flex-center;
+    gap: 1rem;
+    width: 100%;
+    
+    // Form items styling
+    .form-item {
+      margin: 0;
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+    
+    // Actions container
+    .form-actions {
+      margin: 0;
+      flex-shrink: 0;
+    }
+  }
+
+  // Select field styling
+  select {
+    color: #191919;
+    font-weight: bold;
+    
+    // Style the first option (Categories) specifically
+    option:first-child {
+      color: #191919;
+      font-weight: bold;
+    }
+    
+    option:not(:first-child) {
+      font-weight: normal;
+    }
+  }
+
+  // Text input styling
+  .form-control {
+    
+    &::placeholder {
+      color: #747474;
+      font-weight: bold;
+    }
+  }
+
+  // Submit button styling
+  .btn-gold {
+    background-color: #FFC627;
+    border-color: #FFC627;
+    color: #191919;
+    
+    &:hover {
+      background-color: #FFB300;
+      border-color: #FFB300;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  #views-exposed-form-content-display-blog-articles-blog-article-list {
+    .form-inline {
+      flex-direction: column;
+      gap: 0.75rem;
+      
+      .form-item {
+        width: 100%;
+      }
+      
+      .form-actions {
+        width: 100%;
+        
+        .btn-gold {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+/* Courses */
+
+.view-content-displays-courses {
+    .card-img-top {
+        height: 280px;
+        @media (max-width: 575.98px) {
+          height: auto;
+      }
+    }   
+}
+
+/* Publications */
+
+.view-content-display-publication {
+    .publication-row {
+        border-bottom: 1px solid #D0D0D0;
+        .pub-image {
+          .img-fluid {
+            max-width: 201px;
+          }
+        }
+    }
+}
+
+/* Events */
+
+.view-content-display-events {
+    .card-event-details {
+        padding-top: .5rem;
+        padding-bottom: .5rem;
+    }
+    .card-buttons {
+        padding-top: 2rem;
+    }
+}
+
+/* Team */
+
+.view-content-display-team {
+    .views-view-responsive-grid--horizontal {
+        .views-view-responsive-grid__item {
+            margin-bottom: 96px;
+            .profile-img-container {
+                .profile-img {
+                    width: 180px;
+                    height: 180px;
+                    border-radius: 100%;
+                }
+            }
+            .profile-title {
+                max-width: 235px;
+            }
+        }
+    }
+}
+
+.article--full {
+  .view-content-display-blog-articles {
+    .views-view-responsive-grid--horizontal {
+        .views-view-responsive-grid__item {
+            .profile-img-container {
+                width: 102px;
+                .profile-img {
+                    width: 78px;
+                    height: 78px;
+                    border-radius: 100%;
+                }
+            }
+            .profile-title {
+                max-width: 235px;
+            }
+            .profile-content {
+              font-size: .875rem;
+            }
+        }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+.myasu-cb-wrapper{
+  margin: -4px -8px -7px -8px;
+}
+
+.myasu-cb-content{
+    max-height:155px;
+    overflow:auto;
+    padding:5px 8px;
+}
+
+.myasu-cb-tab-footer{
+    background-color:whiteSmoke;
+    padding: 4px 4px 4px 8px;
+    text-align: left;
+    border-top:2px solid #fff;
+}

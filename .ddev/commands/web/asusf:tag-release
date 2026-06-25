@@ -1,0 +1,68 @@
+#!/bin/bash
+
+##
+## This script creates a new git tag for a given release and details next steps
+## to deploy the release for Stack 1.
+##
+## Usage: asusf:tag-release [releaseName]
+## Description: Creates a release tag on `main`.
+##
+## Usage: asusf:tag-release [releaseName]
+## Description: Creates a release tag on `main`.
+## Example: ddev asusf:tag-release 2.3.4
+
+set -e
+
+# Ensure releaseName argument is provided
+if [ -z "$1" ]; then
+  echo "Usage: ddev asusf:tag-release <releaseName>"
+  exit 1
+fi
+
+releaseName="$1"
+
+echo "⚙️  Step 1: Check out 'main' branch"
+git checkout main
+git pull origin main
+
+echo "⚙️  Step 2: Create releaseName tag if it hasn't been used in the git repo yet"
+if git tag | grep -q "^$releaseName$"; then
+  echo "Error: Tag '$releaseName' already exists in the repository."
+  exit 1
+else
+  git tag "$releaseName"
+  git push origin "$releaseName"
+  echo
+  echo -e "Created tag '$releaseName' 🏷"
+  echo
+fi
+
+echo "⚙️  Step 3: Check if we should merge 'main' back into 'develop'"
+read -p "Do you want to merge 'main' back into 'develop' now? (y/n) " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  git checkout develop
+  git pull origin develop
+  git merge main
+  git push origin develop
+  echo "Merged 'main' into 'develop'"
+fi
+
+echo -e "🫏 MANUAL NEXT STEPS 🫏"
+echo
+echo -e "⏳ \033[1;33mPlease wait for CI/CD to build the artifact\033[0m: 'tag/${releaseName}-codestudio-build'"
+echo
+echo -e "  ⁍===⁌ follow Stack 1 pipeline progress ⁍===⁌"
+echo -e "  https://code.acquia.com/ArizonaBoardofRegentsSiteFactoryACSFSites/asufactory1/-/pipelines"
+echo
+echo -e "\033[1;33m📋 Create a CMT when deploying a release to LIVE environments:\033[0m"
+echo -e "  https://asu.service-now.com/ - Create a Standard Change - Web Migration."
+echo
+echo -e "\033[1;33m🎒 Deploy 'tag/${releaseName}-codestudio-build' on TEST:\033[0m"
+echo -e "  https://www.test-asufactory1.acsitefactory.com/admin/gardens/site-update/update"
+echo
+echo -e "\033[1;33m🧳 Deploy 'tag/${releaseName}-codestudio-build' on LIVE:\033[0m"
+echo -e "  https://www.asufactory1.acsitefactory.com/admin/gardens/site-update/update"
+echo
+echo -e "\033[1;33m📝 Update the Webspark Release Notes:\033[0m"
+echo -e "  https://drive.google.com/drive/u/0/folders/1erCVVEDo_MGLhpCpeDsFWsUtJqDJAkbS"

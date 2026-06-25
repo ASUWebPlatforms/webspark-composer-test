@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_previous_site_pub_date
+    - node.type.blog_posts
+  module:
+    - datetime
+id: node.blog_posts.field_previous_site_pub_date
+field_name: field_previous_site_pub_date
+entity_type: node
+bundle: blog_posts
+label: 'Previous site pub date'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    default_date_type: now
+    default_date: now
+default_value_callback: ''
+settings: {  }
+field_type: datetime

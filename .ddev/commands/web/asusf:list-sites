@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Define color codes
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
+
+databases=($(mysql -u db -pdb --silent -e "show databases;" | awk '!/^(db|Database|information_schema)$/'))
+
+stack_id=$(echo "$ACQUIA_ENVIRONMENT_ID" | sed 's/[^0-9]*\([0-9][0-9]*\).*/\1/')
+
+function localuri() {
+    export localuri
+    if [[ "${stack_id}" =~ ^[0-9]+$ ]] && [ "${stack_id}" -ne 1 ]; then
+      localuri="${stack_id}"
+    else
+      localuri=""
+    fi
+    echo "$localuri"
+}
+localuri=$(localuri)
+
+echo -e "${CYAN}My locally pulled stack sites:${NC}"
+for db in "${databases[@]}"; do
+  site_name=$(echo "$db" | sed 's/^db_//;s/_/-/g')
+  echo -e " - ${CYAN}https://$site_name.asu${localuri}.ddev.site${NC}"
+done

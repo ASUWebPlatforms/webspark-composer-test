@@ -1,0 +1,127 @@
+<?php
+
+use Drupal\node\Entity\Node;
+use Drupal\views\ViewExecutable;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * hook_form_alter()
+ *
+ * Remove specific option from dropdown list based on info from municipality node:
+ * - Select your student status
+ * - Interest on campus ugrad
+ * - Interest on campus grad
+ * - Interest online ugrad
+ * - Interest online grad
+ *
+ * @param $form
+ * @param FormStateInterface $form_state
+ * @param $form_id
+ * @return array
+ */
+function asuaec_azscholarship_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+//    ksm($form_id, "form_id");
+    if($form_id == "webform_submission_rfi_node_105_add_form") {
+        $citynid = '';
+        if (isset($_GET['citynid'])) {
+            $citynid = $_GET['citynid'];
+//            ksm($citynid, "citynid");
+
+            //-------------------------------------------------------------
+            // Load the node
+            $city_node = Node::load($citynid);
+
+            //-------------------------------------------------------------
+            // Grad/Ugrad - Select your student status
+            $rfi_grad_ugrad = $city_node->get('field_rfi_grad_ugrad')[0]->getValue()['value'];
+//            ksm($rfi_grad_ugrad, "rfi_grad_ugrad");
+                //grad_ugrad|Undergraduate and Grad
+                //grad|Grad only. Not including Certificate option for Online.
+                //ugrad|Ugrad only. Not including Certificate option for Online.
+//            ksm($form, "form");
+            if($rfi_grad_ugrad == 'ugrad') {
+                unset($form['elements']['step_1']['student_type_options_default']['#options']['Readmission']);
+            }
+            else if($rfi_grad_ugrad == 'grad') {
+                unset($form['elements']['step_1']['student_type_options_default']['#options']['First Time Freshman']);
+                unset($form['elements']['step_1']['student_type_options_default']['#options']['Transfer']);
+            }
+
+            //------------------------------------------------------------
+            // Interest (on campus) - Get what are checked to exclude
+            $interest_to_exclude_oncampus_array = [];
+            for ($x = 0; $x <= sizeof($city_node->get('field_interest_oncampus')); $x++) {
+                if(!is_null($city_node->get('field_interest_oncampus')[$x])) {
+                    $tid = $city_node->get('field_interest_oncampus')[$x]->getValue()['target_id'];
+                    $term_name = \Drupal\taxonomy\Entity\Term::load($tid)->get('name')->value;
+                    array_push($interest_to_exclude_oncampus_array, $term_name);
+                }
+            }
+//            ksm($interest_to_exclude_oncampus_array, "interest_to_exclude_oncampus_array");
+
+            // Exclude the interest that were checked.
+            // Get interest on campus from $form
+            // Ugrad interest on campus
+            foreach($form['elements']['step_1']['area_of_interest_ugrad']['#options'] as $option) {
+                if (in_array($option, $interest_to_exclude_oncampus_array)){
+                    unset($form['elements']['step_1']['area_of_interest_ugrad']['#options'][$option]);
+                }
+            }
+            // Grad interest on campus
+            foreach($form['elements']['step_1']['area_of_interest_grad']['#options'] as $option) {
+                if (in_array($option, $interest_to_exclude_oncampus_array)){
+                    unset($form['elements']['step_1']['area_of_interest_grad']['#options'][$option]);
+                }
+            }
+
+            //------------------------------------------------------------
+            // Interest (online) - Get what are checked to exclude
+            $interest_to_exclude_online_array = [];
+            for ($x = 0; $x <= sizeof($city_node->get('field_interest_online')); $x++) {
+                if(!is_null($city_node->get('field_interest_online')[$x])) {
+                    $tid = $city_node->get('field_interest_online')[$x]->getValue()['target_id'];
+                    $term_name = \Drupal\taxonomy\Entity\Term::load($tid)->get('name')->value;
+                    array_push($interest_to_exclude_online_array, $term_name);
+                }
+            }
+//            ksm($interest_to_exclude_online_array, "interest_to_exclude_online_array");
+
+            // Exclude the interest that were checked.
+            // Get interest online from $form
+            // Ugrad interest online
+            foreach($form['elements']['step_1']['area_of_interest_ugrad_online']['#options'] as $option) {
+                if (in_array($option, $interest_to_exclude_online_array)){
+                    unset($form['elements']['step_1']['area_of_interest_ugrad_online']['#options'][$option]);
+                }
+            }
+            // Grad interest on online
+            foreach($form['elements']['step_1']['area_of_interest_grad_online']['#options'] as $option) {
+                if (in_array($option, $interest_to_exclude_online_array)){
+                    unset($form['elements']['step_1']['area_of_interest_grad_online']['#options'][$option]);
+                }
+            }
+
+
+
+
+        } else {
+            // Fallback behaviour goes here
+        }
+
+    }
+    return $form;
+}
+
+
+/**
+ * @param array $page
+ *
+ * hook_page_attachments_alter
+ * Attach JS to the landing page (/arizona-public-employee-scholarship)
+ */
+function asuaec_azscholarship_page_attachments_alter(array &$page) {
+    $current_path = \Drupal::service('path.current')->getPath();
+    if ($current_path == '/node/106' ) { // Landing page - /arizona-public-employee-scholarship
+        $page['#attached']['library'][] = 'asuaec_azscholarship/azscholarship-landingpage-library';
+    }
+}

@@ -1,0 +1,44 @@
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@font-face {
+  font-family: 'RobotoRegular';
+  font-display: swap;
+  src: local('RobotoRegular'), url(./fonts/Roboto-Regular-webfont.woff) format('truetype');
+}
+
+.text {
+  font-size: calc(12px + (26 - 14) * ((100vw - 300px) / (1600 - 300)));
+}
+
+.headingText {
+  text-transform: capitalize;
+}
+
+@media screen and (min-width: 285px) and (max-width: 990px) {
+  .mobMargin {
+     margin-top: 60px !important;
+  }
+}
+
+.vjs-text-track-display {
+  display: none !important;
+}
+
+.vjs-error-display .vjs-modal-dialog .vjs-hidden {
+  display: none !important;
+}
+
+.vjs-has-started .vjs-loading-spinner  .vjs-control-text{
+  display: none !important;
+}
+
+.vjs-modal-dialog-description {
+  display: none !important;
+}
+
+video::-webkit-media-controls-panel-container {
+  display: none !important;
+}

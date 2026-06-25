@@ -1,0 +1,56 @@
+{#
+/**
+ * @file
+ * Theme override to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ */
+#}
+
+{% if title %}
+  <h3>{{ title }}</h3>
+{% endif %}
+{% set description = 'description' %}
+{% set profile_images = '' %}
+{% set name = 'Name' %}
+
+<div class="4-4-4 bg gray-2-bg bg-top bg-percent-100 clearfix spacing-top-32">
+  <div class="container">
+    <div class="row">
+    <div class="container">
+      <h2>Your advising team</h2>
+    </div>
+      {% for row in rows %}
+        {% if view.style_plugin.getField(loop.index0, 'description__value') %}
+          {% set description = view.style_plugin.getField(loop.index0, 'description__value') %}
+        {% endif %}
+        {% if view.style_plugin.getField(loop.index0, 'description__value') %}
+          {% set name = view.style_plugin.getField(loop.index0, 'field_f') %}
+        {% endif %}
+        {% if view.style_plugin.getField(loop.index0, 'description__value') %}
+          {% set profile_images = view.style_plugin.getField(loop.index0, 'field_photo_chs_') %}
+        {% endif %}
+        {%
+          set row_classes = [
+            default_row_class ? 'views-row',
+          ]
+        %}
+      <div class="layout__region layout__region--first col-md-3">
+        {{ profile_images }}
+        </br>
+        <span class="spacing-top-8" style="padding-left: .7rem" >{{ name }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<div class="spacing-top-32"> {{ description }}</div>

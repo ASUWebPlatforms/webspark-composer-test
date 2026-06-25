@@ -1,0 +1,144 @@
+/* Just leave the group header and Hide other buttons. */
+/*.views-element-container > div > .views-row {
+    display: none;
+}*/
+/* Hide exposed filter */
+#views-exposed-form-tuition-and-billing-calendar-block-1,
+#views-exposed-form-financial-aid-calendar-block-1,
+#views-exposed-form-important-dates-block-1
+{
+    display: none;
+}
+/* Change button label color */
+.btn-maroon {
+    color: #fff !important;
+}
+/* Bring table caption to top */
+caption {
+    caption-side: top !important;
+}
+
+.gray {
+    display: none;
+}
+
+/* Entry term buttons */
+.term-buttons table tr,
+.year-buttons table tr
+{
+    display: inline;
+}
+.term-buttons .table td,
+.year-buttons .table td
+{
+    border: none !important;
+    padding-left: 0;
+}
+
+/* Month and year */
+.tuition-billing-calendar caption,
+.financialaid-calendar caption {
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    letter-spacing: -.0525rem;
+    font-weight: 700;
+    text-align: left;
+    opacity: 1;
+    margin: 1rem 0;
+    color: #191919;
+}
+.session-desc .table td.views-field-description__value {
+    border: none;
+}
+.session-desc .table {
+    margin-bottom: 0;
+}
+
+/* The rest of CSS for table */
+thead {
+    display: none;
+}
+.table-bordered td {
+    border: none !important;
+    border-bottom: 2px solid #e8e8e8 !important;
+}
+.session-desc .table td {
+    padding-left: 0;
+}
+
+/* Jump to */
+.financialaid-calendar { /* Flex container */
+    display: flex;
+    flex-direction: column;
+}
+.views-element-container.session-desc-parent { /* styles to apply to the li tag */
+    order: 1;
+}
+.views-element-container.financialaid-jumpto-parent { /* styles to apply to the li tag */
+    order: 2;
+}
+.wrapped-tables {
+    order: 3;
+}
+.jumpto-dev {
+    border-bottom: 2px solid #e8e8e8 !important;
+    text-align: right;
+}
+#jumpto-select {
+    background-color: transparent;
+    border: none;
+    font-weight: bold;
+}
+
+.views-field-field-date {
+    word-break: keep-all;
+    min-width: 100px;
+}
+.views-field-body {
+    max-width: 500px;
+}
+td.views-field-edit-node a:last-of-type {
+    display: block;
+}
+@media screen and (max-width:991px) {
+    .table-bordered td {
+        display: block;
+        border: none !important;
+    }
+    .table-bordered td:last-child {
+        border-bottom: 2px solid #e8e8e8 !important;
+    }
+    .addtocal-container {
+        float: none !important;
+    }
+}
+
+/* Add to Cal */
+.addtocal-container .addtocal {
+    padding: 5px;
+    background: none !important;
+    border: 0 !important;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    color: #8c1d40 !important;
+    text-decoration: underline !important;
+    cursor: pointer;
+    padding-left: 0 !important;
+}
+.modal-body ul {
+    list-style: none;
+}
+.addtocal-container .addtocal-link a {
+    color: #8c1d40 !important;
+    text-decoration: underline !important;
+}
+.addtocal-container .addtocal:hover, .addtocal-container .addtocal:focus,
+.addtocal-container .addtocal-link a:hover, .addtocal-container .addtocal-link a:focus
+ {
+     background: transparent !important;
+     text-decoration: none !important;
+ }
+.addtocal-container {
+    margin-top: 0.5rem !important;
+}

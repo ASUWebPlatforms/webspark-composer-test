@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the customrenovation theme.
+ */
+
+/**
+ * Implements hook_preprocess_HOOK() for html.html.twig.
+ */
+function customrenovation_popcenter_preprocess_html(&$variables) {
+
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page.html.twig.
+ */
+function customrenovation_popcenter_preprocess_page(&$variables) {
+
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node.html.twig.
+ */
+function customrenovation_popcenter_preprocess_node(&$variables) {
+
+}
+/**
+ * Implements hook_preprocess_TEMPLATE().
+ *
+ * Preprocess views-view.html.twig.
+ */
+function customrenovation_popcenter_preprocess_views_view(&$vars) {
+  $view = $vars['view'];
+  $view_id = $vars['id'];
+  $view_display_id = $vars['display_id'];
+
+  // Due to Drupal core WTF, the system title block magically
+  // controls whether view page titles appear. Due to the fact
+  // that the system title block does not have settings for view pages
+  // yet it secretly affects them, we must set the $title variable ourselves
+  // to guarantee it will be available in the template. If we do not want
+  // the title to display, do not render $title in the template.
+  // See: https://www.drupal.org/project/drupal/issues/2887071
+  if (empty($vars['title'])) {
+    $vars['title'] = [
+      '#type' => 'page_title',
+      '#title' => $view->getTitle(),
+    ];
+  }
+}

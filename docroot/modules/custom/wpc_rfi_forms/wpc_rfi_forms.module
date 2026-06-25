@@ -1,0 +1,58 @@
+<?php
+
+/**
+ * @file
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function wpc_rfi_forms_theme() {
+  return [
+    'webform_handler_rfi_form_processing_summary' => [
+      'variables' => ['settings' => NULL, 'handler' => []],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_help().
+ */
+function wpc_rfi_forms_help($route_name, RouteMatchInterface $route_match) {
+  // TODO - Help is incomplete but recommended as there are several key fields required by the handler.
+  switch ($route_name) {
+    case 'help.page.wpc_rfi_forms':
+      $variables = [
+        ':webform' => Url::fromRoute('help.page', ['name' => 'webform'])->toString(),
+      ];
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The WPC RFI Forms module adds special processing and logic to the <a href=":webform">Webform</a> module. Adminstrative are able to add a custom handler to forms that will process submitted values before they are saved to the results table and submitted to Salesforce (if enabled). The custom handler requires several key field names and structure in the form in order to work.', $variables) . '</p>';
+      $output .= '<h3>' . t('Required Displayed Fields') . '</h3>';
+      $output .= '<p>' . t('<code>ps_acad_plan_descr</code> (Program of Interest). Use Entity Select field matched to Porgrams') . '</p>';
+      $output .= '<h3>' . t('Required Hidden Fields') . '</h3>';
+      $output .= '<p>' . t('<code>lead_source</code> - (Primary Lead Source).') . '</p>';
+      $output .= '<p>' . t('<code>secondary_lead_source</code> - (Secondary Lead Source). Default must be set as <em>unknown</em>') . '</p>';
+      $output .= '<p>' . t('<code>tertiary_lead_source</code> - (Tertiary Lead Source).') . '</p>';
+      $output .= '<p>' . t('<code>campaign_id</code> - (Campaign ID). Use 70134000001CTaG for default') . '</p>';
+      $output .= '<p>' . t('<code>ip_address</code> - (IP Address). Use [current-user:ip-address] for default') . '</p>';
+      $output .= '<p>' . t('<code>ps_acad_plan</code> - (PS Acad Plan).') . '</p>';
+      $output .= '<p>' . t('<code>campus_key</code> - (Campus Key).') . '</p>';
+      $output .= '<p>' . t('<code>keywords</code> - (Keywords).') . '</p>';
+      $output .= '<p>' . t('<code>referring_url</code> - (Referring Url).') . '</p>';
+      $output .= '<p>' . t('<code>landing_page_url</code> - (Landing Page Url).') . '</p>';
+      $output .= '<p>' . t('<code>kpmg_programs</code> - (KPMG Programs).') . '</p>';
+      $output .= '<p>' . t('<code>enterpriseclientid__c</code> - (Enterprise Client ID).') . '</p>';
+      return $output;
+  }
+}
+
+function wpc_rfi_forms_page_attachments(array &$page) {
+  // this script is needed on all pages to ensure cookies and landing pages are captured/set
+  $page['#attached']['library'][] = 'wpc_rfi_forms/mainscripts';
+}

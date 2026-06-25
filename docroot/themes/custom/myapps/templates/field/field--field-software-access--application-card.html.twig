@@ -1,0 +1,14 @@
+{#
+/**
+ * @file
+ * Template for Application Cards 'field_software_access'.
+ */
+#}
+
+{% for item in items %}
+  {% if not loop.last %}
+    {{ item.content }},
+  {% else %}
+    {{ item.content }}
+  {% endif %}
+{% endfor %}

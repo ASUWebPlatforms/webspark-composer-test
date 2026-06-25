@@ -1,0 +1,252 @@
+/* Universal Styles */
+
+.spacing-top-8 {
+  padding-top: 8px;
+  font-size: 100px;
+}
+
+/* Graduate News and Events */
+.graduate-custom-news .cards-items-container a {
+  text-decoration: none;
+}
+
+.graduate-custom-news .cards-items-container a,
+.graduate-custom-news .cards-items-container a:hover {
+  color: #191919;
+}
+
+.graduate-articles .card-tags ul {
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.graduate-articles .card-tags ul li {
+
+  list-style: none;
+}
+
+.graduate-articles .pager {
+  flex-basis: 100%;
+}
+
+.view-content-displays-blog > div,
+.view-content-displays-news-events > div,
+.view-content-displays-staff > div {
+  gap: 1.5rem !important;
+  flex-wrap: wrap !important;
+  flex-direction: row !important;
+  display: flex !important;
+}
+
+.view-content-displays-blog > div > div {
+  flex: 1 0 0% !important;
+}
+
+.mb-7.flex-auto-views {
+  flex: 0 0 auto !important;
+}
+
+.view-content-displays-student-impact > div {
+  gap: 8.5rem !important;
+  flex-wrap: wrap !important;
+  flex-direction: row !important;
+  display: flex !important;
+}
+
+/* Graduate Stats Cards */
+
+.block-inline-blockimage-background-with-stats .background-with-stats  {
+  height: 32rem;
+}
+
+.block-inline-blockimage-background-with-stats .background-with-stats .card-statistic--group {
+  height: 32rem;
+}
+
+.block-inline-blockimage-background-with-stats .card-statistic .card-wrapper-inner {
+  max-width: 282px;
+}
+
+.block-inline-blockimage-background-with-stats .card-statistic {
+  flex-basis: 100%;
+}
+
+.card-statistic--header {
+  color: #FFC627;
+  font-weight: 700;
+  font-size: 4rem;
+}
+.card-statistic--body {
+  color: #FFFFFF;
+  font-weight: normal;
+  font-size: 1rem;
+}
+
+@media screen and (max-width: 992px) {
+  .block-inline-blockimage-background-with-stats .background-with-stats .card-statistic--group {
+    flex-direction: column;
+    padding-top: 42px;
+}
+  .block-inline-blockimage-background-with-stats .card-statistic .card-wrapper-inner {
+    max-width: 100%;
+    text-align: center;
+  }
+  .card-statistic--header {
+    font-size: 3rem;
+  }
+}
+
+/* Graduate Slide-Up Cards */
+
+.block-inline-blockcard-arrangement-slideup .card-slideup--group .tile {
+  height: 600px;
+  padding: 32px;
+  transition: .5s cubic-bezier(0,.7,.6,1);
+  position: relative;
+  background-size: cover !important;
+  background-position: center !important;
+  margin-right: 32px;
+  overflow: hidden;
+}
+
+.block-inline-blockcard-arrangement-slideup .card-slideup--group.one-column .tile {
+  flex: 50%;
+  margin-bottom: 48px;
+}
+.block-inline-blockcard-arrangement-slideup .card-slideup--group.two-columns .tile {
+  flex: 33.333%;
+  margin-bottom: 48px;
+}
+.block-inline-blockcard-arrangement-slideup .card-slideup--group.three-columns .tile {
+  flex: 25%;
+  margin-bottom: 48px;
+}
+.block-inline-blockcard-arrangement-slideup .card-slideup--group.four-columns .tile {
+  flex: 20%;
+  margin-bottom: 48px;
+  height: 400px;
+}
+
+.block-inline-blockcard-arrangement-slideup .card-slideup--group .tile .tileContent {
+  position: absolute;
+  bottom: 32px;
+  right: 32px;
+  left: 32px;
+
+}
+
+.block-inline-blockcard-arrangement-slideup .card-slideup--group .tile .tileContent h2 {
+  color: #fff;
+}
+
+.block-inline-blockcard-arrangement-slideup .card-slideup--group.four-columns .tile .tileContent h2 {
+  font-size: 2rem;
+  line-height: 2.25rem;
+}
+
+
+.block-inline-blockcard-arrangement-slideup .card-slideup--group .tile .tileContent .description {
+  height: auto;
+  max-height: 0px;
+  opacity: 0;
+  transition: 1s cubic-bezier(0.19, 1, 0.19, 1);
+}
+
+.block-inline-blockcard-arrangement-slideup .card-slideup--group .tile .tileContent .description p {
+  display: block;
+  margin-top: 0px;
+  color: #fff;
+}
+
+.block-inline-blockcard-arrangement-slideup .card-slideup--group .tile .tileContent .description .button {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 24px;
+  font-weight: bold;
+  background: #ffc627;
+  color: #191919;
+  margin-top: 24px;
+}
+
+.block-inline-blockcard-arrangement-slideup .card-slideup--group .tile .image-holder:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: linear-gradient(to top,rgba(25,25,25,0.75) 0%,rgba(25,25,25,0) 100%);
+}
+
+.block-inline-blockcard-arrangement-slideup .card-slideup--group .tile:last-child {
+  margin-right: 0px;
+}
+
+.block-inline-blockcard-arrangement-slideup .card-slideup--group .tile:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+.block-inline-blockcard-arrangement-slideup .card-slideup--group .tile:hover .tileContent .description {
+  max-height: 200px;
+  opacity: 1;
+}
+
+.block-inline-blockcard-arrangement-slideup .card-slideup--group .tile:hover .tileContent .description p {
+  margin-top: 16px;
+}
+
+@media screen and (max-width: 992px) {
+  .block-inline-blockcard-arrangement-slideup .card-slideup--group {
+      flex-direction: column;
+  }
+  .block-inline-blockcard-arrangement-slideup .card-slideup--group .tile {
+    margin-right: 0;
+  }
+
+  .block-inline-blockcard-arrangement-slideup .card-slideup--group.one-column .tile,
+  .block-inline-blockcard-arrangement-slideup .card-slideup--group.two-columns .tile,
+  .block-inline-blockcard-arrangement-slideup .card-slideup--group.three-columns .tile, 
+  .block-inline-blockcard-arrangement-slideup .card-slideup--group.four-columns .tile {
+    flex: inherit;
+    width: 100%;
+  }
+  .block-inline-blockcard-arrangement-slideup .card-slideup--group .tile .btn.btn-lg {
+    font-size: .875rem !important;
+    padding: 0.5rem 1rem !important;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .block-inline-blockcard-arrangement-slideup .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
+.uds-person-profile .profile-img {
+  width: 180px;
+  height: 180px;
+  border-radius: 100%;
+}
+
+.block-inline-blockevents h2 {
+  display: none;
+}
+
+.graduate-icons-gold svg {
+  color: #ffc627;
+}
+
+.graduate-tags-page .container .row > .col-12 {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.graduate-tags-page .container .row > .col-12 > header {
+  width: 100%;
+  margin-bottom: 48px;
+}

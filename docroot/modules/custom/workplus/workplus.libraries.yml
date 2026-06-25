@@ -1,0 +1,9 @@
+workplus-app:
+  version: 1.0
+  js:
+    workplus-app/dist/workplus_yrbUTB7z.js: { preprocess: false  }
+  css:
+    component:
+      workplus-app/dist/workplus_C_GFm0gx.css: { }
+  dependencies:
+    - core/drupalSettings

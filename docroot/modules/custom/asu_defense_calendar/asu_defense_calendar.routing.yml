@@ -1,0 +1,7 @@
+asu_defense_calendar.form:
+  path: '/defensecal'
+  defaults:
+    _form: '\Drupal\asu_defense_calendar\Form\DefenseCalendarForm'
+    _title: 'Defense Calendar'
+  requirements:
+    _permission: 'access content'

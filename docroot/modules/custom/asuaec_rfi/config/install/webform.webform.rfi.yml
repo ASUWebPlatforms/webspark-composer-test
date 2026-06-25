@@ -1,0 +1,674 @@
+langcode: en
+status: open
+dependencies:
+  module:
+    - asuaec_rfi
+_core:
+  default_config_hash: 6szOXjo7zLGBH1gYWS9VFcyxvzVzz0bbZh84Rr_pFFM
+open: null
+close: null
+weight: 0
+uid: 1
+template: false
+archive: false
+id: rfi
+title: RFI
+description: ''
+category: ''
+elements: |-
+  step_1:
+    '#type': webform_wizard_page
+    '#title': 'Step 1'
+    plan:
+      '#type': hidden
+      '#title': plan
+      '#default_value': '[current-page:query:plan]'
+    prog:
+      '#type': hidden
+      '#title': prog
+      '#default_value': '[current-page:query:prog]'
+    name:
+      '#type': hidden
+      '#title': name
+      '#default_value': '[current-page:query:name]'
+    grad_ugrad:
+      '#type': hidden
+      '#title': grad_ugrad
+    interest1:
+      '#type': hidden
+      '#title': 'interest1 - Used for post. Area of interest.'
+    birthdate:
+      '#type': hidden
+      '#title': 'BirthDate - Used for post.'
+    entryterm:
+      '#type': hidden
+      '#title': ' EntryTerm - Used for post.'
+    came_from_degree_search:
+      '#type': hidden
+      '#title': 'Came from Degree Search'
+      '#default_value': 'false'
+    hide_institution_dropdown:
+      '#type': hidden
+      '#title': 'Hide Institution dropdown'
+      '#default_value': 'true'
+    hide_highschool_dropdown:
+      '#type': hidden
+      '#title': 'Hide highschool dropdown'
+      '#default_value': 'true'
+    request_information_intro:
+      '#type': webform_markup
+      '#markup': |-
+        <h4>Step 1 of 3</h4>
+
+        <h2>Request information</h2>
+
+        <p>To learn more about ASU or a specific program, fill out the form below then check your email.</p>
+    campus_options:
+      '#type': select
+      '#title': 'Which applies to you?'
+      '#options':
+        GROUND: 'I plan to take some/all of my classes on campus'
+        ONLNE: 'I plan to study 100% online through ASU Online'
+        NOPREF: 'I am not sure'
+      '#empty_option': Select...
+      '#empty_value': '0'
+      '#required': true
+      '#states':
+        visible:
+          ':input[name="plan"]':
+            value:
+              pattern: '^(^$|\[current-page:query:plan\])$'
+    student_type_options_default:
+      '#type': select
+      '#title': 'Select your student status'
+      '#options':
+        'First Time Freshman': 'First-year undergraduate'
+        Transfer: 'Transferring undergraduate'
+        Readmission: 'Graduate (Masters, PhD, EdD, DNP, etc.)'
+      '#empty_option': Select...
+      '#empty_value': '0'
+      '#required': true
+      '#states':
+        visible:
+          - ':input[name="prog"]':
+              value:
+                pattern: '(^$|^UG.*)$'
+          - or
+          - ':input[name="plan"]':
+              value:
+                pattern: '^(^$|\[current-page:query:plan\])$'
+    area_of_interest_empty:
+      '#type': select
+      '#title': 'Area of interest'
+      '#options': area_of_interest_empty
+      '#empty_option': Select...
+      '#empty_value': '0'
+      '#states':
+        visible:
+          - ':input[name="campus_options"]':
+              value:
+                pattern: ^(0)$
+          - or
+          - ':input[name="student_type_options_default"]':
+              value:
+                pattern: ^(0)$
+      '#wrapper_attributes':
+        class:
+          - area-interest-empty
+      '#label_attributes':
+        class:
+          - area
+    area_of_interest_ugrad:
+      '#type': select
+      '#title': 'Area of interest'
+      '#options': area_of_interest_ugrad
+      '#empty_option': Select...
+      '#empty_value': '0'
+      '#required': true
+      '#states':
+        visible:
+          ':input[name="campus_options"]':
+            value:
+              pattern: ^(GROUND|NOPREF)$
+          ':input[name="student_type_options_default"]':
+            value:
+              pattern: '^(First Time Freshman|Transfer)$'
+    area_of_interest_grad:
+      '#type': select
+      '#title': 'Area of interest'
+      '#options': area_of_interest_grad
+      '#empty_option': Select...
+      '#empty_value': '0'
+      '#required': true
+      '#states':
+        visible:
+          ':input[name="campus_options"]':
+            value:
+              pattern: ^(GROUND|NOPREF)$
+          ':input[name="student_type_options_default"]':
+            value: Readmission
+    area_of_interest_ugrad_online:
+      '#type': select
+      '#title': 'Area of interest'
+      '#options': area_of_interest_ugrad_online
+      '#empty_option': Select...
+      '#empty_value': '0'
+      '#required': true
+      '#states':
+        visible:
+          ':input[name="campus_options"]':
+            value: ONLNE
+          ':input[name="student_type_options_default"]':
+            value:
+              pattern: '^(First Time Freshman|Transfer)$'
+    area_of_interest_grad_online:
+      '#type': select
+      '#title': 'Area of interest'
+      '#options': area_of_interest_grad_online
+      '#empty_option': Select...
+      '#empty_value': '0'
+      '#required': true
+      '#states':
+        visible:
+          ':input[name="campus_options"]':
+            value: ONLNE
+          ':input[name="student_type_options_default"]':
+            value: Readmission
+    program_of_interest_text:
+      '#type': textfield
+      '#title': 'Program of interest'
+  step_2:
+    '#type': webform_wizard_page
+    '#title': 'Step 2'
+    about_me:
+      '#type': webform_markup
+      '#markup': |-
+        <h4>Step 2 of 3</h4>
+
+        <h2>About me</h2>
+    email_address:
+      '#type': email
+      '#title': 'Email address'
+      '#required': true
+      '#pattern': '^[\w\-\._]+@[\w\-\._]+\.\w{2,10}$'
+      '#pattern_error': 'Please check email address.'
+    first_name:
+      '#type': textfield
+      '#title': 'First name'
+      '#required': true
+    last_name:
+      '#type': textfield
+      '#title': 'Last name'
+      '#required': true
+    phone:
+      '#type': tel
+      '#title': Phone
+      '#description': '+1 (123) 456-7890'
+      '#required': true
+      '#international': true
+      '#international_initial_country': US
+      '#telephone_validation_format': '0'
+    postal_code:
+      '#type': textfield
+      '#title': 'Postal code'
+      '#required': true
+      '#counter_type': character
+      '#counter_maximum': 10
+      '#counter_maximum_message': 'Max 10 digits'
+    entry_term:
+      '#type': select
+      '#title': 'When do you anticipate starting at ASU?'
+      '#options': entry_term
+      '#empty_option': Select...
+      '#required': true
+      '#states':
+        invisible:
+          ':input[name="grad_ugrad"]':
+            value: GRAD
+    grad_entry_term:
+      '#type': fieldset
+      '#title': 'Grad entry term'
+      '#title_display': invisible
+      '#states':
+        visible:
+          ':input[name="grad_ugrad"]':
+            value: GRAD
+      '#format': container
+      entry_term_text:
+        '#type': textfield
+        '#title': ' When do you anticipate starting at ASU? '
+    gdpr_consent:
+      '#type': checkboxes
+      '#title': 'By submitting my information, I consent to ASU contacting me about education services using email, direct mail, SMS/texting and digital platforms. Message and data rates may apply. Consent is not required to receive services, and I can withdraw consent by contacting ASU at UnsubFutureStudentComm@asu.edu or as described in communications I receive. I consent to ASU’s mobile terms and conditions and Privacy Statements, including the European Supplement.'
+      '#description': '<p>By submitting my information, I consent to ASU contacting me about education services using email, direct mail, SMS/texting and digital platforms. Message and data rates may apply. Consent is not required to receive services, and I can withdraw consent by contacting ASU at <a href="mailto:UnsubFutureStudentComm@asu.edu">UnsubFutureStudentComm@asu.edu</a> or as described in communications I receive. I consent to ASU&rsquo;s <a href="https://asuonline.asu.edu/text-terms/">mobile terms and conditions</a> and <a href="https://asuonline.asu.edu/web-analytics-privacy-2/">Privacy Statements</a>, including the European Supplement.</p>'
+      '#title_display': none
+      '#description_display': before
+      '#options':
+        1: 'I consent'
+      '#required': true
+  step_3:
+    '#type': webform_wizard_page
+    '#title': 'Step 3'
+    more_about_me:
+      '#type': webform_markup
+      '#markup': |-
+        <h4>
+          Step 3 of 3
+        </h4>
+        <h2>
+          More about me
+        </h2>
+    citizenship_country:
+      '#type': select
+      '#title': 'Country of citizenship'
+      '#options': country_codes
+      '#required': true
+      '#default_value': US
+    address:
+      '#type': textfield
+      '#title': Address
+    city:
+      '#type': textfield
+      '#title': City
+      '#counter_type': character
+      '#counter_maximum': 40
+      '#counter_maximum_message': 'Max 40 characters'
+    country:
+      '#type': select
+      '#title': Country
+      '#options': country_codes
+      '#required': true
+      '#default_value': US
+    state_or_province:
+      '#type': select
+      '#title': 'State or Province'
+      '#options': asu_us_state_name
+      '#states':
+        enabled:
+          ':input[name="country"]':
+            value: US
+    zip_code:
+      '#type': textfield
+      '#title': 'Zip code'
+      '#counter_type': character
+      '#counter_maximum': 10
+      '#counter_maximum_message': 'Max 10 digits'
+    set_us_highschool:
+      '#type': fieldset
+      '#title': 'High school you are currently attending'
+      '#states':
+        visible:
+          ':input[name="campus_options"]':
+            value:
+              pattern: ^(^$|GROUND|NOPREF)$
+          ':input[name="student_type_options_default"]':
+            value: 'First Time Freshman'
+          ':input[name="country"]':
+            value: US
+          ':input[name="hide_highschool_dropdown"]':
+            value: 'false'
+      hsstate:
+        '#type': select
+        '#title': 'High school state'
+        '#options': asu_us_state
+        '#empty_option': Select...
+        '#empty_value': '0'
+      hscity:
+        '#type': textfield
+        '#title': 'High school city'
+      hsname:
+        '#type': textfield
+        '#title': 'High school name'
+    set_us_institution:
+      '#type': fieldset
+      '#title': 'The most recent school that you’ve attended'
+      '#states':
+        visible:
+          ':input[name="campus_options"]':
+            value:
+              pattern: ^(GROUND|NOPREF)$
+          ':input[name="student_type_options_default"]':
+            value: Transfer
+          ':input[name="country"]':
+            value: US
+          ':input[name="hide_institution_dropdown"]':
+            value: 'false'
+      istate:
+        '#type': select
+        '#title': 'Institution state'
+        '#options': asu_us_state
+        '#empty_option': Select...
+        '#empty_value': '0'
+      icity:
+        '#type': textfield
+        '#title': 'Institution city'
+      iname:
+        '#type': textfield
+        '#title': 'Institution name'
+    date_of_birth:
+      '#type': date
+      '#title': 'Date of Birth'
+      '#date_date_min': '-99 years'
+      '#date_date_max': '-10 years'
+      '#date_date_format': ''
+    veteran_status_options:
+      '#type': select
+      '#title': 'Military/veteran status'
+      '#options':
+        None: None
+        'Active Duty': 'Active Duty'
+        'National Guard': 'National Guard'
+        Veteran: Veteran
+        'Armed forces reserve': 'Armed forces reserve'
+        Spouse/Dependent: Spouse/Dependent
+      '#required': true
+      '#states':
+        visible:
+          ':input[name="citizenship_country"]':
+            value: US
+      '#default_value': None
+    comments:
+      '#type': textarea
+      '#title': 'Do you have any questions?'
+      '#pattern': '^[\s\x20-\xff\x{2000}-\x{206f}]*$'
+      '#pattern_error': 'Plain text only'
+    asuonline_enterpriseclientid:
+      '#type': hidden
+      '#title': 'ASU Online enterpriseclientid'
+css: ''
+javascript: ''
+settings:
+  ajax: true
+  ajax_scroll_top: form
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: ''
+  page_confirm_path: ''
+  page_theme_name: ''
+  form_title: source_entity_webform
+  form_submit_once: false
+  form_exception_message: ''
+  form_open_message: ''
+  form_close_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_disable_remote_addr: false
+  form_convert_anonymous: false
+  form_prepopulate: true
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_reset: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
+  form_unsaved: false
+  form_disable_back: false
+  form_submit_back: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
+  submission_label: ''
+  submission_log: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: false
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: false
+  wizard_auto_forward: true
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: true
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  preview: 0
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: url
+  confirmation_title: ''
+  confirmation_message: 'Thank you for your submission.'
+  confirmation_url: '/confirmation?sid=[webform_submission:sid]&fname=[webform_submission:values:first_name]&campus_option=[webform_submission:values:campus_options:raw]&grad_ugrad=[webform_submission:values:grad_ugrad:raw]&plancode=[webform_submission:values:program_of_interest_text]&student_type=[webform_submission:values:student_type_options_default:raw]&interest=[webform_submission:values:interest1]'
+  confirmation_attributes: {  }
+  confirmation_back: false
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  token_delete: false
+  serial_disabled: false
+access:
+  create:
+    roles:
+      - anonymous
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers:
+  remote_post:
+    id: remote_post
+    label: 'Remote post'
+    notes: ''
+    handler_id: remote_post
+    status: false
+    conditions: {  }
+    weight: 0
+    settings:
+      method: POST
+      type: x-www-form-urlencoded
+      excluded_data:
+        serial: serial
+        sid: sid
+        uuid: uuid
+        token: token
+        uri: uri
+        created: created
+        completed: completed
+        changed: changed
+        in_draft: in_draft
+        current_page: current_page
+        remote_addr: remote_addr
+        uid: uid
+        langcode: langcode
+        webform_id: webform_id
+        entity_type: entity_type
+        entity_id: entity_id
+        locked: locked
+        sticky: sticky
+        notes: notes
+        interest1: interest1
+        birthdate: birthdate
+        entryterm: entryterm
+        came_from_degree_search: came_from_degree_search
+        asuonline_enterpriseclientid: asuonline_enterpriseclientid
+        hide_institution_dropdown: hide_institution_dropdown
+        campus_options: campus_options
+        student_type_options_default: student_type_options_default
+        area_of_interest_empty: area_of_interest_empty
+        area_of_interest_ugrad: area_of_interest_ugrad
+        area_of_interest_grad: area_of_interest_grad
+        area_of_interest_ugrad_online: area_of_interest_ugrad_online
+        area_of_interest_grad_online: area_of_interest_grad_online
+        program_of_interest_text: program_of_interest_text
+        email_address: email_address
+        first_name: first_name
+        last_name: last_name
+        phone: phone
+        postal_code: postal_code
+        entry_term: entry_term
+        entry_term_text: entry_term_text
+        gdpr_consent: gdpr_consent
+        citizenship_country: citizenship_country
+        address: address
+        city: city
+        country: country
+        state_or_province: state_or_province
+        zip_code: zip_code
+        date_of_birth: date_of_birth
+        veteran_status_options: veteran_status_options
+        comments: comments
+      custom_data: ''
+      custom_options: ''
+      cast: false
+      debug: true
+      completed_url: 'https://crm-enterprise-rfi-forms-submit-handler-sandbox.sdc.uto.asu.edu/'
+      completed_custom_data: |-
+        CitizenshipCountry: "[webform_submission:values:citizenship_country:raw]"
+        Street1: "[webform_submission:values:address]"
+        City: "[webform_submission:values:city]"
+        State: "[webform_submission:values:state_or_province]"
+        Country: "[webform_submission:values:country:raw]"
+        Zip: "[webform_submission:values:zip_code]"
+        BirthDate: "[webform_submission:values:birthdate]"
+        MilitaryStatus: "[webform_submission:values:veteran_status_options]"
+        Comments: "[webform_submission:values:comments]"
+        EmailAddress: "[webform_submission:values:email_address]"
+        FirstName: "[webform_submission:values:first_name]"
+        LastName: "[webform_submission:values:last_name]"
+        Phone: "[webform_submission:values:phone]"
+        EntryTerm: "[webform_submission:values:entryterm]"
+        GdprConsent: "[webform_submission:values:gdpr_consent:raw]"
+        Campus: "[webform_submission:values:campus_options:raw]"
+        Interest1: "[webform_submission:values:interest1]"
+        Interest2: "[webform_submission:values:program_of_interest_text]"
+        Career: "[webform_submission:values:grad_ugrad]"
+        StudentType: "[webform_submission:values:student_type_options_default:raw]"
+        Source: "7016T000002c8qMQAQ"
+        URL: "https://admission-asu-csdev4.ddev.site/main-rfi-test2"
+        datetime: "[webform_submission:created:raw]"
+        enterpriseclientid: "[webform_submission:values:asuonline_enterpriseclientid]"
+        ga_clientid: "2026984202.1614880096"
+        Test: 1
+      updated_url: ''
+      updated_custom_data: ''
+      deleted_url: ''
+      deleted_custom_data: ''
+      draft_created_url: ''
+      draft_created_custom_data: ''
+      draft_updated_url: ''
+      draft_updated_custom_data: ''
+      converted_url: ''
+      converted_custom_data: ''
+      message: 'We are sorry. Remote post failed. Please try again later.'
+      messages: {  }
+      error_url: ''
+      file_data: true
+  post_to_middleware:
+    id: rfi_webform_handler
+    label: 'Post to middleware'
+    notes: ''
+    handler_id: post_to_middleware
+    status: true
+    conditions: {  }
+    weight: 0
+    settings: {  }
+variants: {  }

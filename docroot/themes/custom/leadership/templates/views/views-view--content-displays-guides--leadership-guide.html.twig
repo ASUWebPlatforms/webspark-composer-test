@@ -1,0 +1,38 @@
+{%
+set classes = [
+dom_id ? 'js-view-dom-id-' ~ dom_id,
+]
+%}
+<div{{ attributes.addClass(classes) }}>
+    {{ title_prefix }}
+    {{ title }}
+    {{ title_suffix }}
+
+    {% if header %}
+        <header>
+            {{ header }}
+        </header>
+    {% endif %}
+
+    {{ exposed }}
+    {{ attachment_before }}
+
+    <div class="guide-content">
+        <div class="container">
+            <div class="guide-row-wrapper">
+                <section id="scroller" class="guide-row-wrapper--scrollbox">
+                    {{ rows }}
+                    <figure>
+                        <div class="guide-figure">
+                            {{ footer }}
+                        </div>
+                    </figure>
+                </section>
+            </div>
+            {{ empty }}
+            {{ pager }}
+        </div>
+    </div>
+        {{ attachment_after }}
+        {{ more }}
+</div>

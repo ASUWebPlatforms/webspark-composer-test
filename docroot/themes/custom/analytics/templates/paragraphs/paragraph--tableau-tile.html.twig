@@ -1,0 +1,89 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a paragraph.
+ *
+ * Available variables:
+ * - paragraph: Full paragraph entity.
+ *   Only method names starting with "get", "has", or "is" and a few common
+ *   methods such as "id", "label", and "bundle" are available. For example:
+ *   - paragraph.getCreatedTime() will return the paragraph creation timestamp.
+ *   - paragraph.id(): The paragraph ID.
+ *   - paragraph.bundle(): The type of the paragraph, for example, "image" or "text".
+ *   - paragraph.getOwnerId(): The user ID of the paragraph author.
+ *   See Drupal\paragraphs\Entity\Paragraph for a full list of public properties
+ *   and methods for the paragraph object.
+ * - content: All paragraph items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - attributes: HTML attributes for the containing element.
+ *   The attributes.class element may contain one or more of the following
+ *   classes:
+ *   - paragraphs: The current template type (also known as a "theming hook").
+ *   - paragraphs--type-[type]: The current paragraphs type. For example, if the paragraph is an
+ *     "Image" it would result in "paragraphs--type--image". Note that the machine
+ *     name will often be in a short form of the human readable label.
+ *   - paragraphs--view-mode--[view_mode]: The View Mode of the paragraph; for example, a
+ *     preview would result in: "paragraphs--view-mode--preview", and
+ *     default: "paragraphs--view-mode--default".
+ * - view_mode: View mode; for example, "preview" or "full".
+ * - logged_in: Flag for authenticated user status. Will be true when the
+ *   current user is a logged-in member.
+ * - is_admin: Flag for admin user status. Will be true when the current user
+ *   is an administrator.
+ *
+ * @see template_preprocess_paragraph()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% set modalTitle = paragraph.field_ready.value == 0 ? paragraph.field_title.value ~ ' (Preview)' : paragraph.field_title.value %}
+
+{% block paragraph %}
+  {% if paragraph.field_visible.value == 1 %}
+    <div class="col-sm-12 col-lg-4">
+      {% block content %}
+        {# Note just loading the Teaser because I need to add the markup for the modal #}
+        <div class="teaser--card-horizontal card card-story">
+          <img
+            class="card-img-top"
+            src="{{ paragraph.field_tile_image.entity|file_url|default(file_url("#{active_theme_path()}/assets/images/hex-pattern.png")) }}"
+            alt="{{ paragraph.field_tile_image.entity.field_media_image.alt }}"
+            width="600"
+            height="337"
+            loading="lazy"
+            decoding="async"
+            fetchpriority="high"/>
+
+          <div class="card-header">
+            <h3 class="card-title">
+              {{ paragraph.field_title.value }}
+            </h3>
+          </div>
+
+          <div class="card-body">
+            {% if paragraph.field_tile_hover_value.value %}
+              <h4 class="card-text">{{ paragraph.field_tile_hover_value.value }}</h4>
+            {% endif %}
+            <p class="card-text">{{ paragraph.field_tile_hover_label.value }}</p>
+          </div>
+
+          <div class="card-buttons">
+            <div class="card-button">
+              {# Button to trigger the fullscreen modal wihtin fullscreen-modal.html.twig #}
+              <button class="btn btn-{{ button.color|default('dark') }}"
+                data-bs-toggle="modal"
+                data-bs-target="#tableau-tiles-modal"
+                data-modal-title="{{ modalTitle }}"
+                data-modal-content="{{ paragraph.field_tableau_dashboard_url.value }}">
+                See dashboard
+              </button>
+            </div>
+          </div>
+        </div>
+      {% endblock %}
+    </div>
+  {% endif %}
+{% endblock paragraph %}

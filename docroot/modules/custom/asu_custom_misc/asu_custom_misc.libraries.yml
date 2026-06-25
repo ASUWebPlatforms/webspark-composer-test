@@ -1,0 +1,33 @@
+asu-custom-misc-library:
+  version: 1.x
+  dependencies:
+    - core/jquery
+  js:
+    js/asu_custom_misc.js: { }
+
+countdown-library:
+  version: 1.x
+  dependencies:
+    - core/jquery
+  js:
+    js/countdown.js: { }
+  css:
+    theme:
+      css/countdown.css: {}
+
+summerfinancialaid-library:
+  version: 1.x
+  dependencies:
+    - core/jquery
+  js:
+    js/summerfinancialaid.js: { }
+
+special-financial-assistance-library:
+  version: 1.x
+  dependencies:
+    - core/jquery
+  js:
+    js/special_financial_assistance_programs.js: { }
+  css:
+    theme:
+      css/special_financial_assistance_programs.css: {}

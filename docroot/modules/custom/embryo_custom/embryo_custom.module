@@ -1,0 +1,82 @@
+<?php
+use \Drupal\views\ViewExecutable;
+use Drupal\views\ResultRow;
+use Drupal\media\Entity\Media;
+use Drupal\file\Entity\File;
+
+function embryo_custom_preprocess_views_view_field(&$vars) {
+  $view_display = $vars['view']->current_display;
+  $view_id = $vars['view']->id();
+  if ($view_id === 'keep_details' && $view_display === 'block_7') {
+    if (isset($vars['view']->field) && (count($vars['view']->field) > 0)) {
+      if ($vars['field']->field === 'nothing') {
+        $tax_term_ids = $vars['row']->_entity->get('field_author')->getValue();
+        $field_author_names = getCorrectAuthorName($tax_term_ids);
+        $old_output = $vars['output'];
+        $vars['output'] =  [
+          '#markup' => $field_author_names. $old_output,
+        ];
+      }
+    }
+  }
+}
+
+function getCorrectAuthorName(&$taxonomy_term_ids) {
+  $final_result = [];
+  foreach ($taxonomy_term_ids as $taxonomy_term_id) {
+    $taxonomy_id = $taxonomy_term_id['target_id'];
+    $term_name = \Drupal\taxonomy\Entity\Term::load($taxonomy_id)->get('name')->value;
+    $old_order = explode(' ', $term_name);
+    $last_name = end($old_order);
+    $last_name = $last_name . ',';
+    $old_order[sizeof($old_order) - 1] = $last_name;
+    $new_order = array_merge(array_splice($old_order, -1), $old_order);
+    $array_name = implode(' ', $new_order);
+    $final_result[] = $array_name;
+  }
+  return implode(', ', $final_result);
+}
+
+/**
+ * Implements hook_views_data_export_row_alter().
+ */
+function embryo_custom_views_data_export_row_alter(&$output, ResultRow $row, ViewExecutable $view) {
+  // For a specific view and display.
+  if ($view->storage->id() == "csv_export_to_keep" && $view->current_display == "data_export_1") {
+      if (!empty($output['field_media_image'])) {
+        $new_media_output = [];
+        foreach ($output['field_media_image'] as $key => $value) {
+          $media = Media::load($value);
+          $fid = $media->getSource()->getSourceFieldValue($media);
+          $file = File::load($fid);
+          $uri = $file->getFileUri();
+          $url = \Drupal::service('file_url_generator')->generateAbsoluteString($uri);
+          $new_media_output[] = $url;
+        }
+        $output['field_media_image'] = implode(",", $new_media_output);
+      }
+
+      if (empty($output['field_media_image']) && !empty($output['field_alt_image'])) {
+        $new_media_output = [];
+        $value = $output['field_alt_image']->__toString();
+        $file = File::load($value);
+        $uri = $file->getFileUri();
+        $url = \Drupal::service('file_url_generator')->generateAbsoluteString($uri);
+        $new_media_output[] = $url;
+        $output['field_alt_image'] = implode(",", $new_media_output);
+      }
+
+      if (!empty($output['field_contributor'])) {
+        $contributors_names = [];
+        foreach ($output['field_contributor'] as $k => $v) {
+          $paragraph = \Drupal\paragraphs\Entity\Paragraph::load(intval($v));
+          $term_id = $paragraph->field_contributor->getValue()[0]['target_id'];
+          if (!empty($term_id)) {
+            $term_name = \Drupal\taxonomy\Entity\Term::load($term_id)->get('name')->value;
+            $contributors_names[] = $term_name;
+          }
+        }
+        $output['field_contributor'] = implode(",", $contributors_names);
+      }
+  }
+}

@@ -1,0 +1,10 @@
+viewbook-webformhandler-library:
+  version: 1.x
+  js:
+    js/asuaec_viewbook_webformhandler.js: {}
+    js/asuaec_enterpriseclientid.js: {}
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+    - core/drupalSettings

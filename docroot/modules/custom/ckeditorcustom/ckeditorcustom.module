@@ -1,0 +1,28 @@
+<?php
+
+
+function ckeditorcustom_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $formObject = $form_state->getFormObject();
+    if ($formObject instanceof \Drupal\Core\Entity\EntityFormInterface) {
+      $entity = $formObject->getEntity();
+      if (
+        $entity->getEntityTypeId() === 'node'
+        
+      ) {
+        $form['#attached']['library'][] = 'ckeditorcustom/ckeditorcustom';
+      }
+    }
+
+    // if($form_id == 'node_page__form'||$form_id == 'node_newsletter_form'||$form_id == 'node_crime_alert_form'||$form_id == 'node_accordion_topic_form'||$form_id == 'node_bid_form'||$form_id == 'node_slide_form'||$form_id == 'node_webform_form'){
+    //   // Uncheck the "Generate automatic URL alias" checkbox by default. 
+    //   $form['path']['widget']['0']['pathauto']['#default_value']=0;
+    // }
+    if($form_id == 'node_page__edit_form' || $form_id == 'node_newsletter_edit_form'||$form_id == 'node_crime_alert_edit_form'||$form_id == 'node_article_edit_form'||$form_id == 'node_bid_edit_form' || $form_id == 'node_slide_edit_form'||$form_id == 'node_webform_edit_form'){
+      // Uncheck the "Generate automatic URL alias" checkbox by default. 
+      $form['path']['widget']['0']['pathauto']['#default_value']=0;
+    }
+   
+    // print_r("<pre>");
+    // var_dump($form['#attached']['library']);
+    // exit();
+}

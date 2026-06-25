@@ -1,0 +1,145 @@
+//@import "node_modules/@asu/unity-bootstrap-theme/src/scss/custom-asu-variables";
+
+.asu-about {
+  @media screen and (min-width: 992px) {
+    h1 {
+      font-size: 3rem;
+    }
+
+    div[class^=uds-hero] {
+      grid-template-rows: 1fr repeat(4,auto) 1.5rem;
+    }
+
+    .block-inline-blockcontent-image {
+      .uds-image-overlap {
+        /* variable $uds-component-card-basic-image-top-height-sm is deprecated */
+        grid-template-rows: 10rem /*$uds-component-card-basic-image-top-height-sm*/ 1fr 10rem /*$uds-component-card-basic-image-top-height-sm*/;
+      }
+
+      h2 {
+        line-height: 3rem;
+
+        .highlight-gold {
+          box-shadow:
+              -0.15em 0 0 2px #ffc627,
+              0.15em 0 0 2px #ffc627;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 992px) {
+
+    .ckeditor-col-container {
+      flex-direction: column;
+    }
+
+    .block-inline-blockcontent-image {
+      h2 {
+        line-height: $uds-size-spacing-5;
+
+        .highlight-gold {
+          box-shadow:
+              -0.15em 0 0 2px $uds-color-base-gold,
+              0.15rem 0 0 2px $uds-color-base-gold;
+        }
+      }
+    }
+  }
+
+}
+.asu-about-privacy,
+.asu-about-privacy-security,
+.asu-about-terms-of-use,
+.asu-about-copyright-trademark {
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    .block--asu-edu-mainpagecontent {
+      margin-top: $uds-size-spacing-8;
+    }
+
+    h1 {
+      .highlight-gold {
+        box-shadow: -0.15em 0 0 3px $uds-color-brand-gold, 0.15em 0 0 3px $uds-color-brand-gold;
+      }
+    }
+  }
+
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    h1 {
+      line-height: $uds-size-spacing-6;
+
+      .highlight-gold {
+        font-size: $uds-size-font-xxxl;
+        box-shadow: -0.15em 0 0 1px $uds-color-brand-gold, 0.15em 0 0 1px $uds-color-brand-gold;
+      }
+    }
+  }
+}
+
+.asu-about-terms-of-use {
+  h3 {
+    margin-top: $uds-size-spacing-5;
+  }
+}
+
+.asu-about-privacy {
+  .uds-tabbed-panels {
+    max-width: 700px;
+  }
+
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    a {
+      background: none;
+    }
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    .uds-tabbed-panels {
+      margin: 0;
+      .nav-tabs {
+        .nav-item {
+          font-size: $uds-size-font-large;
+        }
+      }
+
+      .scroll-control-prev {
+        background: none;
+      }
+    }
+
+    .tab-content {
+      padding: $uds-size-spacing-4 0;
+    }
+
+  }
+}
+
+.asu-about-contact {
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    .card-icon-top {
+      height: $uds-size-spacing-5;
+      font-size: $uds-size-spacing-5;
+    }
+  }
+}
+
+.asu-about-locations-maps {
+  .uds-card-arrangement {
+    .uds-card-arrangement-content-container {
+      display: none;
+    }
+  }
+
+  .block-inline-blocktext-content {
+    @media screen and (max-width: $uds-grid-container-max-width-lg) {
+      .lead {
+        font-size: $uds-size-font-xl;
+        line-height: 1.75rem;
+      }
+    }
+  }
+
+  .uds-image-text-block-container {
+    margin: 0;
+  }
+}

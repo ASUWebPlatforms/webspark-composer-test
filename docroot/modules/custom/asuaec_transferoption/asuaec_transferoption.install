@@ -1,0 +1,238 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the asuaec_transferoption module.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Creates some default entries on this module custom table.
+ *
+ * @see hook_install()
+ *
+ * @ingroup asuaec_transferoption
+ */
+
+/**
+ * Implements hook_schema().
+ *
+ * Defines the database tables used by this module.
+ *
+ * @see hook_schema()
+ *
+ * @ingroup asuaec_transferoption
+ */
+function asuaec_transferoption_schema() {
+  // Transfer agreement
+  $schema['asu_transferoption_agreement'] = [
+    'description' => 'Transfer option degree data',
+    'fields' => [
+        'theId' => [
+          'type' => 'serial',
+          'not null' => TRUE,
+          'unsigned' => TRUE,
+        ],
+        'AcadPlan' => [
+            'type' => 'varchar',
+            'length' => 64,
+            'not null' => TRUE,
+            'description' => 'Major code',
+        ],
+        'tACommunityCollege' => [
+            'type' => 'varchar',
+            'length' => 255,
+            'not null' => TRUE,
+            'description' => 'Community college name',
+        ],
+        'transferAgreementType' => [
+            'type' => 'varchar',
+            'length' => 16,
+            'not null' => TRUE,
+            'description' => 'transferAgreementType - MAPP, TAG, etc',
+        ],
+        'transferAgreementYearsUrlsYear' => [
+            'type' => 'varchar',
+            'length' => 64,
+            'not null' => TRUE,
+            'description' => 'transferAgreementYearsUrls - Year',
+        ],
+        'transferAgreementYearsUrlsURL' => [
+            'type' => 'varchar',
+            'length' => 255,
+            'not null' => TRUE,
+            'description' => 'transferAgreementYearsUrls - URL',
+        ],
+        'Descr100' => [
+            'type' => 'varchar',
+            'length' => 255,
+            'not null' => TRUE,
+            'description' => 'Descr100',
+        ],
+        'Degree' => [
+            'type' => 'varchar',
+            'length' => 255,
+            'not null' => TRUE,
+            'description' => 'Degree - BS, BA, etc',
+        ],
+        'CollegeDescr100' => [
+            'type' => 'varchar',
+            'length' => 255,
+            'description' => 'CollegeDescr100',
+        ],
+        'DiplomaDescr' => [
+            'type' => 'varchar',
+            'length' => 255,
+            'description' => 'DiplomaDescr - Can I use it for Program name?',
+        ],
+        'CollegeUrl' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'description' => 'CollegeUrl',
+        ],
+        'CampusStringArray' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'description' => 'CampusStringArray',
+        ],
+        'planCatDescr' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'description' => 'CampusStringArray',
+        ],
+        'keywords' => [
+          'type' => 'varchar',
+          'length' => 1024,
+          'description' => 'keywords',
+        ],
+        'directMatchKeywords' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'description' => 'directMatchKeywords',
+        ],
+        'keywordsCombined' => [
+          'type' => 'varchar',
+          'length' => 1024,
+          'description' => 'keywords and directMatchKeywords combined',
+        ],
+
+    ],
+    'primary key' => array(
+        'theId',
+    ),
+  ];
+
+  // Transfer option degree
+  $schema['asu_transferoption_main'] = [
+      'description' => 'Transfer option degree data',
+      'fields' => [
+          'AcadPlan' => [
+              'type' => 'varchar',
+              'length' => 64,
+              'not null' => TRUE,
+              'description' => 'Major code',
+          ],
+          'Descr100' => [
+              'type' => 'varchar',
+              'length' => 255,
+              'not null' => TRUE,
+              'description' => 'Descr100',
+          ],
+          'Degree' => [
+              'type' => 'varchar',
+              'length' => 255,
+              'not null' => TRUE,
+              'description' => 'Degree - BS, BA, etc',
+          ],
+          'CollegeDescr100' => [
+              'type' => 'varchar',
+              'length' => 255,
+              'description' => 'CollegeDescr100',
+          ],
+          'DiplomaDescr' => [
+              'type' => 'varchar',
+              'length' => 255,
+              'description' => 'DiplomaDescr - Can I use it for Program name?',
+          ],
+          'CampusStringArray' => [
+              'type' => 'varchar',
+              'length' => 255,
+              'description' => 'CampusStringArray',
+          ],
+          'AsuCareerOpp' => [
+            'type' => 'blob',
+            'mysql_type' => 'blob',
+            'serialize' => TRUE,
+            'size' => 'medium',
+            'description' => 'AsuCareerOpp',
+          ],
+          'planCatDescr' => [
+            'type' => 'varchar',
+            'length' => 255,
+            'description' => 'CampusStringArray',
+          ],
+          'DegreeDescrlong' => [
+            'type' => 'blob',
+            'mysql_type' => 'blob',
+            'serialize' => TRUE,
+            'size' => 'medium',
+            'description' => 'DegreeDescrlong',
+          ],
+          'AsuCritTrackUrl' => [
+            'type' => 'varchar',
+            'length' => 255,
+            'description' => 'AsuCritTrackUrl',
+          ],
+          'majorMapDefaultYear' => [
+            'type' => 'varchar',
+            'length' => 255,
+            'description' => 'majorMapDefaultYear',
+          ],
+          'keywords' => [
+            'type' => 'varchar',
+            'length' => 1024,
+            'description' => 'keywords',
+          ],
+          'directMatchKeywords' => [
+            'type' => 'varchar',
+            'length' => 255,
+            'description' => 'directMatchKeywords',
+          ],
+
+      ],
+      'primary key' => array(
+        'AcadPlan',
+      ),
+  ];
+
+  // Transfer Option keywords
+  $schema['asu_transferoption_keyword'] = [
+    'description' => 'Transfer option keywords - Used for auto complete exposed filter.',
+    'fields' => [
+      'theId' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+      ],
+      'keyword' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Keywords',
+      ],
+      'transferAgreementType' => [
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'description' => 'transferAgreementType',
+      ],
+    ],
+    'primary key' => array(
+      'theId',
+    ),
+  ];
+
+
+  return $schema;
+}

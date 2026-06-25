@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * Implements hook_form_alter().
+ */
+function greatgamelab_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'views_exposed_form' && isset($form['#id']) && $form['#id'] == 'views-exposed-form-content-display-blog-articles-blog-article-list') {
+    // Modify the submit button classes
+    $form['actions']['submit']['#attributes']['class'] = [
+      'btn',
+      'btn-gold',
+      'js-form-submit',
+      'form-submit',
+    ];
+    
+    // Add placeholder text and modify search field
+    if (isset($form['combine'])) {
+      $form['combine']['#attributes']['placeholder'] = t('Search...');
+      $form['combine']['#attributes']['class'][] = 'form-control';
+      // Remove the label from display but keep for accessibility
+      $form['combine']['#title_display'] = 'invisible';
+    }
+    
+    // Modify the tags select field
+    if (isset($form['field_tags_target_id'])) {
+      $form['field_tags_target_id']['#attributes']['class'][] = 'form-select';
+      // Remove the label from display but keep for accessibility
+      $form['field_tags_target_id']['#title_display'] = 'invisible';
+      // Change the "- Any -" option to "Categories"
+      $form['field_tags_target_id']['#options']['All'] = t('Categories');
+      // Attach our custom JavaScript
+      $form['#attached']['library'][] = 'greatgamelab/script';
+    }
+  }
+}
+
+/**
+ * Implements template_preprocess_node().
+ */
+function greatgamelab_preprocess_node(&$variables) {
+  if ($variables['node']->getType() == 'article' && $variables['view_mode'] == 'full') {
+    // Get view results
+    $view = \Drupal\views\Views::getView('content_display_blog_articles');
+    if ($view) {
+      $view->setDisplay('featured_team_members');
+      $view->execute();
+      $variables['featured_team_members'] = $view->render();
+    }
+  }
+}

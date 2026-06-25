@@ -1,0 +1,90 @@
+/* Fix weird background issue for mobile */
+.layout__full-width {
+  width:100%;
+  display:flex;
+  justify-content:center;
+}
+
+.layout__full-width .layout__region--first {
+  width:100%;
+}
+/* end bg fix */
+
+.la-homepage .bg.morse-code-black.bg-top.bg-percent-100 {
+  background-image: url(../../img/home-background-buildings.png);
+  background-position: center;
+  background-size: cover;
+}
+
+.hiw h2 {
+  margin-bottom: 3rem;
+}
+
+.hiw__icon {
+  min-height: 4rem;
+
+  img {
+    max-width: 50px;
+  }
+}
+
+.hiw__description {
+  margin-bottom: 2rem;
+  min-height: 5rem;
+  max-width: 18rem;
+}
+
+.hiw .btn {
+  margin-bottom: 2rem;
+}
+
+.wml__icon {
+  min-height: 2rem;
+  max-width: 40px;
+  margin-top: 1rem;
+
+  &.icon_2 {
+    max-width: 28px;
+  }
+}
+
+.wml__description {
+  margin-bottom: 2rem;
+  min-height: 5rem;
+  max-width: 30rem;
+}
+
+.la-homepage .training {
+  display: flex;
+  justify-content: space-between;
+
+  > div:last-child {
+    display: flex;
+  }
+
+  .training__icon {
+    max-width: 44px;
+  }
+
+  .training__text {
+    max-width: 20rem;
+    margin-left: 1rem;
+    margin-top: 0.25rem;
+  }
+}
+
+.la-homepage .block-inline-blockvideo-hero .uds-video-hero {
+  @media (min-width: 1920px) {
+    height: 60rem;
+  }
+
+  @media (max-width: 992px) and (min-width: 576px) {
+    height: 50rem;
+  }
+
+  @media (max-width: 992px) {
+    .poster {
+      object-fit: cover;
+    }
+  }
+}

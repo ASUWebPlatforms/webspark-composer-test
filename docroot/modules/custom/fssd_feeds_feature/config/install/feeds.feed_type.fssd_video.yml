@@ -1,0 +1,64 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.fssd.field_upload_video
+    - node.type.fssd
+  module:
+    - node
+id: fssd_video
+label: 'FSSD Video'
+description: ''
+help: ''
+import_period: -1
+fetcher: upload
+fetcher_configuration:
+  allowed_extensions: 'txt csv tsv xml opml'
+  directory: 'private://feeds'
+parser: csv
+parser_configuration:
+  delimiter: ','
+  no_headers: false
+  line_limit: 100
+processor: 'entity:node'
+processor_configuration:
+  langcode: en
+  insert_new: 1
+  update_existing: 2
+  update_non_existent: _keep
+  expire: -1
+  owner_feed_author: false
+  owner_id: 0
+  authorize: true
+  skip_hash_check: false
+  values:
+    type: fssd
+custom_sources:
+  upload_video:
+    value: 'Upload video'
+    machine_name: upload_video
+    type: csv
+    label: 'Upload video'
+  nid:
+    value: Nid
+    machine_name: nid
+    type: csv
+    label: Nid
+mappings:
+  -
+    target: field_upload_video
+    map:
+      target_id: upload_video
+      description: ''
+    settings:
+      existing: 2
+      language: null
+      reference_by: filename
+      autocreate: false
+  -
+    target: nid
+    map:
+      value: nid
+    unique:
+      value: '1'
+    settings: {  }

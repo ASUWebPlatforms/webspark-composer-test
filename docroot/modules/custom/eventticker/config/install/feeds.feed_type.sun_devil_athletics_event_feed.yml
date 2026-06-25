@@ -1,0 +1,183 @@
+uuid: e41b22c7-9963-4020-84b1-003dfa8acdd1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.asu_athletics_events.body
+    - field.field.node.asu_athletics_events.field_event_date_and_time
+    - field.field.node.asu_athletics_events.field_event_link
+    - field.field.node.asu_athletics_events.field_location
+    - field.field.node.asu_athletics_events.field_opponent
+    - node.type.asu_athletics_events
+  module:
+    - feeds_ex
+    - node
+label: 'Sun Devil Athletics Event Feed'
+id: sun_devil_athletics_event_feed
+description: ''
+help: ''
+import_period: 3600
+fetcher: http
+fetcher_configuration:
+  auto_detect_feeds: false
+  use_pubsubhubbub: false
+  always_download: false
+  fallback_hub: ''
+  request_timeout: 30
+parser: xml
+parser_configuration:
+  context:
+    value: /rss/channel/item
+  source_encoding:
+    - auto
+  display_errors: false
+  line_limit: 100
+  use_tidy: false
+processor: 'entity:node'
+processor_configuration:
+  values:
+    type: asu_athletics_events
+  langcode: en
+  insert_new: 1
+  update_existing: 2
+  update_non_existent: _keep
+  skip_hash_check: true
+  authorize: true
+  revision: false
+  expire: -1
+  owner_feed_author: false
+  owner_id: 141630
+custom_sources:
+  s_localstartdate:
+    value: 'ev:startdate'
+    label: 'ev:startdate'
+    machine_name: s_localstartdate
+    type: blank
+  s_localenddate:
+    value: 'ev:enddate'
+    label: 'ev:enddate'
+    machine_name: s_localenddate
+    type: blank
+  s_opponent:
+    value: 's:opponent'
+    label: 's:opponent'
+    machine_name: s_opponent
+    type: blank
+  ev_location:
+    value: 'ev:location'
+    label: 'ev:location'
+    machine_name: ev_location
+    type: blank
+  s_gameid:
+    value: 's:gameid'
+    label: 's:gameid'
+    machine_name: s_gameid
+    type: blank
+  description:
+    label: description
+    machine_name: description
+    value: description
+    raw: false
+    inner: false
+    type: xml
+  title:
+    label: title
+    machine_name: title
+    value: title
+    raw: false
+    inner: false
+    type: xml
+  link:
+    label: link
+    machine_name: link
+    value: link
+    raw: false
+    inner: false
+    type: xml
+  start_date:
+    label: 'start date'
+    machine_name: start_date
+    value: 's:localstartdate'
+    raw: false
+    inner: false
+    type: xml
+  event_date:
+    label: 'event date'
+    machine_name: event_date
+    value: 's:localenddate'
+    raw: false
+    inner: false
+    type: xml
+  opponent:
+    label: opponent
+    machine_name: opponent
+    value: 's:opponent'
+    raw: false
+    inner: false
+    type: xml
+  location:
+    label: location
+    machine_name: location
+    value: 'ev:location'
+    raw: false
+    inner: false
+    type: xml
+  game_id:
+    label: 'game id'
+    machine_name: game_id
+    value: 's:gameid'
+    raw: false
+    inner: false
+    type: xml
+mappings:
+  -
+    target: body
+    map:
+      value: description
+      summary: ''
+    settings:
+      language: null
+      format: plain_text
+  -
+    target: title
+    map:
+      value: title
+    settings:
+      language: null
+    unique: {  }
+  -
+    target: field_event_link
+    map:
+      value: link
+    settings:
+      language: null
+    unique: {  }
+  -
+    target: field_event_date_and_time
+    map:
+      value: start_date
+      end_value: event_date
+    settings:
+      language: null
+      timezone: UTC
+  -
+    target: field_opponent
+    map:
+      value: opponent
+    settings:
+      language: null
+    unique: {  }
+  -
+    target: field_location
+    map:
+      value: location
+    settings:
+      language: null
+    unique: {  }
+  -
+    target: nid
+    map:
+      value: game_id
+    settings: {  }
+    unique:
+      value: 1

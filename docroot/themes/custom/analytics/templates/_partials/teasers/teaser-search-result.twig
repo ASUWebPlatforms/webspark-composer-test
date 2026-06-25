@@ -1,0 +1,64 @@
+{#
+@file
+The template for the search result teaser.
+
+Available variables:
+- favorite: Boolean. Whether or not to show the favorites icon.
+- title: The title.
+- url: The url to the node.
+- description: The description.
+- pills: An array of objects containing the taxonomy data.
+  - title: The taxonomy name.
+  - data: Array of taxonomy terms.
+- group: The ID of the group this content belongs to.
+- allowAccessRequest: Boolean. Whether or not to allow access requests.
+#}
+
+{% from '@analytics/macros.html.twig' import tags %}
+
+{% set userHasAccess = true %}
+{% if group %}
+  {% set userHasAccess = has_group_access(group) %}
+{% endif %}
+
+<div class="tw-border tw-border-[#d0d0d0] tw-border-solid tw-bg-white tw-p-4">
+  <div class="row gy-2 align-items-center">
+    <div class="col-auto">
+      {% if userHasAccess %}
+        {{ favorites_link }}
+      {% else %}
+        <div class="tw-flex tw-justify-center tw-items-center" style="width: 23px; height: 24px;">
+          <span class="fas fa-lock"></span>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="col tw-space-y-1">
+      <h4 class="tw-my-0 tw-leading-none">
+        <a class="tw-no-underline" href="{{ url }}">{{ title }}</a>
+      </h4>
+
+      {% if description %}
+        <p>{{ description }}</p>
+      {% endif %}
+
+      {% if pills %}
+        <div class="row g-0">
+          {% for pill in pills %}
+            {{ tags(pill.title, pill.data, 'sm') }}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    {% if not userHasAccess and allowAccessRequest %}
+      <div class="col-auto">
+        <a href="#"
+          class="btn btn-primary btn-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#access-request-modal"
+          data-bs-group-name="{{ node.field_group.entity.label.value }}">Request Group Access</a>
+      </div>
+    {% endif %}
+  </div>
+</div>

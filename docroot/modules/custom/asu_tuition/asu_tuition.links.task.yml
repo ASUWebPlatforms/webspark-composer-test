@@ -1,0 +1,19 @@
+asu_tuition.admin_settings:
+  title: 'General'
+  description: 'Administer ASU Tuition content'
+  route_name: asu_tuition.admin_settings
+  base_route: asu_tuition.admin_settings
+
+# asu_tuition.admin_table_settings:
+#   title: 'Tables'
+#   description: 'Administer ASU Tuition table content'
+#   route_name: asu_tuition.admin_table_settings
+#   base_route: asu_tuition.admin_settings
+#   #class: '\Drupal\asu_tuition\Plugin\Menu\LocalTask\AsuTuitionDynamicTabs'
+#   #deriver: '\Drupal\asu_tuition\Plugin\Derivative\AsuTuitionDynamicLocalTasks'
+#   Weight: 100  
+
+asu_tuition.admin_all_tables:
+  title: 'Tables'
+  route_name: asu_tuition.admin_all_tables
+  base_route: asu_tuition.admin_settings

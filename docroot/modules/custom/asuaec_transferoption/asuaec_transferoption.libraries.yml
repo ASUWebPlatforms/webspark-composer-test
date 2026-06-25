@@ -1,0 +1,18 @@
+transferoption-library:
+  version: 1.x
+  dependencies:
+    - core/jquery
+  css:
+    theme:
+      css/transfer_option_detailpage.css: {}
+  js:
+    js/transferoption.js: { }
+
+transfer-option-search-view-library:
+  css:
+    theme:
+      css/transfer_option_search_view.css: {}
+  js:
+    js/transfer_option_search_view.js: {}
+  dependencies:
+    - core/jquery

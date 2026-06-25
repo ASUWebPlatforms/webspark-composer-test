@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_europe_countries
+    - node.type.international_advisors
+    - taxonomy.vocabulary.europe_countries_new
+id: node.international_advisors.field_europe_countries
+field_name: field_europe_countries
+entity_type: node
+bundle: international_advisors
+label: 'Europe countries'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      europe_countries_new: europe_countries_new
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

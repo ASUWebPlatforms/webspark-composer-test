@@ -1,0 +1,35 @@
+<div id="visited-nodes-container" class="visited-nodes-ajax-container">
+	<div class="loading-placeholder">
+		<span class="spinner"></span>
+		<span class="loading-text">Loading visited items...</span>
+	</div>
+</div>
+
+<style>
+	.visited-nodes-ajax-container .loading-placeholder {
+		text-align: center;
+		padding: 20px;
+		color: #666;
+	}
+
+	.visited-nodes-ajax-container .spinner {
+		display: inline-block;
+		width: 20px;
+		height: 20px;
+		border: 2px solid #f3f3f3;
+		border-top: 2px solid #3498db;
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+		margin-right: 10px;
+		vertical-align: middle;
+	}
+
+	@keyframes spin {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+</style>

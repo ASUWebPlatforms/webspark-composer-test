@@ -1,0 +1,5 @@
+name: ASU MyPath2ASU Module
+type: module
+description: 'Generates form to signup for MyPath2ASU'
+package: ASU
+core_version_requirement: ^9 || ^10

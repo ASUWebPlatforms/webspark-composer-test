@@ -1,0 +1,9 @@
+ceadmin-app:
+  version: 3.03
+  js:
+    ceadmin-app/dist/ceadmin_min.js: { preprocess: false  }
+  css:
+    component:
+      ceadmin-app/dist/ceadmin_min.css: { }
+  dependencies:
+    - core/drupalSettings

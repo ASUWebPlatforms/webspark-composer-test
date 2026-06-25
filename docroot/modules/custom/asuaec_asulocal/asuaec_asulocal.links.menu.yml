@@ -1,0 +1,13 @@
+asuaec_asulocal.settings:
+  title: 'ASU Local Degrees settings'
+  description: 'Configure GraphQL endpoint and API key.'
+  route_name: asuaec_asulocal.settings
+  parent: system.admin_config_services
+  weight: 100
+
+asuaec_asulocal.rfi_settings:
+  title: 'ASU Local RFI settings'
+  description: 'ASU Local RFI config page'
+  route_name: asuaec_asulocal.rfi_settings
+  parent: system.admin_config_services
+  weight: 101

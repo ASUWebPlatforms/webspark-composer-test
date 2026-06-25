@@ -1,0 +1,178 @@
+
+/* CSS Document */
+.rep-image, .int_rep_image{    
+	border-radius: 50%;
+    width: 150px;
+    margin: 20px;
+    border: 5px solid #ffcc33;
+}
+
+
+
+.cf-field{
+	/*margin-bottom: 0px !important;*/
+	
+	
+}
+
+form.webform-submission-contact-undergrad-form-form fieldset{
+	/*margin-bottom: -10px !important;*/
+	border: none !important;
+}
+
+form.webform-submission-graduate-contact-form-form fieldset{
+	border: none !important;
+	margin-bottom: -10px;
+}
+
+.intl-rhs-profile{
+	margin-left: -32px;
+}
+
+.req-field.error{
+	border: solid #b72a2a;
+    border-width: 1px 1px 8px;
+}
+
+@media screen and (min-width: 992px){
+	.grad-progams{
+		display: flex !important;
+	}
+	.form-item-select-area-of-interest{
+	     width: 70%;	
+	}
+	
+	#grad-college-wrapper{
+		width: 70%;
+	}
+}
+
+.interest-text{
+   font-size: 18px;	
+}
+
+
+.confirm-right-side{
+	background-color: #f2f2f2 !important;
+	padding: 10px 35px !important;
+}
+
+.image-cropper {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    border: solid 3px #8C1D40 !important;
+}
+
+.contact-confirm-row{
+	/*box-shadow: 0px 8px 20px grey;*/
+    border-radius: 5px;
+	/*margin-top: -60px;
+	z-index: 1000;*/
+	background: #ffffff;
+	padding-right: 0px !important;
+}
+
+.rhs-content{
+	width: 65%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px 30px;
+}
+
+.custom-col{
+	padding-top:30px;
+	
+}
+
+.custom-int-col{
+	padding: 30px !important;
+	
+}
+
+.form-check input[type=radio]+label {
+   font-weight: 300 !important;
+}
+
+.webform-options-display-one-column{
+	margin-top: 1rem;
+}
+
+@media screen and (min-width: 992px){
+	.form-select, .form-control{
+		width: auto !important;
+	}
+
+	.form-item > label{
+		width: 100% !important;
+	}
+}
+
+.modal{
+	top:10% !important;
+}
+
+.rep_title{
+	font-size: 1.2em;
+    font-weight: bold;
+}
+
+.militaryClassForm{
+	display: block !important;
+}
+
+.hide{
+	display: none !important;
+}
+
+.custom-searchicon-hs, .custom-searchicon-tr-az, .custom-searchicon-tr-cal{
+	background-color: rgb(255, 198, 39);
+    /*height: 42px;*/
+    font-size: 1em;
+    padding: 10px;
+    border: 1px solid;
+	margin-left: 20px;
+	cursor: pointer !important;
+	/*position:absolute;*/
+}
+
+.custom-searchicon-hs-focus, .custom-searchicon-tr-az-focus, .custom-searchicon-tr-az-focus{
+	outline: none!important;
+    box-shadow: none!important;
+    border: 2px solid #191919!important;
+	height: 44px;
+}
+
+@media screen and (min-width: 992px){
+	#edit-high-school-autocomplete, #edit-select-arizona-college-or-university, #edit-enter-california-college-or-university{
+		display: inline;
+	}
+	
+	
+
+}
+
+@media screen and (max-width: 992px){
+	#edit-high-school-autocomplete, #edit-select-arizona-college-or-university, #edit-enter-california-college-or-university{
+	   width: 91% !important ;	
+	}
+	
+	.highschool_reps_button{
+		margin-top: 20px !important;
+		margin-bottom: 5px !important;
+	}
+	
+}
+
+.highschool_reps_button{
+	color: #fff;
+    background: #8c1d40;
+	padding: 1rem 2rem;
+	font-size: 1rem;
+    line-height: 1rem;
+    border-radius: 400rem;
+	transition: .03s ease-in-out;
+	cursor: pointer;
+}

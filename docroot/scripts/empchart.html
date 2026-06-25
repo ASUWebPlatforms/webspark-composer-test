@@ -1,0 +1,85 @@
+<h4 style="text-align: center; margin-top: 25px;">JD employment rate within 10 months of graduation</h4>
+<div id="chart_div5"></div>
+<script>
+                google.charts.load('current', {
+                    'packages': ['corechart']
+                });
+                google.charts.setOnLoadCallback(drawVisualization);
+
+                function drawVisualization() {
+                    var data = google.visualization.arrayToDataTable([
+         ['Year', '', {role: 'annotation'}, '', {role: 'annotation'}],
+         ['2016', 72.52, '72.52%', 87.89, '87.89%'],
+         ['2017', 75.29, '75.29%', 88.89, '88.89%'],
+		 ['2018', 77.73, '77.73%', 88.77, '88.77%'],
+		 ['2019', 80.56, '80.56%', 89.01, '89.01%'],
+		 ['2020', 77.39, '77.39%', 87.40, '87.40%']
+      ]);
+
+                    var options = {
+                        height: 500,
+                        chartArea: {
+                            width: '85%',
+                            height: '85%'
+                        },
+                        annotations: {
+                            alwaysOutside: false,
+                            textStyle: {
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                color: '#000000'
+                            }
+                        },
+                        titleTextStyle: {
+                            color: '#5C6670',
+                            fontSize: 16
+                        },
+                        tooltip: {
+							trigger: 'none'
+                        },
+                        vAxis: {
+                            format: '#\'%\'',
+                            textStyle: {
+                                fontSize: 16,
+                                color: '#5C6670'
+                            },
+							gridlines: {
+                                count: 4
+							},
+							viewWindow: {
+								min: 0,
+								max: 100
+							}
+                        },
+                        hAxis: {
+                            textStyle: {
+                                fontSize: 20,
+                                color: '#5C6670',
+                            }
+                        },
+                        seriesType: 'bars',
+                        colors: ['#FFC627', '#8C1D40'],
+                        legend: {
+                            position: 'none',
+                            textStyle: {
+                                fontSize: 18,
+                                color: '#5C6670'
+                            }
+                        },
+						animation:{
+							startup: true,
+        					duration: 2000,
+        					easing: 'out',
+      					}
+                    };
+
+                    var chart = new google.visualization.ComboChart(document.getElementById('chart_div5'));
+                    chart.draw(data, options);
+                }
+            </script>
+<div style="text-align: center;">
+	<div class="goldlegend"></div>
+	<strong>National Employment Average</strong> &nbsp;
+	<div class="maroonlegend"></div>
+	<strong>ASU Law Employment Average</strong>
+</div>

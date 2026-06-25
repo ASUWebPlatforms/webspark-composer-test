@@ -1,0 +1,34 @@
+asu_ditigal_book.admin_settings:
+  title: 'Digital View book content settings page'
+  description: 'Control Digital View book content'
+  route_name: asu_digital_book.admin_settings
+  parent: system.admin_config_system
+  weight: 10
+
+asu_digital_book.learning:
+  title: 'Learning module'
+  description: 'Settings for Learning module'
+  parent: system.admin_config_system
+  route_name: asu_digital_book.learning
+  weight: 0
+
+asu_digital_book.customize:
+  title: 'Cutsomize module'
+  description: 'Settings for customize module'
+  parent: system.admin_config_system
+  route_name: asu_digital_book.customize
+  weight: 1
+
+asu_digital_book.invest:
+  title: 'Invest module'
+  description: 'Settings for invest module'
+  parent: system.admin_config_system
+  route_name: asu_digital_book.invest
+  weight: 2
+
+asu_digital_book.rfi:
+  title: 'RFI page'
+  description: 'Settings for RFI page'
+  parent: system.admin_config_system
+  route_name: asu_digital_book.invest
+  weight: 2

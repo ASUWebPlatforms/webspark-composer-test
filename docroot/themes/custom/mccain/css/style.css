@@ -1,0 +1,650 @@
+#wrapper-footer-columns {
+  background: #fff;
+}
+#wrapper-footer-columns .footer-base {
+  background: #1e1e1e;
+  max-width: 1920px;
+  margin: auto;
+}
+@media (max-width: 575.98px) {
+  #wrapper-footer-columns .asu-mccain-logo img {
+    max-width: 100%;
+  }
+}
+
+/* Universal Card Overrides */
+.transparent-cards .card {
+  background-color: transparent;
+  border: none;
+}
+
+.uds-caption-text {
+  font-size: 1.25rem;
+}
+.uds-caption-text p {
+  max-width: 100%;
+}
+
+.transparent-captions .uds-img .uds-figure .uds-figure-caption {
+  background: none;
+  border: 1px transparent;
+  border-top: none;
+  padding-left: 0;
+  font-weight: bold;
+}
+
+.caption-lg .uds-img .uds-figure .uds-figure-caption .uds-caption-text {
+  font-size: 2.5rem;
+  line-height: 2.5rem;
+}
+
+/* Timeline Block Styles */
+.timeline-spacing .block-inline-blocktext-content {
+  width: 760px;
+  margin: 48px auto 96px auto;
+}
+.timeline-spacing .block-inline-blocktext-content h2 {
+  margin-bottom: 72px;
+}
+.timeline-spacing .block-inline-blocktext-content img {
+  margin-bottom: 72px;
+}
+.timeline-spacing .block-inline-blocktimeline-break {
+  position: relative;
+  margin-bottom: 72px;
+}
+.timeline-spacing .block-inline-blocktimeline-break:before {
+  content: "";
+  /* Pseudo-element to create the horizontal rule */
+  position: absolute;
+  top: 50%;
+  /* Align in the vertical center of the h3 */
+  left: 0;
+  width: 100%;
+  /* Full width of the parent container */
+  height: 1px;
+  /* Thickness of the line */
+  background-color: #D0D0D0;
+  /* Line color */
+  z-index: 1;
+  /* Send the hr behind the heading */
+}
+.timeline-spacing .block-inline-blocktimeline-break h3 {
+  display: block;
+  width: 760px;
+  max-width: 100%;
+  margin: 0 auto;
+  z-index: 2;
+  position: relative;
+}
+.timeline-spacing .block-inline-blocktimeline-break h3 .highlight-gold {
+  padding: 8px;
+}
+@media (max-width: 575.98px) {
+  .timeline-spacing .block-inline-blocktext-content {
+    width: 100%;
+    margin: 1rem;
+  }
+  .timeline-spacing .block-inline-blocktext-content h2 {
+    margin-bottom: 48px;
+  }
+  .timeline-spacing .block-inline-blocktext-content img {
+    margin-bottom: 48px;
+  }
+  .timeline-spacing .block-inline-blocktimeline-break {
+    margin-top: 72px;
+  }
+}
+
+.jmlm-timeline {
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: start !important;
+}
+.jmlm-timeline .year-block {
+  align-items: flex-start;
+  width: 283px;
+}
+.jmlm-timeline .year-block .year {
+  font-size: 6.24rem;
+  font-weight: bold;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+.jmlm-timeline .year-block .description {
+  font-size: 1.25rem;
+  margin: 0;
+  font-weight: 600;
+}
+.jmlm-timeline .line-with-dot {
+  flex: 1;
+  height: 2px;
+  background-color: #8F4A3A;
+  position: relative;
+  align-self: stretch;
+  margin-top: 3.125rem;
+  margin-right: 3rem;
+}
+.jmlm-timeline .line-with-dot::after {
+  content: "";
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  background-color: #8F4A3A;
+  border-radius: 50%;
+}
+@media (max-width: 575.98px) {
+  .jmlm-timeline {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .jmlm-timeline .line-with-dot {
+    display: none;
+  }
+  .jmlm-timeline .year {
+    font-size: 4rem;
+  }
+  .jmlm-timeline .description {
+    font-size: 1rem;
+  }
+}
+
+/* Card and Image Container Overrides */
+.jmlm-home-cards .uds-card-and-image {
+  height: 1000px;
+}
+.jmlm-home-cards .uds-card-and-image .uds-card-and-image-container {
+  max-width: 554px;
+}
+.jmlm-home-cards .uds-card-and-image .uds-card-and-image-container .card {
+  color: #ffffff;
+  background-color: transparent;
+  max-height: calc(554px - 4rem);
+}
+.jmlm-home-cards .uds-card-and-image .uds-card-and-image-container .card .card-body {
+  display: block;
+  overflow: visible;
+}
+.jmlm-home-cards .uds-card-and-image .uds-card-and-image-container .card .card-body h2 {
+  font-size: 5rem;
+  line-height: 5rem;
+  font-weight: 500;
+}
+.jmlm-home-cards .uds-card-and-image .fa-2x {
+  font-size: 2.5rem;
+}
+@media (max-width: 575.98px) {
+  .jmlm-home-cards .uds-card-and-image {
+    height: 466px;
+  }
+  .jmlm-home-cards .uds-card-and-image .uds-card-and-image-container {
+    max-width: 384px;
+  }
+  .jmlm-home-cards .uds-card-and-image .uds-card-and-image-container .card {
+    color: #ffffff;
+    background-color: transparent;
+    max-height: 100%;
+  }
+  .jmlm-home-cards .uds-card-and-image .uds-card-and-image-container .card .card-body {
+    display: block;
+    overflow: visible;
+  }
+  .jmlm-home-cards .uds-card-and-image .uds-card-and-image-container .card .card-body h2 {
+    font-size: 2rem;
+    line-height: 2rem;
+    font-weight: 500;
+  }
+}
+
+.jmlm-card-and-image-simple .uds-card-and-image {
+  height: 800px;
+}
+.jmlm-card-and-image-simple .uds-card-and-image .uds-card-and-image-container {
+  max-width: 554px;
+}
+.jmlm-card-and-image-simple .uds-card-and-image .uds-card-and-image-container .card {
+  color: #ffffff;
+  background-color: transparent;
+  max-height: calc(554px - 4rem);
+}
+.jmlm-card-and-image-simple .uds-card-and-image .uds-card-and-image-container .card .card-body {
+  font-size: 2.5rem;
+  line-height: 2.75rem;
+  display: block;
+  overflow: auto;
+}
+@media (max-width: 575.98px) {
+  .jmlm-card-and-image-simple .uds-card-and-image {
+    background-position: 230vw 0;
+  }
+  .jmlm-card-and-image-simple .uds-card-and-image .uds-card-and-image-container {
+    max-width: 554px;
+  }
+  .jmlm-card-and-image-simple .uds-card-and-image .uds-card-and-image-container .card .card-body {
+    font-size: 1.75rem;
+    line-height: 2.5rem;
+  }
+}
+
+.jmlm-card-and-image-expanded .uds-card-and-image {
+  height: 800px;
+}
+.jmlm-card-and-image-expanded .uds-card-and-image .card {
+  max-height: calc(554px - 4rem);
+  padding: 1rem 0rem;
+}
+.jmlm-card-and-image-expanded .uds-card-and-image .card .card-body {
+  display: block;
+  overflow: auto;
+}
+
+/* Image and Text Container Overrides */
+.jmlm-home-cards .uds-image-text-block-container {
+  border: none;
+}
+.jmlm-home-cards .uds-image-text-block-container .uds-image-text-block-text-container {
+  padding: 14.5rem;
+}
+.jmlm-home-cards .uds-image-text-block-container .uds-image-text-block-text-container h2 {
+  font-size: 5rem;
+  line-height: 5rem;
+  font-weight: 500;
+}
+.jmlm-home-cards .uds-image-text-block-container .fa-2x {
+  font-size: 2.5rem;
+}
+@media (max-width: 575.98px) {
+  .jmlm-home-cards .uds-image-text-block-container .uds-image-text-block-text-container {
+    padding: 2rem;
+  }
+  .jmlm-home-cards .uds-image-text-block-container .uds-image-text-block-text-container h2 {
+    font-size: 2rem;
+    line-height: 2rem;
+    font-weight: 500;
+  }
+}
+
+/* Blockquote Overrides */
+.jmlm-home-cards .uds-blockquote {
+  font-size: 1.875rem;
+  font-weight: 500;
+  padding: 10rem 2rem 10rem 20rem;
+}
+.jmlm-home-cards .uds-blockquote .citation cite {
+  font-size: 1.5rem;
+}
+.jmlm-home-cards .uds-blockquote .citation:before {
+  font-size: 1.5rem;
+}
+@media (max-width: 575.98px) {
+  .jmlm-home-cards .uds-blockquote {
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0;
+  }
+}
+
+.jmlm-star-blockquote {
+  position: relative;
+  overflow: hidden;
+}
+.jmlm-star-blockquote::before {
+  content: "";
+  position: absolute;
+  top: -72px;
+  left: 0;
+  width: 833px;
+  height: 795px;
+  background-image: url("../img/background-star.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: left center;
+  mix-blend-mode: multiply;
+  z-index: 1;
+  pointer-events: none;
+}
+.jmlm-star-blockquote .layout__region {
+  position: relative;
+  z-index: 2;
+}
+@media (max-width: 575.98px) {
+  .jmlm-star-blockquote::before {
+    top: -48vh;
+    left: -24vw;
+    height: 100%;
+  }
+}
+
+/* Image Based Cards Overrides */
+.jmlm-home-cards .uds-image-based-card .card-title a {
+  color: #ffff;
+}
+@media (max-width: 575.98px) {
+  .jmlm-home-cards .layout__region:has(.uds-image-based-card) {
+    margin-bottom: 2rem;
+  }
+  .jmlm-home-cards .layout__region:has(.uds-image-based-card):last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+.uds-blockquote .uds-img:is(img) {
+  border: none;
+}
+
+/* Image Overlap Overrides */
+.uds-image-overlap .content-wrapper {
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.uds-image-overlap .content-wrapper .inner-content-wrapper {
+  background-color: #fff;
+  padding: 40px;
+}
+
+@media (min-width: 992px) {
+  .uds-image-overlap {
+    grid-template-columns: 1.5rem 1fr 20rem 20rem 1.5rem;
+  }
+}
+@media (min-width: 992px) {
+  .uds-image-overlap.content-left {
+    grid-template-columns: 1.5rem 20rem 20rem 1fr 1.5rem;
+  }
+}
+/* Image block overrides */
+.side-by-side-images .layout__region {
+  padding: 0.125rem;
+}
+.side-by-side-images .layout__region .uds-img img {
+  object-fit: cover;
+  width: auto;
+  height: 598px;
+}
+@media (max-width: 575.98px) {
+  .side-by-side-images .layout__region .uds-img img {
+    object-fit: cover;
+    width: 100%;
+    height: auto;
+  }
+}
+
+.full-width-image .uds-img {
+  max-width: 100%;
+}
+
+/* McCain Statement Combined Blocks */
+.mccain-statement--body {
+  margin-top: -48px;
+}
+.mccain-statement--body .col-12 {
+  padding: 0 !important;
+}
+.mccain-statement--body .col-12 .block {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-bottom: 96px;
+}
+.mccain-statement--body .col-12 .block .formatted-text {
+  width: 792px;
+  margin: 0 auto;
+}
+.mccain-statement--body .col-12 .block .formatted-text h2,
+.mccain-statement--body .col-12 .block .formatted-text h3,
+.mccain-statement--body .col-12 .block .formatted-text p {
+  max-width: 100%;
+}
+@media (max-width: 575.98px) {
+  .mccain-statement--body .col-12 {
+    padding: 0 !important;
+  }
+  .mccain-statement--body .col-12 .block {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: 96px;
+  }
+  .mccain-statement--body .col-12 .block .formatted-text {
+    width: 100%;
+    padding: 2rem;
+  }
+  .mccain-statement--body .col-12 .block .formatted-text h2,
+  .mccain-statement--body .col-12 .block .formatted-text h3,
+  .mccain-statement--body .col-12 .block .formatted-text p {
+    max-width: 100%;
+  }
+}
+
+/* Hero-Block Style Overrides */
+@media (max-width: 575.98px) {
+  .node-3 div.uds-hero-lg {
+    height: 34rem;
+    margin-bottom: 0;
+  }
+  .node-3 div.uds-hero-lg .content {
+    display: block;
+    font-weight: normal;
+  }
+  .node-3 div.uds-hero-lg img.hero {
+    object-position: -650px;
+  }
+}
+/* Custom Card Carousel Overrides */
+.asu-card-carousel-container .glide__slides .glide__slide .card .card-img-top {
+  height: 38rem !important;
+}
+.asu-card-carousel-container .glide__slides .glide__slide .card .card-body {
+  padding: 2rem 1rem;
+}
+.asu-card-carousel-container .glide__slides .glide__slide .card .card-body p {
+  max-width: 100%;
+}
+@media (max-width: 575.98px) {
+  .asu-card-carousel-container .glide__slides .glide__slide .card .card-img-top {
+    height: 268px;
+  }
+}
+
+/* Lower CTAs */
+.jmlm-lower-cta .formatted-text {
+  max-width: 486px;
+}
+.jmlm-lower-cta .formatted-text p {
+  font-size: 1.25rem;
+}
+
+.webform-submission-join-conversation-form .btn.btn-primary,
+.jmlm-forms .btn-primary {
+  background: #ffc627;
+  color: #000;
+  border-color: #ffc627;
+}
+
+
+.views-view-responsive-grid--horizontal .views-view-responsive-grid__item-inner {
+  height: 100%;
+}
+@media (max-width: 576px) {
+  .views-view-responsive-grid--horizontal {
+    /* Stack items in a single column on mobile */
+    grid-template-columns: 1fr;
+  }
+}
+
+/* GENERAL STYLES
+-------------------------------------------------*/
+h1.text-white {
+  color: #fff !important;
+}
+
+.h1.h1-lg {
+  font-size: 6rem;
+  margin-bottom: 2.5rem;
+}
+
+h2 {
+  margin-bottom: 3rem;
+}
+
+.lead {
+  font-size: 1.375rem;
+}
+.lead.lead-xlg {
+  font-size: 1.825rem;
+}
+.lead.lead-lg {
+  font-size: 1.5rem;
+}
+.lead.lead-sm {
+  font-size: 1.25rem;
+}
+@media (max-width: 575.98px) {
+  .lead.lead-xlg {
+    font-size: 1.25rem;
+  }
+}
+
+.indent-25 {
+  margin-left: 25%;
+}
+.indent-25 .uds-blockquote {
+  font-weight: 500;
+  font-size: 1.875rem;
+}
+.indent-25 .uds-blockquote .citation cite {
+  font-size: 1.5rem;
+}
+@media (max-width: 575.98px) {
+  .indent-25 {
+    margin-left: 0;
+  }
+  .indent-25 .uds-blockquote {
+    font-size: 1.5rem;
+  }
+  .indent-25 .uds-blockquote .citation cite {
+    font-size: 1.25rem;
+  }
+}
+
+.inline-header {
+  font-weight: 500;
+}
+
+.text-copper {
+  color: #8F4A3A;
+}
+
+.text-center h2 {
+  text-align: center;
+  margin: 2rem auto;
+}
+.text-center p {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gray-1-bg {
+  background-color: #F4F2EA;
+}
+
+.gray-2-bg {
+  background-color: #8F4A3A;
+  color: #ffffff;
+}
+.gray-2-bg a {
+  color: #ffffff;
+}
+.gray-2-bg a.btn-gold {
+  color: #000;
+}
+.gray-2-bg .card-title a {
+  color: #000;
+}
+.gray-2-bg .card-body a {
+  color: #000;
+}
+
+.star-pattern-bg {
+  background-image: url("../img/copper-star-pattern.svg");
+  position: relative;
+  background-repeat: repeat;
+  background-size: 68px;
+  background-position: top;
+  background-blend-mode: multiply;
+  overflow: hidden;
+}
+
+.hide-overlay .uds-card-and-image {
+  background-image: linear-gradient(rgba(25, 25, 25, 0) 0%, rgba(25, 25, 25, 0) 100%, url()) !important;
+}
+
+.hide-image-borders img {
+  border: none;
+}
+
+.text-inline-callout {
+  background-color: #FAFAFA;
+  padding: 2rem;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.page-intro p {
+  max-width: 100%;
+  padding: 2rem;
+}
+.page-intro:before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 63px;
+  background-image: url("../img/intro-bar.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-bottom: 2.25rem;
+}
+@media (max-width: 575.98px) {
+  .page-intro p {
+    padding: 0;
+  }
+}
+
+.wide-content h2,
+.wide-content p {
+  max-width: 816px;
+}
+.wide-content .accordion {
+  max-width: 816px;
+}
+
+.uds-img {
+  max-width: 100%;
+}
+
+@media (max-width: 575.98px) {
+  .w-75 {
+    width: 100% !important;
+  }
+
+  .btn.btn-gold {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    padding: 0.25rem 0.75rem;
+  }
+}
+/** TEMP - REMOVE WHEN VIDEO ADDED */
+@media (min-width: 1260px) {
+  div.uds-hero-lg.uds-video-hero .hero, div.uds-hero-lg.uds-video-hero:after {
+    display: block;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */

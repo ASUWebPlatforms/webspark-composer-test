@@ -1,0 +1,41 @@
+{#
+@file
+The template for the default teaser.
+
+If a cotnent type is missing a template, this template will be used as a fallback.
+
+Available variables:
+- type: The type of card. Either 'card' or 'story'.
+- image: The Image object.
+  - url: The image URL.
+  - alt: The image alt text.
+- favorite: Boolean. Whether or not to show the favorites icon.
+- title: The title.
+- content: The content.
+- button: Array of button objects.
+  - url: The button URL.
+  - color: The button color.
+  - text: The button text.
+- link: Array of link objects.
+  - url: The link URL.
+  - text: The link text.
+- tags: Array of tag objects.
+  - type: The tag type. Either 'alt' or 'standard'.
+  - background: The tag background color.
+  - data: Array of tag objects.
+#}
+
+{% set data = {
+  'title': node.title.value,
+  'content': node.field_description.value|default(content.body),
+  'button': {
+    'url': node|entity_url,
+    'color': 'maroon',
+    'text': 'View',
+  },
+  'favorite': true
+} %}
+
+<article class="node__teaser">
+  {{ include('@analytics/teaser.html.twig', data) }}
+</article>

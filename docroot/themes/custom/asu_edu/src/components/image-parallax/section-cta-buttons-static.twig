@@ -1,0 +1,51 @@
+<div
+  class="uds-card-and-image"
+  style="background-image: url('{{ card.media_url }}');">
+    <div class="uds-card-and-image-container">
+      <div class="card">
+
+        {% if card.heading %}
+          <div class="card-header">
+            {% include '@renovation/headings/card-heading.twig' with {
+                html_tag : 'h3',
+                heading: card.heading,
+              } %}
+          </div>
+        {% endif %}
+
+        <div class="card-body">
+          {{ card.body|raw }}
+        </div>
+
+        {% if card.links %}
+          <div class="card-link">
+            {% for link in card.links %}
+              {% include '@renovation/links/cta-link.twig' with {
+                  url: link.uri,
+                  label: link.title,
+                  options: link.options,
+                  color: 'maroon'
+                } %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if card.ctas %}
+          <div class="card-button">
+            {% for cta in card.ctas %}
+              {% include '@asu_edu/links/cta-link-with-ga.twig' with {
+                url: cta.uri,
+                label: cta.title,
+                target: cta.options.attributes.target,
+                color: cta.options.attributes.class,
+                component: component,
+                section: card.heading,
+                } %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+      </div>
+    </div>
+</div>
+{{ attach_library('asu_edu/image-parallax') }}

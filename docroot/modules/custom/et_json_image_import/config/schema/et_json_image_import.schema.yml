@@ -1,0 +1,8 @@
+# Schema for the configuration files of the ET JSON Image Import module.
+et_json_image_import.settings:
+  type: config_object
+  label: 'ET JSON Image Import Settings'
+  mapping:
+    json_file_upload:
+      type: managed_file
+      label: 'JSON File Upload'

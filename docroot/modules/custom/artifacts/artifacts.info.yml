@@ -1,0 +1,8 @@
+name: artifacts - Juried Review of Artifacts
+description: Application for juried revie of atifacts with rubrics
+package: UOEEE
+type: module
+version: 1.0
+core_version_requirement: ^10
+libraries:
+  - artifacts/artifacts-app

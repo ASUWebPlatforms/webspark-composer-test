@@ -1,0 +1,5 @@
+name: ASU Master form posting
+type: module
+description: 'ASU master form posting'
+package: ASU
+core_version_requirement: '^8 || ^9 || ^10'

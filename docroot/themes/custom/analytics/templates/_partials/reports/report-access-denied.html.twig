@@ -1,0 +1,30 @@
+{#
+@file
+The template for Access Denied to report content.
+
+Available variables:
+- title: The title of the access denied message.
+- message: The message of the access denied message.
+- requestText: The text of the request access button.
+#}
+
+{% set allowsRequests = node.field_group.entity.field_allow_requests.value %}
+
+<div class="access-denied tw-shadow-md">
+  <div class="tw-bg-slate-50 tw-relative tw-flex tw-flex-col tw-justify-center tw-items-center" style="height: 640px;">
+    <div class="tw-bg-sample-report tw-bg-auto tw-bg-center tw-bg-no-repeat tw-blur-sm tw-absolute tw-inset-0 tw-z-10"></div>
+    <div class="tw-absolute tw-z-20 tw-text-center">
+      <h3 class="tw-text-center tw-max-w-none">{{ title ?: 'Access Denied' }}</h3>
+      <p class="tw-text-center tw-max-w-none">{{ message ?: 'You do not have access to view this content.' }}</p>
+      {% if allowsRequests %}
+        <a href="#"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#access-request-modal"
+          data-bs-group-name="{{ node.field_group.entity.label.value }}">Request Group Access</a>
+      {% else %}
+        <p class="tw-text-center tw-max-w-none">Unfortunately, this group does not accept access requests.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_button_text
+    - node.type.blog_posts
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    basic_html: '0'
+    restricted_html: '0'
+    full_html: '0'
+    plain_text: '0'
+id: node.blog_posts.field_button_text
+field_name: field_button_text
+entity_type: node
+bundle: blog_posts
+label: 'Button text'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: Search
+    format: basic_html
+default_value_callback: ''
+settings: {  }
+field_type: text

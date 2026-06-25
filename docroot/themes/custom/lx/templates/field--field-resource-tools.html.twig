@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Template for the page title.
+ */
+#}
+
+<div{{ attributes }}>
+  {% for item in items %}
+  <button  class="button">{{ item.content }}</button>
+  {% endfor %}
+</div>

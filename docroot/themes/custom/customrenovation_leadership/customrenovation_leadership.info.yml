@@ -1,0 +1,19 @@
+name: ASU Leadership Academy Custom Theme
+type: theme
+base theme: renovation
+description: "A custom sub-subtheme for Webspark 2, based on the Renovation subtheme"
+package: ASU Leadership Academy
+core_version_requirement: ^9.0 || ^10
+
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer
+
+libraries:
+  - radix/style
+  - renovation/style
+  - customrenovation_leadership/style

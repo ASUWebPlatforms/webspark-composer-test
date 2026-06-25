@@ -1,0 +1,87 @@
+asuaec_rfib2_directpost.json.categories.ugrad:
+  path: '/admin/asuaec_rfib2_directpost/json/categories/ground/ugrad'
+  defaults:
+    _controller: '\Drupal\asuaec_rfib2_directpost\Controller\JsonController::generateJsonCat'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfib2_directpost.json.categories.grad:
+  path: '/admin/asuaec_rfib2_directpost/json/categories/ground/grad'
+  defaults:
+    _controller: '\Drupal\asuaec_rfib2_directpost\Controller\JsonController::generateJsonCat'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfib2_directpost.json.categories.online.ugrad:
+  path: '/admin/asuaec_rfib2_directpost/json/categories/online/ugrad'
+  defaults:
+    _controller: '\Drupal\asuaec_rfib2_directpost\Controller\JsonController::generateJsonCat'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfib2_directpost.json.categories.online.grad:
+  path: '/admin/asuaec_rfib2_directpost/json/categories/online/grad'
+  defaults:
+    _controller: '\Drupal\asuaec_rfib2_directpost\Controller\JsonController::generateJsonCat'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfib2_directpost.json.degrees.ground.ugrad:
+  path: '/admin/asuaec_rfib2_directpost/json/degrees/ground/ugrad/{interest}'
+  defaults:
+    _controller: '\Drupal\asuaec_rfib2_directpost\Controller\JsonController::generateJsonDegree'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfib2_directpost.json.degrees.ground.grad:
+  path: '/admin/asuaec_rfib2_directpost/json/degrees/ground/grad/{interest}'
+  defaults:
+    _controller: '\Drupal\asuaec_rfib2_directpost\Controller\JsonController::generateJsonDegree'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfib2_directpost.json.degrees.online.ugrad:
+  path: '/admin/asuaec_rfib2_directpost/json/degrees/online/ugrad/{interest}'
+  defaults:
+    _controller: '\Drupal\asuaec_rfib2_directpost\Controller\JsonController::generateJsonDegree'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfib2_directpost.json.degrees.online.grad:
+  path: '/admin/asuaec_rfib2_directpost/json/degrees/online/grad/{interest}'
+  defaults:
+    _controller: '\Drupal\asuaec_rfib2_directpost\Controller\JsonController::generateJsonDegree'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfib2_directpost.json.term.grad:
+  path: '/admin/asuaec_rfib2_directpost/json/term/grad/{plancode}'
+  defaults:
+    _controller: '\Drupal\asuaec_rfib2_directpost\Controller\JsonController::generateJsonTerm'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfib2_directpost.json.gradtype:
+  path: '/admin/asuaec_rfib2_directpost/json/gradtype/{plancode}'
+  defaults:
+    _controller: '\Drupal\asuaec_rfib2_directpost\Controller\JsonController::generateJsonGradtype'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_rfib2_directpost.asuaec_rfib2_directpost_settings:
+  path: '/admin/config/asuaec-rfib2-directpost'
+  defaults:
+    _form: '\Drupal\asuaec_rfib2_directpost\Form\RfiAdminSwitch'
+    _title: 'ASU AEC Custom RFI B2 direct post - Admin config page'
+  requirements:
+    _permission: 'administer site configuration'

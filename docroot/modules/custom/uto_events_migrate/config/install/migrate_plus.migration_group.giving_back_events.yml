@@ -1,0 +1,24 @@
+uuid: 1b89c4e9-3a72-493c-90ba-655511efd51e
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - uto_events_migrate
+id: giving_back_events
+label: 'Giving Back Event Imports'
+description: 'Import giving back Events from feed.'
+source_type: 'XML files'
+module: null
+shared_configuration:
+  dependencies:
+    enforced:
+      module:
+        - uto_events_migrate
+  source:
+    plugin: url
+    data_fetcher_plugin: http_aventri
+    data_parser_plugin: json_aventri
+    authentication:
+      plugin: auth_aventri
+

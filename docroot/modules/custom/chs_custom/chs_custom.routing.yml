@@ -1,0 +1,9 @@
+chs_custom.configuration_form:
+  path: 'admin/config/system/configuration/chs_custom'
+  defaults:
+    _form: '\Drupal\chs_custom\Form\CHSCustomSettingsForm'
+    _title: 'ASU CHS Custom Features Configuration'
+  requirements:
+    _permission: 'administer chs_custom'
+  options:
+    _admin_route: TRUE

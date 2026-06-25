@@ -1,0 +1,22 @@
+.uds-person-profile .profile-img-container {
+  width: 180px;
+  height: 100%;
+}
+
+.uds-person-profile .profile-img-placeholder {
+  background-image: url('/modules/custom/shapingedu_custom/css/images/default-headshot.png');
+  background-size: 100%;
+  background-size: cover;
+  width: 180px;
+  height: 180px;
+}
+
+.uds-person-profile .profile-img-container .profile-img-placeholder img {
+  width: 180px;
+  height: 180px;
+  border-radius: 100%;
+}
+
+.shapingedu-blog-cards .card-img-top img {
+  aspect-ratio: 2;
+}

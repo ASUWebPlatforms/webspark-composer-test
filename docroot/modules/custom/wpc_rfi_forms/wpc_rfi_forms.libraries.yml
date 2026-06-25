@@ -1,0 +1,7 @@
+mainscripts:
+  version: 1.x
+  js:
+    js/wpcforms.js: {}
+  dependencies:
+    - core/jquery
+    - core/js-cookie

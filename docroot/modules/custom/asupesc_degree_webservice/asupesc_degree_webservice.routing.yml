@@ -1,0 +1,28 @@
+# In order to to create pages it is necessary to define routes for them. A route
+# maps a URL path to a controller. It defines with what function or method will
+# be called when a URL is accessed. The following lines defines three of them
+# for this module.
+
+# Menu items corresponding to these URLs are defined separately in the
+# page_example.links.menu.yml file.
+
+# If the user accesses http://example.com/?q=examples/page-example/simple,
+# the routing system will look for a route with that path. In this case it will
+# find a match, and execute the _controller callback. Access to this path
+# requires "access asu degree webservice page" permission.
+
+#asupesc_degree_webservice.description:
+#  path: '/admin/config/asu/asudegrees'
+#  defaults:
+#    _controller: '\Drupal\asupesc_degree_webservice\Controller\AsuDegreeWebserviceController::asudegreewebservice'
+#    _title: 'ASU degrees'
+#  requirements:
+#    _permission: 'access asu degree webservice page'
+
+asupesc_degree_webservice.simple_form:
+  path: '/admin/config/asu/asudegrees'
+  defaults:
+    _form:  '\Drupal\asupesc_degree_webservice\Form\RefreshDegreeForm'
+    _title: 'ASU degrees'
+  requirements:
+    _permission: 'access asupesc degree webservice page'

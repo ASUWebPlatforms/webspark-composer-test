@@ -1,0 +1,19 @@
+uoeee_rest.uoeee_db_api_settings:
+  path: '/admin/config/uoeee/db-api'
+  defaults:
+    _form: '\Drupal\uoeee_rest\Form\DbApiSettingsForm'
+    _title: 'UOEEE DB API settings'
+  requirements:
+    _permission: 'administer site configuration'
+
+
+uoeee_rest.file_upload:
+  path: '/api/upload-files'
+  defaults:
+    _controller: '\Drupal\uoeee_rest\Controller\FileUploadController::upload'
+    _title: 'Upload files (multipart)'
+  requirements:
+    _permission: 'upload files via uoeee API'   # set to permission you control
+  methods: [POST]
+  options:
+      _auth: ['basic_auth'] 

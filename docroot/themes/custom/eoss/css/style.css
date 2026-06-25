@@ -1,0 +1,67 @@
+.view-asu-family-calendar-block-view .fc-unthemed .fc-content,
+.view-asu-family-calendar-block-view .fc-unthemed .fc-divider,
+.view-asu-family-calendar-block-view .fc-unthemed .fc-list-heading td,
+.view-asu-family-calendar-block-view .fc-unthemed .fc-list-view,
+.view-asu-family-calendar-block-view .fc-unthemed .fc-popover,
+.view-asu-family-calendar-block-view .fc-unthemed .fc-row,
+.view-asu-family-calendar-block-view .fc-unthemed tbody,
+.view-asu-family-calendar-block-view .fc-unthemed td,
+.view-asu-family-calendar-block-view .fc-unthemed th,
+.view-asu-family-calendar-block-view .fc-unthemed thead,
+.view-asu-family-calendar-block-view tr {
+  border-color: transparent;
+  padding: 0;
+}
+.view-asu-family-calendar-block-view .fc-scroller {
+  overflow: visible !important;
+  height: unset !important;
+}
+.view-asu-family-calendar-block-view .fc-list-item-time.fc-widget-content,
+.view-asu-family-calendar-block-view .fc-list-item-marker.fc-widget-content,
+.view-asu-family-calendar-block-view .fc-list-heading {
+  display: none;
+}
+.view-asu-family-calendar-block-view .fc-list-item-title a[href]:hover {
+  text-decoration: none;
+}
+.view-asu-family-calendar-block-view .fc-unthemed .fc-list-item:hover td {
+  background: #ffffff;
+}
+.view-asu-family-calendar-block-view .event-list-item-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-top: 40px;
+}
+.view-asu-family-calendar-block-view .event-list-item-date {
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: center;
+}
+.view-asu-family-calendar-block-view .event-list-item-date .day-of-week {
+  text-transform: uppercase;
+  line-height: 1;
+  margin-bottom: -5px;
+}
+.view-asu-family-calendar-block-view .event-list-item-date .day {
+  font-weight: 900;
+  font-size: 1.7rem;
+}
+.view-asu-family-calendar-block-view .event-list-item-text {
+  max-width: 500px;
+  width: 500px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.view-asu-family-calendar-block-view .event-list-item-text .event-full-date {
+  position: relative;
+  top: -5px;
+  font-size: 0.8rem;
+}
+.view-asu-family-calendar-block-view .event-list-item-text .event-location {
+  margin-bottom: 20px;
+}
+.view-asu-family-calendar-block-view .event-list-item-text .event-location span {
+  font-weight: 900;
+}
+
+/*# sourceMappingURL=style.css.map */

@@ -1,0 +1,244 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.asu_tuition_fee_rate_data.body
+    - field.field.node.asu_tuition_fee_rate_data.feeds_item
+    - field.field.node.asu_tuition_fee_rate_data.field_acad_year
+    - field.field.node.asu_tuition_fee_rate_data.field_enrolled_hrs
+    - field.field.node.asu_tuition_fee_rate_data.field_fee_rate
+    - field.field.node.asu_tuition_fee_rate_data.field_rate_fee_code
+    - field.field.node.asu_tuition_fee_rate_data.field_rate_fee_type
+    - field.field.node.asu_tuition_fee_rate_data.field_rate_institution
+    - field.field.node.asu_tuition_fee_rate_data.field_sterm
+    - field.field.node.asu_tuition_fee_rate_data.layout_builder__layout
+    - node.type.asu_tuition_fee_rate_data
+  module:
+    - layout_builder
+    - layout_discovery
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: true
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          74649f3b-2d9b-4aa7-8997-2e83494880ba:
+            uuid: 74649f3b-2d9b-4aa7-8997-2e83494880ba
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'extra_field_block:node:asu_tuition_fee_rate_data:links'
+            additional: {  }
+            weight: 0
+          a208e19f-da94-408a-a153-90d3b5eb9949:
+            uuid: a208e19f-da94-408a-a153-90d3b5eb9949
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_rate_data:body'
+              formatter:
+                label: hidden
+                type: text_default
+                settings: {  }
+                third_party_settings: {  }
+            additional: {  }
+            weight: 1
+          4deefef8-d025-4053-899d-8c5336169c4b:
+            uuid: 4deefef8-d025-4053-899d-8c5336169c4b
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_rate_data:field_rate_institution'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 2
+          2cccbd29-8045-4ff0-917a-8ca8ebb8738d:
+            uuid: 2cccbd29-8045-4ff0-917a-8ca8ebb8738d
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_rate_data:field_acad_year'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 3
+          3220448c-26a2-48a8-8dde-01267bc6d5fd:
+            uuid: 3220448c-26a2-48a8-8dde-01267bc6d5fd
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_rate_data:field_sterm'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 4
+          3e526850-b49c-469a-9dfd-d4dae5075767:
+            uuid: 3e526850-b49c-469a-9dfd-d4dae5075767
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_rate_data:field_rate_fee_code'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 5
+          aee0d1d0-f0e0-4218-a299-55a050717f8e:
+            uuid: aee0d1d0-f0e0-4218-a299-55a050717f8e
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_rate_data:field_enrolled_hrs'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 6
+          6042df70-4ea5-49d2-8d63-7ea328e0a7b8:
+            uuid: 6042df70-4ea5-49d2-8d63-7ea328e0a7b8
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_rate_data:field_fee_rate'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 7
+          c08a4c36-22b4-41d1-8f1b-74d20316114e:
+            uuid: c08a4c36-22b4-41d1-8f1b-74d20316114e
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:asu_tuition_fee_rate_data:field_rate_fee_type'
+              formatter:
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+                type: string
+            additional: {  }
+            weight: 8
+        third_party_settings: {  }
+id: node.asu_tuition_fee_rate_data.default
+targetEntityType: node
+bundle: asu_tuition_fee_rate_data
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_acad_year:
+    weight: 103
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_enrolled_hrs:
+    weight: 106
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_fee_rate:
+    weight: 107
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_rate_fee_code:
+    weight: 105
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_rate_fee_type:
+    weight: 108
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_rate_institution:
+    weight: 102
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_sterm:
+    weight: 104
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  feeds_item: true
+  layout_builder__layout: true

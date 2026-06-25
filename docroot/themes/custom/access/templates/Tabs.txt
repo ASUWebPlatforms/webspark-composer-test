@@ -1,0 +1,59 @@
+<div class="js-tabs">
+  <ul class="js-tablist" data-hx="h2">
+    <li class="js-tablist__item">
+      <a href="#id_first" class="js-tablist__link">Tab 1</a>
+    </li>
+    <li class="js-tablist__item">
+      <a href="#id_second" class="js-tablist__link">Tab 2</a>
+    </li>
+    <li class="js-tablist__item">
+      <a href="#id_third" class="js-tablist__link">Tab 3</a>
+    </li>
+    <li class="js-tablist__item">
+      <a href="#id_fourth" class="js-tablist__link">Tab 4</a>
+    </li>
+  </ul>
+  <div id="id_first" class="js-tabcontent">
+    <p>Text.</p>
+  </div>
+  <div id="id_second" class="js-tabcontent">
+    <p>Text.</p>
+  </div>
+  <div id="id_third" class="js-tabcontent">
+    <p>Text.</p>
+  </div>
+   <div id="id_fourth" class="js-tabcontent">
+    <p>Text.</p>
+  </div> 
+</div>
+
+<div class="js-tabs">
+  <ul class="js-tablist" data-hx="h2">
+    <li class="js-tablist__item">
+      <a href="#id_first" class="js-tablist__link">iOS</a>
+    </li>
+    <li class="js-tablist__item">
+      <a href="#id_second" class="js-tablist__link">Android</a>
+    </li>
+    <li class="js-tablist__item">
+      <a href="#id_third" class="js-tablist__link">HTML</a>
+    </li>
+    <li class="js-tablist__item">
+      <a href="#id_fourth" class="js-tablist__link">Testing</a>
+    </li>
+  </ul>
+  <div id="id_first" class="js-tabcontent">
+  <p>Progressively incentivize web-enabled e-commerce vis-a-vis virtual manufactured products. Proactively <a href="#">this is a link</a> capital for leading-edge e-services.</p>
+  </div>
+  <div id="id_second" class="js-tabcontent">
+  <p>Completely communicate real-time potentialities after strategic products. Efficiently morph tactical technologies through <a href="#">this is a link</a>.</p>
+  </div>
+  <div id="id_third" class="js-tabcontent">
+  <p>Efficiently morph tactical technologies through mission-critical alignments. Credibly leverage other's visionary <a href="#">this is a link</a>principle-centered data.</p>
+  </div>
+  <div id="id_fourth" class="js-tabcontent">
+  <p>Efficiently morph tactical technologies through mission-critical alignments. Credibly leverage other's visionary <a href="#">this is a link</a>principle-centered data.</p>
+  </div> 
+</div>
+
+

@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * Default template for a node title field.
+ */
+#}
+{% for item in items %}
+  {% include '@renovation/headings/heading.twig' with {
+    html_tag : 'span',
+    heading: item.content['#context'].value,
+  } %}
+{% endfor %}
+

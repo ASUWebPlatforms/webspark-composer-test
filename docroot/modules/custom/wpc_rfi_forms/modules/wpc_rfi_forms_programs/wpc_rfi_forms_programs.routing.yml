@@ -1,0 +1,57 @@
+# Route name can be used in several places; e.g. links, redirects, and local
+# actions.
+entity.wpc_rfi_forms_programs_program.canonical:
+  path: '/admin/structure/wpc/programs/{wpc_rfi_forms_programs_program}'
+  defaults:
+    _entity_view: 'wpc_rfi_forms_programs_program'
+    _title: 'Program content'
+  requirements:
+    _entity_access: 'wpc_rfi_forms_programs_program.view'
+
+entity.wpc_rfi_forms_programs_program.collection:
+  path: '/admin/structure/wpc/programs/list'
+  defaults:
+  # Calls the list controller, defined in the annotation of the program entity.
+    _entity_list: 'wpc_rfi_forms_programs_program'
+    _title: 'Program List'
+  requirements:
+    _permission: 'view program entity'
+
+entity.wpc_rfi_forms_programs_program.program_add:
+  path: '/admin/structure/wpc/programs/add'
+  defaults:
+    _entity_form: wpc_rfi_forms_programs_program.default
+    _title: 'Add program'
+  requirements:
+    # Use the entity's access controller. _entity_create_access tells the router
+    # to use the access controller's checkCreateAccess() method instead of
+    # checkAccess().
+    _entity_create_access: 'wpc_rfi_forms_programs_program'
+
+entity.wpc_rfi_forms_programs_program.edit_form:
+  path: '/admin/structure/wpc/programs/{wpc_rfi_forms_programs_program}/edit'
+  defaults:
+    _entity_form: wpc_rfi_forms_programs_program.default
+    _title: 'Edit program'
+  requirements:
+    # Calls the access controller of the entity, passing in the suffix
+    # ('update') as the $operation parameter to checkAccess().
+    _entity_access: 'wpc_rfi_forms_programs_program.update'
+
+entity.wpc_rfi_forms_programs_program.delete_form:
+  path: '/admin/structure/wpc/programs/{wpc_rfi_forms_programs_program}/delete'
+  defaults:
+    _entity_form: wpc_rfi_forms_programs_program.delete
+    _title: 'Delete program'
+  requirements:
+    # Calls the access controller of the entity, passing in the suffix
+    # ('delete') as the $operation parameter to checkAccess().
+    _entity_access: 'wpc_rfi_forms_programs_program.delete'
+
+wpc_rfi_forms_programs.program_settings:
+  path: '/admin/structure/wpc/programs/settings'
+  defaults:
+    _form: '\Drupal\wpc_rfi_forms_programs\Form\ProgramSettingsForm'
+    _title: 'Program settings'
+  requirements:
+    _permission: 'administer program entity'

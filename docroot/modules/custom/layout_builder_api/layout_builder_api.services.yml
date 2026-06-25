@@ -1,0 +1,4 @@
+services:
+  layout_builder_api.service:
+    class: Drupal\layout_builder_api\Service\LayoutBuilderApiService
+    arguments: ['@entity_type.manager', '@cache.default']

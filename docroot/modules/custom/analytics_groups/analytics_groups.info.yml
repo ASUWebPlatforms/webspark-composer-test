@@ -1,0 +1,10 @@
+name: Analytics Groups
+description: Manage groups for the Analytics website.
+package: Analytics
+type: module
+version: 1.0.0
+core_version_requirement: ^9 || ^10
+dependencies:
+  - drupal:group
+  - drupal:rest
+  - analytics_resources:analytics_resources

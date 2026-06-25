@@ -1,0 +1,44 @@
+product-layout:
+  css:
+    theme:
+      css/product-layout.css: {}
+
+content-utilities:
+  css:
+    theme:
+      css/content-utilities.css: {}
+
+front-page:
+  css:
+    theme:
+      css/front-page.css: {}
+
+webform-audit:
+  css:
+    theme:
+      css/webform-audit.css: {}
+  js:
+    js/access-script.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+
+conference:
+  css:
+    theme:
+      css/conference.css: {}
+
+page-specific:
+  css:
+    theme:
+      css/page-specific.css: {}
+
+navigation:
+  css:
+    theme:
+      css/navigation.css: {}
+
+search:
+  css:
+    theme:
+      css/search.css: {}

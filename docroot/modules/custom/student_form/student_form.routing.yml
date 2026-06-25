@@ -1,0 +1,13 @@
+student_form.form:
+  path: '/custom-form/{submission_id}'
+  defaults:
+    _form: '\Drupal\student_form\Form\StuForm'
+    _title: 'Custom Form'
+  requirements:
+    _permission: 'access content'
+    _role: 'authenticated'
+    _method: 'GET|POST'
+  options:
+    parameters:
+      submission_id:
+        type: 'string'

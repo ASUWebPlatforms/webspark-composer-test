@@ -1,0 +1,11 @@
+artifacts-app:
+  version: 1.0
+  js:
+    artifacts-app/dist/artifacts_103a857f.js: { preprocess: false  }
+    https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.8.162/pdf.min.js: { type: external, minified: true, preprocess: false  }
+    https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.8.162/pdf_viewer.min.js: { type: external, minified: true, preprocess: false  }
+  css:
+    component:
+      artifacts-app/dist/artifacts_a68e0f11.css: { }
+  dependencies:
+    - core/drupalSettings

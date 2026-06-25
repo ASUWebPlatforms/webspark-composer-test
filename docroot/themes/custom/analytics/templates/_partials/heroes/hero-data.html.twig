@@ -1,0 +1,100 @@
+{#
+@file
+The template for the Data hero.
+Note that this template is only meant for the Data Table and Data Column content types.
+
+Available variables:
+- background: The background color (bg-maroon, bg-gold, bg-gray-6).
+- type: The data type/bundle.
+- heading: The data heading.
+- description: The data description.
+- database: Array. Database taxonomy terms.
+- pills: An array of objects containing the taxonomy data.
+  - title: The taxonomy name.
+  - data: Array of taxonomy terms.
+- environment: The environment for the data.
+- schema: The schema for the data.
+- table: The table for the data.
+- position: The column position for the data.
+- frequency: The refresh frequency for the data.
+
+  Available macros:
+  - tags: Generate tags markup.
+  - favorites: Generate favorites markup.
+#}
+
+{% from '@analytics/macros.html.twig' import tags %}
+{% from '@analytics/macros.html.twig' import favorites %}
+
+<style>
+  .hero-data-overlay {
+    background-image: linear-gradient(180deg, rgba(25, 25, 25, 0), rgba(25, 25, 25, .788));
+    content: "";
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 20;
+  }
+
+  .flag-title {
+    color: #fff;
+  }
+</style>
+
+<div class="tw-relative text-white spacing-top-48 spacing-bottom-72 {{ background|default('bg-gray-6') }}">
+  <div class="hero-data-overlay"></div>
+  <div class="container tw-relative tw-z-30">
+    <div class="row gy-3">
+      <div class="col-sm-12 col-lg-9">
+        <div class="tw-text-sm tw-py-2 tw-px-4 tw-border-2 tw-border-solid tw-border-slate-200 tw-rounded-full tw-inline-block">
+          {{ type|replace({ '_': ' ' })|title }}
+        </div>
+
+        <h2 class="meta-title tw-mt-5">{{ heading }}</h2>
+
+        {% if description %}
+          <p>{{ description }}</p>
+        {% endif %}
+
+        <div class="metadata row mt-1">
+          {% if database %}
+            <div class="col-sm-auto">
+              <h5>Database</h5>
+              <div>
+                <span class="badge text-bg-gray-2 tw-py-2.5 tw-px-4 tw-text-[14px] mr-1">{{ database }}</span>
+              </div>
+            </div>
+          {% endif %}
+          {% if pills %}
+            {% for pill in pills %}
+              {{ tags(pill.title, pill.data) }}
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+      <div class="col-sm-12 col-lg-3 sm:tw-mt-8">
+        {{ favorites_link }}
+
+        <div class="tw-mt-14 tw-space-y-6">
+          {% if environment %}
+            <p>Environment: <strong>{{ environment }}</strong></p>
+          {% endif %}
+          {% if schema %}
+            <p>Schema: <strong>{{ schema }}</strong></p>
+          {% endif %}
+          {% if table %}
+            <p>Table: <strong>{{ table }}</strong></p>
+          {% endif %}
+          {% if position %}
+            <p>Column Position: <strong>{{ position }}</strong></p>
+          {% endif %}
+          {% if frequency %}
+            <p>Refresh Frequency: <strong>{{ frequency }}</strong></p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

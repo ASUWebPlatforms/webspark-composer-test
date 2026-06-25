@@ -1,0 +1,17 @@
+{% set divider = '' %}
+{% if node.field_group.entity.label.value %}
+  {% set divider = ' | ' ~ node.field_group.entity.label.value %}
+{% endif %}
+{% set data = {
+  'title': node.title.value,
+  'content': 'Tableau Menu' ~ divider,
+  'button': {
+    'url': node|entity_url,
+    'color': 'maroon',
+    'text': 'View dashboard',
+  }
+} %}
+
+<article class="tableau_menu__teaser--minimal">
+  {{ include('@analytics/teaser-minimal.html.twig', data) }}
+</article>

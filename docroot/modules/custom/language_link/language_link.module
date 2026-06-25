@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function language_link_preprocess_node(&$variables) {
+  $variables['#attached']['library'][] = 'language_link/link';
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function language_link_page_attachments(array &$page) {
+  $menu = [
+    'English' => '',
+    '中文' => 'zh-hans',
+    'العربية' => 'ar',
+    'Español' => 'es'
+  ];
+
+  $default_language = \Drupal::languageManager()->getDefaultLanguage()->getId();
+  $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+  if ($default_language === $current_language) {
+    $current_language = '';
+  }
+  
+  unset($menu[array_search($current_language, $menu)]);
+  $page['#attached']['drupalSettings']['language_link']['menu']['keys'] = array_keys($menu);
+  $page['#attached']['drupalSettings']['language_link']['menu']['value'] = array_values($menu);
+}

@@ -1,0 +1,15 @@
+shapingedu-block:
+  version: 1.x
+  css:
+    theme:
+      css/shapingedu-block.css: {}
+shapingedu-global:
+  version: 1.x
+  css:
+    theme:
+      css/shapingedu-global.css: {}
+shapingedu-blog:
+  version: 1.x
+  css:
+    theme:
+      css/shapingedu-blog.css: {}

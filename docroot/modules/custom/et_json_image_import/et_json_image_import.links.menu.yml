@@ -1,0 +1,6 @@
+et_json_image_import.settings:
+  title: JSON Image Media Import Settings
+  description: Settings for JSON Image Media Import
+  parent: system.admin_config_system
+  route_name: et_json_image_import.settings
+  weight: 10

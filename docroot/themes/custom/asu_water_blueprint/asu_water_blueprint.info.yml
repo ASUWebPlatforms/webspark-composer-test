@@ -1,0 +1,17 @@
+name: ASU Water Blueprint
+type: theme
+base theme: renovation
+description: Child theme of ASU Webspark 2
+package: Custom
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+libraries:
+  - asu_water_blueprint/global
+
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer

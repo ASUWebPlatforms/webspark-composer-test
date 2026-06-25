@@ -1,0 +1,7 @@
+style:
+  version: VERSION
+  css:
+    theme:
+      css/style.css: { }
+  dependencies:
+    - core/jquery

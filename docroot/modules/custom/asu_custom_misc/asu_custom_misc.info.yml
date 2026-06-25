@@ -1,0 +1,5 @@
+name: asu_custom_misc
+type: module
+description: 'ASU AEC custom module for miscellaneous items'
+package: ASU
+core_version_requirement: ^8 || ^9 || ^10

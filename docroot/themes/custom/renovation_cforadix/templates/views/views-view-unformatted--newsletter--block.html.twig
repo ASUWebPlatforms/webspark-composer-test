@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="row">
+    <nav id="sidebar-left" class="sidebar accordion" aria-label="Secondary">
+      {% for row in rows %}
+        <a href="/node/{{ row.content['#row'].nid }}" class="nav-link">
+          {{ row.content['#row']._entity.title[0].value }}
+        </a>
+      {% endfor %}
+    </nav>
+  </div>
+</div>

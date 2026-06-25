@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function success_theme_preprocess_node(&$variables)
+{
+  // Add the node title to the content array so it can be accessed in the template.
+  $variables['title'] = [
+    '#markup' => '<h3>' . $variables['node']->getTitle() . '</h3>',
+    '#allowed_tags' => ['h3'],
+  ];
+}
+
+/**
+ * Preprocesado para el campo title del tipo coach.
+ */
+function success_theme_preprocess_field(array &$variables)
+{
+  // Verifica que el campo es 'title' y del tipo de contenido correcto.
+  if ($variables['element']['#field_name'] == 'title' && $variables['element']['#bundle'] == 'coach') {
+    // Extrae el valor del campo.
+    $node = $variables['element']['#object'];
+    $variables['raw_title'] = $node->getTitle();
+    // Add the raw value of the 'field_lastname' field.
+
+
+    // Fetch the raw value of 'field_lastname'.
+    if ($node->hasField('field_lastname') && !$node->get('field_lastname')->isEmpty()) {
+      $variables['raw_lastname'] = $node->get('field_lastname')->value;
+    } else {
+      // Fallback if the field_lastname is empty or does not exist.
+      $variables['raw_lastname'] = '';
+    }
+  }
+}

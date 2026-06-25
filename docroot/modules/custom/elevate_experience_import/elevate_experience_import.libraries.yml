@@ -1,0 +1,11 @@
+experience_finder:
+  version: 1.0.0
+  css:
+    theme:
+      css/experience-finder.css: {}
+  js:
+    js/experience-finder.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/once

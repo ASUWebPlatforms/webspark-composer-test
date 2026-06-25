@@ -1,0 +1,10 @@
+name: 'Sun Devil Athletics Events Feed'
+type: module
+description: 'Import events from Sun Devil Athletics and display them'
+package: Custom
+dependencies:
+  - views
+  - feeds
+  - feeds_ex
+  - feeds_tamper
+core_version_requirement: '^8 || ^9 || ^10'

@@ -1,0 +1,10 @@
+edge.assets:
+  version: 1.x
+  css:
+    theme:
+      dist/css/main.css: {}
+  js:
+    dist/js/main.js: { preprocess: false }
+  dependencies:
+    - core/drupal
+    - core/jquery

@@ -1,0 +1,100 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for ASU.edu Components module.
+ */
+
+use Drupal\block_content\Entity\BlockContent;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\Entity\Node;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function asu_edu_components_form_layout_builder_update_block_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['#attached']['library'][] = 'asu_edu_components/asu_edu_components';
+
+  $form['settings']['block_form']['#process'][] = '_asu_edu_components_block_form_alter';
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function asu_edu_components_form_layout_builder_add_block_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['#attached']['library'][] = 'asu_edu_components/asu_edu_components';
+
+  $form['settings']['block_form']['#process'][] = '_asu_edu_components_block_form_alter';
+}
+
+/**
+ * Implements hook_theme().
+ */
+function asu_edu_components_theme($existing, $type, $theme, $path) {
+  return [
+    'clas_news' => [
+      'variables' => [
+        'view' => NULL,
+        'news_feed_url' => NULL,
+        'items' => NULL,
+        'section' => NULL,
+        'header_title' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function asu_edu_components_preprocess_page(&$variables) {
+  if (empty($variables['node'])) {
+    return;
+  }
+
+  if (!($variables['node'] instanceof Node)) {
+    return;
+  }
+
+  /** @var \Drupal\asu_edu_components\Processor $processor */
+  $processor = \Drupal::service('asu_edu_components.processor');
+
+  $variables['page']['#cache']['contexts'][] = 'route';
+
+  $route = 'entity.node.canonical';
+  // if (\Drupal::routeMatch()->getRouteName() === $route && $processor->enableLuckyOrange($variables['node'])) {
+  //   $variables['#attached']['library'][] = 'asu_edu_components/luckyorange-cali';
+  // }
+
+  $path_alias = $processor->getPathAlias();
+  if ($path_alias === '/about/contact') {
+    $variables['#attached']['library'][] = 'asu_edu_components/liveagent-functionality';
+    $variables['#attached']['library'][] = 'asu_edu_components/liveagent-button';
+    $variables['#attached']['library'][] = 'asu_edu_components/salesforce.liveagent';
+  }
+
+}
+
+/**
+ * Process callback for custom block form.
+ */
+function _asu_edu_components_block_form_alter(array $element, FormStateInterface $form_state) {
+  if (empty($element['#block'])) {
+    return $element;
+  }
+
+  if (!($element['#block'] instanceof BlockContent)) {
+    return $element;
+  }
+
+  /** @var \Drupal\block_content\Entity\BlockContent $block */
+  $block = $element['#block'];
+
+  if ($block->bundle() !== 'asu_edu_stories_of_excellence') {
+    return $element;
+  }
+
+  $element['field_cards']['widget']['#attached']['library'][] = 'asu_edu_components/stories_excellence';
+
+  return $element;
+}

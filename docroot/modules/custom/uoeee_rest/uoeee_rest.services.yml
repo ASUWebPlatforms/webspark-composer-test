@@ -1,0 +1,9 @@
+services:
+  uoeee_rest.authentication:
+    class: Drupal\uoeee_rest\Authentication\UOEEEauthUser
+    arguments: [ '@entity_type.manager' ]
+    tags:
+      - { name: authentication_provider, provider_id: 'uoeee_auth_user', priority: 100 }
+  logger.channel.uoeee_rest:
+    parent: logger.channel_base
+    arguments: ['uoeee_rest']

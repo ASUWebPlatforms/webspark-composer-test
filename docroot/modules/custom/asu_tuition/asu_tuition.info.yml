@@ -1,0 +1,6 @@
+name: ASU tuition estimator
+type: module
+description: 'Provides tuition estimator.'
+package: ASU
+core_version_requirement: ^8.8 || ^9 || ^10
+

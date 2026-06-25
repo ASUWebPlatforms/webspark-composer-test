@@ -1,0 +1,38 @@
+<div class="spacing-top-96">
+  <nav class="uds-tabbed-panels uds-content-align" aria-label="tabbed panels">
+    <div class="nav nav-tabs" id="nav-tab" role="tablist" data-scroll-position="0">
+      {% for item in items %}
+        <a
+          class="nav-item nav-link {% if loop.first %}active{% endif %}"
+          id="nav-title-{{ loop.index }}-tab"
+          href="#nav-title-{{ loop.index }}"
+          role="tab"
+          data-bs-toggle="tab"
+          aria-controls="nav-title-{{ loop.index }}"
+          aria-selected="{{ loop.first ? 'true' : 'false' }}">
+          {{ item.content['#paragraph'].field_student_name.0.value }}
+        </a>
+      {% endfor %}
+    </div>
+  </nav>
+
+  <div class="tab-content" id="nav-tabContent">
+    {% for item in items %}
+      <div
+        class="tab-pane fade {% if loop.first %}active show{% endif %}"
+        id="nav-title-{{ loop.index }}"
+        role="tabpanel"
+        aria-labelledby="nav-title-{{ loop.index }}-tab">
+        
+        <div class="ckeditor-col-container clearfix row">
+          <div class="paragraph-wrapper row mb-4">
+            <div class="grid-12 col">
+              <p>{{ item.content['#paragraph'].field_spotlight.0.value | raw }}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    {% endfor %}
+  </div>
+</div>

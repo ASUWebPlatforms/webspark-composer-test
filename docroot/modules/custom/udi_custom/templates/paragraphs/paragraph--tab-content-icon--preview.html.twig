@@ -1,0 +1,16 @@
+
+{% set icon = file_url(content.field_tab_icon_custom[0]['#media'].field_media_svg_1.entity.uri.value) %}
+
+<div class="card-statistic card-wrapper" id="card-{{ paragraph.uuid.value }}">
+  <div class="card-wrapper-inner">
+    <div class="card-statistic--header">
+    {{ content.field_tab_icon_custom }}
+      {{ content.field_heading|render|striptags|trim }}
+    </div>
+    <div class="card-statistic--body">
+      {{ content.field_body|render }}
+    </div>
+  </div>
+</div>
+
+

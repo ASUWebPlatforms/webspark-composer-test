@@ -1,0 +1,13 @@
+asu_custom_schema.node.schema:
+  path: '/node/{node}/schema'
+  defaults:
+    _form: '\Drupal\asu_custom_schema\Form\NodeSchemaForm'
+    _title: 'Schema Settings'
+  requirements:
+    _custom_access: 'asu_custom_schema.access_checker::access'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+    _admin_route: true

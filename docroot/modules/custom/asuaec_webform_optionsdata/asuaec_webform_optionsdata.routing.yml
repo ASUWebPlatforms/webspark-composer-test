@@ -1,0 +1,39 @@
+asuaec_webform_optionsdata.json.cities.hs:
+  path: '/admin/asuaec_webform_optionsdata/json/cities/hs/{state}'
+  defaults:
+    _controller: '\Drupal\asuaec_webform_optionsdata\Controller\JsonController::generateJsonCity'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_webform_optionsdata.json.names.hs:
+  path: '/admin/asuaec_webform_optionsdata/json/names/hs/{state}/{city}'
+  defaults:
+    _controller: '\Drupal\asuaec_webform_optionsdata\Controller\JsonController::generateJsonName'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_webform_optionsdata.json.cities.inst:
+  path: '/admin/asuaec_webform_optionsdata/json/cities/inst/{state}'
+  defaults:
+    _controller: '\Drupal\asuaec_webform_optionsdata\Controller\JsonController::generateJsonCity'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_webform_optionsdata.json.names.inst:
+  path: '/admin/asuaec_webform_optionsdata/json/names/inst/{state}/{city}'
+  defaults:
+    _controller: '\Drupal\asuaec_webform_optionsdata\Controller\JsonController::generateJsonName'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_webform_optionsdata.admin_settings:
+  path: '/admin/config/asu/webform_optionsdata'
+  defaults:
+    _form: '\Drupal\asuaec_webform_optionsdata\Form\WebformOptionsDataSettingsForm'
+    _title: 'asuaec_webform_optionsdata module admin config page'
+  requirements:
+    _permission: 'administer'

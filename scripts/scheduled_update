@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -e
+
+# Acquia CI checks out the branch in a detached state, so we have to explicitly
+# checkout the branch.
+git checkout ${GIT_BRANCH}
+yes | composer update --prefer-dist
+
+if [[ `git status --porcelain` ]]; then
+  # Git status has returned results, meaning there are changes present and
+  # we need to commit them. We also need to check for acsf-init changes.
+  ./vendor/bin/drush --include=docroot/modules/contrib/acsf/acsf_init acsf-init -y
+  git add -A
+  git commit -m "Scheduled ACMS update commit by Acquia CI for Build ${BUILD_NUMBER}" .
+  git push origin ${GIT_BRANCH}
+  echo "Scheduled update complete."
+else
+  echo "No changes detected."
+fi
+
+set +e

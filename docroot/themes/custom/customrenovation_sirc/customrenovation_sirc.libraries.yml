@@ -1,0 +1,12 @@
+style:
+  version: VERSION
+  css:
+    theme:
+      assets/css/customrenovation_sirc.style.css: {}
+      assets/css/tempstyles.css: {}
+  js:
+    assets/js/customrenovation_sirc.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once

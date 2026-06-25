@@ -1,0 +1,49 @@
+/* Remove/hide Barrett tour and Academic Facility Tour from Event type dropdown list for Visit event Event Series edit page. */
+#eventseries-visit-event-edit-form select#edit-field-evtype > option[value="Barrett tour"],
+#eventseries-visit-event-add-form select#edit-field-evtype > option[value="Barrett tour"],
+#eventseries-visit-event-edit-form select#edit-field-evtype > option[value="Academic Facility Tour"],
+#eventseries-visit-event-add-form select#edit-field-evtype > option[value="Academic Facility Tour"]
+{
+    display: none;
+}
+
+/* Remove/hide everytthing except for Barrett tour and Academic Facility Tour from Event type dropdown list for Barrett Event Series edit page. */
+#eventseries-barrett-edit-form select#edit-field-evtype > option[value="Experience ASU"],
+#eventseries-barrett-add-form select#edit-field-evtype > option[value="Experience ASU"],
+#eventseries-barrett-edit-form select#edit-field-evtype > option[value="ASU Partner Event"],
+#eventseries-barrett-add-form select#edit-field-evtype > option[value="ASU Partner Event"],
+#eventseries-barrett-edit-form select#edit-field-evtype > option[value="Black Excellence Experience Tour"],
+#eventseries-barrett-add-form select#edit-field-evtype > option[value="Black Excellence Experience Tour"],
+#eventseries-barrett-edit-form select#edit-field-evtype > option[value="Campus Tour"],
+#eventseries-barrett-add-form select#edit-field-evtype > option[value="Campus Tour"],
+#eventseries-barrett-edit-form select#edit-field-evtype > option[value="Counselor Event"],
+#eventseries-barrett-add-form select#edit-field-evtype > option[value="Counselor Event"],
+#eventseries-barrett-edit-form select#edit-field-evtype > option[value="Graduate Student Event"],
+#eventseries-barrett-add-form select#edit-field-evtype > option[value="Graduate Student Event"],
+#eventseries-barrett-edit-form select#edit-field-evtype > option[value="K-12 Program"],
+#eventseries-barrett-add-form select#edit-field-evtype > option[value="K-12 Program"],
+#eventseries-barrett-edit-form select#edit-field-evtype > option[value="Self-guided campus Tour"],
+#eventseries-barrett-add-form select#edit-field-evtype > option[value="Self-guided campus Tour"],
+#eventseries-barrett-edit-form select#edit-field-evtype > option[value="Special Event"],
+#eventseries-barrett-add-form select#edit-field-evtype > option[value="Special Event"],
+#eventseries-barrett-edit-form select#edit-field-evtype > option[value="Sun Devil Day"],
+#eventseries-barrett-add-form select#edit-field-evtype > option[value="Sun Devil Day"],
+#eventseries-barrett-edit-form select#edit-field-evtype > option[value="Transfer Day"],
+#eventseries-barrett-add-form select#edit-field-evtype > option[value="Transfer Day"]
+{
+    display: none;
+}
+
+/* Hide Recur type of Cnsecutive Event */
+.form-item-recur-type:has(> #edit-recur-type-consecutive-recurring-date) /*<-- This works in Chrome, but not in FF */
+{
+  display: none;  
+}
+#edit-recur-type-consecutive-recurring-date { /* For Firefox */
+  display: none;
+}
+
+/* Hide Included dates */
+#edit-included-dates-wrapper {
+    display: none !important;
+}

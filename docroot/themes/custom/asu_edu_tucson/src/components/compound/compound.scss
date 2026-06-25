@@ -1,0 +1,272 @@
+//-----------------------------------------------------------------------------
+// Content image side
+//-----------------------------------------------------------------------------
+.block-inline-blockasu-edu-content-image-side {
+  h2.card-title {
+    margin-top: 0;
+  }
+
+  .card-body {
+    padding: 0;
+  }
+
+  .card-button {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Image and Text
+//-----------------------------------------------------------------------------
+.asu-about-contact {
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    .block-inline-blockasu-edu-image-and-text {
+      .uds-image-text-block-container {
+        font-size: $uds-size-font-medium;
+        background-color: transparent;
+        border: transparent;
+        margin-left: 0;
+
+        .uds-image-text-block-text-container {
+          padding: 0 $uds-size-spacing-3 0 .75rem;
+
+          h2 {
+            margin-top: 0;
+            margin-bottom: $uds-size-spacing-4;
+          }
+
+          .ckeditor-col-container {
+            margin-top: $uds-size-spacing-4;
+          }
+
+          .first-col {
+            padding-left: 0;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    .block-inline-blockasu-edu-image-and-text {
+      padding-top: $uds-size-spacing-4;
+      padding-bottom: $uds-size-spacing-4;
+      margin-bottom: 0;
+
+      .uds-image-text-block-container {
+        margin: 0;
+        border: transparent;
+      }
+    }
+  }
+}
+
+.asu-about-locations-maps {
+  .block-inline-blockimage-and-text-block {
+    &.row {
+      @media screen and (max-width: $uds-grid-container-max-width-lg) {
+        .uds-image-text-block-text-container {
+          .btn {
+            font-size: $uds-size-font-small;
+            padding: $uds-size-spacing-1 $uds-size-spacing-2;
+            line-height: $uds-size-spacing-3
+          }
+        }
+
+        .col-12 {
+          padding-left: 0;
+        }
+      }
+    }
+  }
+}
+
+.asu-athletics {
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    .block-inline-blockasu-edu-image-and-text {
+      .formatted-text {
+        font-size: $uds-size-font-large;
+        line-height: $uds-size-spacing-4;
+      }
+    }
+  }
+}
+
+.block-inline-blockimage-and-text-block {
+  @media screen and (min-width: $uds-grid-container-max-width-md) {
+    .col-md-6 {
+      flex: 0 0 75%;
+      max-width: 75%;
+    }
+
+    h3 {
+      margin-bottom: $uds-size-spacing-3;
+    }
+
+    h4 {
+      font-size: $uds-size-font-medium;
+      line-height: $uds-size-spacing-3;
+    }
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-md) {
+    margin-bottom: $uds-size-spacing-2;
+  }
+}
+
+.block-inline-blockasu-edu-image-and-text {
+  font-size: $uds-size-font-medium;
+
+  .uds-image-text-block-container {
+    background-color: #fafafa;
+  }
+
+  img {
+    height: auto;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  .uds-image-text-block-text-container {
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+
+  .col {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    .uds-image-text-block-text-container {
+      padding-left: $uds-grid-gutter-width;
+      padding-right: $uds-grid-gutter-width;
+    }
+
+    .row {
+      margin-right: 0;
+    }
+  }
+}
+
+.block-inline-blockimage-and-text-block {
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    margin-bottom: 40px;
+
+    .img-fluid {
+      width: 100%;
+    }
+
+    .uds-image-text-block-text-container {
+      padding: 48px;
+    }
+
+    h3 {
+      font-size: 40px;
+    }
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Inset Box
+//-----------------------------------------------------------------------------
+.asu-admission {
+  .block-inline-blockasu-edu-content-image-overlap {
+    @media screen and (max-width: $uds-grid-container-max-width-lg) {
+      margin-top: 0;
+    }
+  }
+}
+
+.block-inline-blockasu-edu-content-image-overlap {
+  .uds-story-hero {
+    // Calc value in the grid-template row definitions:
+    // First row = height of the overall mobile hero image - 4.5rem offset for the indented content.
+    display: grid;
+    grid-template-columns: $uds-size-spacing-2 1fr $uds-size-spacing-2;
+    grid-template-rows: calc(#{$uds-size-spacing-32} - 4.5rem) 4.5rem auto;
+    gap: 0px 0px;
+    max-width: 1920px;
+    margin: 0 auto;
+
+    .hero {
+      grid-column: 1 / span 3;
+      grid-row: 1 / span 2;
+      object-fit: cover;
+      height: 100%;
+      width: 100%;
+    }
+
+    .content {
+      grid-column: 2 / span 1;
+      grid-row: inherit;
+      // grid-row: 2 / span 2;
+      margin-top: -90px;
+      background-color: $uds-color-base-white;
+      border: $uds-color-base-gray-2 1px solid;
+      border-radius: 1px;
+
+      // Padding from top of content box should be carried by whatever element comes within it.
+      padding: 0 $uds-size-spacing-2;
+
+      p.meta {
+        padding: .75rem 0;
+        margin: $uds-size-spacing-half 0;
+      }
+    }
+  }
+
+  @media (min-width: $uds-grid-container-max-width-lg) {
+    // Calc value in the grid-template row definitions:
+    // First row = height of the overall hero image - 8rem offset for the indented content.
+    .uds-story-hero {
+      grid-template-columns: $uds-size-spacing-3 1fr $uds-size-spacing-3;
+      grid-template-rows: calc(#{$uds-size-spacing-64} - #{$uds-size-spacing-16}) $uds-size-spacing-16 1fr;
+
+      &.uds-story-hero-lg {
+        grid-template-rows: calc(42.75rem - #{$uds-size-spacing-16}) $uds-size-spacing-16 1fr;
+      }
+
+      // Calc value: 8.34% is the width of one bootstrap column. 12px is the gutter on the outside.
+      .content {
+        padding: 32px calc(16.6% + 12px);
+        margin-top: -200px;
+
+        .breadcrumb,
+        p.meta {
+          margin: 1.25rem 0 2.25rem;
+        }
+      }
+
+      .card-title {
+        margin-bottom: $uds-size-font-large;
+      }
+    }
+  }
+
+  @media (min-width: $uds-breakpoint-xl) {
+    .uds-story-hero {
+      grid-template-columns: 1fr calc(950px + 12px + 12px) 1fr;
+    }
+  }
+
+  @media screen and (max-width: $uds-grid-container-max-width-lg) {
+    margin-top: $uds-size-spacing-4;
+    margin-bottom: $uds-size-spacing-4;
+
+    .uds-story-hero {
+      grid-template-columns: 2rem 1fr 2rem;
+
+      h2 {
+        line-height: 2.25rem;
+      }
+
+      .btn-maroon + a {
+        display: block;
+        font-weight: $uds-font-weight-bold;
+        margin-top: $uds-size-spacing-2;
+      }
+    }
+  }
+}

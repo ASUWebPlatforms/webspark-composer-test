@@ -1,0 +1,28 @@
+global-styling:
+  css:
+    theme:
+      css/style.css: {}
+
+degreesearch:
+  css:
+    theme:
+      css/degree-search.css: {}
+  js:
+    js/check-pagination-adjust-margin.js: {}
+    js/minor-bachelors-check-toggle.js: {}
+
+keep-filters-open:
+  js:
+    js/keep-filters-open.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+views.ajax:
+  js:
+    js/ajax-override.js: {}
+
+frontpage:
+  css:
+    theme:
+      css/front-page.css: {}

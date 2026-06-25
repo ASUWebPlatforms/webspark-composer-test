@@ -1,0 +1,16 @@
+block.settings.asu_edu_components_clas_news:
+  type: block_settings
+  label: 'Clas News block'
+  mapping:
+    section:
+      type: string
+      label: Section
+    items:
+      type: number
+      label: Items
+    view:
+      type: string
+      label: View
+    header_title:
+      type: string
+      label: 'Header title'

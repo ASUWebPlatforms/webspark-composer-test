@@ -1,0 +1,64 @@
+# MypathFormLib:
+#   version: 1.x
+#   css:
+#     theme:
+#        css/asu_mypath.css: {}
+#   dependencies:
+#     - modules/composer/asu_react_integration/reactjs
+#     - core/jquery
+#     - core/drupal
+#     - core/jquery.once
+#   js:
+#     #js/appRfiPath.umd.js: {}
+#     js/react-app/dist/app.bundle.js: { minified: false }
+
+# react-lib:
+#   version: 1.x
+#   js:
+#     js/react-app/dist/app.bundle.js: { minified: false }
+#     js/mapp_form.js: {}
+#   dependencies:
+#     - core/jquery
+#     - core/drupal
+#     - core/jquery.once
+
+# intl-tel-input:
+#   remote: https://intl-tel-input.com/
+#   version: VERSION
+#   license:
+#     name: MIT
+#     url: https://github.com/jackocnr/intl-tel-input/blob/master/LICENSE
+#     gpl-compatible: true
+#   js:
+#     /libraries/intl-tel-input/build/js/intlTelInput.js: {}
+#     js/react-app/dist/app.bundle.js: { minified: false }
+#     js/telephone_international_widget.js: {}
+#   css:
+#     base:
+#       /libraries/intl-tel-input/build/css/intlTelInput.css: {}
+#       css/telephone_international_widget.css: {}
+
+# rfi-mypath-lib:
+#   css:
+#       theme:
+#         css/asu_mypath.css: {}
+#   js:
+#       /node_modules/@asu/app-rfi/dist/appRfi.umd.js: { type: external }
+#   dependencies:
+#       - /asu_degree_rfi/asu-degree-rfi-core
+#       - core/jquery
+#       - core/drupal
+#       - core/jquery.once
+
+my-app:
+  version: 1.x
+  js:
+      js/react/dist/app.bundle.js: {  minified: true, external: true, preprocess: false }
+     # js/react/*.js: { preprocess: FALSE }
+     # js/react/dist/app.bundle.js: { external: true }
+  dependencies:
+      - core/jquery
+      - core/drupal
+      - core/jquery.once
+
+     

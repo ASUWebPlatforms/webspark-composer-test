@@ -1,0 +1,5 @@
+asu_newcollege_custom_tokens.list:
+  title: 'Custom Tokens'
+  description: 'Manage custom text and date tokens for use in rich text content.'
+  route_name: entity.asu_newcollege_custom_token.collection
+  parent: system.admin_config_content

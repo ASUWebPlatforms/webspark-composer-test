@@ -1,0 +1,202 @@
+<?php
+/**
+ * @file
+ * Theme hooks for custom theme.
+ */
+use Drupal\Component\Utility\Xss;
+use Drupal\Core\Template\Attribute;
+use Drupal\Core\Url;
+use Drupal\views\Views;
+use Drupal\node\Entity\Node;
+use Drupal\field_collection;
+use Drupal\field_collection\Entity;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\views\Plugin\views\row\RssPluginBase;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Link;
+use Drupal\node\NodeViewBuilder;
+use Drupal\Core\Entity\EntityViewBuilderInterface;
+use Drupal\Core\Entity\EntityViewBuilder;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\group\Entity\Group;
+use Drupal\group\Entity\GroupContent;
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Form\BaseFormIdInterface;
+
+function custom_webspark_theme_preprocess_node(&$variables)
+{
+    $node = \Drupal::routeMatch()->getParameter('node');
+    if(isset($node)){
+            /* code to create variables for parent-blog node twig file */
+            if($node->getType() == "blog_posts"){
+                  	$nid = $node->id();
+                  	$time = $node->getCreatedTime();
+                  	$node_data = Node::load($nid);
+					//ksm($node);
+                 	// \Drupal::logger('node data')->notice(print_r($node_data->field_blog_svg_image[0]->target_id, TRUE));
+                    $svg_target_id = $node_data->field_blog_svg_image[0]->target_id;
+					$svg_path = \Drupal::database()->query("select filename from {file_managed} where fid = :fid", array(':fid' => $svg_target_id));
+                    foreach($svg_path as $row_path){
+                           $svg_image_path_value = $row_path->filename;
+                    }
+					
+					//get alt tag of the image
+					$svg_img_tag_data = \Drupal::database()->query("select field_blog_svg_image_alt from {node__field_blog_svg_image} where field_blog_svg_image_target_id = :tid", array(':tid' => $svg_target_id));
+					foreach($svg_img_tag_data as $tag_data){
+                           $svg_alt_tag = $tag_data->field_blog_svg_image_alt;
+                    }
+					
+				    
+					
+                    $svg_image_path = "/sites/default/files/$svg_image_path_value";
+                   // \Drupal::logger('node data')->notice(print_r($svg_image_path, TRUE));
+
+                    $variables['node_podcast'] = !empty($node_data->field_podcast_videos[0])?$node_data->field_podcast_videos[0]->value:'';
+                    $variables['nodetype']=$node->getType();
+                    $variables['nid'] = $nid;
+                    $variables['svg_img'] = $svg_image_path;
+					$variables['svg_alt_tag'] = $svg_alt_tag;
+				
+					//Check if the blog is video type. If so,show blog video, else show image  
+				    $blog_type = $node->field_type_of_post->value;
+					if($blog_type == "video"){
+						$video_image_content = $node_data->field_podcast_videos[0]->value;
+					}
+					else{
+						$video_image_content = '<div class="blog-svg-image-top block"><img src="'.$svg_image_path.'" alt="'.$svg_alt_tag.'"/></div>';
+					}
+				
+				    $variables['video_image_content'] = $video_image_content;
+
+                   /* $node_next_buttons_array = \Drupal::database()->query("select nid from {node_field_data} where type='blog_posts'"); */
+                    $node_next_buttons_array = \Drupal::database()->query("select nid from {node_field_data} where type='blog_posts' and nid!=:nid and created > :created ORDER by created, nid ASC LIMIT 1", array(':created' => $time, ':nid' => $nid));
+                    foreach($node_next_buttons_array as $row){
+                       $next_nids_array = $row->nid;
+                    }
+
+                    $next_node_alias = "/node/".$next_nids_array;
+                    $next_alias = \Drupal::database()->query("select alias from {path_alias} where path=:alias", array(':alias' => $next_node_alias));
+                    foreach($next_alias as $next_alias_value){
+                       $node_next_link = $next_alias_value->alias;
+                    }
+
+
+
+                    $node_prev_buttons_array = \Drupal::database()->query("select nid from {node_field_data} where type='blog_posts' and nid!=:nid and created < :created ORDER by created, nid DESC  limit 1", array(':created' => $time, ':nid' => $nid));
+                    foreach($node_prev_buttons_array as $prow){
+                       $prev_nids_array = $prow->nid;
+                    }
+
+                    $prev_node_alias = "/node/".$prev_nids_array;
+                    $pre_alias = \Drupal::database()->query("select alias from {path_alias} where path=:alias", array(':alias' => $prev_node_alias));
+                    foreach($pre_alias as $pre_alias_value){
+                       $node_prev_link = $pre_alias_value->alias;
+                    }
+
+                    if(isset($prev_nids_array)){
+                      $variables['previous_link'] = $node_prev_link;
+                    }
+                    if(isset($next_nids_array)){
+                     $variables['next_link'] = $node_next_link;
+                    }
+
+                    $variables['related_posts_view'] = views_embed_view('parent_blog_posts', 'block_8');
+            }
+
+            /* code to set up aas-to-bas node view as variable for aas to bas page */
+            if($node->getType() == "aas_to_bas"){
+                      $aasnid = $node->id();
+                      $aasnode_data = Node::load($aasnid);
+
+                      $names = [];
+                      // Obtain Acadplan code
+                      $acad_plans = array();
+                      foreach ($node->field_aas_bas as $item) {
+                             if ($item->entity) {
+                                     $degree_names[$item->entity->id()] = $item->entity->label();
+                             }
+                      }
+
+                      foreach($degree_names as $degree_name){
+                                 if (strstr($degree_name, 'Technical Communication')) {
+                                        array_push($acad_plans, "LSTECBAS");
+                                 }
+                                 elseif (strstr($degree_name, 'Operation Management')) {
+                                        array_push($acad_plans, "TSIMCOBAS"); //There are 2 nodes. 9201 and 9224. Deleted 9224.
+                                 }
+                                 elseif (strstr($degree_name, 'Health Sciences')) {
+                                        array_push($acad_plans, "NUHSCBAS");
+                                 }
+                                 elseif (strstr($degree_name, 'Aviation')) {
+                                        array_push($acad_plans, "TSAMTABAS");
+                                 }
+                                 elseif (strstr($degree_name, 'Electronic Energy Systems')) {
+                                        array_push($acad_plans, "TSEESBAS");
+                                 }
+                                 elseif (strstr($degree_name, 'Nursing')) {
+                                        array_push($acad_plans, "NUNURDBSN");
+                                 }
+                                 elseif (strstr($degree_name, 'Emergency Management')) {
+                                        //array_push($acad_plans, "TSIMCEBAS"); //There are 2 nodes. 11167 and 10527. Unpublished 10527 because it had wrong College URL.
+                                        array_push($acad_plans, "PPEMGBAS"); // tsimcebas was replaced by ppemgbas.
+                                 }
+                                 elseif (strstr($degree_name, 'Food Service Management')) {
+                                        array_push($acad_plans, "ECNTRBAS");
+                                 }
+                                 elseif (strstr($degree_name, 'Internet')) {
+                                        array_push($acad_plans, "TSIWDBAS");
+                                 }
+                                 elseif (strstr($degree_name, 'Manufacturing Technology & Management')) {
+                                        array_push($acad_plans, "TSMETFBAS"); // There are 2 nodes. 9208 and 9225. Deleted 9225.
+                                 }
+                                 elseif (strstr($degree_name, 'Applied Science')) {
+                                        array_push($acad_plans, "ASBASBAS");
+                                 }
+                                 elseif (strstr($degree_name, 'Graphic Information Technology')) {
+                                        array_push($acad_plans, "TSGITBAS");
+                                 }
+                                 elseif (strstr($degree_name, 'Software and Computing Systems')) {
+                                        array_push($acad_plans, "TSCSTBAS");
+                                 }
+                                 elseif (strstr($degree_name, 'Health Innovation')) {
+                                        array_push($acad_plans, "NUHCIBAS");
+                                 }
+                                 elseif (strstr($degree_name, 'Medical Laboratory Science')) {
+                                        array_push($acad_plans, "NUMLSBAS");
+                                 }
+                                 elseif (strstr($degree_name, 'Medical Laboratory Science')) {
+                                        array_push($acad_plans, "NUMLSBAS");
+                                 }
+                                 elseif (strstr($degree_name, 'Early Childhood Studies')) {
+                                        array_push($acad_plans, "TEAPSECBAS");
+                                 }
+                                 elseif (strstr($degree_name,'Project Management')) {
+                                        array_push($acad_plans, "LSAPSPMBAS");
+                                 }
+                                 elseif (strstr($degree_name, 'Applied Leadership')) {
+                                        array_push($acad_plans, "LSALSBAS");
+                                 }
+                                 else {
+                                 }
+                      }
+                      $degree_arg = implode("+", $acad_plans);
+
+                      $variables['aas_to_bas_node_view'] = views_embed_view('aas_to_bas', 'block_1', $degree_arg);
+
+            }
+     }
+	
+  //view template variable for tours twig template
+  $view = Views::getView('tours');
+  if ($view) {
+    $view->setDisplay('block_10');
+    $view->setArguments([$variables['node']->id()]);
+    $view->execute();
+    $render_array = $view->render();
+    $variables['tours_view'] = $render_array;
+  }
+	
+}

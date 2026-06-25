@@ -1,0 +1,248 @@
+@charset "UTF-8";
+/**
+ * New styles based on bootstrap.
+ */
+
+.tuition-tr td:first-child {
+  border-right: 1px solid #cccccc;
+}
+
+.tuition-breakdown .tuition-tr:last-child {
+  font-weight: bold;
+}
+
+#accordionTuition .card > div:last-child {
+  padding-bottom: 0px !important;
+}
+
+.tuition-breakdown {
+  margin-bottom: 0px !important;
+}
+
+.tuition-total-result-table {
+  background: #ffc627;
+  font-weight: bold;
+}
+
+.tu-cus-error {
+  color: #dc3545;
+}
+
+.tuition-results-rhs {
+  padding: 20px;
+  background: #f1f1f1 0% 0% no-repeat padding-box;
+}
+
+/*@media screen and (min-width: 992px){
+    .tuition-result-a{
+        width: 80% !important;
+    }
+}
+*/
+.header-price {
+  padding: 0.5rem 1.5rem;
+  margin-right: -2%;
+}
+
+.custom-select.error {
+  border: 2px solid red;
+}
+
+.header-price-bottom {
+  padding: 0.5rem 1.5rem;
+  /*margin-right: 2%;*/
+}
+
+.hide {
+  display: none !important;
+}
+
+.tuition-tr-total {
+  width: 87%;
+}
+
+.tuition-total-academic {
+  display: flex;
+  padding: 20px;
+  background: #ffc627;
+  font-weight: bold;
+}
+
+.total {
+  font-weight: bold !important;
+}
+
+.tuition-total-result-table {
+  width: 87% !important;
+}
+
+.tuition_all_link,
+.hide-show-link {
+  text-align: center;
+  margin: 20px;
+  text-decoration: underline;
+  color: #8c1d40;
+  cursor: pointer;
+  border: none;
+}
+
+#edit-credit-hrs {
+  width: 154px;
+  border-radius: 25px;
+}
+
+#edit-credit-hrs {
+  background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E")
+    no-repeat right 0.75rem center/8px 10px;
+  background-color: #ffc627;
+}
+
+.form-item-credit-hrs {
+  display: flex;
+}
+
+.form-item-credit-hrs label {
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+#results_div {
+  position: relative;
+}
+
+#results_div img {
+  opacity: 50%;
+}
+
+.initial_help_div_text {
+  position: absolute;
+  top: 30%;
+}
+
+.initial_help_p_text {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  background: #191919;
+  color: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.tr-hr {
+  background: #ffc627;
+  width: 40%;
+  height: 2px;
+}
+
+.custom-label {
+  font-size: 0.8rem !important;
+}
+
+button.uds-tooltip .fa-circle {
+  color: #191919 !important;
+}
+/*.asu-tuition .form-type-radio .description,
+.asu-tuition .form-type-checkbox .description {
+  margin-left: 0;
+}
+.asu-tuition .full-time-credits {
+  font-size: 0.85em;
+}
+.asu-tuition th.text-right,
+.asu-tuition td.text-right {
+  text-align: right;
+}
+.asu-tuition td.dollar-amount {
+  text-align: right;
+}
+.asu-tuition .total {
+  font-weight: bold;
+}
+.asu-tuition .total td.dollar-amount:before,
+.asu-tuition .corporate_partner_award_total td.dollar-amount:before {
+  content: '$';
+}
+.asu-tuition .table tbody tr.corporate_partner_award>td {
+  background-color: #dff0d8;
+}
+.asu-tuition .table tbody tr.corporate_partner_award_total>td {
+  background-color: #dff0d8;
+  font-size: larger;
+  font-weight: bold;
+}
+.asu-tuition #acad-year-table thead th.fee-description {
+  width: 40%;
+}
+.asu-tuition #acad-year-table thead th.fee-amount {
+  width: 20%;
+}
+.asu-tuition #acad-year-table.summer thead th.fee-amount {
+  width: 15%;
+}
+.asu-tuition table.tuition-breakdown caption {
+  font-size: 1.2em;
+  font-weight: bold;
+  text-align: left;
+}
+.asu-tuition table.tuition-breakdown.credits-18 th,
+.asu-tuition table.tuition-breakdown.credits-18 td {
+  padding: 3px;
+}
+
+.asu-tuition .modal-wait {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba( 0, 0, 0, .8 );
+}
+.asu-tuition .modal-wait .modal-spinner {
+  color: #fff;
+  left: 45%;
+  position: fixed;
+  top: 45%;
+}
+body.loading {
+ overflow: hidden;
+}
+body.loading .asu-tuition .modal-wait {
+  display: block;
+}
+
+@media print {
+  #asu-tuition-results-page div.tabs,
+  #asu-tuition-results-page div.tabs #tuition,
+  #asu-tuition-results-page div.tabs #breakdown,
+  #asu-tuition-results-page div.tabs #standard-allowances,
+  #asu-tuition-results-page div.tabs #financial-aid {
+    visibility: visible !important;
+    display: block !important;
+  }
+
+  #tabs_bar,
+  #site_nav,
+  #asu_hdr,
+  #block-print-0,
+  ul.tabs,
+  .tab-message,
+  .node .taxonomy,
+  .breadcrumb {
+    display: none;
+  }
+
+  #squeeze {
+    width: 7.5in;
+  }
+
+  #tabs-navigation .tab fieldset legend {
+    display: none;
+  }
+
+  .asu-tuition .section-heading  {
+    display: block;
+  }
+}*/

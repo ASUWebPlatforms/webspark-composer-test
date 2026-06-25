@@ -1,0 +1,8 @@
+excluded:
+  - field.field.node.degree_detail_page.layout_builder__layout
+  - field.field.node.degree_listing_page.layout_builder__layout
+  - metatag.metatag_defaults.media__document
+  - metatag.metatag_defaults.media__image
+  - metatag.metatag_defaults.media__remote_video
+  - metatag.metatag_defaults.media__story_hero
+required: true

@@ -1,0 +1,118 @@
+/*------------------------------------------------------------------
+ UDS Text with Image 
+--------------------------------------------------------------------*/
+
+
+
+/*------------------------------------------------------------------
+ UDS Quote with Image Background
+--------------------------------------------------------------------*/
+
+.uds-quote-image-background {
+  padding: 5rem 2rem;
+}
+
+/*------------------------------------------------------------------
+ UDS Image Background with CTA
+--------------------------------------------------------------------*/
+
+.uds-image-background-with-cta {
+  height: 800px;
+  h1 {
+    line-height: 5rem;
+  }
+}
+
+/*------------------------------------------------------------------
+ UDS Testimonial Carousel
+--------------------------------------------------------------------*/
+
+.testimonial-carousel-container {
+  padding-bottom: 96px;
+  padding-top: 96px;
+}
+
+.asu-testimonial-on-image-container {
+  justify-content: center;
+}
+
+/*------------------------------------------------------------------
+ CHS Get Started buttons - width override
+--------------------------------------------------------------------*/
+
+.chs-wide-buttons {
+  .btn {
+    width: 100% !important;
+  }
+
+}
+
+
+/*------------------------------------------------------------------
+Contact sidebar custom styles
+--------------------------------------------------------------------*/
+.contact-sidebar {
+  .sb-action-link {
+    a {
+      color: #FFFFFF;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+
+/*------------------------------------------------------------------
+Quote slider custom styles
+--------------------------------------------------------------------*/
+
+.bg-quote-slider {
+  background: url(images/quote-slider.jpg) no-repeat center center; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+
+@media screen and (max-width: 992px) {
+  .block-inline-blockasu-edu-anim-content-buttons {
+      width: 100%;
+      margin: 0;
+  }
+}
+
+
+/*------------------------------------------------------------------
+Animated Slider Card custom styles
+--------------------------------------------------------------------*/
+
+.block-inline-blockasu-edu-anim-content-buttons {
+  .animated-content-section {
+  .content-holder {
+      left: auto;
+    }
+  }
+}
+
+/*------------------------------------------------------------------
+CHS Custom Hero Overrides
+--------------------------------------------------------------------*/
+
+div[class^=uds-hero] {
+
+  h1 {
+      line-height: 4.513rem;
+      max-width: 100%;
+  }
+}
+
+.uds-video-hero {
+  .highlight- {
+      background-color: #ffc627;
+      color: #191919;
+      box-shadow: -0.15em 0 0 #ffc627, 0.15em 0 0 #ffc627;
+  }
+}

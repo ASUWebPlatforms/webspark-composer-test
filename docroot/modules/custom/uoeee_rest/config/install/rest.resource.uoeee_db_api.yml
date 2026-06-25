@@ -1,0 +1,9 @@
+id: uoeee_db_api
+plugin_id: uoeee_db_api
+granularity: resource
+configuration:
+  methods: [GET, POST]
+  formats: [json]
+  authentication:
+    - basic_auth
+    # - cookie

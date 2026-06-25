@@ -1,0 +1,552 @@
+langcode: en
+status: open
+dependencies:
+  module:
+    - asu_survey
+weight: 0
+open: null
+close: null
+uid: 4
+template: false
+archive: false
+id: veterans_survey
+title: 'Veterans survey'
+description: ''
+category: ''
+elements: |-
+  js_code:
+    '#type': processed_text
+    '#text': |
+      <style type="text/css">.webform-submission-veterans-survey-node-48-form{
+          background: #FFFFFF 0% 0% no-repeat padding-box;
+          border: 1px solid #D0D0D0;
+          padding-bottom: 20px;
+        }
+      </style>
+      <div class="js-form-wrapper">
+      <div class="container">
+      <div class="row">
+      <h2>Tell Us About You</h2>
+      </div>
+      </div>
+
+      <div class="container">
+      <div class="row">
+      <div class="col col-md-10">
+      <div class="survey-progress-bar">
+      <div class="outer-bar">
+      <div class="inner-bar">&nbsp;</div>
+      </div>
+      </div>
+      </div>
+
+      <div class="col col-md-2"><a href="/veteran-survey-form">Start Over <svg aria-hidden="true" class="svg-inline--fa fa-undo fa-w-16" data-fa-i2svg="" data-icon="undo" data-prefix="fas" focusable="false" role="img" style="width: 1.1em;" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M212.333 224.333H12c-6.627 0-12-5.373-12-12V12C0 5.373 5.373 0 12 0h48c6.627 0 12 5.373 12 12v78.112C117.773 39.279 184.26 7.47 258.175 8.007c136.906.994 246.448 111.623 246.157 248.532C504.041 393.258 393.12 504 256.333 504c-64.089 0-122.496-24.313-166.51-64.215-5.099-4.622-5.334-12.554-.467-17.42l33.967-33.967c4.474-4.474 11.662-4.717 16.401-.525C170.76 415.336 211.58 432 256.333 432c97.268 0 176-78.716 176-176 0-97.267-78.716-176-176-176-58.496 0-110.28 28.476-142.274 72.333h98.274c6.627 0 12 5.373 12 12v48c0 6.627-5.373 12-12 12z" fill="currentColor"></path></svg><!-- <i class="fas fa-undo" style="width: 1.1em;"></i> Font Awesome fontawesome.com --></a></div>
+      </div>
+      </div>
+      </div>
+    '#format': full_html
+  page_11:
+    '#type': webform_wizard_page
+    '#title': 'Page 11'
+    '#attributes':
+      class:
+        - show-next
+    full_name:
+      '#type': textfield
+      '#title': 'First name'
+      '#pattern': '^[a-zA-Z0-9]*$'
+      '#pattern_error': 'First name field accepts plain text only'
+      '#wrapper_attributes':
+        class:
+          - sgroup
+          - '5'
+      '#required': true
+    last_name:
+      '#type': textfield
+      '#title': 'Last name'
+      '#pattern': '^[a-zA-Z0-9]*$'
+      '#pattern_error': 'Last name field accepts plain text only'
+      '#required': true
+  page_1:
+    '#type': webform_wizard_page
+    '#title': 'Page 1'
+    i_am:
+      '#type': radios
+      '#title': 'I am'
+      '#options':
+        'Active duty, guard, reserve': 'Active duty, guard, reserve'
+        'Military spouse': 'Military spouse'
+        Dependant: Dependant
+        Veteran: Veteran
+        'Civil Servant (GS)': 'Civil Servant (GS)'
+        Other: Other
+      '#wrapper_attributes':
+        class:
+          - sgroup
+          - '10'
+  page_2:
+    '#type': webform_wizard_page
+    '#title': 'Page 2'
+    are_you_married_:
+      '#type': radios
+      '#title': 'Are you married?'
+      '#options':
+        'yes': 'Yes'
+        'no': 'No'
+      '#wrapper_attributes':
+        class:
+          - sgroup
+          - '20'
+  page_3:
+    '#type': webform_wizard_page
+    '#title': 'page 3'
+    have_children:
+      '#type': radios
+      '#title': 'Have children?'
+      '#options':
+        'yes': 'Yes'
+        'no': 'No'
+      '#wrapper_attributes':
+        class:
+          - sgroup
+          - '30'
+  page_4:
+    '#type': webform_wizard_page
+    '#title': 'Page 4'
+    my_my_spouse_my_parent_military_service:
+      '#type': checkboxes
+      '#title': 'My / My spouse’s / My parent’s military service (select all that apply)'
+      '#options':
+        Army: Army
+        Navy: Navy
+        'Air Force': 'Air Force'
+        'Marine Corps': 'Marine Corps'
+        'Coast Guard': 'Coast Guard'
+        'Space Force': 'Space Force'
+        Other: Other
+      '#wrapper_attributes':
+        class:
+          - sgroup
+          - '40'
+  page_5:
+    '#type': webform_wizard_page
+    '#title': 'Page 5'
+    my_my_spouse_my_parent_highest_education_level:
+      '#type': radios
+      '#title': 'My / My spouse’s / My parent’s highest education level'
+      '#options':
+        'High school': 'High school'
+        Associate’s: Associate’s
+        Bachelor’s: Bachelor’s
+        Master’s: Master’s
+        PhD: PhD
+        'Trade school/Vocational school': 'Trade school/Vocational school'
+        Other: Other
+      '#wrapper_attributes':
+        class:
+          - sgroup
+          - '50'
+  page_6:
+    '#type': webform_wizard_page
+    '#title': 'Page 6'
+    i_intend_to_use_gi_bill_benefits_for_my_college_degree:
+      '#type': radios
+      '#title': 'I intend to use GI Bill&reg; Benefits for my college degree'
+      '#description': 'GI Bill&reg; is a registered trademark of the U.S. Department of Veterans Affairs (VA). More information about education benefits offered by VA is available at the official U.S. government website at <a href="http://www.benefits.va.gov/gibill" rel="noopener noreferrer" target="_blank">www.benefits.va.gov/gibill</a>.'
+      '#description_display': before
+      '#options':
+        'yes': 'Yes'
+        'no': 'No'
+      '#wrapper_attributes':
+        class:
+          - sgroup
+          - '60'
+  page_7:
+    '#type': webform_wizard_page
+    '#title': 'Page 7'
+    what_degree_path_do_you_plan_to_pursue_:
+      '#type': radios
+      '#title': 'What degree path do you plan to pursue?'
+      '#options':
+        'STEM (Science, Technology, Engineering, Mathematics)': 'STEM (Science, Technology, Engineering, Mathematics)'
+        'Arts / Humanities': 'Arts / Humanities'
+        'Business / Entrepreneurship': 'Business / Entrepreneurship'
+        'Public Service (Department of Defense, Law Enforcement, Nurses, Physicians Assistant, Social Workers)': 'Public Service (Department of Defense, Law Enforcement, Nurses, Physicians Assistant, Social Workers)'
+        Other: Other
+        'Still undecided': 'Still undecided'
+      '#wrapper_attributes':
+        class:
+          - sgroup
+          - '70'
+  page_8:
+    '#type': webform_wizard_page
+    '#title': 'Page 8'
+    i_feel_prepared_for_success_in_a_collegiate_setting:
+      '#type': radios
+      '#title': 'I feel prepared for college'
+      '#options':
+        'Strongly disagree': 'Strongly disagree'
+        Disagree: Disagree
+        Neutral: Neutral
+        Agree: Agree
+        'Strongly agree': 'Strongly agree'
+      '#wrapper_attributes':
+        class:
+          - sgroup
+          - '80'
+  page_9:
+    '#type': webform_wizard_page
+    '#title': 'Page 9'
+    i_m_seeking_a_degree_with_the_mindset_that_an_earned_degree_will:
+      '#type': radios
+      '#title': 'I''m seeking a degree with the mindset that it''ll help me get a job in a specific industry upon graduation.'
+      '#options':
+        'Strongly disagree': 'Strongly disagree'
+        Disagree: Disagree
+        Neutral: Neutral
+        Agree: Agree
+        'Strongly agree': 'Strongly agree'
+      '#wrapper_attributes':
+        class:
+          - sgroup
+          - '90'
+  page_10:
+    '#type': webform_wizard_page
+    '#title': 'Page 10'
+    '#attributes':
+      class:
+        - show-next
+    once_you_earn_your_degree_what_kind_of_job_do_you_want_to_get_:
+      '#type': textarea
+      '#title': 'Thinking into the future a bit, once you earn your degree, what kind of job will you pursue?'
+      '#pattern': '^[a-zA-Z0-9 ]*$'
+      '#pattern_error': 'Plain text only'
+      '#counter_type': character
+      '#counter_minimum': 1
+      '#counter_maximum': 255
+      '#wrapper_attributes':
+        class:
+          - sgroup
+          - '95'
+  page_12:
+    '#type': webform_wizard_page
+    '#title': 'Page 12'
+    email_address:
+      '#type': email
+      '#title': 'Email me a copy of my results'
+      '#wrapper_attributes':
+        class:
+          - sgroup
+          - '100'
+      '#required': true
+    i_want_to_get_more_information_about_asu:
+      '#type': checkbox
+      '#title': 'I want to get more information about ASU'
+    rfi_elements:
+      '#type': fieldset
+      '#title': 'RFI elements'
+      '#title_display': invisible
+      '#states':
+        visible:
+          ':input[name="i_want_to_get_more_information_about_asu"]':
+            checked: true
+      '#attributes':
+        class:
+          - survey-rfi
+      which_applies_to_you_:
+        '#type': select
+        '#title': 'Which applies to you?'
+        '#options':
+          Ground: 'I plan to take some/all of my classes on campus'
+          ONLNE: 'I plan to study 100% online through ASU Online'
+          NOPREF: 'I am not sure'
+        '#required': true
+        '#wrapper_type': form_element
+      select_your_student_status:
+        '#type': select
+        '#title': 'Select your student status'
+        '#options':
+          'First Time Freshman': 'First-year undergraduate'
+          Transfer: 'Transferring undergraduate'
+          Readmission: 'Graduate (Masters, PhD, EdD, DNP, etc.)'
+        '#required': true
+        '#wrapper_type': form_element
+      area_of_interest_online:
+        '#type': select
+        '#title': 'Area of interest online'
+        '#options':
+          'Art and design': 'Art and design'
+          'Behavioral sciences': 'Behavioral sciences'
+          'Communication and digital media': 'Communication and digital media'
+          'Computer science and technology': 'Computer science and technology'
+          Education: Education
+          Engineering: Engineering
+          'Geographical sciences and urban planning': 'Geographical sciences and urban planning'
+          'Health and wellness': 'Health and wellness'
+          History: History
+          Humanities: Humanities
+          'Information technology': 'Information technology'
+          Language: Language
+          'Law, criminal justice and public service': 'Law, criminal justice and public service'
+          'Liberal arts': 'Liberal arts'
+          Management: Management
+          Nursing: Nursing
+          Nutrition: Nutrition
+          Psychology: Psychology
+          STEM: STEM
+          Science: Science
+          'Social Sciences': 'Social Sciences'
+          Sustainability: Sustainability
+        '#states':
+          visible:
+            ':input[name="which_applies_to_you_"]':
+              value: ONLNE
+        '#required': true
+      program_of_interest:
+        '#type': select
+        '#title': 'Program of interest'
+        '#options':
+          Art: Art
+        '#states':
+          visible:
+            ':input[name="area_of_interest_online"]':
+              filled: true
+        '#required': true
+      when_do_you_anticipate_starting_at_asu_:
+        '#type': select
+        '#title': 'When do you anticipate starting at ASU?'
+        '#options': asu_entry_terms
+        '#required': true
+      phone_number:
+        '#type': tel
+        '#title': 'Phone number'
+        '#description': |-
+          Please enter your phone number using the following format. +1 (123) 456-7890<br />
+          Make sure to include the + before your area code (including the + symbol).
+      postal_code:
+        '#type': textfield
+        '#title': 'Postal code'
+        '#pattern': '^[0-9]*$'
+        '#pattern_error': 'Numbers only for Zipcode'
+        '#required': true
+      asuonline_enterpriseclientid:
+        '#type': hidden
+        '#title': 'ASU Online enterpriseclientid'
+      by_submitting_my_information_i_consent_to_asu_contacting_me_abou:
+        '#type': checkboxes
+        '#title': 'By submitting my information, I consent to ASU contacting me about education services using email, direct mail, SMS/texting and digital platforms. Message and data rates may apply. Consent is not required to receive services, and I can withdraw consent by contacting ASU at <a href="mailto:UnsubFutureStudentComm@asu.edu">UnsubFutureStudentComm@asu.edu</a> or as described in communications I receiv! consent to ASU''s <a href="https://asuonline.asu.edu/text-terms/">mobile terms and conditions</a>, and <a href="https://asuonline.asu.edu/web-analytics-privacy-2/">Privacy Statements</a>, including the European Supplement. '
+        '#options':
+          1: 'I consent'
+        '#states':
+          visible:
+            ':input[name="which_applies_to_you_"]':
+              value: Ground
+        '#wrapper_type': form_element
+      gdpr_online_consent:
+        '#type': checkbox
+        '#title': 'By submitting my information, I consent to ASU contacting me about educational services using automated calls, prerecorded voice messages, SMS/text messages or email at the information provided above. Message and data rates may apply. Consent is not required to receive services, and I may call ASU directly at 866-277-6589. I consent to ASU''s <a href="https://asuonline.asu.edu/text-terms/">mobile terms and conditions</a>, and <a href="https://asuonline.asu.edu/web-analytics-privacy-2/">Privacy Statements</a>, including the European Supplement.'
+        '#states':
+          visible:
+            ':input[name="which_applies_to_you_"]':
+              value: ONLNE
+css: ''
+javascript: ''
+settings:
+  ajax: true
+  ajax_scroll_top: form
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: ''
+  page_confirm_path: ''
+  page_theme_name: ''
+  form_title: source_entity_webform
+  form_submit_once: false
+  form_open_message: ''
+  form_close_message: ''
+  form_exception_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_disable_remote_addr: false
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_unsaved: false
+  form_disable_back: false
+  form_submit_back: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_reset: false
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  form_attributes: {  }
+  form_method: ''
+  form_action: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
+  submission_label: ''
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_log: false
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: false
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: false
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: false
+  wizard_confirmation_label: ''
+  wizard_auto_forward: true
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: true
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  preview: 0
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: url
+  confirmation_url: '/confirmation-page-survey?sid=[webform_submission:sid]&rfi=[webform_submission:values:i_want_to_get_more_information_about_asu]'
+  confirmation_title: ''
+  confirmation_message: ''
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  token_delete: false
+  serial_disabled: false
+access:
+  create:
+    roles:
+      - anonymous
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers:
+  submit_survey_form_submissions_to_middleware:
+    id: asu_veteran_survey_form_handler
+    handler_id: submit_survey_form_submissions_to_middleware
+    label: 'Submit Survey form submissions to middleware'
+    notes: ''
+    status: true
+    conditions: {  }
+    weight: 0
+    settings: {  }
+  send_survey_confirmation_email:
+    id: asu_survey_email_handler
+    handler_id: send_survey_confirmation_email
+    label: 'Send survey confirmation email'
+    notes: ''
+    status: true
+    conditions: {  }
+    weight: 0
+    settings: {  }
+variants: {  }

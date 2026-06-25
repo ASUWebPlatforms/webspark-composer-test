@@ -1,0 +1,14 @@
+{% set image_path = node.field_event_image|file_url %}
+{% set public_url = file_url('public://') %}
+{% set clean_path = image_path|replace({(public_url): '/'}) %}
+
+<div class="card custom-event-card carousel-item">
+    <img src="{{ clean_path|image_style('block_image_med')|replace({'%2520': '%20'}) }}" alt="">
+    <div class="description-box">
+        <h3 class="event-title">{{ node.title.value }}</h3>
+        <p class="description" title="{{ node.body.value|striptags }}" >{{ node.body.value|striptags }}</p>
+        <div class="date"><span class="fontawesome-icon-inline"><span class="fa-solid fa-calendar">&nbsp;</span></span> {{ node.field_date.start_date.gettimestamp|format_date('custom', 'D, M j, Y - g:ia') }} - {{ node.field_date.end_date.gettimestamp|format_date('custom', 'D, M j, Y - g:ia') }}</div>
+        <div class="location"><span class="fontawesome-icon-inline"><span class="fa-solid fa-location-dot">&nbsp;</span></span> {{ node.field_event_location.value }}</div>
+        <a href="{{ node.field_link.value.0.uri }}" target="_blank" class="btn btn-default btn-maroon btn">Learn more</a>
+    </div>
+</div>

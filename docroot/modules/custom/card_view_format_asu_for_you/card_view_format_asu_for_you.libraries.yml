@@ -1,0 +1,9 @@
+# Custom module library for general purposes.
+card_view_format_asu_for_you:
+  js:
+    js/card-view-format.js: {}
+  css:
+    component:
+      css/card-view-format.css: {}
+  dependencies:
+    - core/drupalSettings

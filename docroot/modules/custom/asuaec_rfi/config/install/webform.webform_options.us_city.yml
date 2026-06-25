@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: us_city
+label: 'US city'
+category: ASU
+likert: false
+options: ''

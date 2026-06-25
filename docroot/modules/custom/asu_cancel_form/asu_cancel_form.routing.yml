@@ -1,0 +1,8 @@
+asu_cancel_form.cancelForm:
+  path: '/cancel_reservation/{aid}/{eventid}'
+  defaults:
+    _controller: '\Drupal\asu_cancel_form\Controller\AsuCancelEventsController::cancelForm'
+  requirements:
+    _permission: 'access content'
+    _title: 'Cancel confirmation'
+ 

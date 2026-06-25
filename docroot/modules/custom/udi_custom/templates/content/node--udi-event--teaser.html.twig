@@ -1,0 +1,57 @@
+{#
+/**
+ * @file
+ * Template for a UDI Event Teaser Node.
+ */
+#}
+{%
+  set classes = [
+  'node',
+  node.isPromoted() ? 'node--promoted',
+  node.isSticky() ? 'node--sticky',
+  not node.isPublished() ? 'node--unpublished',
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+  'udi-event--teaser',
+  'col',
+  'col-xs-12',
+  'col-sm-4',
+  'mb-4',
+]
+%}
+
+{% set image = file_url(content.field_media[0]['#media'].field_media_image.entity.uri.value) %}
+
+<article{{ attributes.addClass(classes) }}>
+  {{ title_suffix }}
+  {% block content %}
+  <div class="card cards-components card-event">
+    <img class="card-img-top" src="{{ image }}" alt="Digital Culture Summer Institute 2022">
+    <div class="card-header">
+      <h3 class="card-title">{{ label|render|striptags|trim }}</h3>
+    </div>
+    <div class="card-event-details">
+      <div class="card-event-icons">
+        <div>
+          <i class="far fa-calendar"></i>
+        </div>
+      <div>
+        <span>{{ content.	field_event_date }} <br>{{ content.field_event_time }}</span>
+      </div>
+    </div>
+    <div class="card-event-icons">
+      <div>
+        <i class="fas fa-map-marker-alt"></i>
+      </div>
+      <div>{{ content.field_event_location }}</div>
+      </div>
+    </div>
+    <div class="card-link">
+      <a href="{{ url}}" class="btn btn-md btn-gold">Learn More</a>
+    </div>
+    <div class="card-tags">
+      {{ content.field_event_tags|render }}
+    </div>
+  </div>
+  {% endblock %}
+</article>

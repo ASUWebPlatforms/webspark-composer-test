@@ -1,0 +1,22 @@
+{% set image = file_url(content.field_media[0]['#media'].field_media_image.entity.uri.value) %}
+{% set cardlink = content.field_card_link|render|striptags|trim %}
+
+<div class="card-wrapper" id="card-{{ paragraph.uuid.value }}">
+    <div class="card cards-components {% if cardlink is not empty %}card-hover {% endif %}{{ content.field_card_border|render|striptags|trim }}" data-testid="card-container">
+        <img class="card-img-top" src="{{ image }}" alt="Design Programs" data-testid="card-image">
+        <div class="card-header">
+        <h3 class="card-title">{{ content.field_heading|render|striptags|trim }}</h3>
+        {% if content.field_body %}
+        <div class="py-3 mr-4">
+        <p>{{ content.field_body|render|striptags|trim }}</p>
+        </div>
+
+        {% endif %}
+    </div>
+    {% if cardlink is not empty %}
+    <div class="card-link" data-testid="card-link">
+        <a class="stretched-link" href="{{ cardlink }}"></a>
+    </div>
+    {% endif %}
+    </div>
+</div>

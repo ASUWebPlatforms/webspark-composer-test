@@ -1,0 +1,13 @@
+# This declares the plugin manager to the service container. For background
+# information on the service container, see https://www.drupal.org/node/2133171.
+# Changes here require that the cache be cleared in order to have Drupal notice
+# them.
+services:
+  asuaec_transferoption.nodecreation:
+    class: Drupal\asuaec_transferoption\NodeCreation\TransferOptionNodeGenerator
+
+#  asuaec_transferoption.refreshdegreeform:
+#    class: Drupal\asuaec_transferoption\RefreshTransferOptionDegreeForm
+#    arguments: ['@database']
+
+

@@ -1,0 +1,44 @@
+{#
+/**
+* @file
+* Template for a Node.
+*/
+#}
+{% extends '@renovation/node/node.twig' %}
+{% block content %}
+
+<div class="8-4 uds-flex-order-default product-review">
+  <div class="container">
+    <div class="row">
+
+      <!-- Main content -->
+      <div class="layout__region layout__region--first col-md-8">
+       
+        <div class="block">
+          <nav aria-label="breadcrumbs" class="container px-0">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/">Home</a></li>
+              <li class="breadcrumb-item"><a href="/products">IT product accessibility tests</a></li>
+            </ol>
+          </nav>
+        </div>
+
+        <h1 class="article">{{ drupal_title() }}</h1>
+
+        <div class="main-body">
+          {{ content }} 
+        </div>
+      </div>
+      <!-- /#main content -->
+
+      <!-- Psuedo sidebar -->
+      <div class="layout__region layout__region--second col-md-4">
+        <p>&nbsp;</p>
+      </div>
+      <!-- /# end psuedo sidebar -->
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+

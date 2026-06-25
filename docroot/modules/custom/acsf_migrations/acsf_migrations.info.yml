@@ -1,0 +1,8 @@
+name: ACSF migration
+type: module
+description: Include acsf related update/modifications.
+core_version_requirement: ^9 || ^10
+package: custom
+dependencies:
+  - acsf
+  - acsf_duplication

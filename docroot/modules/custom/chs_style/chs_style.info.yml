@@ -1,0 +1,5 @@
+name: ASU CHS style
+description: Provides a style library and adjusts revision log form
+type: module
+core_version_requirement: ^8 || ^9 || ^10
+version: 1.0

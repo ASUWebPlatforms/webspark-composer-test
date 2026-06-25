@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_asu_search_profile
+    - node.type.senator_spotlight
+  module:
+    - link
+id: node.senator_spotlight.field_asu_search_profile
+field_name: field_asu_search_profile
+entity_type: node
+bundle: senator_spotlight
+label: 'ASU Search Profile'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 17
+field_type: link

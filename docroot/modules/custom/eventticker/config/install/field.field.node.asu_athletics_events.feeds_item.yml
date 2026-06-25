@@ -1,0 +1,23 @@
+uuid: 4c3c2262-a6c6-47d1-8c9f-6779cf665292
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.feeds_item
+    - node.type.asu_athletics_events
+  module:
+    - feeds
+id: node.asu_athletics_events.feeds_item
+field_name: feeds_item
+entity_type: node
+bundle: asu_athletics_events
+label: 'Feeds item'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:feeds_feed'
+  handler_settings: {  }
+field_type: feeds_item

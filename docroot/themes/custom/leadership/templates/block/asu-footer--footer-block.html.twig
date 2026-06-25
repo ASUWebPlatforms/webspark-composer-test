@@ -1,0 +1,109 @@
+{% if show_logo_social_media %}
+  <div class="wrapper" id="wrapper-endorsed-footer">
+    <div class="container" id="endorsed-footer">
+      <div class="row">
+        <div class="col-md" id="endorsed-logo">
+          {% if unit_custom_logo %}
+            {{ unit_custom_logo }}
+          {% else %}
+            <img src="{{ src_unit_logo }}" alt="ASU University Technology Office Arizona State University."/>
+          {% endif %}
+        </div>
+        <div class="col-md" id="social-media">
+          <nav class="nav" aria-label="Social Media">
+            {% if facebook_url %}
+              <a class="nav-link" href="{{ facebook_url }}"><span title="{{ site_name }} Facebook Social Media Icon" class="fab fa-facebook-square"></span></a>
+            {% endif %}
+            {% if twitter_url %}
+              <a class="nav-link" href="{{ twitter_url }}"><span title="{{ site_name }} Twitter Social Media Icon" class="fab fa-twitter-square"></span></a>
+            {% endif %}
+            {% if instagram_ulr %}
+              <a class="nav-link" href="{{ instagram_ulr }}"><span title="{{ site_name }} Instagram Social Media Icon" class="fab fa-instagram-square"></span></a>
+            {% endif %}
+            {% if youtube_url %}
+              <a class="nav-link" href="{{ youtube_url }}"><span title="{{ site_name }} YouTube Social Media Icon" class="fab fa-youtube-square"></span></a>
+            {% endif %}
+            {% if linkedin_url %}
+              <a class="nav-link" href="{{ linkedin_url  }}"><span title="{{ site_name }} LinkedIn Social Media Icon" class="fab fa-linkedin"></span></a>
+            {% endif %}
+          </nav>
+        </div>
+
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% if show_columns %}
+  <div class="wrapper" id="wrapper-footer-columns">
+    <div class="container" id="footer-columns">
+      <div class="row">
+        <div class="col-xl" id="info-column">
+          <h5>{{ unit_name }}</h5>
+          {% if link_url and link_title %}
+            <p class="contact-link"><a href="{{ link_url }}">{{ link_title }}</a></p>
+          {% endif %}
+          {% if cta_url and cta_title %}
+            <p class="contribute-button"><a href="{{ cta_url }}" class="btn btn-small btn-gold">{{ cta_title }}</a></p>
+          {% endif %}
+        </div>
+        {% for column in columns_data %}
+        <div class="col-xl flex-footer">
+          <div class="card card-foldable desktop-disable-xl">
+            <div class="card-header">
+              <h5>
+                <a id="footlink-header-{{ loop.index }}" class="collapsed" data-toggle="collapse" href="#footlink-{{ loop.index }}" role="button" aria-expanded="false" aria-controls="footlink-{{ loop.index }}">
+                  {{ column.title }}
+                  <span class="fas fa-chevron-up"></span>
+                </a>
+              </h5>
+            </div>
+            <div id="footlink-{{ loop.index }}" class="collapse card-body" aria-labelledby="footlink-header-{{ loop.index }}">
+              {{ column.menu_items }}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+<div class="wrapper" id="wrapper-footer-innovation">
+  <div class="container" id="footer-innovation">
+    <div class="row">
+      <div class="col p-xl-0">
+        <div class="d-flex footer-innovation-links">
+          <a class="img-link" href="https://www.asu.edu/rankings">
+            <img src="{{ src_footer_img }}" alt="Number one in the U.S. for innovation. #1 ASU, #2 Stanford, #3 MIT. - U.S. News and World Report, 5 years, 2016-2020">
+          </a>
+          <nav class="nav" aria-label="University Services">
+            <a class="nav-link" href="https://www.asu.edu/map/">Maps and Locations</a>
+            <a class="nav-link" href="https://www.asu.edu/asujobs">Jobs</a>
+            <a class="nav-link" href="https://isearch.asu.edu/">Directory</a>
+            <a class="nav-link" href="https://www.asu.edu/contactasu/">Contact ASU</a>
+            <a class="nav-link" href="https://my.asu.edu/">My ASU</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrapper" id="wrapper-footer-colophon">
+  <div class="container" id="footer-colophon">
+    <div class="row">
+      <div class="col p-xl-0">
+        <div class="footer-legal-links">
+          <nav class="nav colophon" aria-label="University Legal and Compliance">
+            <a class="nav-link" href="https://www.asu.edu/copyright/">Copyright and Trademark</a>
+            <a class="nav-link" href="https://www.asu.edu/accessibility/">Accessibility</a>
+            <a class="nav-link" href="https://www.asu.edu/privacy/">Privacy</a>
+            <a class="nav-link" href="https://www.asu.edu/tou/">Terms of Use</a>
+            <a class="nav-link" href="https://www.asu.edu/emergency/">Emergency</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

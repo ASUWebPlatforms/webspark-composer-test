@@ -1,0 +1,4 @@
+/* Hide original fields: Title and Hero image field */
+article.newsletter > div.white-bg.layout__fixed-width {
+    display: none;
+}

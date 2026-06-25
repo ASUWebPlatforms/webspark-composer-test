@@ -1,0 +1,6 @@
+analytics_saml_updater.admin:
+  title: Analytics SAML Updater
+  description: Configure the Analytics SAML Updater module.
+  route_name: analytics_saml_updater.settings
+  parent: system.admin_config_development
+  weight: 100

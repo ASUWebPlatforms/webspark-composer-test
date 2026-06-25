@@ -1,0 +1,19 @@
+uuid: 9da45198-e55a-4ef6-a2ad-475f07fddb4f
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - eventticker
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+name: 'ASU Athletics Events'
+type: asu_athletics_events
+description: ''
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: true

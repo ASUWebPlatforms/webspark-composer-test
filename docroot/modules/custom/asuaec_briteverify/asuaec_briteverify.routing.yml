@@ -1,0 +1,7 @@
+asuaec_briteverify.settings:
+  path: '/admin/config/asuaec-briteverify'
+  defaults:
+    _form: '\Drupal\asuaec_briteverify\Form\BriteVerifySettingsForm'
+    _title: 'BriteVerify Settings'
+  requirements:
+    _permission: 'administer site configuration'

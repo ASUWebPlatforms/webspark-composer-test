@@ -1,0 +1,27 @@
+{#
+@file
+The template for the user hero.
+
+Available variables:
+- Name: The user's name.
+- Title: The user's title.
+- Email: The user's email address.
+#}
+
+<div class="tw-py-20 bg-gray-2">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center">
+      <div class="flex-grow-1">
+        <h1 class="tw-text-[56px] tw-leading-none tw-mb-0">{{ name }}</h1>
+
+        {% if title %}
+          <h3 class="tw-mt-2 tw-mb-0">{{ title }}</h3>
+        {% endif %}
+
+        {% if email %}
+          <p class="tw-mt-2 tw-mb-0"><a href="mailto:{{ email }}">{{ email }}</a></p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

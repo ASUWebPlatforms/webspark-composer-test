@@ -1,0 +1,6 @@
+#!/bin/bash
+## Description: Run ESLint
+## Usage: eslint
+## Example: ddev eslint [options] [file|directory]
+
+yarn eslint "$@"

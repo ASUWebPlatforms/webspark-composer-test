@@ -1,0 +1,20 @@
+name: customrenovation_economist
+type: theme
+base theme: renovation
+description: "A custom sub-subtheme for Webspark 2, based on the Renovation subtheme"
+package: ASU Watts College
+core_version_requirement: ^8.7.7 || ^9.0 || ^10.0
+
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  stayuptodate: "Stay up-to-date"
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer
+
+libraries:
+  - radix/style
+  - renovation/style
+  - customrenovation_economist/style

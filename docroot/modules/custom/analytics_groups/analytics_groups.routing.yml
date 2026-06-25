@@ -1,0 +1,9 @@
+analytics_groups.add_group:
+  path: '/group/add/analytics-group'
+  defaults:
+    _controller: \Drupal\analytics_groups\Controller\AnalyticsGroupsController::createGroupForm
+    _title: 'Add Analytics Group'
+  requirements:
+    _role: 'administrator'
+  options:
+    _admin_route: true

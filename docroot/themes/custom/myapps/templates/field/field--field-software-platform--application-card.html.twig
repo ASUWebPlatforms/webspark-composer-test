@@ -1,0 +1,10 @@
+{#
+/**
+ * @file
+ * Template for Application Cards 'field_software_platform'.
+ */
+#}
+
+{% for item in items %}
+  <span class="badge text-bg-gray-2">{{ item.content['#plain_text'] }}</span>
+{% endfor %}

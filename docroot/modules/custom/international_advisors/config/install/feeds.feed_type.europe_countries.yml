@@ -1,0 +1,58 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.europe_countries_new
+  module:
+    - taxonomy
+id: europe_countries
+label: 'Europe countries'
+description: ''
+help: ''
+import_period: -1
+fetcher: upload
+fetcher_configuration:
+  allowed_extensions: 'txt csv tsv xml opml'
+  directory: 'private://feeds'
+parser: csv
+parser_configuration:
+  delimiter: ','
+  no_headers: false
+  line_limit: 100
+processor: 'entity:taxonomy_term'
+processor_configuration:
+  langcode: en
+  insert_new: 1
+  update_existing: 2
+  update_non_existent: _keep
+  expire: -1
+  skip_hash_check: false
+  values:
+    vid: europe_countries_new
+  owner_id: 0
+  authorize: false
+  owner_feed_author: false
+custom_sources:
+  europe_country:
+    label: 'Europe country'
+    value: 'Europe country'
+    machine_name: europe_country
+  code:
+    label: Code
+    value: Code
+    machine_name: code
+mappings:
+  -
+    target: name
+    map:
+      value: europe_country
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: description
+    map:
+      value: code
+    settings:
+      language: null
+      format: plain_text

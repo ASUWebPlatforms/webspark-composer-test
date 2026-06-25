@@ -1,0 +1,52 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ *
+ * @ingroup themeable
+ */
+#}
+<div class="sdaOuter row">
+  <div class="sdaContainer col-lg-9">
+    <div class="sdaInner">
+      {% for row in rows %}
+        {% set eventFirst = row.content['#row']._entity.title.value %}
+
+        {% set eventLoc = row.content['#row']._entity.field_location[0].value %}
+
+        {% if row.content['#row']._entity.field_event_date_and_time[0].value|date('g:i a', 'America/Phoenix') is same as( '12:00 am') %}
+          {% set eventTime = 'All day' %}
+        {% else %}
+          {% set eventTime = row.content['#row']._entity.field_event_date_and_time[0].value|date('g:i a', 'America/Phoenix') %}
+        {% endif %}
+        <div class="sdaEvent">
+          <div class="sdaEventInner">
+            <span class="sdaTitle">{{ eventFirst }}</span>
+            <span class="sdaLocation"><span class="fa-solid fa-location-dot"></span> {{ eventLoc ? eventLoc : "TBD" }}</span>
+            <span class="sdaDate"><span class="fa-regular fa-calendar"></span> {{ row.content['#row']._entity.field_event_date_and_time[0].value|date('M j', 'America/Phoenix') }}</span>
+            <span class="sdaTime"><span class="fa-regular fa-clock"></span> {{ eventTime }}</span>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <button id="slickPlaypause"><i class="fa-solid fa-pause"></i></button>
+  </div>
+  <div class="sdaCTA col-lg-3">
+    <div class="sdaCTAInner">
+      <span class="h3"><span class="highlight-gold">Get your tickets today!</span></span>
+      <a class="btn btn-maroon" href="/inferno/tickets">Student Ticketing</a>
+      <span><a class="sdaTicket" href="https://thesundevils.com/calendar">Full schedule</a> <span class="fas fa-chevron-right"></span></span>
+    </div>
+  </div>
+</div>

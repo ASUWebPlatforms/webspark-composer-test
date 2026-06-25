@@ -1,0 +1,68 @@
+.fc-unthemed td.fc-today {
+    background-color: white;
+}
+
+.fc-left {
+    background-color: #000;
+    color: #fff;
+}
+
+.fc-event {
+    background-color: #FFC627 !important;
+    color: #000;
+    border: 1px solid #FFC627 !important;
+}
+
+.fc-head-container th.fc-day-header {
+    border-color: #fff;
+}
+
+.fc-head-container {
+    border-top: #fff !important;
+    border-left: #fff !important;
+    border-right: #fff !important;
+}
+
+.fc-button-group>.fc-button:not(:first-child),
+.fc-button-group>.fc-button:not(:last-child) {
+    color: #191919;
+    width: 4rem;
+    height: 4rem;
+    margin: 0 0.75rem;
+    background-color: #e8e8e8;
+    border: 1px solid #d0d0d0;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    text-shadow: 0 0.25em 0.5em rgb(0 0 0 / 10%);
+    opacity: 1;
+    cursor: pointer;
+    transition: opacity 150ms ease,border 300ms ease-in-out;
+    line-height: 1;
+}
+
+.fc-today .fc-day-number {
+    background: #8C1D40;
+    border-radius: 50%;
+    color: #fff;
+    line-height: 1.125em;
+    padding: 0.2rem 0.375rem;
+}
+
+.fc-content-skeleton, .fc-content-skeleton > table {
+    height: 100%;
+}
+
+.fc-content-skeleton thead {
+    position: relative;
+    top: 100%;
+    transform: translateY(-100%);
+}
+
+.fc-content-skeleton tbody {
+    position: relative;
+    top: -30%;
+}
+
+.fc-ltr .fc-dayGrid-view .fc-day-top .fc-day-number {
+    float: left;
+}

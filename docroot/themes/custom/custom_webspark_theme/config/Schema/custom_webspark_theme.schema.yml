@@ -1,0 +1,5 @@
+# Schema for the configuration files of the Renovation theme.
+
+custom_webspark_theme.settings:
+  type: theme_settings
+  label: 'Custom Webspark Theme settings'

@@ -1,0 +1,9 @@
+udi_custom.configuration_form:
+  path: 'admin/config/system/configuration/udi_custom'
+  defaults:
+    _form: '\Drupal\udi_custom\Form\UDICustomSettingsForm'
+    _title: 'UDI Custom Features Configuration'
+  requirements:
+    _permission: 'administer udi_custom'
+  options:
+    _admin_route: TRUE

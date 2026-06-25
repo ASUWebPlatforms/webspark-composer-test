@@ -1,0 +1,37 @@
+asuaec_json.json.campus.ugrad:
+  path: '/admin/asuaec_json/json/campus/{grad_ugrad}/{interest}'
+  defaults:
+    _controller: '\Drupal\asuaec_json\Controller\JsonController::generateJsonCampusList'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_json.json.get_colleges_by_multi_campuses_and_interest:
+  path: '/admin/asuaec_json/json/get_colleges_by_multi_campuses_and_interest/{campus}/{interest}/{grad_ugrad}'
+  defaults:
+    _controller: '\Drupal\asuaec_json\Controller\JsonController::getCollegesByMulticampusesAndInterest'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_json.json.get_majors_by_multi_campuses_and_college:
+  path: '/admin/asuaec_json/json/get_majors_by_multi_campuses_and_college/{campus}/{college}/{grad_ugrad}'
+  defaults:
+    _controller: '\Drupal\asuaec_json\Controller\JsonController::getMajorsByMulticampusesAndCollege'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_json.json.get_ptype:
+  path: '/admin/asuaec_json/json/get_ptypes/{eventseries_id}'
+  defaults:
+    _controller: '\Drupal\asuaec_json\Controller\JsonController::getPtypes'
+  requirements:
+    _permission: 'access content'
+
+asuaec_json.json.get_interests:
+  path: '/admin/asuaec_json/json/get_interests/{campus}'
+  defaults:
+    _controller: '\Drupal\asuaec_json\Controller\JsonController::getInterests'
+  requirements:
+    _permission: 'access content'

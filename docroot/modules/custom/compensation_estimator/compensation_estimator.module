@@ -1,0 +1,67 @@
+<?php
+
+// use Drupal\Node\Entity\Node;
+// use Drupal\file\Entity\File;
+// function compensation_estimator_preprocess_node(&$variables) {
+//   $node = \Drupal::routeMatch()->getParameter('node');
+//   if ($node instanceof \Drupal\node\NodeInterface) {
+//    // You can get nid and anything else you need from the node object.
+//    $nid = $node->id();
+//    $node_details = Node::load($nid);
+// //    $original_image = $node_details->field_profile_image->entity->getFileUri();
+//     $original_image = $node_details->field_profile_image->getValue();
+//     $image=File::load($node_details->field_profile_image->getValue()[0]['target_id'])->url();
+//     // $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('return_to_work');
+//    print("<pre>");
+// //    print_r($node_details);
+// //    print_r("-------------------\n");
+//    print_r($image);
+// //    print_r($style);
+//    print("</pre>");
+//    exit();
+//    $destination = $style->buildUri($original_image);
+//   if (!file_exists($destination)) {
+//     $style->createDerivative($original_image, $destination);
+//   }
+//   $url = $style->buildUrl($original_image);
+//   }
+// }
+
+/**
+ * Remove duplicate alias, for all content types. 
+ */
+function compensation_estimator_update_8902() {
+    $query = \Drupal::entityQuery('node')
+    ->accessCheck(FALSE);
+    // $query->condition('type', 'article', '=');
+    $nids = $query->execute();
+    $path_alias_storage = \Drupal::entityTypeManager()->getStorage('path_alias');
+  
+    foreach ($nids as $nid) {
+      $actual_alias = \Drupal::service('path.alias_manager')
+        ->getAliasByPath('/node/' . $nid);
+  
+      // Load all path alias for this node.
+      $alias_objects = $path_alias_storage->loadByProperties([
+        'path' => '/node/' . $nid,
+      ]);
+  
+      // Delete all other alias than the actual one.
+      foreach ($alias_objects as $alias_object) {
+        if ($alias_object->get('alias')->value !== $actual_alias) {
+          $alias_object->delete();
+        }
+      }
+      // Load all new path alias for this node.
+      $new_alias_objects = $path_alias_storage->loadByProperties([
+        'path' => '/node/' . $nid,
+      ]);
+      // Delete duplicate aliases.
+      if (count($new_alias_objects) > 1) {
+        array_shift($new_alias_objects);
+        foreach ($new_alias_objects as $alias_object) {
+          $alias_object->delete();
+        }
+      }
+    }
+  }

@@ -1,0 +1,6 @@
+name: ASU AEC Webform options data
+type: module
+description: 'Pull countries and states from Form Manager XML Web service'
+package: ASU
+core_version_requirement: ^9 || ^10 || ^11
+configure: asuaec_webform_optionsdata.settings

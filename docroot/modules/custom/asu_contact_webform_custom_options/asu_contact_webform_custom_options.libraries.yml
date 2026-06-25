@@ -1,0 +1,34 @@
+
+undergardContactFormLib:
+  version: VERSION
+  js:
+    js/undergradContactForm.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery.once
+  css:
+    theme:
+      css/contactForm.css: {}
+
+gardContactFormLib:
+  version: VERSION
+  js:
+    js/gradContactForm.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery.once
+  css:
+    theme:
+      css/contactForm.css: {}
+ 
+
+contactFormConfirmationCss:
+  version: VERSION
+  css:
+    theme:
+      css/contactForm.css: {}
+

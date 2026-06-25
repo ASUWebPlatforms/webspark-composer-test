@@ -1,0 +1,32 @@
+
+{% set imgset = content.field_tab_icon_custom|render %}
+{% set iconimg = file_url(content.field_tab_icon_custom[0]['#media'].field_media_svg_1.entity.uri.value)%}
+{% set imageiconimg = file_url(content.field_tab_icon_custom[0]['#media'].field_media_image.entity.uri.value) %}
+
+{% set iconfa = content.field_icon|render %}
+{% if iconimg is empty %}
+{% set icon = iconfa %}
+{% else %}
+{% set icon = iconimg %}
+{% endif %}
+
+<div class="grid-items pe-3" id="item-{{ paragraph.uuid.value }}">
+    <div class="grid-item d-flex flex-column flex-sm-row"> 
+        <div class="grid-item--icon col col-1 d-flex align-items-center justify-content-center me-2">
+            {% if imgset %}
+                {% if iconimg !='/' %}
+                <img src="{{ iconimg }}"> 
+               {% else %}
+                <img src="{{ imageiconimg }}" class="png-icon"> 
+                {% endif %}
+            {% else %}
+            {{ iconfa }} 
+            {% endif %}
+            
+        </div>
+         <div class="grid-item--body col col-11">
+            <h3 class="grid-item--title">{{ content.field_heading|render|striptags|trim }}</h3>
+            {{ content.field_body|render }}
+         </div>
+    </div>
+</div>

@@ -1,0 +1,224 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.blog_posts.body
+    - field.field.node.blog_posts.feeds_item
+    - field.field.node.blog_posts.field_blog_image
+    - field.field.node.blog_posts.field_blog_svg_image
+    - field.field.node.blog_posts.field_button_text
+    - field.field.node.blog_posts.field_categories
+    - field.field.node.blog_posts.field_featured
+    - field.field.node.blog_posts.field_import_id
+    - field.field.node.blog_posts.field_podcast_videos
+    - field.field.node.blog_posts.field_previous_site_pub_date
+    - field.field.node.blog_posts.field_short_description
+    - field.field.node.blog_posts.field_show_on_blog_home_page
+    - field.field.node.blog_posts.field_top_content
+    - field.field.node.blog_posts.field_type_of_post
+    - field.field.node.blog_posts.layout_builder__layout
+    - node.type.blog_posts
+  content:
+    - 'block_content:text_content:1717ac44-9e7f-453e-9611-5490d01a672c'
+    - 'block_content:text_content:b136f66a-e052-4c8d-94be-ac3bc534fbd3'
+  module:
+    - block_content
+    - datetime
+    - layout_builder
+    - layout_builder_restrictions
+    - options
+    - svg_image
+    - text
+    - user
+    - webspark_module_renovation_layouts
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: onecol_fixed_width_section
+        layout_settings:
+          label: ''
+          additional:
+            classes:
+              style:
+                'bg gray-1-bg': 'bg gray-1-bg'
+              direction: bg-top
+              length: bg-percent-100
+          context_mapping: {  }
+        components:
+          2bdc22f8-69f4-43d4-a1fc-bd6da97aaddc:
+            uuid: 2bdc22f8-69f4-43d4-a1fc-bd6da97aaddc
+            region: first
+            configuration:
+              id: 'block_content:b136f66a-e052-4c8d-94be-ac3bc534fbd3'
+              label: 'Parent blog college bound icon on category pages'
+              provider: block_content
+              label_display: '0'
+              status: true
+              info: ''
+              view_mode: full
+              context_mapping: {  }
+            additional: {  }
+            weight: 0
+        third_party_settings: {  }
+      -
+        layout_id: onecol_full_width_section
+        layout_settings:
+          label: ''
+          additional:
+            classes:
+              style: {  }
+              direction: bg-top
+              length: bg-percent-100
+          context_mapping: {  }
+        components:
+          b53a3a06-a13b-4cc8-8df1-1c55194aa210:
+            uuid: b53a3a06-a13b-4cc8-8df1-1c55194aa210
+            region: first
+            configuration:
+              id: 'block_content:1717ac44-9e7f-453e-9611-5490d01a672c'
+              label: 'Parent blog menu icons'
+              provider: block_content
+              label_display: '0'
+              status: true
+              info: ''
+              view_mode: full
+              context_mapping: {  }
+            additional: {  }
+            weight: 0
+        third_party_settings: {  }
+  layout_builder_restrictions:
+    allowed_block_categories: {  }
+    entity_view_mode_restriction:
+      whitelisted_blocks: {  }
+      blacklisted_blocks: {  }
+      restricted_categories: {  }
+      allowed_layouts: {  }
+id: node.blog_posts.default
+targetEntityType: node
+bundle: blog_posts
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_blog_image:
+    weight: 102
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_blog_svg_image:
+    weight: 112
+    label: above
+    settings:
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_button_text:
+    weight: 107
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_categories:
+    weight: 104
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_featured:
+    weight: 109
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+  field_import_id:
+    weight: 110
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+    region: content
+  field_podcast_videos:
+    weight: 103
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_previous_site_pub_date:
+    weight: 114
+    label: above
+    settings:
+      format_type: medium
+      timezone_override: ''
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_short_description:
+    weight: 111
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_show_on_blog_home_page:
+    weight: 105
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+  field_top_content:
+    weight: 113
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+  field_type_of_post:
+    weight: 106
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  sharethis:
+    weight: 10
+    settings: {  }
+    third_party_settings: {  }
+    region: first
+hidden:
+  feeds_item: true
+  layout_builder__layout: true

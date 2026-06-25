@@ -1,0 +1,13 @@
+{% set data = {
+  'title': node.title.value,
+  'content': 'Data Dictionary Schema',
+  'button': {
+    'url': node|entity_url,
+    'color': 'gold',
+    'text': 'View schema',
+  }
+} %}
+
+<article class="data-dictionary-schema__teaser--minimal">
+  {{ include('@analytics/teaser-minimal.html.twig', data) }}
+</article>

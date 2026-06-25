@@ -1,0 +1,12 @@
+global-styling:
+
+    css:
+        component:
+            css/renovationcustom.style.css: {}
+        theme:
+            css/print.css: { media: print }
+        
+
+slider.js:
+  js:
+    \libraries\glider-js\glider.min.js: {}

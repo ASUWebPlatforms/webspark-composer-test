@@ -1,0 +1,8 @@
+name: Custom ASU User
+description: Contains Site specific Drupal customizations for the asurite users.
+type: module
+core_version_requirement: ^8 || ^9 || ^10
+package: ASU
+dependencies:
+  - cas
+

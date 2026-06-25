@@ -1,0 +1,18 @@
+# Ignore SASS files.
+/.sass-cache
+
+# Ignore OSX index files.
+.DS_Store
+
+# Ignore IDE/app specific files.
+*.codekit
+.idea
+.vscode
+
+# Ignore node modules.
+node_modules
+config.local.js
+
+# Ignore SASS source maps
+*.js.map
+*.css.map

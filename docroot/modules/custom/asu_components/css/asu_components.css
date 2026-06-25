@@ -1,0 +1,106 @@
+.block-inline-blockasu-edu-animated-quote .highlight-gold {
+    background-color: transparent;
+    box-shadow: none;
+    background-size: 200% 200%;
+    transition: background-position 800ms;
+    transition-delay: 200ms;
+    background-image: linear-gradient(to left, transparent 50%, #ffc627 0);
+    background-position: right;
+}
+
+/* .block-inline-blockasu-edu-animated-quote .highlight-gold.delayed {
+    transition-delay: 400ms;
+} */
+
+.block-inline-blockasu-edu-animated-quote .animate-bg-in-scroll {
+    background-position: left;
+}
+
+
+
+
+.my-2 {
+    background-image: url(https://www.asu.edu/sites/default/files/2022-08/AE-pillar-RichaTeaching.jpg);
+
+}
+
+.block-inline-blockasu-edu-anim-content-buttons .animated-content-section .content-section {
+    background-size: cover;
+    height: 600px;
+    width: 400px;
+    min-width: 300px;
+    position: relative;
+    transition: all 1s cubic-bezier(0.19,1,0.19,1);
+    margin: 0 1rem;
+}
+.block-inline-blockasu-edu-anim-content-buttons .animated-content-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.text-white {
+    color: #fff!important;
+}
+.mb-5, .my-5 {
+    margin-bottom: 2.5rem!important;
+}
+.mt-5, .my-5 {
+    margin-top: 2.5rem!important;
+}
+
+.block-inline-blockasu-edu-anim-content-buttons .animated-content-section .content-holder {
+    position: absolute;
+    bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 100%;
+    height: auto;
+}
+
+.pl-4, .px-4 {
+    padding-left: 2rem!important;
+}
+.pr-4, .px-4 {
+    padding-right: 2rem!important;
+}
+.block-inline-blockasu-edu-anim-content-buttons .animated-content-section .content-holder {
+    position: absolute;
+    bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 100%;
+    height: auto;
+}
+
+.pl-4, .px-4 {
+    padding-left: 2rem!important;
+}
+.pr-4, .px-4 {
+    padding-right: 2rem!important;
+}
+
+.block-inline-blockasu-edu-anim-content-buttons .animated-content-section .image-holder:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: linear-gradient(to top,rgba(25,25,25,0.75) 0%,rgba(25,25,25,0) 100%);
+}
+
+.mb-3, .my-3 {
+    margin-bottom: 1.5rem!important;
+}
+.mt-1, .my-1 {
+    margin-top: 0.5rem!important;
+}
+
+@media screen and (min-width: 992px)
+.block-inline-blockasu-edu-anim-content-buttons .animated-content-section .content-section:hover {
+    transform: scale(1.1);
+}

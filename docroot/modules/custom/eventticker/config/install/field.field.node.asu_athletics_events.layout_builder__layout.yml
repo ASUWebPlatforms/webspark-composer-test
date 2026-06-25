@@ -1,0 +1,21 @@
+uuid: 8a2a45e3-59b7-4456-b364-33d304506c70
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.layout_builder__layout
+    - node.type.asu_athletics_events
+  module:
+    - layout_builder
+id: node.asu_athletics_events.layout_builder__layout
+field_name: layout_builder__layout
+entity_type: node
+bundle: asu_athletics_events
+label: Layout
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: layout_section

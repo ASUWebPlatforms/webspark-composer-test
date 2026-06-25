@@ -1,0 +1,35 @@
+customrenovation.xs:
+  label: XS
+  mediaQuery: '(max-width: 575px)'
+  weight: 0
+  multipliers:
+    - 1x
+    - 2x
+customrenovation.sm:
+  label: SM
+  mediaQuery: '(min-width: 576px) and (max-width: 767px)'
+  weight: 1
+  multipliers:
+    - 1x
+    - 2x
+customrenovation.md:
+  label: MD
+  mediaQuery: '(min-width: 768px) and (max-width: 991px)'
+  weight: 1
+  multipliers:
+    - 1x
+    - 2x
+customrenovation.lg:
+  label: LG
+  mediaQuery: '(min-width: 992px) and (max-width: 1199px)'
+  weight: 1
+  multipliers:
+    - 1x
+    - 2x
+customrenovation.xl:
+  label: XL
+  mediaQuery: '(min-width: 1200px)'
+  weight: 1
+  multipliers:
+    - 1x
+    - 2x

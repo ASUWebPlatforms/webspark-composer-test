@@ -1,0 +1,16 @@
+{
+  "name": "asuwatts/customrenovation_sirc",
+  "description": "A custom sub-subtheme for Webspark 2",
+  "type": "drupal-theme",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Travis Butterfield",
+      "email": "tbutterf@asu.edu"
+    }
+  ],
+  "require": {
+    "php": ">=7.3",
+    "drupal/core": "^8.8.0 || ^9.0"
+  }
+}

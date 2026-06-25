@@ -1,0 +1,9 @@
+name: ReCaptcha Ajax Reset
+type: module
+description: Allows a ReCaptcha field remain visible when a form reloads due to a missing required field 
+package: 'Custom Modules'
+core_version_requirement: ^9 || ^10
+version: '1.0.0'
+dependencies:
+  - captcha:captcha
+  - recaptcha:recaptcha

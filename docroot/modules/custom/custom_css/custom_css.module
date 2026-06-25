@@ -1,0 +1,9 @@
+<?php
+ 
+/**
+ * Implements hook_page_attachments().
+ */
+function custom_css_page_attachments(array &$attachments) {
+  
+  $attachments['#attached']['library'][] = 'custom_css/my_custom_css';
+}

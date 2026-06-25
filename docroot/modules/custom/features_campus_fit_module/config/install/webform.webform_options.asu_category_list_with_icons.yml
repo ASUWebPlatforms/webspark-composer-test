@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies: {  }
+id: asu_category_list_with_icons
+label: 'ASU category list with icons'
+category: ASU
+likert: false
+options: |-
+  'Architecture, construction and design-15q': '<i class="fas fa-pencil-ruler"></i> Architecture, construction and design'
+  'Anthropology, sociology and cultural studies-15q': '<i class="fas fa-users"></i> Anthropology, sociology and cultural studies'
+  Business-15q: '<i class="fas fa-briefcase"></i> Business'
+  'Fine arts, performance and film-15q': '<i class="fas fa-theater-masks"></i> Fine arts, performance and film'
+  'Communications and languages-15q': '<i class="fas fa-comments"></i> Communications and languages'
+  'Computer science, software engineering and mathematics-15q': '<i class="fas fa-code"></i> Computer science, software engineering and mathematics'
+  'Criminology and forensics-15q': '<i class="fas fa-search"></i> Criminology and forensics'
+  'Earth, space and flight-15q': '<i class="fas fa-rocket"></i> Earth, space and flight'
+  'Education and teaching-15q': '<i class="fas fa-chalkboard-teacher"></i> Education and teaching'
+  Engineering-15q: '<i class="fas fa-cog"></i> Engineering'
+  Entrepreneurship-15q: '<i class="fas fa-lightbulb"></i> Entrepreneurship'
+  'Health and wellness-15q': '<i class="fas fa-heartbeat"></i> Health and wellness'
+  'History, philosophy and humanities-15q': '<i class="fas fa-landmark"></i> History, philosophy and humanities'
+  Nursing-15q: '<i class="fas fa-stethoscope"></i> Nursing'
+  Journalism-15q: '<i class="fas fa-newspaper"></i> Journalism'
+  'Public service and political science-15q': '<i class="fas fa-balance-scale"></i> Public service and political science'
+  Pre-health-15q: '<i class="fas fa-user-md"></i></i> Pre-health'
+  Pre-law-15q: '<i class="fas fa-gavel"></i> Pre-law'
+  Psychology-15q: '<i class="fas fa-brain"></i> Psychology'
+  'Sports, tourism and recreation-15q': '<i class="fas fa-football-ball"></i> Sports, tourism and recreation'
+  Science-15q: '<i class="fas fa-microscope"></i> Science'
+  Sustainability-15q: '<i class="fas fa-globe-americas"></i> Sustainability'
+  'I''m not sure, exploratory-15q': '<i class="fas fa-question-circle"></i> I''m not sure, exploratory'

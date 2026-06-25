@@ -1,0 +1,11 @@
+name: WPC RFI Forms
+type: module
+description: Add JS and submit function to handle WPC Program Forms 
+package: 'WPC Custom'
+core_version_requirement: ^8.8 || ^9 || ^10
+version: '2.0.0'
+dependencies:
+  - webform:webform
+  - sfweb2lead_webform:sfweb2lead_webform
+  - wpc_rfi_forms:wpc_rfi_forms_programs
+  - wpc_rfi_forms:wpc_rfi_forms_sources

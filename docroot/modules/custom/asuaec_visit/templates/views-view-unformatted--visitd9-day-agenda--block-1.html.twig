@@ -1,0 +1,106 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * Custom variables
+ * - event_series_id[key]
+ * - event_instance_id[key]
+ * - privacy[key]
+ * - publish_date_formatted[key]
+ * - legend_toggle - Array of Legend/toggle if we need it later.
+ * - legend_toggle_string
+
+ * - event_type[key]
+ * - event_display_title[key]
+ * - event_date[key] -- Wed, 05/03/23 03:00 pm
+ * - dateonly[key] -- 2023-05-02
+ * - time_start[key]
+ * - time_end[key]
+ * - timestamp_start[key]
+ * - timestamp_end[key]
+ * - visitor_type[key]
+ *
+ * @see template_preprocess_views_view_unformatted()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% if title %}
+  <h3>{{ title }}</h3>
+{% endif %}
+
+{#{% for row in rows %}#}
+{% for key, value in rows %}
+{#  DUMP<br />#}
+{#  {{ dump(key) }}#}
+{#  <br />#}
+{#  key: {{ key }}<br />#}
+{#  event series id: {{ event_series_id[key] }}<br />#}
+
+  {%
+    set row_classes = [
+      default_row_class ? 'views-row',
+    ]
+  %}
+
+{#  {{ event_series_id }}#}
+
+{#  <div{{ row.attributes.addClass(row_classes) }}>#}
+  <div class="views-row-outer {{ legend_toggle_string[key] }}">
+    <div{{ value.attributes.addClass(row_classes) }}>
+
+        <div class="dots d-flex flex-row"></div>
+
+        {#  When Privacy is comingsoon, then print the message. #}
+        {% if privacy[key] == 'comingsoon' %}
+        {% if publish_date_formatted[key] == '' %}
+          <div class="comingsoon">Coming soon</div>
+        {% else %}
+          <div class="comingsoon">Coming soon - registration opens {{ publish_date_formatted[key] }}</div>
+        {% endif %}
+        {% endif %}
+
+        {#  When Privacy is public, then print radio button. #}
+        {% if privacy[key] == 'public' %}
+{#        <input type="radio" name="event" value="{{ event_series_id[key] }}-{{ event_timestamp[key] }}|{{ event_series_id[key] }}|{{ eventtype }}|{{ event_date }}|{{ time_start }}|{{ time_end }}|{{ timestamp_start }}|{{ timestamp_end }}|{{ visitor_type }}">#}
+{#          <input type="radio" name="event" value="{{ event_series_id[key] }}-{{ timestamp_start[key] }}|{{ event_series_id[key] }}|{{ event_type[key] }}|{{ event_date[key] }}|{{ dateonly[key] }}|{{ time_start[key] }}|{{ time_end[key] }}|{{ timestamp_start[key] }}|{{ timestamp_end[key] }}|{{ visitor_type[key] }}">#}
+          <input type="radio" name="event" value="{{ event_series_id[key] }}">
+
+          <input type="hidden" name="datetime-{{ event_series_id[key] }}" value="{{ datetime[key] }}" />
+          <input type="hidden" name="from-{{ event_series_id[key] }}" value="{{ time_start[key] }}" />
+          <input type="hidden" name="to-{{ event_series_id[key] }}" value="{{ time_end[key] }}" />
+          <input type="hidden" name="eventid-{{ event_series_id[key] }}" value="{{ event_series_id[key] }}-{{ timestamp_for_eventid[key] }}" />
+          <input type="hidden" name="eventseriesid-{{ event_series_id[key] }}" value="{{ event_series_id[key] }}" />
+          <input type="hidden" name="timestamp-{{ event_series_id[key] }}" value="{{ timestamp_start[key] }}" />
+          <input type="hidden" name="timestamp2-{{ event_series_id[key] }}" value="{{ timestamp_end[key] }}" />
+          <input type="hidden" name="vdate-{{ event_series_id[key] }}" value="{{ dateonly[key] }}" />
+          <input type="hidden" name="eventtype-{{ event_series_id[key] }}" value="{{ event_type[key] }}" />
+          <input type="hidden" name="eventinstanceid-{{ event_series_id[key] }}" value="{{ event_instance_id[key] }}" />
+          <input type="hidden" name="eventdisplaytitle-{{ event_series_id[key] }}" value="{{ event_display_title[key] }}" />
+
+        {% endif %}
+
+  {#    {{- row.content -}}#}
+      {{- value.content -}}
+    </div>
+  </div>
+{% endfor %}
+
+{% if rows %}
+  <div class='continue-button'>
+    <button type="submit" class="btn btn-maroon" id="continue" name="continue">Continue</button>
+  </div>
+{% endif %}
+
+

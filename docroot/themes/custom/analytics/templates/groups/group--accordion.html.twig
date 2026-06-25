@@ -1,0 +1,8 @@
+{% set data = {
+  'title': group.label.value,
+  'content': group.field_group_description.value|default('No description provided.'),
+} %}
+
+<article class="group__teaser--accordion">
+  {{ include('@analytics/teaser-accordion.html.twig', data) }}
+</article>

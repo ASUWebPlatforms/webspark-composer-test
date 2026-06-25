@@ -1,0 +1,26 @@
+<?php
+use Drupal\user\RoleInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+
+function delete_cas_users_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+ 
+//   $cas_user_manager = \Drupal::service('cas.user_manager');
+//   $account = $form_state->getFormObject()->getEntity();
+//   $parts = explode("@", $account ->getEmail());
+
+//   $cas_username = $cas_user_manager->getCasUsernameForAccount($account->id());
+
+//   // If a CAS username was found for this user, then populate the CAS username
+//   // form field with its current value. Also remove the password management
+//   // fields if configured to do so.
+//   //if ($cas_username) {
+//     $form['account']['cas_enabled']['#default_value'] = TRUE;
+//   //  $form['account']['cas_username']['#default_value'] = ;
+//  // }
+//     if(!$cas_username){
+//         $form['account']['cas_username']['#default_value'] = $parts[0] ;
+//     }
+//     $cas_user_manager->setCasUsernameForAccount($account, $parts[0] );
+}

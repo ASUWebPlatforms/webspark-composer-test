@@ -1,0 +1,117 @@
+/*------------------------------------------------------------------
+placeholder-name
+--------------------------------------------------------------------*/
+/*------------------------------------------------------------------
+ UDS Text with Image 
+--------------------------------------------------------------------*/
+.uds-image-text-block-container {
+  border: none;
+}
+
+/*------------------------------------------------------------------
+ UDS Quote with Image Background
+--------------------------------------------------------------------*/
+.uds-quote-image-background {
+  min-height: 672px;
+}
+.uds-quote-image-background .uds-blockquote.uds-testimonial {
+  align-items: start;
+}
+.uds-quote-image-background .uds-blockquote.uds-testimonial blockquote {
+  text-align: left;
+}
+.uds-quote-image-background .uds-blockquote.uds-testimonial cite.name {
+  justify-content: flex-start;
+}
+.uds-quote-image-background .uds-blockquote.uds-testimonial cite.description {
+  justify-content: flex-start;
+}
+.uds-quote-image-background .uds-blockquote.uds-testimonial .citation:before {
+  margin: 1rem 0;
+}
+
+/*------------------------------------------------------------------
+1. Basic Card Utilities
+--------------------------------------------------------------------*/
+/*------------------------------------------------------------------
+10. Custom ASUMEX Cards
+--------------------------------------------------------------------*/
+.card .card-header img {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+/*------------------------------------------------------------------
+Partner Search Form
+--------------------------------------------------------------------*/
+#views-exposed-form-content-display-project-project-list {
+  display: flex;
+  margin-bottom: 48px;
+}
+#views-exposed-form-content-display-project-project-list .form-group {
+  width: 50%;
+  padding-right: 24px;
+}
+#views-exposed-form-content-display-project-project-list .form-actions {
+  display: flex;
+}
+#views-exposed-form-content-display-project-project-list .form-actions .btn.btn-primary {
+  background: #191919;
+  font-size: 0.875rem;
+  padding: 0.5rem 2rem;
+  margin: 2.25rem 0.5rem;
+}
+
+/*------------------------------------------------------------------
+ Mailchimp - Custom
+--------------------------------------------------------------------*/
+#mc-embedded-subscribe {
+  margin: 0;
+}
+
+#mc_embed_signup input.form-submit {
+  border: 1px solid transparent;
+  border-radius: 400rem;
+}
+
+#mc_embed_signup h2,
+#sf_embed_signup h2 {
+  font-weight: bold;
+  padding: 0;
+  margin: 15px 0;
+  font-size: 1.4em;
+}
+#mc_embed_signup form,
+#sf_embed_signup form {
+  display: block;
+  position: relative;
+  text-align: left;
+  padding: 10px 0 10px 3%;
+}
+#mc_embed_signup .mc-field-group,
+#sf_embed_signup .mc-field-group {
+  width: 100%;
+}
+#mc_embed_signup input.subscribe,
+#sf_embed_signup input.subscribe {
+  border: 1px solid transparent;
+  border-radius: 400rem;
+  font-size: 1rem;
+}
+#mc_embed_signup .mc-group-name .mc-field-group,
+#sf_embed_signup .mc-group-name .mc-field-group {
+  padding: 0 0 3% 0;
+}
+#mc_embed_signup .mc-group-name .mc-field-group:first-child,
+#sf_embed_signup .mc-group-name .mc-field-group:first-child {
+  padding-right: 1rem;
+}
+#mc_embed_signup .mc-group-name .mc-field-group:last-child,
+#sf_embed_signup .mc-group-name .mc-field-group:last-child {
+  padding-left: 1rem;
+}
+
+/* UNIVERSAL STYLES
+-------------------------------------------------*/
+
+/*# sourceMappingURL=asumex-theme.css.map */

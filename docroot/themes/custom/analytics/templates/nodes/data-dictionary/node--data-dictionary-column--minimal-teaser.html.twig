@@ -1,0 +1,13 @@
+{% set data = {
+  'title': node.title.value,
+  'content': 'Data Dictionary Column',
+  'button': {
+    'url': node|entity_url,
+    'color': 'maroon',
+    'text': 'View column',
+  }
+} %}
+
+<article class="data-dictionary-column__teaser--minimal">
+  {{ include('@analytics/teaser-minimal.html.twig', data) }}
+</article>

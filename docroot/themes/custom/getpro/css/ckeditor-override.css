@@ -1,0 +1,47 @@
+span.btn.btn-maroon,
+span.btn.btn-dark,
+span.btn.btn-gold,
+span.btn.btn-gray {
+  margin-right: 2rem;
+}
+
+span.btn.btn-maroon a:link,
+span.btn.btn-dark a:link {
+  color: #fff;
+  text-decoration: none;
+}
+span.btn.btn-maroon a:visited,
+span.btn.btn-dark a:visited,
+span.btn.btn-maroon a:hover,
+span.btn.btn-dark a:hover,
+span.btn.btn-maroon a:active,
+span.btn.btn-dark a:active {
+  color: #fff;
+}
+
+span.btn.btn-gold a:link,
+span.btn.btn-gray a:link {
+  color: #212529;
+  text-decoration: none;
+}
+span.btn.btn-gold a:visited,
+span.btn.btn-gray a:visited,
+span.btn.btn-gold a:hover,
+span.btn.btn-gray a:hover,
+span.btn.btn-gold a:active,
+span.btn.btn-gray a:active {
+  color: #212529;
+}
+
+ul ul {
+  list-style: none;
+}
+
+ol ol {
+  list-style: none;
+}
+
+.caption > figcaption {
+  display: block;
+  width: 100%;
+}

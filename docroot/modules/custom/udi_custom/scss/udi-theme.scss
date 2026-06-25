@@ -1,0 +1,128 @@
+
+// compile: sass scss/udi-theme.scss css/udi-theme.css
+// sass --watch scss:css
+
+@import 'components/nodes';
+@import 'components/blocks';
+@import 'components/cards';
+@import 'components/views';
+@import 'components/forms';
+@import 'components/responsive';
+
+/* UNIVERSAL STYLES
+-------------------------------------------------*/
+
+main {
+    margin-bottom: -2.5rem !important; /* overrides the theme padding on the bottom of the main section */
+}
+
+.profile-img {
+    object-fit: cover;
+}
+
+.fa-ul {
+    li {
+        p {
+            padding-left: 1rem;
+        }
+    }
+}
+
+/* ----- SVG ----- */
+
+.st0{
+    fill:#191919
+}
+.st1{
+    font-family: Arial, Helvetica, sans-serif;
+}
+.st2{
+    font-size:20px
+}
+.st3{
+    font-family: Arial, Helvetica, sans-serif;
+}
+.st4{
+    font-size:14px
+}
+.st5{
+    fill:#747474
+}
+.st6{
+    font-size:18px
+}
+
+
+.st00{
+    clip-path:url(#SVGID_00000137120249519303787930000018211844184397564349_);
+}
+.st10{
+    fill:#E8E8E8;
+}
+.st20{
+    fill:#00A3E0;
+}
+.st30{
+    fill:#191919;
+}
+.st40{
+    font-family: 'Arial-BoldMT',Arial, Helvetica, sans-serif;
+}
+.st50{
+    font-size: 2.5rem;
+}
+.st60{
+    font-size: 9.375rem;
+}
+.st70{
+    letter-spacing:-5;
+}
+
+.svgimpact {
+    transform: matrix(1, 0, 0, 1, 331, 351);
+}
+.svgcountry {
+    transform: matrix(1, 0, 0, 1, 952, 351);
+}
+
+@media screen and (max-width: 576px) {
+    .svgimpact {
+        transform: matrix(1, 0, 0, 1, 374, 351);
+    }
+    .svgcountry {
+        transform: matrix(1, 0, 0, 1, 984, 351);
+    }
+    .st50{
+        font-size: 3em;
+
+    }
+    .st60{
+        font-size: 16em;
+    }
+}
+
+.cls-1, .cls-2 {
+    fill: #191919;
+    font-family: Arial-BoldMT, Arial;
+    font-weight: 700;
+  }
+
+  .cls-1 {
+    font-size: 40px;
+    letter-spacing: -0.035em;
+  }
+
+  .cls-2 {
+    font-size: 16px;
+  }
+
+  .cls-3 {
+    font-family: ArialMT, Arial;
+    font-weight: 400;
+  }
+
+  .cls-4 {
+    fill: none;
+    stroke: #00a3e0;
+    stroke-width: 2px;
+  }

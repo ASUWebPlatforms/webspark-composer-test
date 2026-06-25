@@ -1,0 +1,23 @@
+{{ attach_library('leadership/animatedhero') }}
+{{ attach_library('leadership/aos') }}
+
+<div class="uds-video-hero-scrollable">
+  <video autoplay="true" muted="true" autobuffer="" preload="auto" playsinline class="fixed-background">
+  <source src="/themes/custom/leadership/assets/video/scrollback.mp4">
+</video>
+  </video>
+  <!--<img class="scroll-hero" src="{{ hero_background }}" alt="{{ hero_alt }}" />-->
+  <div class="hero-scrollable--wrapper">
+    <div class="hero-scrollable--content scroll-container">
+      <div id="trigger-body" class="container hero-scrollable--heading">
+        <h1 class="text-white">{{ heading }}</h1>
+        <span class="scroll-icon">
+          <span class="scroll-icon__dot"></span>
+        </span>
+      </div>
+      <div class="hero-scrollable--body container">
+        {{ hero_body }}
+      </div>
+    </div>
+  </div>
+</div>

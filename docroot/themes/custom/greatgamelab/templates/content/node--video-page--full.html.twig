@@ -1,0 +1,49 @@
+{#
+/**
+ * @file
+ * Custom Template for a Video Page Node component.
+ */
+#}
+
+{%
+  set classes = [
+  'node',
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+  'spacing-top-96',
+  'spacing-bottom-96',
+]
+%}
+<div class="layout__fixed-width">
+    <div class="max-size-container center-container bg-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <article {{ attributes.addClass(classes) }} >
+                    {{ title_prefix }}
+                    {{ title_suffix }}
+                    {% block content %}
+                        <div class="ggl-article-title mx-auto">
+                        <h1>A Set Piece with {{ node.label }}</h2>
+                        <p class="lead"><strong>{{ content.field_protagonist_title }}</strong></p>
+                        </div>
+                        <div class="ggl-article-image mt-5 mb-5">
+                            {{ content.field_set_piece_video }}
+                        </div>
+                        <div class="ggl-article-body set-piece-body mx-auto">
+                            <p>{{ content.field_set_piece_date }}</p>
+                            <div class="ggl-article-body__content">
+                                {{ content.body }}
+                            </div>
+                            {{ content.field_quote|render }}
+                            <p><a href="/set-pieces">Back to set pieces</a></p>
+                        </div>
+                    {% endblock %}
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

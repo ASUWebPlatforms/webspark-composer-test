@@ -1,0 +1,69 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a view of cards.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ *   - img_url: A custom variable created from the node in preprocess function, see card_view_format_studlife.theme.inc
+ *   - img_alt: A custom variable created from the node in preprocess function, see card_view_format_studlife.theme.inc
+ *   - read_more: A custom variable created from the node in preprocess function, see card_view_format_studlife.theme.inc
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_card_view_format_studlife()
+ *
+ * @ingroup themeable
+ */
+#}
+
+
+<div>
+  {% if title %}
+    <h3>{{ title }}</h3>
+  {% endif %}
+  <div class="uds-card-arrangement default">
+    {% if options.columns == 0 %}
+      {% set columns = 'two-columns' %}
+    {% elseif options.columns == 2 %}
+      {% set columns = 'four-columns' %}
+    {% else %}
+      {% set columns = 'three-columns' %}
+    {% endif %}
+    {%
+      set container_classes = [
+        'uds-card-arrangement-card-container',
+        'auto-arrangement',
+        columns,
+      ]
+      %}
+    <div {{ attributes.addClass(container_classes) }}>
+      {% for row in rows %}
+        <div class="card-wrapper">
+          <div class="card cards-components card-story" data-testid="card-container">
+            <img class="card-img-top" src={{ row.img_url }} alt={{ row.img_alt }} data-testid="card-image">
+            <div class="card-header" data-testid="card-title">
+              <h3 class="card-title">
+                {{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ title }}'] }}
+              </h3>
+            </div>
+            <div class="card-body" data-testid="card-body">
+              {{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_teaser }}'] }}
+              <br>
+              {{ row.created }} {{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ field_choose_the_tags }}'] }} {{ row.content['#view'].style_plugin.render_tokens[ loop.index0 ]['{{ node_read_time }}'] }}
+            </div>
+            <div class="card-buttons">
+              <div class="card-button" data-testid="card-button">
+                <a class="btn btn-gold" href={{row.read_more}} target="">Read More</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

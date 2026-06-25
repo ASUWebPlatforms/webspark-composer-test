@@ -1,0 +1,17 @@
+{% set divider = '' %}
+{% if node.field_group.entity.label.value %}
+  {% set divider = ' | ' ~ node.field_group.entity.label.value %}
+{% endif %}
+{% set data = {
+  'title': node.title.value,
+  'content': 'Group Page' ~ divider,
+  'button': {
+    'url': node|entity_url,
+    'color': 'maroon',
+    'text': 'View page',
+  }
+} %}
+
+<article class="group-page__teaser--minimal">
+  {{ include('@analytics/teaser-minimal.html.twig', data) }}
+</article>

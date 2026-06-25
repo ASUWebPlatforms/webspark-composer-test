@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function chs_ws2_public_preprocess_page(&$variables)  {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  switch ($route_name) {
+    case 'system.404':
+      // Page Not Found.
+      _chs_ws2_public_preprocess_page_404($variables);
+      break;
+  }
+}
+
+/**
+ * Private function to preprocess the 404 page.
+ */
+function _chs_ws2_public_preprocess_page_404(&$variables) {
+
+  // Remove the default behaviour.
+  unset($variables['page']['content']['system_main']);
+  // Create a wrapper, so we can add classes here.
+  $wrapper = [
+    '#type' => 'container',
+    '#attributes' => [
+      'class' => ['container'],
+    ],
+  ];
+  // Title for the 404 page.
+  $wrapper['title'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'h1',
+    '#value' => t('Page Not Found'),
+  ];
+
+  // Get the 404 block.
+  $bid = 1749; //hardcoded, sorry folks
+  $block = \Drupal\block_content\Entity\BlockContent::load($bid);
+  $render = \Drupal::entityTypeManager()->
+  getViewBuilder('block_content')->view($block);
+
+  $wrapper['404'] = $render;
+
+
+  // Get the links.
+  $config = \Drupal::config('webspark_blocks.settings');
+  $links = $config->get('webspark_utility_links');
+  $wrapper['links'] = [
+    '#theme' => 'webspark_blocks__links',
+    '#title' => t('Here are some links you may find helpful'),
+    '#links' => $links,
+  ];
+
+  $variables['page']['content']['page_404_content'] = $wrapper;
+}

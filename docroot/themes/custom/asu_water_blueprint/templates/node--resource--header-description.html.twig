@@ -1,0 +1,55 @@
+{#
+/**
+ * @file
+ * Template for a Node component.
+ */
+#}
+{%
+  set classes = [
+  'resource',
+  'gray-1-bg p-4 mb-4',
+]
+%}
+{% set related_topics %}
+  {% for topic in content.field_topics|children %}
+    {{ topic }}{{ loop.last ? '' : ', ' }}
+  {% endfor %}
+{% endset %}
+
+{% set resource_link %}
+  <a href="{{ content.field_link.0['#url'] }}">{{ content.field_link.0['#title'] }}{{content.field_link.0['#url']|render starts with 'http' ? ' <span class="fa-solid fa-arrow-up-right-from-square"></span>'}}</a>
+{% endset %}
+
+<div class="uds-hero-md">
+  <div class="hero-overlay"></div>
+
+  <img class="hero" src="{{ file_url(content.field_media[0]['#media'].field_media_image.entity.uri.value) }}" alt="{{ content.field_media[0]['#media'].field_media_image.alt }}" loading="lazy" decoding="async" fetchpriority="high"/>
+
+
+  <header>
+    <p class="hero-subtitle">
+      <span class="highlight-black">
+        {{ content.field_resource_type }}
+      </span>
+    </p>
+    {% include '@renovation/headings/heading-highlighted.twig' with {
+        html_tag: 'h1',
+        heading: node.title.0.value,
+        highlight: 'default',
+      } %}
+  </header>
+
+  {% if size != 'sm' %}
+    <div class="content text-white fw-normal">
+      {{ content.body }}
+      {% if content.field_topics.0 %}
+        <div class="resource--topics mb-2"><strong>Topics in this resouce:</strong> {{ related_topics }}</div>
+      {% endif %}
+   </div>
+  {% endif %}
+
+
+  <a href="{{ content.field_link.0['#url'] }}" class="btn btn-default btn-maroon btn" target="" data-ga-event="link" data-ga-action="click" data-ga-name="onclick" data-ga-type="internal link" data-ga-section="Resource type" data-ga-component="Resource title" data-ga-region="main content" data-ga-text="Resource link">
+      {{ content.field_link.0['#title'] }}{{content.field_link.0['#url']|render starts with 'http' ? ' <span class="fa-solid fa-arrow-up-right-from-square"></span>'}}
+    </a>
+</div>

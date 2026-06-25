@@ -1,0 +1,182 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\Utility\WebformFormHelper;
+use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\webform\WebformSubmissionInterface;
+use Drupal\webform\Entity\Webform;
+use Drupal\webform\WebformSubmissionForm;
+use Drupal\webform\Entity\WebformSubmission;
+use Drupal\Core\Mail\MailFormatHelper;
+use Drupal\Core\Mail\MailManagerInterface;
+use Drupal\Component\Utility\SafeMarkup;
+use Drupal\Component\Utility\Html;
+
+function asu_quiz_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+	
+    /** code to attach libraries to quiz form and quiz confirmation page */
+    if(isset($form_id)) {
+        if (($form_id != "node_page_layout_builder_form") && ($form_id != "views_exposed_form")) {
+            /*$libraries_config = \Drupal::config('asu_quiz.libraries_admin_settings');
+            $libraries_count_value = $libraries_config->get('libraries_field_count');
+            for ($i = 1; $i <= $libraries_count_value; $i++) {
+                $all_libraries_data[$i] = $libraries_config->get("libraries_field_$i");
+                //  ksm($all_libraries_data[$i]);
+                if (!empty($all_libraries_data[$i])) {
+                    $form_lids[$i] = explode(':', $all_libraries_data[$i]);
+                    $fid_value = $form_lids[$i];
+                    $lib_names[$form_lids[$i][0]] = explode(',', $form_lids[$i][1]);
+                } else {
+                    $lib_names = '0';
+                }
+
+            }
+			//ksm($lib_names);
+			//ksm($form_id);
+            foreach ($lib_names as $lib_key => $lib_location) {
+				
+                if (sizeof($lib_location) > 1) {
+                    for ($j = 0; $j <= sizeof($lib_location); $j++) {
+                        if ($form_id == $lib_key) {
+                            $form['#attached']['library'][] = $lib_location[$j];
+                        }
+                    }
+                } else {
+                    if ($form_id == $lib_key) {
+                        $form['#attached']['library'][] = $lib_location;
+                    }
+                }
+                
+            }*/
+			if($form_id == "webform_submission_quiz_node_2068_add_form"){
+				$form['#attached']['library'][] = 'asu_quiz/quizStyle';
+				$form['#attached']['library'][] = 'asu_quiz/Quizconfirmationjs';
+			}
+			if($form_id == "webform_submission_quiz_rfi_form_node_2071_add_form"){
+				$form['#attached']['library'][] = 'asu_quiz/quizConfirmationStyle';
+				$form['#attached']['library'][] = 'asu_quiz/Quizconfirmationjs';
+			}
+           //ksm($form['#attached']['library']);
+        }
+    }
+     $personaconfig = \Drupal::config('asu_quiz.admin_settings');
+     $quiz_form_id = $personaconfig->get('persona_webform_id');
+	//ksm($quiz_form_id);
+	// ksm($form_id);
+     if ($form_id == "webform_submission_quiz_node_".$quiz_form_id."_add_form") {
+         if ($form_id != "node_page_layout_builder_form") {
+			 $email_from_url = \Drupal::request()->query->get('email');
+             $url_email_add = isset($email_from_url) ? $email_from_url : '';
+             if (!empty($url_email_add)) {
+                 $fname = \Drupal::request()->query->get('fname');
+                 $lname = \Drupal::request()->query->get('lname');
+                 $email = \Drupal::request()->query->get('email');
+                 $stype = \Drupal::request()->query->get('stype');
+                 $zipcode = \Drupal::request()->query->get('zipcode');
+                 $country = \Drupal::request()->query->get('country');
+                 $sterm = \Drupal::request()->query->get('sterm');
+                 $url_fname = isset($fname) ? $fname : '';
+                 $url_lname = isset($lname) ? $lname : '';
+                 $url_email = isset($email) ? $email : '';
+                 $url_stype = isset($stype) ? $stype : '';
+                 $url_zipcode = isset($zipcode) ? $zipcode : '';
+                 $url_country = isset($country) ? $country : '';
+                 $url_sterm = isset($sterm) ? $sterm : '';
+                 $url_variables = array('fname' => $url_fname, 'lname' => $url_lname, 'email' => $url_email, 'stype' => $url_stype, 'sterm' => $url_sterm, 'zipcode' => $url_zipcode, 'country' => $url_country);
+                 $_SESSION['quiz_email_variables'] = $url_variables;
+                // \Drupal::logger('vars')->notice('<pre><code>' . print_r($_SESSION['quiz_email_variables'], TRUE) . '</code></pre>');
+             }
+         }
+		// ksm($_SESSION['quiz_email_variables'] );
+     }
+    // ksm($_SESSION['quiz_email_variables'] );
+ }
+
+function asu_quiz_webform_submission_presave(WebformSubmissionInterface $submission) {
+	/*$webform_id = $submission->getWebform()->id();
+	//If student has already submitted RFI,get submission data into quiz webform hidden fields and save it into session variables
+	//ksm($submission);
+	//ksm($webform_id);
+	if($webform_id == "quiz"){
+		$submission_data = $submission->getData();
+		$sid = $submission->id();
+		$rfi_sid = isset($submission_data['rfi_sid'])?$submission_data['rfi_sid']:'';
+		//ksm($rfi_sid);
+		$rfi_nid = "rfi";
+		
+		if(!empty($rfi_nid) && !empty($rfi_sid)){
+			$query = \Drupal::entityQuery('webform_submission')
+            ->condition('webform_id', 'rfi')
+            ->condition('sid', $rfi_sid)
+            ->accessCheck(FALSE);
+			$result = $query->execute();
+			$rfi_data = WebformSubmission::loadMultiple($result);
+			//ksm($rfi_data);
+			if(!empty($rfi_data)){
+				//ksm($rfi_data);
+				$rfi_submission_data = $rfi_data[$rfi_sid]->getData();
+				//ksm($rfi_submission_data);
+				$submission_data['first_name'] = isset($rfi_submission_data['first_name'])?$rfi_submission_data['first_name']:'';
+				$submission_data['last_name'] = isset($rfi_submission_data['last_name'])?$rfi_submission_data['last_name']:'';
+				$submission_data['email'] = isset($rfi_submission_data['email_address'])?$rfi_submission_data['email_address']:'';
+				$submission_data['zipcode'] = isset($rfi_submission_data['postal_code'])?$rfi_submission_data['postal_code']:'';
+				$submission_data['student_type'] = isset($rfi_submission_data['student_type_options_default'])?$rfi_submission_data['student_type_options_default']:'';
+				$submission_data['start_term'] = isset($rfi_submission_data['entryterm'])?$rfi_submission_data['entryterm']:'';
+				$submission_data['country'] = isset($rfi_submission_data['country'])?$rfi_submission_data['country']:'';
+				$quiz_rfi_data = array('fname' => $submission_data['first_name'], 'lname' => $submission_data['last_name'], 'email' => $submission_data['email'], 'stype' => $submission_data['student_type'], 'sterm' => $submission_data['start_term'], 'zipcode' => $submission_data['zipcode'], 'country' => $submission_data['country']);
+				$_SESSION["quiz_rfi_data"] = $quiz_rfi_data;
+			}
+			//ksm($_SESSION["quiz_rfi_data"]);
+			//ksm($submission_data);
+		}
+	
+	
+		//If student is coming to the form via email with url parameters then save the them in the form and in session variables
+		if(empty($rfi_sid)){
+			if(isset($_SESSION["quiz_email_variables"])){
+				if(!empty($_SESSION["quiz_email_variables"])){
+					$data_from_email = $_SESSION['quiz_email_variables'];
+					$efirst_name = isset($data_from_email['fname'])?base64_decode($data_from_email['fname']):'';
+					$elast_name = isset($data_from_email['lname'])?base64_decode($data_from_email['lname']):'';
+					$eemail_address = isset($data_from_email['email'])?base64_decode($data_from_email['email']):'';
+					$ecountry = isset($data_from_email['country'])?base64_decode($data_from_email['country']):'';
+					$estudent_type = isset($data_from_email['stype'])?base64_decode($data_from_email['stype']):'';
+					$ezip_code = isset($data_from_email['zipcode'])?base64_decode($data_from_email['zipcode']):'';
+					$estart_term = isset($data_from_email['sterm'])?base64_decode($data_from_email['sterm']):'';
+					$submission_data['first_name'] = $efirst_name;
+					$submission_data['last_name'] = $elast_name;
+					$submission_data['email'] = $eemail_address;
+					$submission_data['zipcode'] = $ezip_code;
+					$submission_data['student_type'] = $estudent_type;
+					$submission_data['start_term'] = $estart_term;
+					$submission_data['country'] = $ecountry;
+				}
+				//	unset($_SESSION["quiz_email_variables"]);
+			}
+		}
+		
+		
+		
+	}*/
+	
+}
+
+/**
+ * Implements hook_mail() to QUIZ RFI confirmation email.
+ */
+function asu_quiz_mail($key, &$message, $params) {
+    $options = array(
+        'langcode' => $message['langcode'],
+    );
+    switch ($key) {
+        case 'send_quiz_email':
+            //$message['from'] = \Drupal::config('system.site')->get('mail');
+			$message['from'] = "ASURecruitment@asu.edu";
+            $message['subject'] = t('@subject', ['@subject' => $params['subject']], $options);
+            $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed; delsp=yes'; // Needed this to display images.
+            $message['body'][] = $params['message'];
+			$message['reply-to'] = "ASURecruitment@asu.edu";
+            break;
+    }
+}

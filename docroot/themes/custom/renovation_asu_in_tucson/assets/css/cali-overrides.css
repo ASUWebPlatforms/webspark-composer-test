@@ -1,0 +1,24 @@
+/* .block-inline-blockasu-edu-image-carousel-buttons .asu-cms-image-carousel .image-carousel-cta .asucms-image img {
+  min-height: 700px;
+}
+
+.block-inline-blockasu-edu-image-carousel-buttons .asu-cms-image-carousel .glide__slides {
+  width: auto !important;
+} */
+
+div[class^=uds-hero] {
+  margin-bottom: 0  !important;
+}
+.pb-5 {
+ padding-bottom: 0 !important;
+}
+
+.block-inline-blockasu-edu-stories-of-excellence .stories-of-excellence .image-holder img {
+  max-height: 125%;
+}
+
+@media (max-width: 992px) {
+  .block-inline-blockasu-edu-stories-of-excellence .stories-of-excellence .excellence-card{
+    height: 500px !important;
+  }
+}

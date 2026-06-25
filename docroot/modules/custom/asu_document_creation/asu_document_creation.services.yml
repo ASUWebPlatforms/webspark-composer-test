@@ -1,0 +1,11 @@
+services:
+  asu_document_creation.latex_document_creation:
+    class: Drupal\asu_document_creation\LatexDocumentCreation
+
+  asu_document_creation.word_document_creation:
+    class: Drupal\asu_document_creation\WordDocumentCreation
+    arguments: ['@current_user']
+
+  asu_document_creation.document_save_service:
+    class: Drupal\asu_document_creation\DocumentSaveService
+    arguments: ['@asu_document_creation.latex_document_creation', '@asu_document_creation.word_document_creation']

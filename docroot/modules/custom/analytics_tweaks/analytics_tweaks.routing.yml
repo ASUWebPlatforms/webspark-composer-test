@@ -1,0 +1,7 @@
+analytics_tweaks.settings:
+  path: '/admin/config/analytics-tweaks/settings'
+  defaults:
+    _form: '\Drupal\analytics_tweaks\Form\AnalyticsTweaksSettingsForm'
+    _title: 'Analytics Tweaks settings'
+  requirements:
+    _permission: 'administer site configuration'

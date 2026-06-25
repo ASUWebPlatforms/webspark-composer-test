@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -ev
+
+if [ ! -z $CHANGE_TARGET ]; then
+  export COMMIT=$CHANGE_TARGET
+else
+  export COMMIT=$GIT_COMMIT
+fi
+
+if [ "$(git diff --name-only $COMMIT)" = "README.md" ]; then
+    echo "Only docs were updated, stopping build process."
+    exit 0
+fi
+
+set +ev

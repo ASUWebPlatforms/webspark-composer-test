@@ -1,0 +1,55 @@
+{%
+  set classes = [
+  dom_id ? 'js-view-dom-id-' ~ dom_id,
+]
+%}
+{% set bg = settings['additional']['classes']['style'] %}
+{% set bgcolor = bg|length > 0 ? bg|first is same as 'bg morse-code-white' ? 'bg-white' : bg|first : 'bg-white' %}
+{% set more_classes = [ 'gray-1-bg', 'spacing-top-96', 'spacing-bottom-96' ] %}
+{% set classes = classes|merge(more_classes) %}
+
+<div{{ attributes.addClass(classes) }}>
+  <div class="container">
+    <div class="row">
+
+      {% if exposed %}
+        <aside class="col-12 col-lg-3 mb-4">
+          {{ exposed }}
+        </aside>
+      {% endif %}
+
+      <div class="col-12 col-lg-9">
+        {{ title_prefix }}
+        {{ title }}
+        {{ title_suffix }}
+
+        {% if header %}
+          <header>
+            {{ header }}
+          </header>
+        {% endif %}
+
+        {{ attachment_before }}
+
+        {% if rows -%}
+          {{ rows }}
+        {% elseif empty -%}
+          {{ empty }}
+        {% endif %}
+
+        {{ pager }}
+        {{ attachment_after }}
+        {{ more }}
+
+        {% if footer %}
+          <footer>
+            {{ footer }}
+          </footer>
+        {% endif %}
+
+        {{ feed_icons }}
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+name: 'New data for ASU Tuition'
+type: module
+core_version_requirement: '^8.9 || ^9 || ^10'
+dependencies:
+  - asu_tuition
+  - autotitle
+  - feeds
+  - field
+  - layout_builder
+  - layout_discovery
+  - menu_ui
+  - node
+  - path
+  - text
+  - user

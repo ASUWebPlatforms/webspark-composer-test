@@ -1,0 +1,8 @@
+global-styles:
+  css:
+    component:
+      css/styles.css: {}
+
+fontawesome-kit:
+  js:
+    https://kit.fontawesome.com/93e98468c5.js: { type: external } 

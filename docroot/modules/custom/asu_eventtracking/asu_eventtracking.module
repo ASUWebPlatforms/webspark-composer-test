@@ -1,0 +1,208 @@
+<?php
+
+use Drupal\Core\Link;
+use Drupal\Component\Utility\Html;
+
+/**
+ * Invokes hook_preprocess_page().
+ *
+ * @param $vars
+ *
+ * @return void
+ * NOTE: Leaving off the return type because it may cause an error.
+ */
+function asu_eventtracking_preprocess_page(&$variables)
+{
+  // Add a logged-in user's name and ID to JS for GA tracking
+  $user = Drupal::currentUser();
+  $user_data = [
+    'software_applications' => [
+      'username' => $user->getAccountName(),
+      'userid' => $user->id(),
+    ],
+  ];
+
+  $variables['#attached']['library'][] = 'asu_eventtracking/asu-event-tracking';
+  $variables['#attached']['drupalSettings']['myapps']['asu-event-tracking'] = $user_data;
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ *
+ * @param $theme_registry
+ *
+ * @return void
+ * NOTE: Leaving off the return type because it may cause an error.
+ */
+function asu_eventtracking_theme_registry_alter(&$theme_registry)
+{
+  if (isset($theme_registry['link_formatter_link_default']['function'])) {
+    $theme_registry['link_formatter_link_default']['function'] = 'asu_eventtracking_link_formatter_link_default';
+  }
+
+  if (isset($theme_registry['field']['preprocess functions'])) {
+    $theme_registry['field']['preprocess functions'][] = '_asu_eventtracking_preprocess_field';
+  }
+}
+
+/**
+ *
+ * Helper function for preprocessing field theming
+ *
+ * @param $variables
+ *
+ * @return void
+ * NOTE: Leaving off the return type because it may cause an error.
+ */
+function _asu_eventtracking_preprocess_field(&$variables)
+{
+  $link = $variables['element'];
+  $object = $link['#object'];
+  $link_fields = _asu_eventtracking_fields_list();
+
+  foreach ($link_fields as $field_key => $field_data) {
+    $field_trim = str_replace('field_field_', 'field_', $field_data['field_machine']);
+
+    if (($link['#field_name'] === $field_trim) && (count($variables['items']) == 1)) {
+      // Build data for link
+      $data = _asu_eventtracking_build_data(
+        $object->title,
+        $field_data['link_text'],
+        $link['#field_name'],
+        $field_key,
+        $object->nid
+      );
+
+      // Insert $data into $variables
+      $variables['items'][0]['#element']['attributes'] = $data['tag_attributes'];
+
+      // Alter link text for view
+      $title = (isset($variables['items']['0']['#display']['views_view'])) ? $data['title']
+        : $variables['items'][0]['#element']['title'];
+      $variables['items'][0]['#element']['title'] = $title;
+
+      // If Manufacturer Download add external link icon HTML
+      if ($field_key == "md") {
+        $variables['items'][0]['#element']['title'] = $title . '<i class="fa fa-external-link"></i>';
+        $variables['items'][0]['#element']['html'] = true;
+      }
+    }
+  }
+}
+
+/**
+ * Overrides theme_link_formatter_link_default (link.module).
+ *
+ * @param $vars
+ *
+ * @return array|string|string[]|void|null
+ */
+function asu_eventtracking_link_formatter_link_default($vars)
+{
+  $link_options = $vars['element'];
+  unset($link_options['title']);
+  unset($link_options['url']);
+
+  if (isset($link_options['attributes']['class'])) {
+    $link_options['attributes']['class'] = [$link_options['attributes']['class']];
+  }
+
+  // Additional Processing
+  $field_names = _asu_eventtracking_fields_list();
+  $list = [];
+  foreach ($field_names as $k => $v) {
+    $list[] = $v['field_machine'];
+  }
+
+  // Display a normal link if both title and URL are available.
+  if ((!empty($vars['element']['title']) && !empty($vars['element']['url'])) || (!empty($vars['element']['url']))) {
+    // $link = l($vars['element']['title'], $vars['element']['url'], $link_options); // Removed from Drupal 8
+    // TODO: Verify this generated link is correct. See https://www.drupal.org/node/2346779
+    $link = Link::fromTextAndUrl($vars['element']['title'], $vars['element']['url'])->toString();
+    if (in_array('field_' . $vars['field']['field_name'], $list, true)) {
+      // Decode only onClick attribute
+      preg_match('/onClick="(.+?)"/s', $link, $matches);
+
+      if (isset($matches[1])) {
+        $onClick_text = str_replace('&#039;', "'", $matches[1]);
+        $link = preg_replace('|^(.+?) onClick="(.+?)" (.+?)$|s', "$1 onClick=\"$onClick_text\" $3", $link);
+      }
+    }
+
+    return $link;
+  } // If only a title, display the title.
+  elseif (!empty($vars['element']['title'])) {
+    return Html::escape($vars['element']['title']);
+  }
+}
+
+/**
+ * Helper function - generate list of fields that need GA tracking.
+ *
+ * @return array[]
+ */
+function _asu_eventtracking_fields_list(): array
+{
+  return [
+    'ra' => [
+      'field_machine' => 'field_field_run_app',
+      'link_text' => 'Run App',
+    ],
+    'da' => [
+      'field_machine' => 'field_field_download_app',
+      'link_text' => 'Download',
+    ],
+    'md' => [
+      'field_machine' => 'field_field_manufacturer_download',
+      'link_text' => 'Download',
+    ],
+    'sn' => [
+      'field_machine' => 'field_field_service_now',
+      'link_text' => 'Request Software',
+    ],
+  ];
+}
+
+/**
+ * Update link HTML with attributes for Google Analytics, new CSS classes, etc.
+ *
+ * @param $title
+ * @param $link_text
+ * @param $field_name
+ * @param $field_key
+ * @param $nid
+ *
+ * @return array
+ */
+function _asu_eventtracking_build_data($title, $link_text, $field_name, $field_key, $nid): array
+{
+  $user = Drupal::currentUser();
+
+  // Sanitize node $title - Strip out all non-alphanumeric characters and whitespace
+  $machine_title = str_replace(' ', '_', html_entity_decode($title, ENT_QUOTES));
+  $machine_title = preg_replace("/[^a-zA-Z0-9_]+/", "", $machine_title);
+
+  // Build link attributes array
+  $event_action = str_replace('field_', '', $field_name);
+  $onclick_text = "myApps('linkTracker.send', {
+    hitType: 'event',
+    eventCategory: 'myApps_links',
+    eventAction: '$event_action',
+    eventLabel: '" . $machine_title . "',
+    eventValue: " . $user->id() . ",
+    transport: 'beacon',
+    hitCallback: createFunctionWithTimeout(function() {
+      // Do nothing
+    })
+  });";
+
+  return [
+    'title' => $link_text,
+    'machine_title' => $machine_title,
+    'tag_attributes' => [
+      'onClick' => $onclick_text,
+      'class' => 'software-action-link ' . $field_key . " " . $field_key . '-' . $nid,
+      'target' => '_blank',
+    ],
+  ];
+}

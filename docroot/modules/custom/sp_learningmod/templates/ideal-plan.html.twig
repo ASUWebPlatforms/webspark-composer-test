@@ -1,0 +1,72 @@
+{% if submitted %}
+	<div class="container bg-white p-4 rounded shadow" style="max-width: 900px;">
+		<h2 class="fw-bold">{{ title }}</h2>
+		<p>
+			<strong>
+				<u style="text-decoration: underline;">There is really no "perfect" plan for the situation in Central City</u>
+			</strong>
+			{{ description|raw }}</p>
+
+		<div class="uds-table mt-4">
+			<table class="table table-bordered">
+				<thead class="thead-dark">
+					<tr>
+						<th>Response</th>
+						<th>Cost</th>
+						<th>Match to Ideal?</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for response in responses %}
+						<tr>
+							<td>
+								<a href="#" class="response-link" data-toggle="modal" data-target="#responseModal{{ response.nid }}">{{ response.title }}</a>
+							</td>
+							<td>{{ response.cost }}</td>
+							<td>{{ response.match|raw }}</td>
+						</tr>
+
+						<!-- Modal -->
+						<div class="modal fade" id="responseModal{{ response.nid }}" tabindex="-1" aria-labelledby="responseModalLabel{{ response.nid }}" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="responseModalLabel{{ response.nid }}">{{ response.title }}</h5>
+										<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<p>{{ response.feedback|raw }}</p>
+										<h5>Pros</h5>
+										<p>{{ response.pros }}</p>
+										<h5>Cons</h5>
+										<p>{{ response.cons }}</p>
+										<h5>Anticipated Outcomes</h5>
+										<p>{{ response.anticipated_outcome }}</p>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+
+		<div class="mt-4">
+			<p>Click the links above to see detailed feedback for each response. When you are finished, you may go back to
+				<a href="/learning/prostitution/plan/buildmyplan">re-work your plan</a>, or
+				<a href="/learning/prostitution/evaluation">complete the evaluation</a>
+				to tell us about your experience with this module.
+			</p>
+		</div>
+	</div>
+{% else %}
+	<p>You have not submitted a plan yet.</p>
+	<p>Please return to
+		<a href='/learning/prostitution/plan/reviewmyplan'>Review My Plan</a>
+		and submit it first.</p>
+{% endif %}

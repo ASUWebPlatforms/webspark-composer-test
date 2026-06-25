@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: online_grad_program_of_interest
+label: 'Online grad program of interest'
+category: ''
+likert: false
+options: 'Architecture: Architecture'

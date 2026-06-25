@@ -1,0 +1,85 @@
+.asu-academics-colleges-schools-downtown,
+.asu-academics-colleges-schools-polytechnic,
+.asu-academics-colleges-schools-tempe,
+.asu-academics-colleges-schools-west,
+.asu-academics-colleges-schools-havasu {
+  .btn {
+    margin-top: $uds-grid-gutter-width;
+    @media screen and (max-width: $uds-grid-container-max-width-lg) {
+      font-size: .75rem;
+      padding: .25rem .75rem;
+      line-height: 1rem
+    }
+  }
+
+  .btn+.btn {
+    margin-left: 0;
+
+    @media screen and (min-width: $uds-grid-container-max-width-lg) {
+      margin-left: 16px;
+    }
+  }
+}
+
+.asu-academics {
+  .uds-highlighted-heading:first-child {
+    h2 {
+      margin-bottom: 0;
+    }
+  }
+
+  .uds-highlighted-heading+.uds-highlighted-heading {
+    h2 {
+      margin-top: 0;
+    }
+  }
+
+  @media screen and (min-width: $uds-grid-container-max-width-lg) {
+    .block-inline-blockasu-edu-section-with-cta-buttons.asu-edu-static {
+      .uds-card-and-image {
+        padding: $uds-size-spacing-6 $uds-size-spacing-12;
+
+        p {
+          margin-bottom: 0;
+          line-height: $uds-size-font-large;
+        }
+      }
+    }
+  }
+}
+
+.asu-academics-colleges-schools {
+  @media screen and (max-width: $uds-grid-container-max-width-lg) { 
+    .block-webspark-module-asu-breadcrumb {
+      margin-top: $uds-size-spacing-6;
+    }
+    @media screen and (max-width: $uds-grid-container-max-width-md) {
+      .layout__region--second .block-inline-blocktext-content a {
+        margin: 3.125rem 0.5rem;
+      }
+    }
+  }
+}
+
+.asu-academics-faculty-excellence {
+  .block-inline-blockcard-carousel {
+    .btn-maroon {
+      color: $uds-color-base-white !important;
+    }
+
+    @media screen and (max-width: $uds-grid-container-max-width-lg) {
+      margin-top: $uds-size-spacing-4;
+      margin-bottom: $uds-size-spacing-6;
+    }
+  }
+
+}
+
+/* WWWCMS-30 - adding grid links style override (unset flex) for academics/faculty-excellence - cphill 2022-01-11 */
+.asu-academics-faculty-excellence {
+  .uds-grid-links {
+    a {
+      display: unset;
+    }
+  }
+}

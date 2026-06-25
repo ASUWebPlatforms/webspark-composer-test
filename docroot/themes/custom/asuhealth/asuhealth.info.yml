@@ -1,0 +1,31 @@
+name: asuhealth
+type: theme
+description: This is a asuhealth sub theme of the webspark theme renovation
+core_version_requirement: ^10
+# Defines the base theme
+base theme: renovation
+
+libraries:
+  - asuhealth/global-styling
+  - asuhealth/degreesearch
+  - asuhealth/keep-filters-open
+
+libraries-extend:
+  views/views.ajax:
+    - asuhealth/views.ajax
+
+components:
+  namespaces:
+    asuhealth: ./src/components
+
+regions:
+  header: Header
+  pre_content: Pre Content
+  pre_degree_content: Pre Degree Content
+  content: Content
+  sidebar: Sidebar
+  degree_sidebar: Degree Sidebar
+  degree_search_results: Degree Search Results
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer

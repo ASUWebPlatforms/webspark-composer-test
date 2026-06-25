@@ -1,0 +1,11 @@
+name: Custom Book Block
+type: module
+description: 'A more flexible book navigation menu.'
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+package: Custom
+
+# Information added by Drupal.org packaging script on 2020-10-05
+version: '1.0.0-beta1'
+project: 'custom_book_block'
+datestamp: 1601873257

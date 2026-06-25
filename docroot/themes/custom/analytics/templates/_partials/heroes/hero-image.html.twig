@@ -1,0 +1,53 @@
+{#
+@file
+The template for large hero.
+
+Available variables:
+- size: The size of the hero. (sm, md, lg)
+- background: The background color for the hero.
+- image: The image object.
+- heading: The heading for the hero.
+- content: Content to display.
+- cta: Show the call to action button. Only for Group pages
+#}
+
+<div class="uds-hero-{{ size|default('md') }} bg-{{ background|default('maroon') }} {{ cta ? 'has-btn-row' }}">
+  <div class="hero-overlay"></div>
+  {% if image %}
+    <img class="hero"
+      src='{{ image }}'
+      alt="A hero image for the {{ heading }} group."
+      width="2560"
+      height="512"
+      loading="lazy"
+      decoding="async"
+      fetchpriority="high"/>
+  {% endif %}
+
+  <h1>
+    <span class="tw-text-base">{{ favorites_link }}</span>
+    <span class="text-white" style="margin-left: 0;">
+      {{ heading }}
+    </span>
+  </h1>
+
+  {% if content %}
+    <div class="content">
+      <p class="text-white">
+        {{ content }}
+      </p>
+    </div>
+  {% endif %}
+
+  {% if cta %}
+    {% if not isGroupMember and group.field_allow_requests.value %}
+      <div class="btn-row">
+        <a href="#"
+          class="btn btn-default btn-gold"
+          data-bs-toggle="modal"
+          data-bs-target="#access-request-modal"
+          data-bs-group-name="{{ group.label.value }}">Request Group Access</a>
+      </div>
+    {% endif %}
+  {% endif %}
+</div>

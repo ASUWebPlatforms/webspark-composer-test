@@ -1,0 +1,4 @@
+'administer wpc_rfi_forms':
+  'title': 'Administer WPC RFI Forms'
+  'description': 'Configure settmgs for managing WPC RFI Forms'
+  restrict access: true

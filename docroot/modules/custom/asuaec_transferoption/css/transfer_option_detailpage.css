@@ -1,0 +1,9 @@
+/* Remove "Transfer option"(/transfer-option) from breadcrumb in degree detail page such as: https://admission-asu-csdev13.ddev.site/bachelors-degrees/majorinfo/BAACCBS/undergrad/false/2097?comm-college=Maricopa%20County%20Community%20College%20District
+  The /transfer-option page is an unpublished degree listing page.
+*/
+ol.breadcrumb > li.breadcrumb-item:nth-child(2) {
+  display: none;
+}
+.intro > div[data-testid="required-course"] {
+  display: none;
+}

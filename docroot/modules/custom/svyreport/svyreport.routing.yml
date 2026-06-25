@@ -1,0 +1,161 @@
+svyreport.svyreport:
+  path: '/survey-reporting'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'Survey-Reporting'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.post:
+  path: '/survey-reporting/post'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportPost'
+    _title: 'Survey-Reporting - Report Log'
+  methods:  'POST'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _format: json
+
+svyreport.custom:
+  path: '/survey-reporting/custom-report/{questions}/{college}/{department}/{acadplan}'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'Survey-Reporting Custom'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.graduating:
+  path: '/survey-reporting/graduating-metrics'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'Survey-Reporting-Graduating Metrics'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.learningugrd:
+  path: '/survey-reporting/learning_ugrd/{college}/{department}/{acadplan}'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'ASU contribution to skills ...-UGRD'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.learninggrad:
+  path: '/survey-reporting/learning_grad/{college}/{department}/{acadplan}'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'ASU contribution to skills ...-GRAD'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.entreprenuership:
+  path: '/survey-reporting/entreprenuership'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'Survey-Reporting-Entreprenuership'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.aprgrad:
+  path: '/survey-reporting/apr_grad'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'Survey-Reporting-APR-GRAD'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.aprugrd:
+  path: '/survey-reporting/apr_ugrd'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'Survey-Reporting-APR-UGRD'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.wpcgrad:
+  path: '/survey-reporting/wpc5_grad'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'Survey-Reporting-WPC-GRAD'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.wpcugrd:
+  path: '/survey-reporting/wpc5_ugrd'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'Survey-Reporting-WPC-UGRD'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.mygrad:
+  path: '/survey-reporting/my_grad'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'Survey-Reporting-MultiYear-GRAD'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.myugrd:
+  path: '/survey-reporting/my_ugrd'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'Survey-Reporting-MultiYear-UGRD'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.transfer:
+  path: '/survey-reporting/transfer'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'Survey-Reporting-Transfer'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.connections:
+  path: '/survey-reporting/connections'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'Survey-Reporting-Connections'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.wp_wl_agree:
+  path: '/survey-reporting/wp_wl_agree'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'Survey-Reporting-Work Plus'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.wp_wl_mysup:
+  path: '/survey-reporting/wp_wl_mysup'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'Survey-Reporting-Work Plus'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.wp_wl_profdev:
+  path: '/survey-reporting/wp_wl_profdev'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'Survey-Reporting-Work Plus'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.wp_wl_experiencein:
+  path: '/survey-reporting/wp_wl_experiencein'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'Survey-Reporting-Work Plus'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+svyreport.wp_wl_confident:
+  path: '/survey-reporting/wp_wl_confident'
+  defaults:
+    _controller: '\Drupal\svyreport\Controller\SvyReportController::svyreportLoad'
+    _title: 'Survey-Reporting-Work Plus'
+  requirements:
+    _user_is_logged_in: 'TRUE'

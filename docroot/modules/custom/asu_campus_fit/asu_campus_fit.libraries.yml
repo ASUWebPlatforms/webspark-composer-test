@@ -1,0 +1,24 @@
+
+campusFitLib:
+  version: VERSION
+  js:
+    js/asu_campus_fit.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+  css:
+    theme:
+      css/asu_campus_fit.css: {}
+
+campusFitResults:
+  version: VERSION
+  js:
+    js/asu_campus_results.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+  css:
+    theme:
+      css/asu_campus_results.css: {}

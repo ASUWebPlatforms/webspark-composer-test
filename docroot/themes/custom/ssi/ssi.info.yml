@@ -1,0 +1,14 @@
+name: SSI
+type: theme
+description: SSI subtheme
+base theme: renovation
+core_version_requirement:  ^9.0 || ^10
+libraries:
+  - ssi/style
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer

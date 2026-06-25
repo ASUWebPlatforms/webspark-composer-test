@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies: {  }
+id: test
+label: 'Campus images'
+category: ''
+likert: false
+options: |-
+  on_campus-5q: '<img src="/sites/default/files/2022-08/oncampus.png" class="cfimg" /><br />I want to go to college on a campus and take all my classes in-person.'
+  hybrid-5q: '<img src="/sites/default/files/2022-08/hybrid.png" class="cfimg"  /><br />I would like a mix of in-person and online learning experiences.'
+  online-6q: '<img src="/sites/default/files/2022-08/online.png"  class="cfimg" /><br />I want to take all my classes online.<br /><br />'

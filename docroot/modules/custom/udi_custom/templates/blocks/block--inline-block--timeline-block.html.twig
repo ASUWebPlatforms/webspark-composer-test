@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Template for a block.
+ */
+#}
+
+{% set display = content.field_grid_links_display|render|trim|striptags %}
+{% set visibility = content.field_display_status|render|trim|striptags %}
+
+{% set classes = [
+  'block',
+  'block-' ~ configuration.provider|clean_class,
+  'block-' ~ plugin_id|clean_class,
+  'block-timeline',
+] %}
+
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+<div class="{{ visibility }}">
+  <h2{{ title_attributes }}>{{ label }}</h2>
+    <div class="block-timeline--items d-flex justify-content-between flex-column flex-sm-row mt-5">
+      {{ content.field_timeline_entry }}
+    </div>
+  </div>
+
+</div>

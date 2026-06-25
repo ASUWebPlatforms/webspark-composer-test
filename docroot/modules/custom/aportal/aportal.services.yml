@@ -1,0 +1,21 @@
+services:
+
+  logger.channel.aportal:
+    parent: logger.channel_base
+    arguments: ['aportal']
+    
+  cache.aportal:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    factory: 'cache_factory:get'
+    arguments: ['aportal']
+
+  aportal.dashboard_globals:
+    class: Drupal\aportal\Service\DashboardGlobals
+    arguments:
+      - '@cache.aportal'
+      - '@database'
+      - '@datetime.time'        
+      - '@logger.channel.aportal'
+      - '@user.data'
+      - '@current_user'
+    public: true

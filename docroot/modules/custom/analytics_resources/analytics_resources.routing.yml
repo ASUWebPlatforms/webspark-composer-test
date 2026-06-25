@@ -1,0 +1,7 @@
+analytics_resources.settings:
+  path: admin/config/analytics-resources/settings
+  defaults:
+    _controller: \Drupal\analytics_resources\Controller\AnalyticsResourcesController::settings
+    _title: Configure the Analytics Resources module
+  requirements:
+    _role: administrator

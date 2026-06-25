@@ -1,0 +1,8 @@
+name: ASU AEC Visit React Module
+description: Module for ASU AEC Visit React code
+package: ASU
+core: 10.x
+core_version_requirement: ^10 || ^11
+type: module
+dependencies:
+  - drupal:jsonapi

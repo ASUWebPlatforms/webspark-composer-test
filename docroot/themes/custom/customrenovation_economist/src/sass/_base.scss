@@ -1,0 +1,127 @@
+/* Fix btn-primary issue */
+.btn-primary {
+  background-color: $maroon;
+  color: $white;
+  a {
+    color: $white;
+    text-decoration: none;
+  }
+}
+
+.btn-primary:hover {
+  color: $white;
+  background-color: $maroon;
+  border-color: $maroon;
+}
+
+/* remove extra padding from nested containers */
+.container {
+  .container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* fix pagination alignment to be centered */
+.pagination {
+  justify-content: center;
+}
+
+/* fix gap between top of main section and main menu */
+@media screen and (min-width: $uds-breakpoint-lg) {
+  .page main.pt-5 {
+    padding-top: 0.75rem !important;
+  }
+}
+
+/* fix gap between top of main section and main menu */
+@media screen and (min-width: $uds-breakpoint-xl) {
+  .page main.pt-5 {
+    padding-top: 2rem !important;
+  }
+}
+
+/* fix image carousel bullet on black bg */
+.glide__bullet--active {
+  border: 1px solid #d0d0d0 !important;
+}
+
+.goldbg {
+  background-color: $gold;
+}
+
+.stayuptodate__wrapper {
+  background-image: url("/themes/custom/customrenovation_economist/assets/images/gettyimages-983731944-2048x2048.png");
+  background-position: center;
+  background-size: cover;
+
+  &__shade {
+    background-color: rgba(25, 25, 25, 0.75);
+  }
+
+  #edit-markup h2 {
+    color: $white;
+    font-size: 2.5rem;
+    text-align: center;
+  }
+
+  #edit-flexbox {
+    display: grid;
+    grid-template-columns: 1fr;
+    column-gap: 1rem;
+
+    @media screen and (min-width: $uds-breakpoint-md) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media screen and (min-width: $uds-breakpoint-lg) {
+      width: 66%;
+      margin: 0 auto;
+    }
+
+    label {
+      color: $white;
+      font-weight: bold;
+    }
+  }
+
+  [id^="edit-actions"] {
+    text-align: center;
+  }
+
+  .webform-button--submit {
+    color: $dark;
+    background: $gold;
+    border-color: $gold;
+  }
+}
+
+/* Contact page */
+.contact-webform,
+.contact-page-body {
+  margin: 6rem 0 0;
+}
+
+.contact-webform {
+  [id^="edit-actions"] {
+    text-align: right;
+  }
+
+  @media screen and (max-width: $uds-breakpoint-md) {
+    margin-top: 1rem;
+  }
+
+  .webform-button--submit {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: $dark;
+  }
+}
+
+.contact-phone {
+  color: var(--maroon);
+}
+
+.block-inline-blocktext-content a {
+  display: inline;
+}

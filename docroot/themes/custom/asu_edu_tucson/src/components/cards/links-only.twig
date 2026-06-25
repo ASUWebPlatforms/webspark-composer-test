@@ -1,0 +1,14 @@
+<h2><span class="{{ title_class }}">{{ heading }}</span></h2>
+<div class="row row-spaced pt-2 pb-2">
+  {% for card in cards %}
+    <div class="col col-12 col-lg-{{ divider }}">
+      <div class="card">
+          <h3 class="card-title">{{ card.heading }}</h3>
+          {% for link in card.links %}
+            {{ link(link.title, link.uri) }}
+          {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
+

@@ -1,0 +1,26 @@
+{% if q is not empty %}
+  {{ q }}
+{% endif %}
+<div id="views-exposed-form-degree-search-solr8-block-1">
+{% if form.search_api_fulltext is defined %}
+  {{ form.search_api_fulltext }}
+{% endif %}
+{% if form.actions is defined %}
+  {{ form.actions }}
+{% endif %}
+</div>
+{% if form.field_keyword_collapsible is defined %}
+  {{ form.field_keyword_collapsible }}
+{% endif %}
+
+{% if form.field_author_collapsible is defined %}
+  {{ form.field_author_collapsible }}
+{% endif %}
+
+{% if form.field_collection_collapsible is defined %}
+  {{ form.field_collection_collapsible }}
+{% endif %}
+
+{% if form.actions.reset is defined %}
+  {{ form.actions.reset }}
+{% endif %}

@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:text_content:76e5ec0e-b8f9-4ce0-a6bf-ccd4607dc9fa'
+  module:
+    - block_content
+    - system
+  theme:
+    - renovation
+id: parentblognewsletterfooterblock
+theme: renovation
+region: footer
+weight: -6
+provider: null
+plugin: 'block_content:76e5ec0e-b8f9-4ce0-a6bf-ccd4607dc9fa'
+settings:
+  id: 'block_content:76e5ec0e-b8f9-4ce0-a6bf-ccd4607dc9fa'
+  label: 'Parent blog newsletter footer block'
+  provider: block_content
+  label_display: '0'
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    pages: "/parent-blog/*\r\n/parent-blog"
+    negate: false

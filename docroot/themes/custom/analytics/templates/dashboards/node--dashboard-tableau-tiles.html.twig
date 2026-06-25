@@ -1,0 +1,54 @@
+{#
+/**
+ * @file
+ * Template for a Tableau Tiles.
+ */
+#}
+
+{% set classes = [
+  'node',
+  node.isPromoted() ? 'node--promoted',
+  node.isSticky() ? 'node--sticky',
+  not node.isPublished() ? 'node--unpublished',
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+] %}
+{% set data = {
+  'heading': node.label,
+  'image': node.field_banner_image|file_url
+} %}
+{% set button = {
+  'text': node.field_header_button.entity.field_button_label.value,
+  'url': node.field_header_button.entity.field_link_to_content.value
+} %}
+{% set modal = {
+  'id': 'tableau-tiles-modal',
+  'showSource': true
+} %}
+
+{{ attach_library('analytics/tableau-tiles') }}
+
+<article{{ attributes.addClass(classes) }}>
+  {{ include('@analytics/hero-image.html.twig', data, with_context = false) }}
+  {{ include('@analytics/fullscreen-modal.html.twig', modal, with_context = false) }}
+
+  {% block content %}
+    <div class="tw-my-8">
+      <div class="container">
+        <div class="row row-cols-sm-1 row-cols-lg-3 g-3">
+          {{ content|without('field_header_button') }}
+        </div>
+      </div>
+    </div>
+
+    {% if button.url %}
+      <div class="tw-my-8">
+        <div class="container">
+          <a href="{{ button.url }}" class="btn btn-primary tw-block tw-mx-auto">
+            {{ button.text }}
+          </a>
+        </div>
+      </div>
+    {% endif %}
+  {% endblock %}
+</article>

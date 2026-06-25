@@ -1,0 +1,13 @@
+{% set data = {
+  'title': node.title.value,
+  'content': 'Glossary Term',
+  'button': {
+    'url': node|entity_url,
+    'color': 'maroon',
+    'text': 'View term',
+  }
+} %}
+
+<article class="glossary-term__teaser--minimal">
+  {{ include('@analytics/teaser-minimal.html.twig', data) }}
+</article>

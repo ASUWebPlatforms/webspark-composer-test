@@ -1,0 +1,54 @@
+.gold-downtown-bg {
+  padding: 96px 0 96px 0;
+  background-image: url(/sites/default/files/uploads/2019/08/sunset-thrive-silhouette-downtown.jpg);
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  min-height: 525px;
+  margin-bottom: -40px;
+}
+
+p.rcontext {
+  background-color: #000;
+  color: $gold;
+  display: inline;
+  white-space: pre-wrap;
+  line-height: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: arial, sans-serif;
+  padding: 5px;
+  padding-left: 0px;
+  box-shadow: -5px 0 0 #000;
+  -webkit-box-decoration-break: clone;
+  -o-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.watts-schools {
+  overflow: hidden;
+}
+
+.watts-schools h2 {
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+}
+
+/* Fix weird background issue for mobile */
+.layout__full-width {
+  width:100%;
+  display:flex;
+  justify-content:center;
+}
+
+.layout__full-width .layout__region--first {
+  width:100%;
+}
+/* end bg fix */
+
+/* make watts image larger */
+@media (min-width: 768px) {
+  #about-watts > .uds-card-and-image {
+    height: 600px;
+  }
+}

@@ -1,0 +1,10 @@
+{% set catch_cache = content|render %}
+{% set class = [
+  'h-100',
+] %}
+<div{{ attributes.addClass(class) }}>
+  <div class="card p-2 h-100 mx-1 shadow-sm">
+    <span class="font-weight-bold text-uppercase">{{ node.getCreatedTime()|date('F j, Y') }}</span>
+    <a class="lead font-weight-bold" href="{{ url }}">{{ node.getTitle() }}</a>
+  </div>
+</div>

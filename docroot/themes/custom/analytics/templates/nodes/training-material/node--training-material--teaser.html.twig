@@ -1,0 +1,14 @@
+{% set data = {
+  'title': node.title.value,
+  'content': node.field_description.value,
+  'button': {
+    'url': node|entity_url,
+    'color': 'gold',
+    'text': 'View training',
+  },
+  'favorite': true
+} %}
+
+<article class="training-material__teaser">
+  {{ include('@partials/teasers/teaser.html.twig', data) }}
+</article>

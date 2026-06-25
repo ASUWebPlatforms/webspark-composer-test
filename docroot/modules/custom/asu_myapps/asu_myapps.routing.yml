@@ -1,0 +1,18 @@
+asu_myapps.check_access:
+  path: ednaquery/checkAccess/{node}
+  defaults:
+    _controller: \Drupal\asu_myapps\Controller\AsuMyappsController::download
+  requirements:
+    _permission: access content
+  options:
+    parameters:
+      node:
+        type: entity:node
+
+asu_myapps.settings:
+  path: admin/config/asu_myapps/settings
+  defaults:
+    _controller: \Drupal\asu_myapps\Controller\AsuMyappsController::settings
+    _title: Configure My Apps settings
+  requirements:
+    _permission: access administration pages

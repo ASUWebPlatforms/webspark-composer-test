@@ -1,0 +1,314 @@
+<?php
+
+/**
+ * @file
+ */
+
+use Drupal\block_content\Entity\BlockContent;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\file\Entity\File;
+use Drupal\media\Entity\Media;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+use Drupal\crop\Entity\Crop;
+use Drupal\image\Entity\ImageStyle;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Extension\ExtensionList;
+
+function udi_custom_theme($existing, $type, $theme, $path) {
+  
+  return [
+    // Ghost block to apply styles and scripts
+    'udi_block' => [
+      'variables' => [],
+    ],
+
+    // Mailchimp Subscribe Form
+    'udi_mailchimp' => [
+      'variables' => [],
+    ],
+
+    // nodes
+    'node__impact_story__featured' => [
+      'template' => 'content/node--impact-story--featured',
+      'base hook' => 'node'
+    ],
+
+    'node__impact_story__teaser' => [
+      'template' => 'content/node--impact-story--teaser',
+      'base hook' => 'node'
+    ],
+
+    'node__experts__teaser' => [
+      'template' => 'content/node--experts--teaser',
+      'base hook' => 'node'
+    ],
+
+    'node__udi_event__teaser' => [
+      'template' => 'content/node--udi-event--teaser',
+      'base hook' => 'node'
+    ],
+    
+    'node__design_resource__featured' => [
+      'template' => 'content/node--design-resource--featured',
+      'base hook' => 'node'
+    ],
+    
+    'node__design_resource__teaser' => [
+      'template' => 'content/node--design-resource--teaser',
+      'base hook' => 'node'
+    ],
+
+    // taxonomy
+    'taxonomy_term__tags' => [
+      'template' => 'taxonomy/taxonomy-term--tags',
+      'base hook' => 'taxonomy'
+    ],
+
+    //blocks
+    'block__inline_block__fixed_image_background_with_cta' => [
+      'template' => 'blocks/block--inline-block--fixed-image-background-with-cta',
+      'base hook' => 'block_content'
+    ],
+
+    'block__inline_block__image_background_with_text' => [
+      'template' => 'blocks/block--inline-block--image-background-with-text',
+      'base hook' => 'block_content'
+    ],
+
+    'block__inline_block__image_background_cta_sidebar' => [
+      'template' => 'blocks/block--inline-block--image-background-cta-sidebar',
+      'base hook' => 'block_content'
+    ],
+
+    'block__inline_block__tabbed_content_icon' => [
+      'template' => 'blocks/block--inline-block--tabbed-content-icon',
+      'base hook' => 'block_content'
+    ],
+
+    'block__inline_block__testimonial_image_background_udi' => [
+      'template' => 'blocks/block--inline-block--testimonial-image-background-udi',
+      'base hook' => 'block_content'
+    ],
+
+    'block__inline_block__grid_links_udi' => [
+      'template' => 'blocks/block--inline-block--grid-links-udi',
+      'base hook' => 'block_content'
+    ],
+
+    'block__inline_block__institution_list' => [
+      'template' => 'blocks/block--inline-block--institution-list',
+      'base hook' => 'block_content'
+    ],
+
+    'block__inline_block__leadership_grid' => [
+      'template' => 'blocks/block--inline-block--leadership-grid',
+      'base hook' => 'block_content'
+    ],
+
+    'block__inline_block__featured_fellow' => [
+      'template' => 'blocks/block--inline-block--featured-fellow',
+      'base hook' => 'block_content'
+    ],
+
+    'block__inline_block__timeline_block' => [
+      'template' => 'blocks/block--inline-block--timeline-block',
+      'base hook' => 'block_content'
+    ],
+
+    'block__inline_block__video_modal' => [
+      'template' => 'blocks/block--inline-block--video-modal',
+      'base hook' => 'block_content'
+    ],
+
+    'block__inline_block__image_and_text_block_udi' => [
+      'template' => 'blocks/block--inline-block--image-and-text-block-udi',
+      'base hook' => 'block_content'
+    ],
+    
+    // paragraphs
+    'paragraph__card_group_with_icon_alt' => [
+      'template' => 'paragraphs/paragraph--card-group-with-icon-alt',
+      'base hook' => 'paragraph'
+    ],
+
+    'paragraph__card_with_icon_udi_alt' => [
+      'template' => 'paragraphs/paragraph--card-with-icon-udi-alt',
+      'base hook' => 'paragraph'
+    ],
+
+    'paragraph__tab_content_icon__preview' => [
+      'template' => 'paragraphs/paragraph--tab-content-icon--preview',
+      'base hook' => 'paragraph'
+    ],
+
+    'paragraph__icon_grid_item' => [
+      'template' => 'paragraphs/paragraph--icon-grid-item',
+      'base hook' => 'paragraph'
+    ],
+
+    'paragraph__testimonial__udi' => [
+      'template' => 'paragraphs/paragraph--testimonial--udi',
+      'base hook' => 'paragraph'
+    ],
+
+    'paragraph__institution__default' => [
+      'template' => 'paragraphs/paragraph--institution--default',
+      'base hook' => 'paragraph'
+    ],
+
+    'paragraph__profile__default' => [
+      'template' => 'paragraphs/paragraph--profile--default',
+      'base hook' => 'paragraph'
+    ],
+
+    'paragraph__timeline_entry' => [
+      'template' => 'paragraphs/paragraph--timeline-entry',
+      'base hook' => 'paragraph'
+    ],
+
+    'paragraph__card_group_default_udi' => [
+      'template' => 'paragraphs/paragraph--card-group-default-udi',
+      'base hook' => 'paragraph'
+    ],
+
+    'paragraph__card_udi' => [
+      'template' => 'paragraphs/paragraph--card-udi',
+      'base hook' => 'paragraph'
+    ],
+    
+    // fields
+    'field__field_tab_icon_custom' => [
+      'template' => 'fields/field--field-tab-icon-custom',
+      'base hook' => 'field'
+    ],
+
+    'field__field_quote_type' => [
+      'template' => 'fields/field--field-quote-type',
+      'base hook' => 'field'
+    ],
+    'field__field_title_and_organization' => [
+      'template' => 'fields/field--field-title-and-organization',
+      'base hook' => 'field'
+    ],
+
+    // views
+    'views_view__content_impact_stories__full_list' => [
+      'template' => 'views/views-view--content-impact-stories--full-list',
+      'base hook' => 'views'
+    ],
+
+    'views_view_unformatted__content_impact_stories__full_list' => [
+      'template' => 'views/views-view-unformatted--content-impact-stories--full-list',
+      'base hook' => 'views'
+    ],
+
+    'views_view__content_experts' => [
+      'template' => 'views/views-view--content-experts',
+      'base hook' => 'views'
+    ],
+
+    'views_view_unformatted__content_experts' => [
+      'template' => 'views/views-view-unformatted--content-experts',
+      'base hook' => 'views'
+    ],
+    
+    'views_view__content_displays_programs__participants_block' => [
+      'template' => 'views/views-view--content-displays-programs--participants-block',
+      'base hook' => 'views'
+    ],
+
+    'views_view__content_resources__design_resources_block' => [
+      'template' => 'views/views-view--content-resources--design-resources-block',
+      'base hook' => 'views'
+    ],
+
+    'views_view__content_dti__dti_resources_block' => [
+      'template' => 'views/views-view--content-dti--dti-resources-block',
+      'base hook' => 'views'
+    ],
+  
+    'views_view_unformatted__content_dti' => [
+      'template' => 'views/views-view-unformatted--content-dti',
+      'base hook' => 'views'
+    ],
+
+    'views_view_unformatted__content_resources' => [
+      'template' => 'views/views-view-unformatted--content-resources',
+      'base hook' => 'views'
+    ],
+
+    'views_view__content_events__events_list' => [
+      'template' => 'views/views-view--content-events--events-list',
+      'base hook' => 'views'
+    ],
+
+    'views_view_unformatted__content_events__events_list' => [
+      'template' => 'views/views-view-unformatted--content-events--events-list',
+      'base hook' => 'views'
+    ],
+
+  ];
+}
+
+function udi_custom_preprocess_block(&$variables){
+  global $base_url;
+  $variables['base_url'] = $base_url;
+  $plugin_id = $variables['plugin_id'] ?? '';
+  $block_id = $variables['derivative_plugin_id'];
+  $base_id = $variables['base_plugin_id'];
+
+  // Preprocess tabs for tabbed content.
+  if (isset($variables['elements']['content']['#block_content'])) {
+    $block_type = $variables['elements']['content']['#block_content']->bundle();
+
+    if ($block_type == 'tabbed_content_icon') {
+      $block_content = $variables['content']['#block_content'];
+      
+      $paragraphs = $block_content->field_tab->referencedEntities();
+      
+      // Create an array of tabs.
+      $uditabs = [];
+      foreach ($paragraphs as $paragraph) {
+
+        $uditabs[] = [
+          'heading' => $paragraph->get('field_heading')->value,
+          'copy' => $paragraph->get('field_body')->view(),
+          'image' => $paragraph->get('field_media')->view(),
+          'icon' => $paragraph->get('field_tab_icon_special')->view(),
+          'background' => $paragraph->get('field_background_image')->view(),
+        ];
+      }
+      $variables['uditabs'] = $uditabs;
+
+    }
+    
+  }
+}
+
+function udi_custom_css_alter(&$css, \Drupal\Core\Asset\AttachedAssetsInterface $assets) {
+  /** @var ExtensionList $extension_list */
+  $extension_list = \Drupal::service('extension.list.module');
+  $path = $extension_list->getPath('udi_custom') . '/css/udi-theme.css';  
+  if (isset($css[$path])) {
+    // Use anything greater than 100 to have it load after the theme as CSS_AGGREGATE_THEME is set to 100.
+    $css[$path]['group'] = 300;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ *
+ */
+function udi_custom_preprocess_html(&$variables) {
+  $path = \Drupal::service('path.current')->getPath();
+  $path_args = explode('/', $path);
+  if (isset($path_args[1]) && isset($path_args[2]) && ($path_args[1] == 'node') && (is_numeric($path_args[2]))) {
+    $variables['attributes']['class'][] = 'page-node-' . $path_args[2];
+  }
+}
+
+
+/**
+ * @} End.
+ */

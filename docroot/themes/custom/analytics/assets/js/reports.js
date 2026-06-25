@@ -1,0 +1,2 @@
+document.addEventListener("DOMContentLoaded",(function(){var e="report-modal",n=document.getElementById(e),t=document.getElementById("".concat(e,"-content")),d=document.getElementById("report-embed");n.addEventListener("show.bs.modal",(function(e){t.innerHTML=d.innerHTML})),n.addEventListener("hidden.bs.modal",(function(e){t.innerHTML=null}))}));
+//# sourceMappingURL=reports.js.map

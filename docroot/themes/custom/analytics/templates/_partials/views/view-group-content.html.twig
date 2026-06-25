@@ -1,0 +1,187 @@
+{#
+/**
+ * @file
+ * Default theme implementation for main view template.
+ *
+ * Available variables:
+ * - attributes: Remaining HTML attributes for the element.
+ * - css_name: A CSS-safe version of the view name.
+ * - css_class: The user-specified classes names, if any.
+ * - header: The optional header.
+ * - footer: The optional footer.
+ * - rows: The results of the view query, if any.
+ * - empty: The content to display if there are no rows.
+ * - pager: The optional pager next/prev links to display.
+ * - exposed: Exposed widget form/info to display.
+ * - feed_icons: Optional feed icons to display.
+ * - more: An optional link to the next page of results.
+ * - title: Title of the view, only used when displaying in the admin preview.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the view title.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the view title.
+ * - attachment_before: An optional attachment view to be displayed before the
+ *   view content.
+ * - attachment_after: An optional attachment view to be displayed after the
+ *   view content.
+ * - dom_id: Unique id for every view being printed to give unique class for
+ *   JavaScript.
+ *
+ * @see template_preprocess_views_view()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% set classes = [
+  dom_id ? 'js-view-dom-id-' ~ dom_id,
+] %}
+{% set groupID = view.argument.gid.value.0 %}
+{% set group = group(groupID) %}
+
+<style>
+  #{{ exposed['#id'] }}  #edit-actions {
+    margin-bottom: 24px;
+    margin-top: 24px;
+    display: none;
+  }
+</style>
+
+<div{{ attributes.addClass(classes) }}>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h2><span class="highlight-gold">{{ group.label.value }}</span></h2>
+
+        {% if header %}
+          <header>
+            {{ header }}
+          </header>
+        {% endif %}
+
+        {# Actions #}
+        {% block group_actions %}
+          <a class="btn btn-primary btn-md tw-mr-4" href="{{ path('entity.group_relationship.group_node_create_page', {'group': groupID}) }}">{{ 'Create new content'|t }}</a>
+
+          {% if 'administrator' in user.getroles(true) %}
+            <a class="btn btn-primary btn-md tw-mr-4" href="{{ path('entity.group_relationship.group_node_add_page', {'group': groupID}) }}">{{ 'Add existing content'|t }}</a>
+          {% endif %}
+        {% endblock %}
+      </div>
+    </div>
+
+    <div class="row tw-mt-12">
+      <div class="col-12 col-md-3">
+        <h3 class="tw-mt-0">Filters</h3>
+        <div id="extra-actions" class="tw-py-4" style="border-bottom: 1px solid #e5e5e5; border-top: 1px solid #e5e5e5">
+          <div class="js-active-filters tw-py-2"></div>
+          {{ exposed.actions }}
+        </div>
+        {{ exposed }}
+      </div>
+
+      <div class="col">
+        <div class="tw-flex tw-items-baseline">
+          <h3 class="tw-mt-0">Results</h3>
+          {% if footer %}
+            <span class="tw-text-sm tw-ml-2">
+              {{ footer }}
+            </span>
+          {% endif %}
+        </div>
+
+        {{ attachment_before }}
+        {% if rows -%}
+          {{ rows }}
+        {% elseif empty -%}
+          {% embed '@radix/alert/alert.twig' with {
+            type: 'warning',
+            heading: false,
+            content: empty,
+            alert_utility_classes: ['view-empty']
+          } %}
+          {% endembed %}
+        {% endif %}
+        {{ pager }}
+        {{ attachment_after }}
+        {{ more }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // TODO: Extract this code to a separate file, and make functional for use across multiple views
+  document.addEventListener('DOMContentLoaded', () => {
+    const name = "{{ view_name }}";
+    const form = document.getElementById("{{ exposed['#id'] }}");
+    const submit = document.querySelector("#{{ exposed['#id'] }} .js-form-submit");
+    const extraSubmit = document.querySelector(`#extra-actions #edit-submit-${name}`);
+    const submitForm = (e) => {
+      e.preventDefault();
+      form.requestSubmit(submit);
+    };
+
+    extraSubmit.addEventListener('click', submitForm);
+  });
+
+  // Add the selected filters to the view
+  const filterCheckboxes = document.querySelectorAll('input[type=checkbox]:checked');
+  const filterRadios = document.querySelectorAll('input[type=radio]:checked');
+  const filterInputs = document.querySelectorAll('input[type=text]');
+  const filterList = document.querySelector('.js-active-filters');
+
+  // TODO: Extract this into a reusable function, can use for radio and checkbox
+  if (filterCheckboxes.length > 0) {
+    filterCheckboxes.forEach(function(checkbox) {
+      const id = checkbox.id;
+      const label = document.querySelector(`label[for="${id}"]`);
+      const labelText = label ? label.textContent : '';
+
+      if (filterList) {
+        let filterItem = document.createElement('span');
+        filterItem.classList.add('badge', 'tw-py-1.5', 'tw-px-2.5', 'tw-text-[12px]', 'text-bg-gray-2', 'tw-mr-1', 'tw-mb-1');
+        filterItem.textContent = labelText;
+        filterList.appendChild(filterItem);
+      }
+    });
+  }
+
+  if (filterRadios.length > 0) {
+    filterRadios.forEach(function(radio) {
+      const id = radio.id;
+      const label = document.querySelector(`label[for="${id}"]`);
+      const labelText = label ? label.textContent : '';
+
+      if (filterList) {
+        let filterItem = document.createElement('span');
+        filterItem.classList.add('badge', 'tw-py-1.5', 'tw-px-2.5', 'tw-text-[12px]', 'text-bg-gray-2', 'tw-mr-1', 'tw-mb-1');
+        filterItem.textContent = labelText;
+        filterList.appendChild(filterItem);
+      }
+    });
+  }
+
+  if (filterInputs.length > 0) {
+    filterInputs.forEach(function(input) {
+      const value = input.value.trim();
+      if (value) {
+        if (filterList) {
+          let filterItem = document.createElement('span');
+          filterItem.classList.add('badge', 'tw-py-1.5', 'tw-px-2.5', 'tw-text-[12px]', 'text-bg-gray-2', 'tw-mr-1', 'tw-mb-1');
+          filterItem.textContent = value;
+          filterList.appendChild(filterItem);
+        }
+      }
+    });
+  }
+
+  if (filterList.children.length > 0) {
+    const actionsDiv = document.querySelector("#extra-actions #edit-actions");
+    let resetBtn = document.createElement('a');
+    resetBtn.textContent = 'Clear filters';
+    resetBtn.href = "{{ path('<current>') }}";
+    resetBtn.classList.add('btn', 'btn-md', 'btn-gray');
+    actionsDiv.appendChild(resetBtn);
+  }
+</script>

@@ -1,0 +1,30 @@
+/* Fix views pager */
+.views-element-container {
+  nav.pager {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    ul {
+      list-style: none;
+      display: inline-flex;
+      padding: 0;
+    }
+    li {
+      padding: 1rem;
+    }
+  }
+}
+
+.smallsource {
+  margin: 0 auto;
+  max-width: 1170px;
+  text-align: right;
+  padding: 0 10px;
+  font-size: 12px;
+}
+
+.rank div {
+  font-size: 22px;
+  font-weight: bold;
+  line-height: calc(100% + 4px);
+}

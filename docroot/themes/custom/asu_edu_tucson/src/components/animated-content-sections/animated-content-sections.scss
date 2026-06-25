@@ -1,0 +1,89 @@
+.block-inline-blockasu-edu-anim-content-buttons {
+
+  .animated-content-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    .content-section {
+      background-size: cover;
+      height: 600px;
+      width: 400px;
+      min-width: 300px;
+      position: relative;
+      transition: all 1s cubic-bezier(0.19, 1, 0.19, 1);
+      margin: 0 $uds-size-spacing-2;
+
+      .link-area {
+        a {
+          display: block;
+        }
+      }
+    }
+
+    @media screen and (max-width: $uds-grid-container-max-width-lg) {
+      flex-direction: column;
+
+      .long-text {
+        display: none;
+      }
+
+      h2, .button-area {
+        padding-left: $uds-size-spacing-5;
+        padding-right: $uds-size-spacing-5;
+      }
+    }
+
+    .image-holder:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-image: linear-gradient(
+        to top,
+        rgba(25, 25, 25, 0.75) 0%,
+        rgba(25, 25, 25, 0) 100%
+      );
+    }
+
+    .content-holder {
+      position: absolute;
+      bottom: $uds-size-spacing-4;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      width: 100%;
+      height: auto;
+      left: unset;
+    }
+
+    @media screen and (min-width: $uds-grid-container-max-width-lg) {
+      .content-section:hover {
+        transform: scale(1.04);
+        .image-holder {
+          transform: scale(1);
+        }
+      }
+
+      .hidden-details {
+        transition: all 1s cubic-bezier(0.19, 1, 0.19, 1);
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+      }
+      .content-section:hover .hidden-details {
+        max-height: 300px;
+        opacity: 1;
+      }
+
+      .button-area {
+        a:hover {
+          margin-left: $uds-size-spacing-half;
+        }
+      }
+    }
+  }
+}

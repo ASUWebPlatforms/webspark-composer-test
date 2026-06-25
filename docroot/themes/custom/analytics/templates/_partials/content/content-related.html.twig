@@ -1,0 +1,11 @@
+<div class="analytics-content-grid tw-mt-24">
+  {% block header %}{% endblock %}
+
+  <div class="row g-2">
+    {% block content %}
+      {% for item in items %}
+        <div class="col-sm-12 col-lg-4">{{ item.content }}</div>
+      {% endfor %}
+    {% endblock %}
+  </div>
+</div>

@@ -1,0 +1,327 @@
+<?php
+
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\field\Entity\FieldStorageConfig;
+//use Drupal\Core\Database\Connection;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\views\Plugin\views\style\StylePluginBase;
+use Drupal\views\Views;
+use Drupal\views\Plugin\views\cache\CachePluginBase;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\views\ViewExecutable;
+use Drupal\Core\Mail\MailManagerInterface;
+use Drupal\Component\Utility\SafeMarkup;
+use Drupal\Component\Utility\Html;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Form\FormStateInterface;
+
+
+/**
+ * Implements hook_views_pre_render() to customize rgistration link for sundevil days send off.
+ */
+function asu_masterform_posting_views_pre_render(ViewExecutable $view) {
+
+  if (
+      ($view->id() == "off_campus_rsvp" && (($view->current_display == 'block_2'))) || // Sun Devil Send offs
+      ($view->id() == "off_campus_rsvp" && (($view->current_display == 'block_3'))) || // Yield domestic
+      ($view->id() == "off_campus_rsvp" && (($view->current_display == 'block_4'))) || // Yield international
+      ($view->id() == "off_campus_rsvp" && (($view->current_display == 'block_5'))) || // College Signing Days
+      ($view->id() == "off_campus_rsvp" && (($view->current_display == 'block_6')))    // Sun Devil Send offs NEW (4/25/2025)
+     ) {
+
+
+    // Get the existing filters
+    $filters = $view->display_handler->getOption('filters');
+
+    foreach($view->result as $value){
+
+      // Get Privacy value
+      $privacy = $value->_entity->get('field_privacy')->target_id; // 22: Coming soon, 24: Public
+
+      $title = $value->_entity->get('title')->value;
+      if($privacy == '24') { // Privacy: Public
+        $date = $value->_entity->get('field_offcampus_event_date')->value;
+        $end_date = $value->_entity->get('field_offcampus_event_date')->end_value;
+        $date_string = strtotime($date);
+        $end_date_string = strtotime($end_date);
+        $start_date_format = date("Y-m-d", $date_string);
+        $date_value =  date("Y-m-d h:i a", strtotime('-7 hours',$date_string));
+        $url_start_date =  date("Y-m-d", strtotime($date_value));
+        //$start_time_format = date("F jS, Y", $date_string);
+        $start_time_format = date("H:i:s", strtotime('-7 hours', $date_string));
+        $end_date_format = date("Y-m-d", $end_date_string);
+        $end_time_format = date("H:i:s",  strtotime('-7 hours', $end_date_string));
+        $readable_date =  date("F jS, Y - h:i:s a",strtotime('-7 hours', $date_string));
+
+        // Changed event location to be <state>-<city> on 1/17/2025 by Chizuko
+        //$event_location = $value->_entity->get('field_offcampus_event_state')->value;
+        $event_city = 	$value->_entity->get('field_offcampus_event_city')->value;
+        $event_location = $value->_entity->get('field_offcampus_event_state')->value . '-' . $value->_entity->get('field_offcampus_event_city')->value;
+
+        //$event_id = $value->_entity->get('field_offcampus_event_id')->value;
+
+        $capacity = $value->_entity->get('field_capacity')->value;
+        $remaining_spots = $value->_entity->get('field_remaining_spots')->value;
+        $total_registrants = $value->_entity->get('field_total_registrants')->value;
+        $nid = $value->_entity->get('nid')->value;
+        $spots_left =  $capacity - $remaining_spots;
+        $event_type_tid = $value->_entity->get('field_offcampus_event_type')->target_id;
+        /*if(isset($value->_entity->get('field_event_close_message'))){
+              $close_message = $value->_entity->get('field_event_close_message')->value;
+        }
+        else{
+              $close_message = '';
+        }*/
+        $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($event_type_tid);
+        $event_type = $term->get('name')->value;
+        if($event_type == "Sun Devil Sendoff"){
+          $webform_name = "sun_devil_send_off";
+        }
+
+        //$event_id = $webform_name.'-'.$event_city.'-'.$date_string;
+        $event_id = $nid.'-'.$date_string;
+
+        // Add an event ID anchor to the Body field so reminder email links can jump directly to the matching Views row. Added on 6/3/2026.
+        // Example: https://visitasu.asu.ddev.site/sun-devil-send-offs#420241-1781395200
+        $body = "<div id='" . $event_id . "'></div>";
+        $value->_entity->set('body', [
+          'value' => $body,
+          'format' => 'full_html',
+        ]);
+
+
+        //$title = $value->_entity->get('title')->value;
+        $display_title = $value->_entity->get('field_display_title')->value; // Changed to use display_title for the event form title on 2/26/2025.
+
+        // Switch between Event type or Display title to use for building Event name. (12/23/2025)
+        $use_displaytitle_for_eventname = (int) $value->_entity->get('field_displaytitle_for_eventname')->value; // 1 or 0
+
+        // Changed event_name to be something like "Yield_Road to ASU: Chicago_2025-03-16 12:30 pm" on 1/17/2025 by Chizuko
+        //$event_name = $event_type . '_' . $title . '_' . $date_value;
+
+        if($use_displaytitle_for_eventname === 1) { // Use Display title for Event name. (12/23/2025)
+          $event_name = $display_title . '_' . $date_value; // ex. Road to ASU: Denver_2026-01-10 11:00 am
+        } else { // Use Event type for Event name.
+          $event_name = $event_type . '_' . $event_location . '_' . $date_value; // ex. Yield Events_Colorado-Denver_2026-01-10 11:00 am
+        }
+
+
+        $type = ''; // Use this value from JS. This is just for within Visit site.
+        $hs = 'yes'; // yes/no - Display HS dropdowns or not.
+        $term = 'yes'; // yes/no - Display Entry term dropdown or not.
+        $term_val = '';
+        $address1 = '';
+        $address2 = '';
+        $city = '';
+        $country = '';
+        $country_val = '';
+        $state = '';
+        if($event_type == 'Yield Events') {
+          // Get domestic/international
+          $domestic_international = $value->_entity->get('field__domestic_international_vs')->value;
+          if($domestic_international == 'International') {
+            $hs = 'no';
+            $type = 'yieldintl';
+          }
+          if($domestic_international == 'Domestic') {
+            $type = 'yielddomestic';
+          }
+          if($domestic_international == 'college_signing_days') {
+            $type = 'yieldcsd';
+          }
+        }
+        if($event_type == 'Sun Devil Sendoff') {
+          $hs = 'no';
+          $term = 'no';
+          $term_val = '2267';
+          $address1 = 'no';
+          $address2 = 'no';
+          $city = 'no';
+          $country = 'no';
+          $country_val = 'US';
+          $state = 'no';
+        }
+
+
+        // Pass URL params. Get existing URL params.
+
+        // // Tell Drupal that View output depends on URL params.
+        // $view->element['#cache']['contexts'][] = 'url.query_args:fname';
+        // $view->element['#cache']['contexts'][] = 'url.query_args:lname';
+        // $view->element['#cache']['contexts'][] = 'url.query_args:email';
+        // $view->element['#cache']['contexts'][] = 'url.query_args:phone';
+        // $view->element['#cache']['contexts'][] = 'url.query_args:zip';
+        // $view->element['#cache']['contexts'][] = 'url.query_args:asurite'; // Added on 12/8/2025
+
+        // Tell Drupal that View output depends on the token in the URL.
+        $view->element['#cache']['contexts'][] = 'url.query_args:token'; // Added on 12/8/2025
+
+        $request = \Drupal::request();
+
+        // $fname = $request->query->get('fname', '');
+        // $lname = $request->query->get('lname', '');
+        // $email = $request->query->get('email', '');
+        // $phone = $request->query->get('phone', '');
+        // $zip = $request->query->get('zip', '');
+        // $asurite = $request->query->get('asurite', ''); // Added on 12/8/2025
+        $pii_token   = $request->query->get('token', ''); // Added on 12/8/2025
+
+
+        // $url = "<a href='/sundevilsendoffs?event_form_date=$readable_date&event_date_time=$date_value&event_start_date=$url_start_date&event_start_time=$start_time_format&event_end_date=$url_start_date&event_end_time=$end_time_format&event_id=$event_id&nid=$nid&cap=$capacity&event_name=$title&event_city=$event_city&cat=$event_type&location=$event_location' class='btn btn-maroon'>Register</a>";
+        // $url = "<a href='/masterform-registration?event_form_date=$readable_date&event_date_time=$date_value&event_start_date=$url_start_date&event_start_time=$start_time_format&event_end_date=$url_start_date&event_end_time=$end_time_format&event_id=$event_id&nid=$nid&cap=$capacity&event_name=$event_name&event_city=$event_city&cat=$event_type&location=$event_location&formtitle=$display_title&hs=$hs&type=$type' class='btn btn-maroon'>Register</a>"; // Added fname, lname, email and phone. Changed on 4/25/2025
+
+        $url = "<a href='/masterform-registration?event_form_date=" . rawurlencode($readable_date)
+          . "&event_date_time=" . rawurlencode($date_value)
+          . "&event_start_date=" . rawurlencode($url_start_date)
+          . "&event_start_time=" . rawurlencode($start_time_format)
+          . "&event_end_date=" . rawurlencode($url_start_date)
+          . "&event_end_time=" . rawurlencode($end_time_format)
+          . "&event_id=" . rawurlencode($event_id)
+          . "&nid=" . rawurlencode($nid)
+          . "&cap=" . rawurlencode($capacity)
+          . "&event_name=" . rawurlencode($event_name)
+          . "&event_city=" . rawurlencode($event_city)
+          . "&cat=" . rawurlencode($event_type)
+          . "&location=" . rawurlencode($event_location)
+          . "&formtitle=" . rawurlencode($display_title)
+          . "&hs=" . rawurlencode($hs)
+          . "&type=" . rawurlencode($type)
+          . "&term=" . rawurlencode($term)
+          . "&term_val=" . rawurlencode($term_val)
+          // . "&fname=" . rawurlencode($fname)
+          // . "&lname=" . rawurlencode($lname)
+          // . "&email=" . rawurlencode($email)
+          // . "&phone=" . rawurlencode($phone)
+          // . "&zip=" . rawurlencode($zip)
+          // . "&address1=" . rawurlencode($address1)
+          // . "&address2=" . rawurlencode($address2)
+          // . "&city=" . rawurlencode($city)
+          // . "&country=" . rawurlencode($country)
+          // . "&state=" . rawurlencode($state)
+          // . "&asurite=" . rawurlencode($asurite) // Added on 12/8/2025
+          . "&token=" . rawurlencode($pii_token) // Added on 12/8/2025
+          . "' class='btn btn-maroon'>Register</a>";
+
+        //if(empty($remaining_spots) || ($remaining_spots > 0)){
+        if(empty($total_registrants) || $total_registrants < $capacity){
+          $btn_label = $url;
+        }
+        else{
+          $btn_label = "<p>Registration closed</p>";
+        }
+      } // END OF if($privacy == '24') { // Privacy: Public
+
+      if($privacy == '22') { // Privacy: Private
+        $btn_label = "<p>Coming soon</p>";
+        // Remove "Event location and check-in details"
+        $evenloc_detail = $value->_entity->set('field_offcampus_event_location', '');
+      }
+
+      if($privacy == '75') { // Privacy: Registration closed
+        $btn_label = "<p>Registration closed</p>";
+      }
+      //ksm($btn_label);
+      $content = \Drupal\Core\Render\Markup::create($btn_label);
+
+      $value->_entity->set('field_offcampus_event_link', $title);
+      $value->_entity->set('title', $content);
+      //$value->_entity->set('field_offcampus_event_date',$readable_date);
+
+		}
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function asu_masterform_posting_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+
+  // Get Form IDs from config
+  $config = \Drupal::config('asu_masterform_posting.settings');
+  $target_form_ids = $config->get('target_form_ids') ?? [];
+
+  // Fallback defaults if config is empty.
+  if (empty($target_form_ids)) {
+    $target_form_ids = [
+      'webform_submission_sun_devil_send_off_node_217217_add_form',
+      'webform_submission_sun_devil_send_off_node_217217_edit_form',
+      'webform_submission_beet_node_264061_add_form',
+      'webform_submission_beet_node_264061_edit_form',
+    ];
+  }
+
+  if (!in_array($form_id, $target_form_ids, TRUE)) {
+    return;
+  }
+
+  // // Dump element keys so we know what to target.
+  // if (isset($form['elements'])) {
+  //   \Drupal::logger('cstest')->notice(
+  //     'Masterform element keys: <pre>@keys</pre>',
+  //     ['@keys' => print_r(array_keys($form['elements']), TRUE)]
+  //   );
+  // }
+
+  $request = \Drupal::request();
+  $pii_token  = $request->query->get('token');
+
+  if (!$pii_token) {
+    return;
+  }
+
+
+  // Prevent anonymous page cache / dynamic page cache for tokenized requests
+  // Otherwise anonymous users may get a cached version of the form (no prepopulate).
+  \Drupal::service('page_cache_kill_switch')->trigger();
+  if (\Drupal::hasService('dynamic_page_cache_kill_switch')) {
+    \Drupal::service('dynamic_page_cache_kill_switch')->trigger();
+  }
+  // Also make sure the form render cache varies by token.
+  $form['#cache']['contexts'][] = 'url.query_args:token';
+  // Avoid caching the form render when token is present.
+  $form['#cache']['max-age'] = 0;
+
+
+
+  // Read from cache
+  $cid = 'asu_masterform_posting_pii:' . $pii_token;
+  $cached = \Drupal::cache('data')->get($cid);
+  $pii = $cached ? $cached->data : [];
+
+  // $all_session = $session->all();
+  // \Drupal::logger('cstest')->notice('ALL SESSION: <pre>' . print_r($all_session, true) . '</pre>');
+
+  if (empty($pii)) {
+    return;
+  }
+
+  // Map PII keys to Webform element machine names
+  $mapping = [
+    'fname'   => 'first_name', // Webform element key
+    'lname'   => 'last_name',
+    'email'   => 'email',
+    'zip'     => 'zip_code',
+    'asurite' => 'asu_rite_id',
+    'phone'   => 'phone',
+  ];
+
+  if (isset($form['elements']) && is_array($form['elements'])) {
+    foreach ($mapping as $pii_key => $element_key) {
+      if (!empty($pii[$pii_key]) && isset($form['elements']['student_profile'][$element_key])) {
+        // Set default values so the Webform is prepopulated.
+        $form['elements']['student_profile'][$element_key]['#default_value'] = $pii[$pii_key];
+      }
+    }
+
+    // If we have an ASURITE in PII, set do_you_have_asu_rite_id default to Yes
+    if (!empty($pii['asurite']) && isset($form['elements']['do_you_have_asu_rite_id'])) {
+      $form['elements']['do_you_have_asu_rite_id']['#default_value'] = 'Yes';
+    }
+  }
+
+  // Clear PII once used --> Do NOT delete token/PII here.
+  // Users may open the email link multiple times, refresh, or go back.
+  // Instead, we will delete it after succesfull webform submission in masterFormSubmissionPost.php.
+  // \Drupal::cache('data')->delete($cid);
+}

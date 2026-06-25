@@ -1,0 +1,40 @@
+{#
+/**
+ * @file
+ * Template for a Data Dictionary node.
+ */
+#}
+{% set classes = [
+  'node',
+  node.isPromoted() ? 'node--promoted',
+  node.isSticky() ? 'node--sticky',
+  not node.isPublished() ? 'node--unpublished',
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+  'pb-12'
+] %}
+
+<article{{ attributes.addClass(classes) }}>
+  <div class="max-size-container center-container">
+    {% block hero %}
+      {% set data = {
+        'background': 'bg-maroon',
+        'type': node.bundle,
+        'heading': node.title.value,
+        'description': node.field_description.value,
+      } %}
+      {{ include('@analytics/hero-data.html.twig', data) }}
+    {% endblock %}
+  </div>
+
+  <div class="container tw-py-24">
+    <div class="row">
+      <div class="col-sm-12 col-lg">
+        {% block content %}
+          <h2 class="tw-mt-0">About this Term</h2>
+          {{ content|without('field_data_stewardship_team') }}
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+</article>

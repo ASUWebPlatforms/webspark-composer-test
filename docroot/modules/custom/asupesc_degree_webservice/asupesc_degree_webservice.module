@@ -1,0 +1,705 @@
+<?php
+//use Drupal\Core\Database\Connection;
+
+/**
+ * Calls helping function to get the list of all categories.
+ * Calls helping function to get undergrad degrees from web service.
+ * Insert the undergrad degrees into asu_ugrad_interest_category_degrees table.
+ *
+ * @param $context
+ */
+function asupesc_degree_webservice_data_insert_ugrad(&$context) {
+    $degree_errored_array = array();
+
+    // Get all categories from web service
+    $all_categories = _get_all_categories_from_webservice();
+    // \Drupal::logger('asupesc_degree_webservice')->notice(print_r($all_categories, true)); // xmlrpc is working!
+
+    // Get degrees from web service
+    $cert = 'false';
+    $file_contents = _get_degrees_from_webservice('undergrad', $cert);
+    // \Drupal::logger('asupesc_degree_webservice')->notice("file_contents: <pre>" . print_r($file_contents, true) . "</pre>");
+
+    // DB inserts
+
+    // Truncate table before inserting data
+    $connection = \Drupal::database(); //<--- This worked!!!
+    $connection->truncate('asu_ugrad_interest_category_degrees')->execute(); //Empty the table content before refreshing the table with new data
+
+    foreach($file_contents as $programs => $thearray) {
+        foreach($thearray as $key2 => $theobj) {
+
+            $asuNactvAppOvrd = $theobj->AsuNactvAppOvrd;
+            //if($asuNactvAppOvrd != 'N') { // Only when $asuNactvAppOvrd != 'N', then, insert data into table. -- Commented it out on 6/3/2021. Degree seems to be appearing in Degree Search.
+
+                $data = array();
+
+                // Interest bucket
+                $data['planCatDescr'] = $theobj->planCatDescr; //<--- This is array. I can use this later.
+                // \Drupal::logger('asupesc_degree_webservice')->notice("planCatDescr:<pre>" . print_r($data['planCatDescr'], true) . "</pre>");
+                $categories_array = array();
+                foreach ($data['planCatDescr'] as $key => $val) {
+                    $category_id = array_search($val, $all_categories);
+                    $categories_array[$category_id] = $val;
+                }
+                // Campuses
+                $campuses_array = $theobj->CampusStringArray;
+                if (sizeof($campuses_array) > 1) {
+                    $campuses_string = implode(", ", $campuses_array);
+                } else if (sizeof($campuses_array) == 1) {
+                    $campuses_string = $campuses_array[0];
+                } else {
+                    $campuses_string = '';
+                }
+                // The rest
+                $data['AcadProg'] = isset($theobj->AcadProg) ? $theobj->AcadProg : '';
+                $data['DiplomaDescr'] = isset($theobj->DiplomaDescr) ? $theobj->DiplomaDescr : '';
+                $data['AcadPlan'] = $theobj->AcadPlan;
+                $data['Descr100'] = isset($theobj->Descr100) ? $theobj->Descr100 : '';
+                $data['CollegeUrl'] = isset($theobj->CollegeUrl) ? $theobj->CollegeUrl : '';
+                $data['CollegeAcadOrg'] = isset($theobj->CollegeAcadOrg) ? $theobj->CollegeAcadOrg : '';
+                $data['DepartmentCode'] = isset($theobj->DepartmentCode) ? $theobj->DepartmentCode : '';
+                $data['AsuCritTrackUrl'] = isset($theobj->AsuCritTrackUrl) ? $theobj->AsuCritTrackUrl : '';
+                $data['CollegeDescr100'] = isset($theobj->CollegeDescr100) ? $theobj->CollegeDescr100 : '';
+                $data['Degree'] = isset($theobj->Degree) ? $theobj->Degree : '';
+                $data['AsuCustomText'] = isset($theobj->AsuCustomText) ? $theobj->AsuCustomText : '';
+                $data['AsuNactvAppOvrd'] = isset($theobj->AsuNactvAppOvrd) ? $theobj->AsuNactvAppOvrd : '';
+                // \Drupal::logger('asupesc_degree_webservice')->notice("dataentry:<pre>" . print_r($data, true) . "</pre>");
+
+                // Try to keep the final table the same as before. Therefore, we insert one row per category.
+                foreach ($categories_array as $cat_id => $cat_name) {
+                    // Insert to database
+                    $dbentry = array(
+                        'categoryid' => $cat_id,
+                        'categoryname' => $cat_name,
+                        'categorycampuscode' => $campuses_string,
+                        'categoryprogramname' => $data['DiplomaDescr'],
+                        'categoryprogramcode' => $data['AcadProg'],
+                        'categorymajorname' => $data['Descr100'],
+                        'categorymajorcode' => $data['AcadPlan'],
+                        'categoryprogramurl' => $data['CollegeUrl'],
+                        'categoryprogramDesrc100' => $data['CollegeDescr100'],
+                        'categorymajorWebappURL' => $data['AsuCustomText'],
+                        'categoryprogramAcadOrg' => $data['CollegeAcadOrg'],
+                        'categorydepartmentCode' => $data['DepartmentCode'],
+                        'categorydegree' => $data['Degree'],
+                        'categoryAsuCustomText' => $data['AsuCustomText'],
+                        'categoryAsuNactvAppOvrd' => $data['AsuNactvAppOvrd'],
+                    );
+                    // \Drupal::logger('asupesc_degree_webservice')->notice("dbentry:<pre>" . print_r($dbentry, true) . "</pre>");
+                    try {
+                        $query = $connection->insert('asu_ugrad_interest_category_degrees')->fields($dbentry)->execute();
+                    } catch (Exception $e) {
+                        array_push($degree_errored_array, $data['AcadPlan']);
+                        \Drupal::logger('asupesc_degree_webservice')->error($e->getMessage());
+                        continue;
+                    }
+                } // END OF foreach($categories_array as $cat_id => $cat_name)
+
+            //} // END OF if($asuNactvAppOvrd != 'N')
+
+        } // END OF foreach($thearray as $key2 => $theobj)
+    } // END OF foreach($file_contents as $programs => $thearray)
+
+    $context['results']['degrees_errored_out'][$cert] = $degree_errored_array;
+} // END OF function asupesc_degree_webservice_data_insert_ugrad()
+
+/**
+ * Changed on 6/5/2026.
+ * Gets active Grad degrees from ASU Data Potluck.
+ * Inserts one row per degree category into asu_grad_interest_category_degrees.
+ */
+function asupesc_degree_webservice_data_insert_grad(&$context) {
+  $degree_errored_array = array();
+  $file_contents = _get_grad_degrees_from_datapotluck();
+
+  if (empty($file_contents) || !is_array($file_contents)) {
+    $context['results']['degrees_errored_out']['true'] = array();
+    $context['results']['degrees_errored_out']['false'] = array('Data Potluck returned no grad degrees.');
+    return;
+  }
+
+  $connection = \Drupal::database();
+  $connection->truncate('asu_grad_interest_category_degrees')->execute();
+
+  foreach ($file_contents as $theobj) {
+    if (!is_array($theobj)) {
+      continue;
+    }
+
+    $acad_plan = trim((string) ($theobj['acadPlanCode'] ?? ''));
+    if ($acad_plan === '') {
+      $degree_errored_array[] = '[missing acadPlanCode]';
+      continue;
+    }
+
+    $categories = $theobj['planCategories'] ?? array();
+    if (empty($categories) || !is_array($categories)) {
+      \Drupal::logger('asupesc_degree_webservice')->notice('No planCategories found for @plan', ['@plan' => $acad_plan]);
+      continue;
+    }
+
+    $owner = _asupesc_datapotluck_primary_owner($theobj);
+    $campuses_string = _asupesc_datapotluck_campuses_string($theobj);
+    $graduateAllApplyDates = _asupesc_datapotluck_grad_apply_dates($theobj);
+    $custom_text = _asupesc_datapotluck_string($theobj['customText'] ?? '');
+
+    foreach ($categories as $category) {
+      if (!is_array($category)) {
+        continue;
+      }
+
+      $cat_id = trim((string) ($category['categoryCode'] ?? ''));
+      $cat_name = trim((string) ($category['categoryDescription'] ?? ''));
+
+      if ($cat_id === '') {
+        \Drupal::logger('asupesc_degree_webservice')->notice('No categoryCode found for @plan', ['@plan' => $acad_plan]);
+        continue;
+      }
+
+      $dbentry = array(
+        'categoryid' => $cat_id,
+        'categoryname' => $cat_name,
+        'categorycampuscode' => $campuses_string,
+        'categoryprogramname' => _asupesc_datapotluck_string($owner['collegeDescription'] ?? ''),
+        'categoryprogramurl' => _asupesc_datapotluck_string($owner['collegeUrl'] ?? ''),
+        'categoryprogramcode' => _asupesc_datapotluck_string($theobj['acadProgramCode'] ?? ''),
+        'categoryprogramDesrc100' => _asupesc_datapotluck_string($owner['collegeAlphaSortDescription'] ?? ($owner['collegeDescription'] ?? '')),
+        'categoryprogramAcadOrg' => _asupesc_datapotluck_string($owner['collegeAcadOrg'] ?? ''),
+        'categorydepartmentCode' => _asupesc_datapotluck_string($owner['departmentAcadOrg'] ?? ''),
+        'categoryDegreeDescShort' => _asupesc_datapotluck_grad_degree_short($theobj),
+        'categoryDegreeDescLong' => _asupesc_datapotluck_string($theobj['degreeDescriptionLong'] ?? ''),
+        'categorymajorname' => (($theobj['acadPlanType'] ?? '') === 'CER')
+          ? _asupesc_datapotluck_string($theobj['acadPlanDescription'] ?? '')
+          : trim(_asupesc_datapotluck_string($theobj['acadPlanDescription'] ?? '') . ', ' . _asupesc_datapotluck_grad_degree_short($theobj), ', '),
+        'categorymajorcode' => $acad_plan,
+        'categorymajorWebappURL' => _asupesc_datapotluck_string($theobj['customAdmissionUrl'] ?? ''),
+        'categorygradtype' => _asupesc_datapotluck_string($theobj['degreeEducationLevel'] ?? ''),
+        'categorygraduateAllApplyDates' => $graduateAllApplyDates,
+        'categoryAsuCustomText' => $custom_text,
+        'categoryAsuNactvAppOvrd' => !empty($theobj['activeInDegreeSearch']) ? 'Y' : 'N',
+      );
+
+      try {
+        $connection->insert('asu_grad_interest_category_degrees')->fields($dbentry)->execute();
+      }
+      catch (Exception $e) {
+        $degree_errored_array[] = $acad_plan;
+        \Drupal::logger('asupesc_degree_webservice')->error($e->getMessage());
+        continue;
+      }
+    }
+  }
+
+  $context['results']['degrees_errored_out']['true'] = array();
+  $context['results']['degrees_errored_out']['false'] = $degree_errored_array;
+}
+
+
+
+
+/**
+ * Calls helping function to get Grad degrees/certificates from web service.
+ * Inserts them into asu_grad_interest_category_degrees table.
+ *
+ * @param String $cert
+ *   true or false
+ * @param array $all_categories
+ *   Array of all categories that were pulled from web service
+ * @param $context
+ */
+function _get_grad_degrees($cert, $all_categories, &$context) {
+    $degree_errored_array = array();
+
+    // Get degrees from webservice
+    $file_contents = _get_degrees_from_webservice('graduate', $cert);
+    // \Drupal::logger('asupesc_degree_webservice2')->notice("file_contents: <pre>" . print_r($file_contents, true) . "</pre>");
+
+    // DB inserts
+    $connection = \Drupal::database();
+
+    foreach($file_contents as $programs => $thearray) {
+        foreach($thearray as $key2 => $theobj) {
+
+            $asuNactvAppOvrd = isset($theobj->AsuNactvAppOvrd) ? $theobj->AsuNactvAppOvrd : '';
+            //if($asuNactvAppOvrd != 'N') { // Only when $asuNactvAppOvrd != 'N', then, insert data into table. -- Commented it out on 6/3/2021. Degree seems to be appearing in Degree Search.
+
+            $data = array();
+
+            // Interest bucket
+            $data['planCatDescr'] = $theobj->planCatDescr; //<--- This is array. I can use this later.
+            // \Drupal::logger('asupesc_degree_webservice')->notice("planCatDescr:<pre>" . print_r($data['planCatDescr'], true) . "</pre>");
+            $categories_array = array();
+            foreach ($data['planCatDescr'] as $key => $val) {
+                $category_id = array_search($val, $all_categories);
+                $categories_array[$category_id] = $val;
+            }
+            // Campuses
+            $campuses_array = $theobj->CampusStringArray;
+            $campuses_string = '';
+            if (sizeof($campuses_array) > 1) {
+                $campuses_string = implode(", ", $campuses_array);
+            } else if(sizeof($campuses_array) == 1) {
+                $campuses_string = $campuses_array[0];
+            }
+            // graduateAllApplyDates
+            $graduateAllApplyDates = '';
+            $i = 0;
+            foreach ($theobj->graduateAllApplyDates as $key => $value) {
+                if($i != 0) {
+                    $graduateAllApplyDates .= ', ';
+                }
+                $graduateAllApplyDates .= $key;
+                $i++;
+            }
+            // The rest
+            $data['DiplomaDescr'] = isset($theobj->DiplomaDescr) ? $theobj->DiplomaDescr : '';
+            $data['CollegeUrl'] = isset($theobj->CollegeUrl) ? $theobj->CollegeUrl : '';
+            $data['AcadProg'] = isset($theobj->AcadProg) ? $theobj->AcadProg : '';
+            $data['CollegeDescr100'] = isset($theobj->CollegeDescr100) ? $theobj->CollegeDescr100 : '';
+            $data['CollegeAcadOrg'] = isset($theobj->CollegeAcadOrg) ? $theobj->CollegeAcadOrg : '';
+            $data['DepartmentCode'] = isset($theobj->DepartmentCode) ? $theobj->DepartmentCode : '';
+            $data['DegreeDescrshort'] = isset($theobj->DegreeDescrshort) ? $theobj->DegreeDescrshort : '';
+            $data['DegreeDescrformal'] = isset($theobj->DegreeDescrformal) ? $theobj->DegreeDescrformal : '';
+            $data['Descr100'] = isset($theobj->Descr100) ? $theobj->Descr100 : '';
+            $data['AcadPlan'] = $theobj->AcadPlan;
+            $data['AsuCritTrackUrl'] = isset($theobj->AsuCritTrackUrl) ? $theobj->AsuCritTrackUrl : '';
+            $data['DegreeEducationLvl'] = isset($theobj->DegreeEducationLvl) ? $theobj->DegreeEducationLvl : '';
+            $data['AsuCustomText'] = isset($theobj->AsuCustomText) ? $theobj->AsuCustomText : '';
+            $data['AsuNactvAppOvrd'] = $asuNactvAppOvrd;
+            // \Drupal::logger('asupesc_degree_webservice')->notice("data:<pre>" . print_r($data, true) . "</pre>");
+
+            // Try to keep the final table the same as before. Therefore, we insert one row per category.
+            foreach ($categories_array as $cat_id => $cat_name) {
+
+                // Insert to database
+                $dbentry = array(
+                    'categoryid' => $cat_id,
+                    'categoryname' => $cat_name,
+                    'categorycampuscode' => $campuses_string,
+                    'categoryprogramname' => $data['DiplomaDescr'],
+                    'categoryprogramurl' => $data['CollegeUrl'],
+                    'categoryprogramcode' => $data['AcadProg'],
+                    'categoryprogramDesrc100' => $data['CollegeDescr100'],
+                    'categoryprogramAcadOrg' => $data['CollegeAcadOrg'],
+                    'categorydepartmentCode' => $data['DepartmentCode'],
+                    'categoryDegreeDescShort' => $data['DegreeDescrshort'],
+                    'categoryDegreeDescLong' => $data['DegreeDescrformal'],
+                    'categorymajorname' => $data['Descr100'],
+                    'categorymajorcode' => $data['AcadPlan'],
+                    'categorymajorWebappURL' => $data['AsuCritTrackUrl'],
+                    'categorygradtype' => $data['DegreeEducationLvl'],
+                    'categorygraduateAllApplyDates' => $graduateAllApplyDates,
+                    'categoryAsuCustomText' => $data['AsuCustomText'],
+                    'categoryAsuNactvAppOvrd' => $data['AsuNactvAppOvrd'],
+                );
+                // \Drupal::logger('asupesc_degree_webservice')->notice("dbentry:<pre>" . print_r($dbentry, true) . "</pre>");
+                try {
+                    $query = $connection->insert('asu_grad_interest_category_degrees')->fields($dbentry)->execute();
+                } catch (Exception $e) {
+                    array_push($degree_errored_array, $data['AcadPlan']);
+                    \Drupal::logger('asupesc_degree_webservice')->error($e->getMessage());
+                    continue;
+                }
+
+            } // END OF foreach($categories_array as $cat_id => $cat_name)
+
+            //} // END OF if($asuNactvAppOvrd != 'N')
+
+        }
+    }
+    $context['results']['degrees_errored_out'][$cert] = $degree_errored_array;
+
+} // END OF function _get_grad_degrees(bool $cert)
+
+/**
+ * Get a list of all categories from web service.
+ *
+ * @return array
+ *   Returns array of all categories.
+ */
+function _get_all_categories_from_webservice() {
+  // Stopped using eAdvisorDSFind.listCategoriesMap because eAdvisorDSFind.listCategoriesMap doesn't include 2.5 Year Fast Track and 3 Year Fast Track.
+//    $config = \Drupal::config('asupesc_degree_webservice.settings');
+//    $webservice_xml_url = $config->get('asupesc_degree_webservice_xml_url');
+//
+//    // Get all categories list
+//    $all_categories = array();
+//    $categories = xmlrpc($webservice_xml_url, array('eAdvisorDSFind.listCategoriesMap'  => array('undergrad')));
+//
+//    foreach($categories as $cat_id => $cat_name){
+//        $all_categories[$cat_id] = $cat_name;
+//    }
+//    return $all_categories;
+
+  //---- Let's pull all degrees from Web service and get categories, instead of using eAdvisorDSFind.listCategoriesMap because eAdvisorDSFind.listCategoriesMap doesn't include 2.5 Year Fast Track and 3 Year Fast Track. Changed on 8/21/2024. ----//
+  $grad_ugrad = 'undergrad';
+  // Use cached ground degrees if available
+  $cached_items = \Drupal::cache()->get('asuaec_ground_degrees_' . $grad_ugrad);
+  if($cached_items) {
+    $file_contents = $cached_items->data;
+  } else {
+    $file_contents = _get_degrees_from_webservice($grad_ugrad, 'false');
+    // Cache degrees for later use
+    \Drupal::cache()->set('asuaec_ground_degrees_' . $grad_ugrad, $file_contents);
+  }
+  // Gather interest
+  $config = \Drupal::config('asupesc_degree_webservice.settings');
+  $webservice_xml_url = $config->get('asupesc_degree_webservice_xml_url');
+  $temp_cat_code = array();
+  $all_categories = array();
+  foreach($file_contents as $programs => $thearray) {
+    foreach($thearray as $key2 => $theobj) {
+      $data = array();
+      // Interest bucket
+      $data['planCatDescr'] = $theobj->planCatDescr; //<--- This is array.
+//            ksm($data['planCatDescr'], "plan cat desc");
+
+      foreach($data['planCatDescr'] as $key => $value) {
+        $cat_code = xmlrpc($webservice_xml_url, array('eAdvisorDSFind.getCategoryCodeForName'  => array($value)));
+        // Noticed that there is no category code for 2.5 Year Fast Track and 3 Year Fast Track. For those, just create temporary category code: 999_X.
+        if($cat_code == '' || is_null($cat_code)) {
+          array_push($temp_cat_code, $value);
+          $index = array_search($value, $temp_cat_code);
+          $cat_code = '999' . '_' . $index;
+        }
+        if (!array_key_exists($cat_code, $all_categories)) {
+          $all_categories[$cat_code] = $value;
+        }
+      }
+    } // END OF foreach($thearray as $key2 => $theobj)
+  } // END OF foreach($file_contents as $programs => $thearray)
+    $config = \Drupal::config('asupesc_degree_webservice.settings');
+    $webservice_xml_url = $config->get('asupesc_degree_webservice_xml_url');
+
+    // Get all categories list
+    $all_categories = array();
+    $categories = xmlrpc($webservice_xml_url, array('eAdvisorDSFind.listCategoriesMap'  => array('undergrad')));
+
+    foreach($categories as $cat_id => $cat_name){
+        $all_categories[$cat_id] = $cat_name;
+    }
+    return $all_categories;
+}
+
+/**
+ * Get degrees from web service using new method that returns Json.
+ *
+ * @param string $grad_ugrad
+ *  'graduate' or 'undergrad'
+ * @param string $cert
+ *  'true' or 'false'
+ * @return mixed|string
+ *  Returns Json decoded object
+ */
+function _get_degrees_from_webservice($grad_ugrad, $cert) {
+    $client = \Drupal::httpClient();
+    $filter = '';
+    if($grad_ugrad == 'graduate') {
+        $filter = '?method=findAllDegrees&program=' . $grad_ugrad . '&cert=' . $cert . '&fields=planCatDescr,CampusStringArray,DiplomaDescr,CollegeUrl,AcadProg,CollegeDescr100,CollegeAcadOrg,DepartmentCode,DegreeDescrshort,DegreeDescrformal,Descr100,AcadPlan,AsuCritTrackUrl,DegreeEducationLvl,graduateAllApplyDates,AsuCustomText,AsuNactvAppOvrd';
+    } else if ($grad_ugrad == 'undergrad') {
+        $filter = '?method=findAllDegrees&program='. $grad_ugrad . '&cert=false&fields=planCatDescr,CampusStringArray,DiplomaDescr,CollegeUrl,AcadProg,CollegeDescr100,CollegeAcadOrg,DepartmentCode,Descr100,AcadPlan,AsuCritTrackUrl,Degree,AsuCustomText,AsuNactvAppOvrd';
+    }
+    $file_contents = '';
+    try {
+        // $config = \Drupal::config('asupesc_degree_webservice.settings');
+        // $webservice_url = $config->get('asupesc_degree_webservice_url'); // Changed on 10/8/2025
+        $config_data = \Drupal::config('asuaec_rfib2.customadmin_settings');
+        $degreews = $config_data ? $config_data->get('degreews') : NULL;
+        if ($degreews === 'devdegreews') {
+          $webservice_url = 'https://degrees-qa.apps.asu.edu/t5/service';
+        } else {
+          $webservice_url = 'https://degrees.apps.asu.edu/t5/service';
+        }
+
+        // \Drupal::logger('asupesc_degree_webservice')->notice("webservice_url: <pre>" . $webservice_url . "</pre>");
+        $url = $webservice_url . $filter;
+        // \Drupal::logger('asupesc_degree_webservice2')->notice("url: <pre>" . $url . "</pre>");
+        $request = $client->get($url);
+        $code = $request->getStatusCode();
+        if ($code == 200) {
+            $content = $request->getBody()->getContents();
+            if ($content != null) {
+                $file_contents = json_decode($content);
+            } else {
+                throw new Exception("Web service didn't return anything.");
+            }
+        } else {
+            throw new Exception("Error occured. Error code: " . $code);
+        }
+    }
+    catch (Exception $e) {
+        $messenger = \Drupal::messenger();
+        $messenger->addMessage(t($e->getMessage(), []));
+        \Drupal::logger('asupesc_degree_webservice')->error($e->getMessage());
+    }
+    return $file_contents;
+}
+
+/**
+ * @param $context
+ */
+function asupesc_degree_webservice_data_insert_online(&$context) {
+    $degree_errored_array = array();
+    $client = \Drupal::httpClient();
+    try {
+        // Get degrees from web service
+        $config = \Drupal::config('asupesc_degree_webservice.settings');
+        $webservice_url = $config->get('asupesc_degree_webservice_url_online');
+        // \Drupal::logger('asupesc_degree_webservice')->notice("webservice_url: <pre>" . $webservice_url . "</pre>");
+
+        $filter = '';
+        $url = $webservice_url . $filter;
+        // \Drupal::logger('asupesc_degree_webservice2')->notice("url: <pre>" . $url . "</pre>");
+
+        // $request = $client->get($url, array('headers' => array('Accept' => 'text/xml', 'Content-Type' => 'application/x-www-form-urlencoded')));
+        $request = $client->get($url, [
+            'headers' => [
+                'Accept' => 'text/xml',
+                'User-Agent' => 'Mozilla/5.0',
+            ],
+            'allow_redirects' => [
+                'track_redirects' => TRUE,
+            ],
+            'http_errors' => FALSE,
+            'timeout' => 30,
+        ]);
+        // \Drupal::logger('asupesc_degree_webservice')->notice("request: <pre>" . print_r($request, true) . "</pre>");
+        // \Drupal::logger('asupesc_degree_webservice')->notice('Redirect history: <pre>@history</pre>', [
+        //     '@history' => print_r($request->getHeader('X-Guzzle-Redirect-History'), TRUE),
+        // ]);
+
+        $code = $request->getStatusCode();
+
+        if ($code == 200) {
+            // $content = $request->getBody()->getContents();
+            $content = (string) $request->getBody();
+            // \Drupal::logger('asupesc_degree_webservice')->notice("content: <pre>" . print_r($content, true) . "</pre>");
+
+            if ($content != null) {
+                // $xml = simplexml_load_string(utf8_encode($content));
+                $xml = simplexml_load_string($content);
+                if ($xml === false) {
+                    echo "Failed loading XML: ";
+                    foreach(libxml_get_errors() as $error) {
+                        echo "<br>", $error->message;
+                    }
+
+                } else {
+                    // \Drupal::logger('asupesc_degree_webservice')->notice("xml: <pre>" . print_r($xml, true) . "</pre>");
+
+                    //Empty the table content before refreshing the table with new data
+                    $connection = \Drupal::database(); //<--- This worked!!!
+                    $connection->truncate('asu_online_degrees')->execute(); //Empty the table content before refreshing the table with new data
+
+
+                    foreach ($xml->program as $degree_obj ) {
+                        // Interest area
+                        $interest_areas_array = array();
+                        $onlineinterestareas_obj = $degree_obj->interestareas;
+                        foreach($onlineinterestareas_obj->value as $interest_area ) {
+                            array_push($interest_areas_array, $interest_area);
+                        }
+                        $interest_areas_string = implode('|', $interest_areas_array);
+                        // Sub plan
+                        $subplans_array = array();
+                        $onlinesubplancode_obj = $degree_obj->subplancode;
+                        foreach($onlinesubplancode_obj->value as $subplan ) {
+                            array_push($subplans_array, $subplan);
+                        }
+                        $subplans_string = implode('|', $subplans_array);
+                        $dbentry = array(
+                            'onlinecode' => isset($degree_obj->code) ? $degree_obj->code : '',
+                            // 'onlinetitle' => isset($degree_obj->title) ? str_replace('â', '-', utf8_decode($degree_obj->title)) : '',
+                            'onlinetitle' => isset($degree_obj->title) ? str_replace('â', '-', $degree_obj->title) : '',
+                            'onlinecategory' => isset($degree_obj->category) ? $degree_obj->category : '',
+                            'onlineinterestarea' => $interest_areas_string,
+                            'onlineprogcode' => $degree_obj->progcode,
+                            'onlineplancode' => $degree_obj->plancode,
+                            'onlinesubplancode' => $subplans_string,
+                            'onlineshortdesc' => $degree_obj->shortdesc,
+                            'onlineurl' => $degree_obj->detailpage,
+                            'onlinecrmdestination' => $degree_obj->crmdestination,
+                        );
+                        //Insert data into asu_online_degrees table
+                        try {
+                            $query = $connection->insert('asu_online_degrees')->fields($dbentry)->execute();
+                        } catch (Exception $e) {
+                            array_push($degree_errored_array, $degree_obj->plancode);
+                            \Drupal::logger('asupesc_degree_webservice')->error($e->getMessage());
+                            continue;
+                        }
+                    } // END of foreach ($xml->program as $key => $value )
+
+                }
+
+            } else {
+                throw new Exception("Web service didn't return anything.");
+            }
+        } else {
+            throw new Exception("Error occured. Error code: " . $code);
+        }
+    }
+    catch (Exception $e) {
+        $messenger = \Drupal::messenger();
+        $messenger->addMessage(t($e->getMessage(), []));
+        \Drupal::logger('asupesc_degree_webservice')->error($e->getMessage());
+    }
+    // \Drupal::logger('asupesc_degree_webservice')->notice("file_contents: <pre>" . print_r($file_contents, true) . "</pre>");
+
+    $context['results']['degrees_errored_out']['online'] = $degree_errored_array;
+} // END OF function asupesc_degree_webservice_data_insert_online()
+
+
+/**
+ * Batch 'finished' callback used by both batch 1, batch 2 and batch 3.
+ */
+function asupesc_degree_webservice_finished($success, $results, $operations) {
+    $messenger = \Drupal::messenger();
+    if ($success) {
+        // Here we could do something meaningful with the results.
+        // We just display the number of nodes we processed...
+        $errored_degrees = '';
+        if((isset($results['degrees_errored_out']['true']) && sizeof($results['degrees_errored_out']['true']) > 0) ||
+            isset($results['degrees_errored_out']['false']) && (sizeof($results['degrees_errored_out']['false']) > 0)) {
+            if (isset($results['degrees_errored_out']['true']) && sizeof($results['degrees_errored_out']['true']) > 0) {
+                $errored_degrees .= print_r($results['degrees_errored_out']['true'], true);
+            }
+            if (isset($results['degrees_errored_out']['false']) && sizeof($results['degrees_errored_out']['false']) > 0) {
+                $errored_degrees .= print_r($results['degrees_errored_out']['false'], true);
+            }
+            \Drupal::logger('asupesc_degree_webservice2')->notice("degrees_errored_out:<pre>" . $errored_degrees . "</pre>");
+            $messenger->addMessage(t('Degrees that had errored out during import: @degrees', ['@degrees' => $errored_degrees]));
+        } else if (isset($results['degrees_errored_out']['online']) && sizeof($results['degrees_errored_out']['online']) > 0) {
+                $errored_degrees .= print_r($results['degrees_errored_out']['online'], true);
+                \Drupal::logger('asupesc_degree_webservice2')->notice("degrees_errored_out:<pre>" . $errored_degrees . "</pre>");
+                $messenger->addMessage(t('Degrees that had errored out during import: @degrees', ['@degrees' => $errored_degrees]));
+        } else {
+            $messenger->addMessage(t('All degrees were imported.', []));
+        }
+    }
+    else {
+        // An error occurred.
+        // $operations contains the operations that remained unprocessed.
+        $error_operation = reset($operations);
+        $messenger->addMessage(
+            t('An error occurred while processing @operation with arguments : @args',
+                [
+                    '@operation' => $error_operation[0],
+                    '@args' => print_r($error_operation[0], TRUE),
+                ]
+            )
+        );
+    }
+}
+
+/**
+ * Helper functions for updated asupesc_degree_webservice_data_insert_grad() to work with datapotluck.
+ * Added on 6/5/2026.
+ */
+function _get_grad_degrees_from_datapotluck() {
+  $data = array();
+
+  try {
+    $query = \GuzzleHttp\Psr7\Query::build([
+      'degreeType' => 'GR',
+      'filter' => 'activeInDegreeSearch',
+      'include' => [
+        'acadPlanCode',
+        'acadPlanDescription',
+        'acadProgramCode',
+        'acadPlanType',
+        'degreeDescriptionShort',
+        'degreeDescriptionLong',
+        'degreeEducationLevel',
+        'planCategories',
+        'campusesOffered',
+        'owners',
+        'applicationDeadlines',
+        'customText',
+        'customAdmissionUrl',
+      ],
+    ]);
+
+    $data = \Drupal::service('asu_data_potluck.potluck_client')
+      ->getData('codeset/acad-plans', ['query' => $query]);
+
+    if (!is_array($data)) {
+      throw new Exception('Data Potluck did not return grad degree data.');
+    }
+  }
+  catch (Exception $e) {
+    \Drupal::messenger()->addMessage(t($e->getMessage(), []));
+    \Drupal::logger('asupesc_degree_webservice')->error($e->getMessage());
+  }
+
+  return $data;
+}
+
+function _asupesc_datapotluck_primary_owner(array $degree) {
+  $primary_owner = array();
+  $owners = $degree['owners'] ?? array();
+
+  if (!is_array($owners)) {
+    return $primary_owner;
+  }
+
+  foreach ($owners as $owner) {
+    if (!is_array($owner)) {
+      continue;
+    }
+
+    if (empty($primary_owner) || (($owner['percentOwned'] ?? 0) > ($primary_owner['percentOwned'] ?? 0))) {
+      $primary_owner = $owner;
+    }
+  }
+
+  return $primary_owner;
+}
+
+function _asupesc_datapotluck_campuses_string(array $degree) {
+  $campuses = array();
+
+  foreach (($degree['campusesOffered'] ?? array()) as $campus) {
+    $campus_code = is_array($campus) ? trim((string) ($campus['campusCode'] ?? '')) : '';
+
+    if ($campus_code !== '' && !in_array($campus_code, $campuses)) {
+      $campuses[] = $campus_code;
+    }
+  }
+
+  return implode(', ', $campuses);
+}
+
+function _asupesc_datapotluck_grad_apply_dates(array $degree) {
+  $dates = array();
+
+  foreach (($degree['applicationDeadlines'] ?? array()) as $deadline) {
+    if (!is_array($deadline)) {
+      continue;
+    }
+
+    $campus = trim((string) ($deadline['campus'] ?? ''));
+    $session = trim((string) ($deadline['session'] ?? ''));
+    $strm = trim((string) ($deadline['strm'] ?? ''));
+
+    if ($campus !== '' && $session !== '' && $strm !== '') {
+      $key = $campus . ':' . $session . ':' . $strm;
+      $dates[$key] = $key;
+    }
+  }
+
+  return implode(', ', array_values($dates));
+}
+
+function _asupesc_datapotluck_grad_degree_short(array $degree) {
+  if (($degree['acadPlanType'] ?? '') === 'CER') {
+    return 'Certificate';
+  }
+
+  return _asupesc_datapotluck_string($degree['degreeDescriptionShort'] ?? '');
+}
+
+function _asupesc_datapotluck_string($value) {
+  return is_scalar($value) ? trim((string) $value) : '';
+}

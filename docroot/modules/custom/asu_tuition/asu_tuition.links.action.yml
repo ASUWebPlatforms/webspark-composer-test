@@ -1,0 +1,7 @@
+asu_tuition.dynamic_tabs:
+  route_name: asu_tuition.admin_table_settings
+  title: 'Example dynamic title action'
+  weight: -20
+  class: '\Drupal\asu_tuition\Plugin\Menu\LocalAction\AsuTuitionDynamicTabsLocal'
+  appears_on:
+    - asu_tuition.admin_table_settings

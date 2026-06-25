@@ -1,0 +1,23 @@
+{{ attach_library('asu_alumni/style') }}
+{% set icon = '' %}
+
+{% set socialType = content.field_social_media.0['#markup'] %}
+
+{% if socialType == 'Facebook' %}
+{% set icon = 'fa-facebook-f' %}
+{% endif %}
+{% if socialType == 'Twitter' %}
+{% set icon = 'fa-twitter' %}
+{% endif %}
+{% if socialType == 'Linkedin' %}
+{% set icon = 'fa-linkedin-in' %}
+{% endif %}
+{% if socialType == 'Instagram' %}
+{% set icon = 'fa-instagram' %}
+{% endif %}
+
+<a target="_blank" href="{{content.field_link.0['#title']}}">
+    <div class="social_icon">
+        <span class="fab {{icon}} icon fa-lg"></span>
+    </div>
+</a>

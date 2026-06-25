@@ -1,0 +1,65 @@
+asuaec-visit-library:
+  version: 1.1
+  dependencies:
+    - core/jquery
+    - core/once
+  js:
+    js/asuaec_visit.js: { }
+    js/asuaec_youhaveselected_div.js: { }
+  css:
+    theme:
+      css/asuaec_visit.css: {}
+
+asuaec-visitform-library:
+  version: 1.13
+  dependencies:
+    - core/jquery
+    - core/once
+  js:
+    js/asuaec_visitform.js: { }
+    js/asuaec_visitform_college.js: { }
+    js/jquery.selectboxes.js: { }
+    js/asuaec_visitform_hs_inst.js: { }
+    js/asuaec_youhaveselected_div.js: { }
+  css:
+    theme:
+      css/asuaec_visitform.css: {}
+
+asuaec-schedulepage-library:
+  version: 1.x
+  dependencies:
+    - core/jquery
+  js:
+    js/asuaec_schedulepage.js: { }
+  css:
+    theme:
+      css/asuaec_schedulepage.css: {}
+
+asuaec-confpage-library:
+  version: 1.x
+  dependencies:
+    - core/jquery
+  js:
+    js/asuaec_confpage.js: { }
+  css:
+    theme:
+      css/asuaec_confpage.css: {}
+
+sundevilJsLib:
+  version: 1.x
+  js:
+    js/sunDevil.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+
+asuaec-eventseries-editform-library:
+  version: 1.x
+  dependencies:
+    - core/jquery
+  js:
+    js/asuaec-eventseries-editform.js: {}
+  css:
+    theme:
+      css/asuaec-eventseries-editform.css: {}

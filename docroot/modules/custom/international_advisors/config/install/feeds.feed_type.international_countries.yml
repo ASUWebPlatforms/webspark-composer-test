@@ -1,0 +1,47 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.international_countries
+  module:
+    - taxonomy
+id: international_countries
+label: 'International countries'
+description: ''
+help: ''
+import_period: 3600
+fetcher: upload
+fetcher_configuration:
+  allowed_extensions: 'txt csv tsv xml opml'
+  directory: 'private://feeds'
+parser: csv
+parser_configuration:
+  delimiter: ','
+  no_headers: false
+  line_limit: 100
+processor: 'entity:taxonomy_term'
+processor_configuration:
+  langcode: en
+  insert_new: 1
+  update_existing: 2
+  update_non_existent: _keep
+  expire: -1
+  skip_hash_check: false
+  values:
+    vid: international_countries
+  owner_id: 0
+  authorize: false
+  owner_feed_author: false
+custom_sources:
+  country:
+    label: Country
+    value: Country
+    machine_name: country
+mappings:
+  -
+    target: name
+    map:
+      value: country
+    unique: {  }
+    settings:
+      language: ''

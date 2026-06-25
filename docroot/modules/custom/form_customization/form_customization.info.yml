@@ -1,0 +1,7 @@
+name: "Form Customization"
+type: module
+description: "Customize Rules, Event Registry Form and Mail Config"
+core_version_requirement: ^10 || ^11
+package: Custom
+version: 1.0
+

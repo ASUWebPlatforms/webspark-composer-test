@@ -1,0 +1,688 @@
+<?php
+
+
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeViewBuilder;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Url;
+use Drupal\Core\Block\BlockBase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Render\Renderer;
+use Drupal\views\Views;
+use Drupal\node\NodeInterface;
+use Drupal\node\Entity\Node;
+use Drupal\file\Entity\File;
+use Drupal\image\Entity\ImageStyle;
+use Drupal\file\Entity;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\ReplaceCommand;
+
+/**
+ * Alter webform elements.
+ *
+ * @param array $element
+ *   The webform element.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ * @param array $context
+ *   An associative array containing the following key-value pairs:
+ *   - form: The form structure to which elements is being attached.
+ */
+
+
+/** Implementation of hook_webform_options_alter to alter predefined webform options **/
+function asu_contact_webform_custom_options_webform_options_alter(array &$options, array &$element, $id)
+{
+	//ksm($id,'id');
+	/** Code to alter Freshman states dropdown options **/
+	if($id == "freshman_states"){
+		$query = \Drupal::database();
+		$hasData = $query->select('node__field_specialist_state_freshman', 'n')
+			->fields('n',['field_specialist_state_freshman_value'])
+			->fields('n',['entity_id'])
+			->execute()
+			->fetchAll();
+		
+		foreach($hasData as $data){
+			$state[$data->field_specialist_state_freshman_value] = $data->field_specialist_state_freshman_value;
+		}
+		ksort($state);
+		
+		//unset states that are not needed
+		unset($state[1]);
+		unset($state[2]);
+		unset($state['Canada']);
+		unset($state['Canadian Provinces and Territories']);
+		unset($state['Canadian Provinces/Territories']);
+		//ksm($options);
+		$options = $state;
+		
+	}
+	
+	
+}
+
+
+    	
+	
+/*** hook_form_alter for gradudate form to update college and program of interest fields dynamically based on degree level field selection ***/
+
+function asu_contact_webform_custom_options_form_alter(&$form, FormStateInterface $form_state, $form_id){
+    //ksm($form_id);
+	$confact_form_config = \Drupal::config('asu_contact_webform_custom_options.contact_form_formnid_settings');
+	$undergrad_nid = $confact_form_config->get('undergrad_contact_form_nid');
+	$grad_nid = $confact_form_config->get('grad_contact_form_nid');
+
+	/** International advisors content type form **/
+	if(($form_id == "node_international_advisors_form") || ($form_id == "node_international_advisors_edit_form")){
+		$form['field_select_country']['#prefix'] = '<div id="ajax-intl-countries-list">';
+		$form['field_select_country']['#suffix'] = "</div>";
+		//ksm($form['field_select_country']['widget']['#options']);
+		$form['field_intl_region']['widget']['#ajax'] = [
+		    'callback' => 'updateCckInternationalCountry',
+		    'wrapper' => 'ajax-intl-countries-list',
+			'event' => 'change',
+		];
+		
+	}
+	
+	/** undergrad form form alter **/
+	if(($form_id == "webform_submission_graduate_contact_form_add_form") || ($form_id == "webform_submission_graduate_contact_form_node_".$grad_nid."_add_form")){
+		//attach library
+		$form['#attached']['library'][] = 'asu_contact_webform_custom_options/gardContactFormLib';
+		$form['#validate'][] = 'asu_contact_webform_custom_options_custom_validation';
+		
+		/** add wrappers to fields **/
+		$form['elements']['graduate_form']['degree_details']['select_area_of_interest']['#prefix'] = '<div class="req-field"><span class="interest-text"><strong>Please select one option: *</strong></span><br /><div class="uds-card-arrangement"><div class="uds-card-arrangement-card-container auto-arrangement two-columns grad-progams">';
+		$form['elements']['graduate_form']['degree_details']['select_a_school_or_college']['#prefix'] = '<div id="grad-college-wrapper">';
+		$form['elements']['graduate_form']['degree_details']['select_a_school_or_college']['#suffix'] = '</div></div></div></div>';
+		$form['elements']['graduate_form']['degree_details']['select_program_of_interest']['#prefix'] = '<div id="ajax-programs-list">';
+		$form['elements']['graduate_form']['degree_details']['select_program_of_interest']['#suffix'] = '</div>';
+		$form['elements']['graduate_form']['degree_details']['start_term']['#prefix'] = '<div id="grad-start-date-wrapper"><div id="term-error-message"></div>';
+		$form['elements']['graduate_form']['degree_details']['start_term']['#suffix'] = '</div>';
+		
+		$form['elements']['graduate_form']['degree_details']['select_a_school_or_college']['#validated'] = TRUE; //add this line to override validation 
+		$form['elements']['graduate_form']['degree_details']['select_program_of_interest']['#validated'] = TRUE; //add this line to override validation 
+		$form['elements']['graduate_form']['degree_details']['start_term']['#validated'] = TRUE; //add this line to override validation 
+		
+		
+		/** add ajax functionality to dynamically update college drop down options when degree level field is changed **/
+	    $form['elements']['graduate_form']['degree_details']['degree_level']['#ajax'] = [
+		    'callback' => 'updateGradCollege',
+		    'wrapper' => 'grad-college-wrapper',
+			'event' => 'change',
+		    
+	    ];
+		
+	    $form['elements']['graduate_form']['degree_details']['select_area_of_interest']['#ajax'] = [
+		    'callback' => 'updateGradInterestProgram',
+		    'wrapper' => 'ajax-programs-list',
+			'event' => 'change',
+		];
+		
+	    $form['elements']['graduate_form']['degree_details']['select_a_school_or_college']['#ajax'] = [
+		    'callback' => 'updateGradCollegeProgram',
+		    'wrapper' => 'ajax-programs-list',
+			'event' => 'change',
+		    
+	    ];
+		
+		$form['elements']['graduate_form']['degree_details']['select_program_of_interest']['#ajax'] = [
+		    'callback' => 'updateStartTerm',
+		    'wrapper' => 'grad-start-date-wrapper',
+			'event' => 'change',
+		    
+	    ];
+	}
+	
+	
+   /** hook_form_alter for undergrad form to update freshman state field dropdown values and update autocomplete field options **/	
+   if(($form_id == "webform_submission_contact_undergrad_form_add_form") || ($form_id == "webform_submission_contact_undergrad_form_node_".$undergrad_nid."_add_form")){
+	  
+	   
+	   //add wrapper to highs school
+	   $form['elements']['high_school_names']['#prefix'] = '<div id="hs-wrapper">';
+	   $form['elements']['high_school_names']['#suffix'] = '</div>';
+	   $form['elements']['high_school_names']['#validated'] = TRUE;
+	
+	   $form['elements']['domestic_hs_rep_info']['#prefix'] = '<div id="domestic-hs-rep-wrapper">';
+	   $form['elements']['domestic_hs_rep_info']['#suffix'] = '</div>';
+	   $form['elements']['domestic_hs_rep_info']['#attributes']['class'] = array('class' => array("show-rep-info-div pl-5"));
+	   
+	
+	   $form['#attached']['library'][] = 'asu_contact_webform_custom_options/undergardContactFormLib';
+		
+	   /** add ajax functionality to freshman state field so that high school reps info is updated based on state and/or school selection **/
+	   $form['elements']['freshman_state']['#ajax'] = [
+		    'callback' => 'updateHighSchool',
+		    'wrapper' => 'hs-wrapper',
+		    'event' => 'change',
+	   ];
+	   
+	   /** add ajax functionality to international advisors region field **/
+	   $form['elements']['international_section']['international_select_your_region']['#ajax'] = [
+		    'callback' => 'updateInternationalCountry',
+		    'wrapper' => 'intl-country-wrapper',
+		    'event' => 'change',
+	   ];
+	   
+	   $form['elements']['international_section']['select_custom_international_country']['#prefix'] = '<div id="intl-country-wrapper">';
+	   $form['elements']['international_section']['select_custom_international_country']['#suffix'] = '</div>';
+	   $form['elements']['international_section']['select_custom_international_country']['#validated'] = TRUE;
+	   
+	   
+	   /** Add custom autocomplete route to high schools field **/
+	   $form['elements']['high_school_autocomplete']['#autocomplete_route_name'] = 'asu_contact_webform_custom_options.highSchoolAutocomplete';
+	   $form['elements']['high_school_autocomplete']['#attributes']['placeholder'] = t('Enter high school');
+	   
+	   /** Add custom autocomplete route to Transfer Arizona institutions field **/
+	   $form['elements']['transfer_fields']['select_arizona_college_or_university']['#autocomplete_route_name'] = 'asu_contact_webform_custom_options.transferArizonaInstitutes';
+	   $form['elements']['transfer_fields']['select_arizona_college_or_university']['#attributes']['placeholder'] = t('Select Arizona college or univeristy');
+	   
+	   /** Add custom autocomplete route to Transfer California institutions **/
+	   $form['elements']['transfer_fields']['enter_california_college_or_university']['#autocomplete_route_name'] = 'asu_contact_webform_custom_options.transferCaliforniaInstitutes';
+	   $form['elements']['transfer_fields']['enter_california_college_or_university']['#attributes']['placeholder'] = t('Select California college or univeristy');
+	 
+	   return $form;
+	 
+   }
+	
+}
+
+
+/**
+ * Custom validation handler.
+ */
+function asu_contact_webform_custom_options_custom_validation($form, FormStateInterface $form_state) {
+ 
+  $selected_prog_value = $form_state->getValue('select_program_of_interest');
+  $selected_term = $form_state->getValue('start_term');
+  
+  if (empty($selected_prog_value)) {
+    $form_state->setErrorByName('select_program_of_interest', t('Please enter select a program of interest.'));
+  }
+  if (empty($selected_term)) {
+    $form_state->setErrorByName('start_term', t('Please enter start term.'));
+  }
+}
+
+/*Ajax function update international countries list when creating international advisors content type **/
+function updateCckInternationalCountry(array $form, FormStateInterface $form_state){
+	$form_state->setRebuild(true);
+	$intl_region = $form_state->getValue('field_intl_region');
+	//ksm($intl_region);
+	if(sizeof($intl_region > 1)){
+		foreach($intl_region as $all_regions){
+			$each_region[$all_regions['value']] = $all_regions['value'];
+		}
+	}
+	else{
+		$each_region = $intl_region[0]['value'];
+	}
+	//ksm($each_region);
+	$region = $intl_region[0]['value'];
+	$database = \Drupal::database();
+	$intl_data = $database->select('taxonomy_term_field_data','atp')
+				->fields('atp',['name','tid'])
+				//->condition('atp.vid','international_countries')
+				->condition('atp.description__value',$each_region,IN)
+				->execute()
+				->fetchAll();
+		
+		
+		foreach($intl_data as $intl_values){
+			
+				$intl_countries[$intl_values->tid] = $intl_values->name;
+			
+		}
+	
+	
+	$form['field_select_country']['widget']['#options'] = $intl_countries;
+	return $form['field_select_country'];
+}
+
+
+/* function to update internatioanl country */
+function updateInternationalCountry(array $form, FormStateInterface $form_state){
+		$form_state->setRebuild(true);
+		//ksm($form_state);
+		$intl_region = $form_state->getValue('international_select_your_region');
+		//ksm($intl_region);
+		/*if($intl_region == "Africa"){
+			$region = "africa_countries";
+		}
+		if($intl_region == "Asia"){
+			$region = "asia";
+		}
+		if($intl_region == "Europe"){
+			$region = "europe_countries_new";
+		}
+		if($intl_region == "Australia"){
+			$region = "australia";
+		}
+		if($intl_region == "Central America"){
+			$region = "central_america_";
+		}
+		if($intl_region == "Middle East"){
+			$region = "middleeast_country";
+		}
+		if($intl_region == "North America"){
+			$region = "north_america_countries";
+		}
+		if($intl_region == "Antarctica"){
+			$region = "antarctica";
+		}
+		if($intl_region == "Oceania"){
+			$region = "oceania_countries";
+		}
+		if($intl_region == "South America"){
+			$region = "south_america_countries";
+		}
+	 
+	
+		$database = \Drupal::database();
+		$intl_data = $database->select('taxonomy_term_field_data','atp')
+				->fields('atp',['name','description__value'])
+				->condition('atp.vid',$region)
+				->execute()
+				->fetchAll();
+		
+		
+		foreach($intl_data as $intl_values){
+			if(!empty($intl_values->description__value)){
+				$intl_countries[$intl_values->description__value] = $intl_values->name;
+			}
+			
+		}
+		$any = array(' Any ' => 'Enter country');
+		array_unshift($intl_countries, $any);
+	
+	    $form['elements']['international_section']['select_custom_international_country']['#options'] = $intl_countries;
+		return $form['elements']['international_section']['select_custom_international_country'];*/
+	
+	    $database = \Drupal::database();
+		$rep_countries = $database->select('taxonomy_term_field_data','atp');
+		$rep_countries->fields('atp',['name','tid']);
+		$rep_countries->innerJoin('node__field_select_country','fsc','atp.tid = fsc.field_select_country_target_id');
+				//->condition('atp.vid','international_countries')
+		$rep_countries->condition('atp.description__value',$intl_region);
+		$rep_countries->execute();
+		$intl_data = $rep_countries->execute()->fetchAll();
+		$intl_countries = array();
+		
+		foreach($intl_data as $intl_values){
+			$explode_values = explode('-',$intl_values->name);
+			$intl_countries[$explode_values[1]] = $explode_values[0];
+		}
+	   
+		$any = [' Any ' => 'Enter country'];
+		array_unshift($intl_countries, $any);
+	    $form['elements']['international_section']['select_custom_international_country']['#options'] = $intl_countries;
+		return $form['elements']['international_section']['select_custom_international_country'];
+}
+
+
+
+/* function to update start term field dropdown options dynamically */
+function updateStartTerm(array $form, FormStateInterface $form_state){
+		$form_state->setRebuild(true);
+		$program_code = $form_state->getValue('select_program_of_interest');
+	
+		$database = \Drupal::database();
+		$term_options_array = array();
+		$term_options = array();
+	    $term_array = array('0'=>'Select a start date');
+		$hasTerm = $database->select('asu_grad_interest_category_degrees', 'agd')
+			->fields('agd',['categorygraduateAllApplyDates'])
+			->condition('agd.categorymajorcode',$program_code)
+			->execute()
+			->fetchAll();
+		
+		foreach($hasTerm as $result){
+			if($result->categorygraduateAllApplyDates != ''){
+			  $term_options_array = explode(',', $result->categorygraduateAllApplyDates);
+			}
+		}
+		foreach($term_options_array as $each_term) {
+			$each_term_array = explode(':', $each_term );
+			if(!array_key_exists(trim($each_term_array[2]), $term_options)) {
+				if(trim($each_term_array[0]) != 'ONLNE') { // Exclude Online.
+					$term_array[trim($each_term_array[2])] = getHumanReadableTerm(trim($each_term_array[2]));
+				}
+			}
+		}		
+	    
+	   
+		ksort($term_array);
+	   /* show error message if the selected program is not accepting new students at this time based on the term years array size */
+	
+	   if(sizeof($term_array) == 1){
+			$form['elements']['graduate_form']['degree_details']['start_term']['#prefix'] = '<div id="grad-start-date-wrapper"><div id="term-error-message"><p style="color: red;">The program you are interested in is not accepting new students at this time. Please select a different program of interest, and then select the semester you would like to start.</p></div>';
+			
+		}
+		else{
+			$form['elements']['graduate_form']['degree_details']['start_term']['#prefix'] = '<div id="grad-start-date-wrapper"><div id="term-error-message"></div>';
+		}
+		
+		$form['elements']['graduate_form']['degree_details']['start_term']['#options'] = $term_array;
+	    return $form['elements']['graduate_form']['degree_details']['start_term'];
+	
+}
+
+/* helper function for start term field */
+function getHumanReadableTerm($term_code) {
+	$threedigit_year = substr($term_code, 0, 3);
+	$year = substr($threedigit_year, 0, 1) . '0' . substr($threedigit_year, 1);
+	
+	$semester_code = substr($term_code, 3);
+	$semester = '';
+	switch ($semester_code) {
+		case 1:
+			$semester = 'Spring';
+			break;
+		case 4:
+			$semester = 'Summer';
+			break;
+		case 7:
+			$semester = 'Fall';
+			break;
+	}
+	return $year . ' ' . $semester;	
+}
+
+
+function updateGradInterestProgram(array $form, FormStateInterface $form_state){	
+	$form_state->setRebuild(true);
+	$degree_value = $form_state->getValue('degree_level');
+	$interest_grad_query = \Drupal::database();
+	$acad_interest = $form_state->getValue('select_area_of_interest');
+	//ksm($acad_interest);
+	$prog_array = array('0'=>'Select program of interest');
+	
+	if(!empty($degree_value)){
+		
+		if($degree_value == 21) { // 15 is also Doctoral.
+			$grad_prog_Data = $interest_grad_query->select('asu_grad_interest_category_degrees', 'agi')
+				->fields('agi',['categorymajorcode','categorymajorname'])
+				->condition('agi.categorygradtype',[15,21], 'IN')
+				->condition("agi.categoryname",$acad_interest)
+				->orderBy('agi.categorymajorname')
+				->execute()
+				->fetchAll();
+		}
+		elseif($degree_value == "cert"){
+			$grad_prog_Data = $interest_grad_query->select('asu_grad_interest_category_degrees', 'agi')
+				->fields('agi',['categorymajorcode','categorymajorname'])
+				->condition('agi.categoryDegreeDescShort','Certificate')
+				->condition("agi.categoryname",$acad_interest)
+				->orderBy('agi.categorymajorname')
+				->execute()
+				->fetchAll();
+		}
+		elseif($degree_value == 17) { 
+			$grad_prog_Data = $interest_grad_query->select('asu_grad_interest_category_degrees', 'agi')
+				->fields('agi',['categorymajorcode','categorymajorname'])
+				->condition('agi.categorygradtype',17)
+				->condition("agi.categoryname",$acad_interest)
+				->orderBy('agi.categorymajorname')
+				->execute()
+				->fetchAll();
+		}
+		else{
+
+		}
+		foreach($grad_prog_Data as $grad_prog_values){
+			
+			$prog_values[$grad_prog_values->categorymajorcode] = $grad_prog_values->categorymajorname;
+			$prog_array[$grad_prog_values->categorymajorcode] = $grad_prog_values->categorymajorname;
+		}
+		
+	}
+	    
+	//ksm($prog_array);	
+	//array_push($empty_option, $prog_values );
+	$form['elements']['graduate_form']['degree_details']['select_program_of_interest']['#options'] = $prog_array;
+	return $form['elements']['graduate_form']['degree_details']['select_program_of_interest'];
+	
+}
+
+function updateGradCollegeProgram(array $form, FormStateInterface $form_state){	
+	$form_state->setRebuild(true);
+	$degree_value = $form_state->getValue('degree_level');
+	$college_grad_query = \Drupal::database();
+	$college_value = $form_state->getValue('select_a_school_or_college');
+	$college_prog_options = array('0'=>'Select program of interest');
+	if(!empty($degree_value)){
+		
+		if($degree_value == 21) { // 15 is also Doctoral.
+			$grad_prog_Data = $college_grad_query->select('asu_grad_interest_category_degrees', 'agi')
+				->fields('agi',['categorymajorcode','categorymajorname'])
+				->condition('agi.categorygradtype',[15,21], 'IN')
+				->condition("agi.categoryprogramAcadOrg",$college_value)
+				->orderBy('agi.categorymajorname')
+				->execute()
+				->fetchAll();
+		}
+		elseif($degree_value == "cert"){
+			$grad_prog_Data = $college_grad_query->select('asu_grad_interest_category_degrees', 'agi')
+				->fields('agi',['categorymajorcode','categorymajorname'])
+				->condition('agi.categoryDegreeDescShort','Certificate')
+				->condition("agi.categoryprogramAcadOrg",$college_value)
+				->orderBy('agi.categorymajorname')
+				->execute()
+				->fetchAll();
+		}
+		elseif($degree_value == 17) { 
+			$grad_prog_Data = $college_grad_query->select('asu_grad_interest_category_degrees', 'agi')
+				->fields('agi',['categorymajorcode','categorymajorname'])
+				->condition('agi.categorygradtype',17)
+				->condition("agi.categoryprogramAcadOrg",$college_value)
+				->orderBy('agi.categorymajorname')
+				->execute()
+				->fetchAll();
+		}
+		else{
+
+		}
+		foreach($grad_prog_Data as $grad_prog_values){
+			$college_prog_values[$grad_prog_values->categorymajorcode] = $grad_prog_values->categorymajorname;
+			$college_prog_options[$grad_prog_values->categorymajorcode] = $grad_prog_values->categorymajorname;
+		}
+		
+	}
+		//ksm($college_prog_values);
+		//Append empt option to the array
+		
+
+		//array_unshift($prog_values, $empty_option);
+		$form['elements']['graduate_form']['degree_details']['select_program_of_interest']['#options'] = $college_prog_options;
+		return $form['elements']['graduate_form']['degree_details']['select_program_of_interest'];
+	
+}
+
+
+function updateGradCollege(array $form, FormStateInterface $form_state)
+{	
+	$form_state->setRebuild(true);
+	$degree_value = $form_state->getValue('degree_level');
+	$grad_query = \Drupal::database();
+	$grad_college_values = array('0'=>'Select school or college');
+	//$grad_college_array = array('0'=>'Select school or college');
+	if($degree_value == 21) { // 15 is also Doctoral.
+		$grad_college_Data = $grad_query->select('asu_grad_interest_category_degrees', 'agi')
+			->fields('agi',['categoryprogramacadorg','categoryprogramDesrc100'])
+			->condition('agi.categorygradtype',[15,21], 'IN')
+			->orderBy('agi.categoryprogramDesrc100')
+			->execute()
+			->fetchAll();
+	}
+	elseif($degree_value == "cert"){
+		$grad_college_Data = $grad_query->select('asu_grad_interest_category_degrees', 'agi')
+			->fields('agi',['categoryprogramacadorg','categoryprogramDesrc100'])
+			->condition('agi.categoryDegreeDescShort','Certificate')
+			->orderBy('agi.categoryprogramDesrc100')
+			->execute()
+			->fetchAll();
+	}
+	else{
+		$grad_college_Data = $grad_query->select('asu_grad_interest_category_degrees', 'agi')
+			->fields('agi',['categoryprogramacadorg','categoryprogramDesrc100'])
+			->condition('agi.categorygradtype',$degree_value)
+			->orderBy('agi.categoryprogramDesrc100')
+			->execute()
+			->fetchAll();
+	}
+	
+	foreach($grad_college_Data as $grad_colleges){
+		//$grad_colleges[$grad_colleges->categoryprogramacadorg] = $grad_colleges->categoryprogramDesrc100;
+		$grad_college_values[$grad_colleges->categoryprogramacadorg] = $grad_colleges->categoryprogramDesrc100;
+	}
+	//Append empt option to the array
+	
+	if($degree_value == "nd"){
+		$grad_nd_college_values[0] = 'Select school or college';
+		$grad_nd_college_values['CAS'] = 'New College of Interdisciplinary Arts and Sciences';
+		$grad_nd_college_values['CBA'] = 'W. P. Carey School of Business';
+		$grad_nd_college_values['CCS'] = 'Cronkite School of Journalism and Mass Comm';
+		$grad_nd_college_values['CES'] = 'Ira A. Fulton School of Engineering';
+		$grad_nd_college_values['CGF'] = 'School for the Future of Innovation in Society';
+		//$grad_nd_college_values['GRNONDEG'] = 'Graduate College';
+		$grad_nd_college_values['CHI'] = 'Herberger Institute';
+		$grad_nd_college_values['CLA'] = 'College of Liberal Arts & Sciences';
+		//$grad_nd_college_values['LSGRNONDGR'] = 'Letters & Sciences';
+		$grad_nd_college_values['CHL'] = 'College of Health Solutions';
+		$grad_nd_college_values['CNU'] = 'College of Nursing';
+		$grad_nd_college_values['CPP'] = 'College of Public Programs';
+		$grad_nd_college_values['CTB'] = 'Thunderbird School of Global Management';
+		$grad_nd_college_values['CTE'] = 'Mary Lou Fulton Teachers College';
+		asort($grad_nd_college_values);
+		$grad_college_array = $grad_nd_college_values;
+	}
+	else{
+		$grad_college_array = $grad_college_values;
+	}
+	//array_unshift($grad_college_values, $empty_option);
+	$form['elements']['graduate_form']['degree_details']['select_a_school_or_college']['#options'] = $grad_college_array;
+	return $form['elements']['graduate_form']['degree_details']['select_a_school_or_college'];
+}
+
+
+
+function updateHighSchool(array $form, FormStateInterface $form_state){
+	$form_state->setRebuild(true);
+	//ksm($form_state->getValue('freshman_state'));
+	$state_value = $form_state->getValue('freshman_state');
+	
+	if (!empty($state_value)) {
+		if($state_value == "Arizona"){
+			$form['elements']['high_school_names']['#options'] = getSelect2Options($state_value);
+		}
+		
+	} else {
+		$form['elements']['high_school_names']['#options'] = getAllSelect2Options();
+	}
+	
+	
+	return $form['elements']['high_school_names'];
+	
+	
+}
+
+
+function getSelect2Options($state_value){
+		$hs_query = \Drupal::database();
+		$hashsData = $hs_query->select('node__field_specialist_hs_names', 'fs')
+			->fields('fs',['field_specialist_hs_names_value'])
+			->execute()
+			->fetchAll();
+		
+		foreach($hashsData as $hsdata){
+			$hs_name[$hsdata->field_specialist_hs_names_value] = $hsdata->field_specialist_hs_names_value;
+		}
+		ksort($hs_name);
+		$any = array(' Any ' => 'Enter school name');
+		array_unshift($hs_name, $any);
+		return $hs_name;
+}
+
+
+function getAllSelect2Options(){
+		$hs_nostate_query = \Drupal::database();
+		$hsnostateData = $hs_nostate_query->select('asu_webform_highschool_data', 'fs')
+			->fields('fs',['hs_id','hs_name'])
+			->execute()
+			->fetchAll();
+		
+		foreach($hsnostateData as $hsnostatevalue){
+			$hs_nostate_name[$hsnostatevalue->hs_id] = $hsnostatevalue->hs_name;
+		}
+		return $hs_nostate_name;
+}
+
+
+function getRepInfo($state_selected,$hs_selected){
+	$rep_query = \Drupal::database();
+	if($state_selected == "Arizona") {
+		$hs_value = $hs_selected;
+		$rep_fields = $rep_query->select('node_field_data', 'nfv')->fields('nfv', array('nid'));
+		$rep_fields->innerJoin('node__field_specialist_state_freshman', 'fstate', 'fstate.entity_id = nfv.nid');
+		$rep_fields->innerJoin('node__field_specialist_category', 'fsc','fsc.entity_id = nfv.nid' );
+		$rep_fields->leftJoin("node__field_specialist_hs_names",'fshs', 'fshs.entity_id = nfv.nid');
+		$rep_fields->condition('fstate.field_specialist_state_freshman_value', $state_selected);
+		$rep_fields->condition('fshs.field_specialist_hs_names_value', '%' . $rep_query->escapeLike($hs_value) . '%', 'LIKE');
+		$rep_fields->condition('fsc.field_specialist_category_target_id',1);
+		$results = $rep_fields->execute()->fetchAll();
+	}
+	else {
+		$hs_value = '';
+		$rep_fields = $rep_query->select('node_field_data', 'nfv')->fields('nfv', array('nid'));
+		$rep_fields->innerJoin('node__field_specialist_state_freshman', 'fstate', 'fstate.entity_id = nfv.nid');
+		$rep_fields->innerJoin('node__field_specialist_category', 'fsc','fsc.entity_id = nfv.nid' );
+		$rep_fields->leftJoin("node__field_specialist_hs_names",'fshs', 'fshs.entity_id = nfv.nid');
+		$rep_fields->condition('fstate.field_specialist_state_freshman_value', $state_selected);
+		$rep_fields->condition('fsc.field_specialist_category_target_id',1);
+		$results = $rep_fields->execute()->fetchAll();
+	}
+	
+	$results = $rep_fields->execute()->fetchAll();
+	
+	foreach($results as $rep_id){
+			$node_id[] = $rep_id->nid;
+	}
+	foreach($node_id as $nid){
+		$node = Node::load($nid);
+		//ksm($node);
+		$fname = $node->field_first_name[0]->value;
+		$last_name = $node->field_last_name[0]->value;
+		$image_id = $node->field_specialist_image[0]->target_id;
+		$phone = $node->field_phone[0]->value;
+		$email = $node->field_specialist_email[0]->value;
+		$appointment_link = $node->field_phone_or_video_appointment[0]->value;
+		$image_uri = File::load($image_id)->getFileUri();
+		$rep_image = ImageStyle::load('medium')->buildUri($image_uri);
+		$image_path = explode('//', $rep_image);
+		
+		$new_explode = explode('/',$image_path[1]);
+		
+		$image_parts = sizeof($new_explode);
+		$image_name = $new_explode[$image_parts - 1];
+		$rfi_image_path = "/sites/default/files/$image_name";
+		$content = "<div>$fname-$last_name<br /><img src='$rfi_image_path' /></div>";
+		
+		$content = '<div class="col-xs-12 col-sm-6 col-md-12 col-rep-12 col_flex" data-aos="fade-up" data-aos-delay="300" data-aos-once="true">
+    <div class="right-col"> <strong>'.$fname.' is your contact</strong><br> <span class="smalltext"> Please contact '.$fname.' for information about admissions, requirements or any other questions you may have.<br>	<br> <i class="fa fa-envelope" aria-hidden="true"> </i><a href="mailto:' . $email . '">' . $email . '</a>&nbsp;&nbsp;  <i class="fa fa-phone" aria-hidden="true"> </i> &nbsp;'.$phone.' </span><br><p>Schedule a time to connect with me: <a href="'.$appointment_link.'">'.$appointment_link.'</a></p><a href="#" id="CounselRepLink"><p class="btn btn-maroon counsel-rep-button">contact '.$fname.'</p></a> </div></div>';
+		
+		return $content;
+	}
+	
+}
+
+/**
+   * {@inheritdoc}
+   */
+/*function submitForm(array &$form, FormStateInterface $form_state) {
+	// Extracts the entity ID from the autocompletion result.
+	$article_id = EntityAutocomplete::extractEntityIdFromAutocompleteInput($form_state->getValue('freshman_state'));
+  
+}*/

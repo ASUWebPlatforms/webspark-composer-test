@@ -1,0 +1,4 @@
+name: 'CSRD Utils'
+type: module
+description: 'Help module.'
+core_version_requirement: ^9.3 || ^10

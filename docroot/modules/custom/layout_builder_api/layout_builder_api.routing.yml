@@ -1,0 +1,19 @@
+
+layout_builder_api.node_layout_rendered:
+  path: '/api/layout-builder/node/{node}/rendered'
+  defaults:
+    _controller: '\Drupal\layout_builder_api\Controller\LayoutBuilderApiController::getNodeLayoutRendered'
+    _format: 'json'
+  requirements:
+    _permission: 'access content'
+    node: \d+
+  methods: [GET]
+
+layout_builder_api.layout_templates:
+  path: '/api/layout-builder/templates'
+  defaults:
+    _controller: '\Drupal\layout_builder_api\Controller\LayoutBuilderApiController::getLayoutTemplates'
+    _format: 'json'
+  requirements:
+    _permission: 'access content'
+  methods: [GET]

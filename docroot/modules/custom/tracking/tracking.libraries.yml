@@ -1,0 +1,9 @@
+tracking-app:
+  version: 1.0
+  js:
+    tracking-app/dist/tracking_1425b84d.js: { preprocess: false  }
+  css:
+    component:
+      tracking-app/dist/tracking_4992c2b1.css: { }
+  dependencies:
+    - core/drupalSettings

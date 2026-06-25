@@ -1,0 +1,7 @@
+name: asu_provost_aprview
+type: module
+description: 'Provost custom module for APR Pages View and APR Pages nodes'
+package: ASU
+core_version_requirement: '^8 || ^9 || ^10'
+dependencies:
+  - drupal:views

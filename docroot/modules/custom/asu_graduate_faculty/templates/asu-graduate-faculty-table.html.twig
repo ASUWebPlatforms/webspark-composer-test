@@ -1,0 +1,52 @@
+{{ attach_library('asu_graduate_faculty/vanilla-sort') }}
+{{ attach_library('asu_graduate_faculty/ajax-endorsement') }}
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1 class="p-2">{{ title }}</h1>
+    </div>
+    <div class="col-lg-12">
+      <p class="px-2 pb-1">{{ searchSummary|raw }}</p>
+    </div>
+    <div class="col-lg-12">
+      <table id="graduate-results" class="table table-striped">
+        <thead>
+          <tr>
+            {% for head in heads %}
+              <th>
+                <div class="d-flex justify-content-between align-items-center" role="button" style="cursor:pointer;">
+                  <span>{{ head|capitalize }}</span>
+                  <span class="sort-icon"></span>
+                </div>
+              </th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+              <tr>
+                {% for key, value in row %}
+                  {% if key == 'endorsement' %}
+                    <td><button class="ajax-endorsement btn btn-sm btn-primary" data-endorsement-id="{{ value.0 }}">{{ value.1 }}</button></td>
+                  {% elseif key == 'email address' %}
+                    <td><a href="mailto: {{value}}">{{ value }}</a></td>
+                  {% elseif key == 'name' %}
+                    {% if value is iterable %}
+                      <td><a href="https://isearch.asu.edu/profile/{{value.link}}">{{ value.name }}</a></td>
+                    {% else %}
+                      <td>{{ value }}</td>
+                    {% endif %}
+                  {% elseif key == 'title' %}
+                    <td class="row-max-width">{{ value }}</td>
+                  {% else %}
+                    <td>{{ value }}</td>
+                  {% endif %}
+                {% endfor %}
+              </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

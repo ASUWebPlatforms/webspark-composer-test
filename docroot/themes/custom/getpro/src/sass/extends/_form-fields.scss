@@ -1,0 +1,29 @@
+// Override of Bootstrap border-radius
+.custom-select {
+  border-radius: 0;
+}
+
+// Override of 100% width, display: block defaults
+form.views-exposed-form {
+  margin-bottom: 1rem;
+  .form-control,
+  .custom-select {
+    display: initial;
+    padding: 0.25rem 1rem 0.5rem;
+  }
+  .form-group {
+    display: inline-block;
+    &.form-item {
+      margin-right: 1.5rem;
+      label {
+        display: block;
+      }
+    }
+  }
+  input[name=field_keywords_target_id]{
+    max-width: 200px;
+  }
+  #edit-actions {
+    display: inline-block;
+  }
+}

@@ -1,0 +1,171 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.asu_tuition_fee_code_data.field_acad_career
+    - field.field.node.asu_tuition_fee_code_data.field_acad_prog
+    - field.field.node.asu_tuition_fee_code_data.field_base_term
+    - field.field.node.asu_tuition_fee_code_data.field_campus
+    - field.field.node.asu_tuition_fee_code_data.field_code_description
+    - field.field.node.asu_tuition_fee_code_data.field_code_residency
+    - field.field.node.asu_tuition_fee_code_data.field_fee_code
+    - field.field.node.asu_tuition_fee_code_data.field_fee_type
+    - field.field.node.asu_tuition_fee_code_data.field_institution
+    - field.field.node.asu_tuition_fee_code_data.field_notes
+    - node.type.asu_tuition_fee_code_data
+  module:
+    - node
+id: asu_tuition_fee_code_data
+label: 'ASU tuition fee code data'
+description: ''
+help: ''
+import_period: -1
+fetcher: upload
+fetcher_configuration:
+  allowed_extensions: 'txt csv tsv xml opml'
+  directory: 'private://feeds'
+parser: csv
+parser_configuration:
+  delimiter: ','
+  no_headers: false
+  line_limit: 100
+processor: 'entity:node'
+processor_configuration:
+  langcode: en
+  insert_new: 1
+  update_existing: 0
+  update_non_existent: _keep
+  expire: -1
+  owner_feed_author: false
+  owner_id: 0
+  authorize: true
+  skip_hash_check: false
+  values:
+    type: asu_tuition_fee_code_data
+custom_sources:
+  acad_career:
+    value: acad_career
+    machine_name: acad_career
+    type: csv
+    label: acad_career
+  acad_prog:
+    value: acad_prog
+    machine_name: acad_prog
+    type: csv
+    label: acad_prog
+  base_term:
+    value: base_term
+    machine_name: base_term
+    type: csv
+    label: base_term
+  campus:
+    value: campus
+    machine_name: campus
+    type: csv
+    label: campus
+  fee_code:
+    value: fee_code
+    machine_name: fee_code
+    type: csv
+    label: fee_code
+  fee_type:
+    value: fee_type
+    machine_name: fee_type
+    type: csv
+    label: fee_type
+  residency:
+    value: residency
+    machine_name: residency
+    type: csv
+    label: residency
+  note:
+    value: note
+    machine_name: note
+    type: csv
+    label: note
+  institution:
+    value: institution
+    machine_name: institution
+    type: csv
+    label: institution
+  descr:
+    value: descr
+    machine_name: descr
+    type: csv
+    label: descr
+mappings:
+  -
+    target: field_acad_career
+    map:
+      value: acad_career
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_acad_prog
+    map:
+      value: acad_prog
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_base_term
+    map:
+      value: base_term
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_campus
+    map:
+      value: campus
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_fee_code
+    map:
+      value: fee_code
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_fee_type
+    map:
+      value: fee_type
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_code_residency
+    map:
+      value: residency
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_notes
+    map:
+      value: note
+    settings:
+      language: null
+  -
+    target: field_institution
+    map:
+      value: institution
+    unique: {  }
+    settings:
+      language: null
+  -
+    target: field_code_description
+    map:
+      value: descr
+    settings:
+      language: null
+  -
+    target: title
+    map:
+      value: fee_code
+    unique: {  }
+    settings:
+      language: null

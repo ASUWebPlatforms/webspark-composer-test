@@ -1,0 +1,634 @@
+<?php
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\node\NodeInterface;
+use Drupal\node\Entity\Node;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\group\Entity\Group;
+use Drupal\group\Entity\GroupContent;
+use Drupal\group\Entity\GroupInterface;
+use Drupal\Core\Routing;
+use Drupal\field_collection;
+use Drupal\field_collection\Entity;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\Core\Field\FieldItemList;
+use Drupal\group\Plugin\GroupContentEnablerBase;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+use Drupal\Component\Render\Markup;
+use Drupal\group\Entity\Storage\GroupRelationshipStorageInterface;
+use Drupal\group\Entity\Storage\GroupRoleStorageInterface;
+use Drupal\group\Entity\GroupRelationship;
+use Drupal\Core\Database\Database;
+use Drupal\user\Entity\User;
+
+
+//define('MYASU_CB_VIEWS_FIELD_VIDEO', 'field_myasu_cb_video');
+//global $database = \Drupal::database();
+/* Get acad plans */
+function asu_allowed_values_plan(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+	$database = \Drupal::database();
+    $query = $database->select('asu_academic_plans', 'nfv')->fields('nfv', array('acad_plan_code','acad_plan_value'));
+    //$query = db_query('select * from {asu_academic_plans}');
+	$resultData = $query->execute()->fetchAll();
+    foreach($resultData as $results){
+        $plan_code = $results->acad_plan_code;
+        $plan_value = $results->acad_plan_value;
+        $all_plans[$plan_code] = $plan_value;
+    }
+
+    $all_plans = array_merge(array('All' => '- Any -'), $all_plans);
+    return $all_plans;
+}
+
+/* Get weights */
+function asu_allowed_values_weights(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable){
+    $items = array();
+    $i = -10;
+    for($i = -10; $i <= 10; $i++) {
+      $items[$i] = $i;
+
+    }
+
+    return $items;
+}
+
+/* Get terms */
+function asu_allowed_values_terms(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable){
+	  $database = \Drupal::database();
+      $terms = array();
+       $query = $database->select('asu_terms', 'nfv')->fields('nfv', array('term_code','term_value'));
+       $query_terms = $query->execute()->fetchAll();
+      //$query = db_query('select * from {asu_terms} order by term_code DESC');
+        foreach($query_terms as $results){
+            $term_code = $results->term_code;
+            $term_value = $results->term_value;
+            $terms[$term_code] = $term_value;
+        }
+
+       $defaults = array(
+        'All' => ' - Any - ',
+        'NotEnrolled' => '- Not Enrolled -',
+      );
+	  $all_terms = array_merge($defaults, $terms);
+      return $all_terms;
+     // return $defaults + $terms;
+}
+
+
+
+/**
+ * Get all campuses as an array
+ */
+function asu_allowed_values_campus(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+    $campuses = array();
+	$database = \Drupal::database();
+    $query = $database->select('asu_campus', 'nfv')->fields('nfv', array('campus_code','campus_value'));
+    $query_campus = $query->execute()->fetchAll();
+    //$query = db_query('select * from {asu_campus}');
+    foreach($query_campus as $results){
+        $campus_code = $results->campus_code;
+        $campus_value = $results->campus_value;
+        $all_campuses[$campus_code] = $campus_value;
+    }
+
+    $all_campuses = array_merge(array('All' => '- Any -'), $all_campuses);
+	asort($all_campuses);
+    return $all_campuses;
+}
+
+/**
+ * Update groups dropdown list to current users' group list
+ */
+function asu_allowed_values_group_list(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+    $group_ids = array();
+	$database = \Drupal::database();
+    $current_user_groups = [];
+    $user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+    $groups = array();
+    $uid= $user->get('uid')->value;
+    $roles = $user->getRoles();
+
+    //dpm($roles);
+    if(in_array('administrator', $roles)){
+		$query = $database->select('groups_field_data', 'nfv')->fields('nfv', array('id','label'));
+    	$query_gid = $query->execute()->fetchAll();
+        //$query_gid = db_query('select * from {groups_field_data}');
+        foreach($query_gid as $result_groups){
+            $current_user_groups[$result_groups->id] = $result_groups->label;
+            asort($current_user_groups);
+        }
+    }
+    else{
+        $grp_membership_service = \Drupal::service('group.membership_loader');
+        $grps = $grp_membership_service->loadByUser($user);
+        foreach ($grps as $grp) {
+                $groups[] = $grp->getGroup();
+        }
+        foreach($groups as $user_group){
+            $current_user_groups[$user_group->get('id')->value] = $user_group->get('label')->value;
+
+        }
+    }
+
+    //ksm($current_user_groups);
+    return $current_user_groups;
+
+}
+
+/**
+ * Update tabs dropdown list to current users' group list on node creation page
+ */
+/*function asu_allowed_values_tabs_list(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+    $group_ids = array();
+	$database = \Drupal::database();
+    $title = [];
+    $user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+
+    $uid= $user->get('uid')->value;
+    //ksm($uid, 'uid');
+    $tab_ids = array();
+    $current_path = \Drupal::request()->getPathInfo();
+    $url_path_components = explode('/',$current_path);
+    $roles = $user->getRoles();
+   // ksm($url_path_components);
+    if(!empty(strpos($current_path,'group'))){
+        $group_id = $url_path_components[2];
+        //ksm($group_id);
+		$query = $database->select('group_relationship_field_data', 'nfv')->fields('nfv', array('gid'));
+		$query->condition('gid',$group_id,'=');
+    	$query_gid = $query->execute()->fetchAll();
+        //$query_gid = db_query('select * from {group_content_field_data}  where gid=:gid', array(':gid' => $group_id));
+    }
+    else{
+
+               // $query_gid = db_query('select * from {group_content_field_data}');
+			$query_3 = $database->select('group_relationship_field_data', 'nfv')->fields('nfv', array('gid','type','entity_id'));
+			$query_gid = $query_3->execute()->fetchAll();
+        }
+
+
+
+    foreach($query_gid as $results){
+        //ksm($results);
+		//ksm(strpos($results->type, 'membership'));
+        if (strpos($results->type, 'membership') === false) {
+            $gid_array[] = $results->entity_id;
+        }
+    }
+
+    //ksm($gid_array);
+
+    if(!empty($gid_array)){
+        $gid = array_unique($gid_array);
+         //ksm($gid);
+        //$tab_nodes = db_query("SELECT * FROM {node} WHERE nid IN (:nids[]) and type=:type ", array(':nids[]' => $gid, ':type' => 'myasu_cb_tab' ));
+		$tab_query = $database->select('node', 'n')->fields('n', array('nid'));
+		//$tab_query->condition('nid',$gid,'IN');
+		$tab_query->condition('type','myasu_cb_tab','=');
+		$tab_nodes = $tab_query->execute()->fetchAll();
+        foreach($tab_nodes as $tab_nids){
+
+               $tab_ids[$tab_nids->nid] = $tab_nids->nid;
+
+        }
+
+        //ksm($tab_ids);
+        if(!empty($tab_ids)){
+            //$gtitle = db_query("SELECT * FROM {node_field_data} WHERE nid IN (:tabids[])", array(':tabids[]' => $tab_ids));
+			$gtitle_query = $database->select('node_field_data', 'n')->fields('n', array('nid','title'));
+			$gtitle_query->condition('nid',$tab_ids,'IN');
+			$gtitle = $gtitle_query->execute()->fetchAll();
+            foreach($gtitle as $result_title){
+                  //$title[$result_title->entity_id] = $result_title->label;
+                  $title[$result_title->nid] = $result_title->title;
+            }
+
+            //dpm($title);
+
+        }
+		else{
+			$title = '';
+		}
+    }
+	//ksm($title);
+	return $title;
+}*/
+
+ /**
+ * Update user page groups dropdown list dropdown list to current users' group list on node creation page
+ */
+function asu_allowed_values_account_group_list(FieldStorageConfig $definition, ContentEntityInterface $entity = NULL, $cacheable) {
+		  $connection = Database::getConnection();
+		  $query = $connection->select('groups_field_data', 'gfd')
+			->fields('gfd');
+
+		  $result = $query->execute()->fetchAll(); // Fetch all results indexed by group ID (gid).
+			//ksm($result);
+			$groupIds = [];
+			foreach ($result as $record) {
+				//ksm($record);
+				$gid_options[$record->id] = $record->label;
+			}
+		 asort($gid_options);
+		 return $gid_options;
+
+ }
+
+
+
+//** hook_form_views_exposed_form_alter implementation to change parent group text field to drop down in "All content in my groups" view **/
+function asu_allowed_values_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+    if($form['#id'] == "views-exposed-form-nodes-based-on-logged-in-user-groups-page-1"){
+        //dpm($form);
+        $user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+        $uid= $user->get('uid')->value;
+        $database = \Drupal::database();
+		//code to get GID of current user
+
+		$query = $database->select('group_relationship_field_data', 'nfv');
+		$query->fields('nfv'); // Select all fields from group_relationship_field_data
+		$query->join('groups_field_data', 'gfd', 'nfv.gid = gfd.id');
+
+		// Ensure fields() is called on the query object
+		$query->addField('gfd', 'id');
+		$query->addField('gfd', 'label');
+		$query->condition('nfv.uid', $uid, '=');
+		$query->condition('nfv.plugin_id', 'group_membership', '!=');
+		$query_gid = $query->execute()->fetchAll();
+
+		//code to get group name
+
+		foreach($query_gid as $groups){
+            $group_title[$groups->id] = $groups->label;
+
+        }
+
+		if(!empty($group_title)){
+			$form['gid_1']['#type'] = 'select';
+			$form['gid_1']['#multiple'] = FALSE;
+
+			// Specify the empty option for our select list
+			$form['gid_1']['#empty_option'] = t('All groups');
+
+			// Add the $options from above to our select list
+			$form['gid_1']['#options'] = $group_title;
+			unset($form['gid_1']['#size']);
+		}
+
+    }
+
+}
+
+
+/**Implement hook_form_alter to assign or remove nodes when they are created or updated -- code taken from: https://www.drupal.org/project/group/issues/2772975#comment-12079571**/
+
+function asu_allowed_values_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+	//ksm($form_id );
+	//\Drupal::logger('$form_id' )->notice('tabs: <pre>@node</pre>', ['@node' => print_r($form_id , TRUE)]);
+	//Tabs cck field code in node_myasu_cb_post_form
+	 if (($form_id === 'node_myasu_cb_post_edit_form') || ($form_id === 'node_myasu_cb_post_form')) {
+		// ksm($form);
+
+		$group_ids = array();
+		$database = \Drupal::database();
+		$title = [];
+		$user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+
+		$uid= $user->get('uid')->value;
+		//ksm($uid, 'uid');
+		//\Drupal::logger('uid')->notice('user id: <pre>@node</pre>', ['@node' => print_r($uid, TRUE)]);
+		$tab_ids = array();
+		$current_path = \Drupal::request()->getPathInfo();
+		$url_path_components = explode('/',$current_path);
+		$roles = $user->getRoles();
+	    if(!empty(strpos($current_path,'group'))){
+			$group_id = $url_path_components[2];
+			$query = $database->select('group_relationship_field_data', 'nfv')->fields('nfv');
+			$query->condition('gid',$group_id,'=');
+			$query->condition('plugin_id','group_node:myasu_cb_tab','=');
+			$query_gid = $query->execute()->fetchAll();
+		}
+		else{
+				//get user group ids
+
+				$user_query = $database->select('group_relationship_field_data', 'nfv')->fields('nfv');
+				$user_query->condition('uid',$uid,'=');
+				$user_query = $user_query->execute()->fetchAll();
+
+				foreach($user_query as $user_results){
+					$user_gids[$user_results->gid] = $user_results->gid;
+				}
+
+			//\Drupal::logger('users gid')->notice('user gid: <pre>@node</pre>', ['@node' => print_r($user_gids, TRUE)]);
+				   // $query_gid = db_query('select * from {group_content_field_data}');
+				$query_3 = $database->select('group_relationship_field_data', 'nfv')->fields('nfv');
+				$query_3->condition('plugin_id','group_node:myasu_cb_tab','=');
+				$query_3->condition('gid',$user_gids,'IN');
+				$query_gid = $query_3->execute()->fetchAll();
+		}
+
+
+
+		foreach($query_gid as $results){
+			$tab_ids[$results->entity_id] = $results->entity_id;
+		}
+
+	//	\Drupal::logger('tabs')->notice('tabs: <pre>@node</pre>', ['@node' => print_r($tab_ids, TRUE)]);
+
+		if(!empty($tab_ids)){
+				//$gtitle = db_query("SELECT * FROM {node_field_data} WHERE nid IN (:tabids[])", array(':tabids[]' => $tab_ids));
+				$gtitle_query = $database->select('node_field_data', 'n')->fields('n');
+				$gtitle_query->condition('nid',$tab_ids,'IN');
+				$gtitle = $gtitle_query->execute()->fetchAll();
+				foreach($gtitle as $result_title){
+					  //$title[$result_title->entity_id] = $result_title->label;
+					  $tabtitle[$result_title->nid] = $result_title->title;
+				}
+
+				//dpm($title);
+
+		}
+		else{
+				$tabtitle = '';
+		}
+	//	\Drupal::logger('tab titles')->notice('tabs: <pre>@node</pre>', ['@node' => print_r($tabtitle, TRUE)]);
+
+        $form['field_myasu_cb_tab']['widget']['#options'] = $tabtitle;
+
+
+  }
+
+	/***********/
+
+   /*  $current_path = \Drupal::request()->getPathInfo();
+   if(empty(strpos($current_path,'group'))){
+        if(($form['#id'] == 'node-myasu-cb-post-form') || ($form['#id'] == 'node-myasu-cb-tab-form')){
+            foreach (array_keys($form['actions']) as $action) {
+                if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
+                    $form['actions'][$action]['#submit'][] = '_asu_allowed_values_custom_callback_group';
+                }
+
+            }
+        }
+    }
+
+    if(!empty(strpos($current_path,'group'))){
+       if(($form['#id'] == 'node-myasu-cb-post-form') || ($form['#id'] == 'node-myasu-cb-tab-form')){
+            $url_values = explode('/', $current_path);
+            $url_gid = $url_values[2];
+
+
+            $form['gid_from_url'] = array(
+                '#type' => 'hidden',
+                '#value' => $url_gid,
+            );
+            //dpm($form);
+            foreach (array_keys($form['actions']) as $action) {
+
+                if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
+                 //   $form['actions']['submit']['#submit'][] = '_asu_allowed_values_custom_callback_group_with_gid';
+                }
+
+            }
+        }
+    }*/
+
+    if(($form_id == 'node_myasu_cb_post_edit_form') || ($form_id == 'node_myasu_cb_tab_edit_form') || ($form_id == "node_myasu_cb_post_form") || $form_id == "node_myasu_cb_tab_form"){
+        $form['actions']['submit']['#submit'][] = '_asu_allowed_values_custom_edit_callback_group';
+
+    }
+
+	//User edit form
+	if(($form_id == 'user_form')){
+		 $form['actions']['submit']['#submit'][] = '_group_module_add_user_to_group';
+
+    }
+
+}
+
+/*
+function _asu_allowed_values_custom_callback_group(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+    $nid = $form_state->getValue('nid');
+
+    $node = Node::load($nid);
+
+    $gids = $form_state->getValue('field_select_group_list');
+    foreach ($gids as $gid) {
+
+        // Skip -none- option
+        if ($gid['target_id'] == '_none') {
+          continue;
+        }
+        $group = Group::load($gid['value']);
+
+        $pluginId = 'group_node:'.$node->getType();
+        //$group->addContent($node, $pluginId);
+
+        $relation = $group->getContentByEntityId($pluginId, $nid);
+        if (!$relation) {
+          $group->addContent($node, $pluginId);
+        }
+    }
+
+}
+*/
+/** submit function when adding node from a group page **/
+
+/*function _asu_allowed_values_custom_callback_group_with_gid($form, FormStateInterface $form_state) {
+
+    $gid_from_url = $form_state->getValue('gid_from_url');
+    $nid = $form_state->getValue('nid');
+    $node = Node::load($nid);
+
+    $gids = $form_state->getValue('field_select_group_list');
+    foreach ($gids as $gid) {
+       if($gid['value'] !=  $gid_from_url){
+        $group = Group::load($gid['value']);
+
+        $pluginId = 'group_node:'.$node->getType();
+        //$group->addContent($node, $pluginId);
+
+        $relation = $group->getContentByEntityId($pluginId, $nid);
+        if (!$relation) {
+          $group->addContent($node, $pluginId);
+        }
+
+       }
+    }
+
+}*/
+
+
+function _asu_allowed_values_custom_edit_callback_group($form, FormStateInterface $form_state) {
+    $nid = $form_state->getValue('nid');
+    $node = Node::load($nid);
+   //ksm($nid);
+    // Index-Array for wanted groups ( gid => gid )
+    $gids = $form_state->getValue('field_select_group_list');
+
+
+    $gids_wanted = [];
+    foreach ($gids as $gid) {
+        $gids_wanted[$gid['value']] = $gid['value'];
+    }
+	//ksm($gids_wanted);
+	$plugin_id = 'group_node:' . $node->bundle();
+
+
+	// Get a database connection.
+	$connection = Database::getConnection();
+	// Build the query.
+
+	$query = $connection->select('group_relationship_field_data', 'gr')
+		->fields('gr') // Select all fields.
+		->condition('entity_id', $nid,'=')
+		->condition('plugin_id', $plugin_id,'=');
+
+	// Execute the query and fetch the results.
+	$result = $query->execute()->fetchAll(); // Fetch all results indexed by group ID (gid).
+	//ksm($result);
+	$groupIds = [];
+	foreach ($result as $record) {
+		//ksm($record);
+    	$gids_existing[] = $record->gid;
+  	}
+	//ksm($gids_existing);
+	// Index-Array gnodes to create
+	// Union for existing and wanted groups
+	if(!empty($gids_existing)){
+		$gids_union = $gids_existing + $gids_wanted;
+	}
+	else{
+		$gids_union = $gids_wanted;
+	}
+
+	//code to delete relationship if group removed
+
+	// = (Union for existing and wanted) minus existing
+	 $gids_delete = array_diff($gids_union, $gids_wanted);
+	// ksm($gids_delete);
+     foreach ($gids_delete as $del_gid) {
+         $delgroup = Group::load($del_gid);
+		 if ($delgroup) {
+            // Check if the relationship exists.
+			 $del_existing_relationships = $delgroup->getRelationshipsByEntity($node, $plugin_id);
+			 if (!empty($del_existing_relationships)) {
+				 // Delete the relationship.
+				 foreach ($del_existing_relationships as $del_relationship) {
+					 $del_relationship->delete();
+				 }
+				 \Drupal::messenger()->addMessage('The relationship has been deleted successfully.');
+
+            } else {
+				 \Drupal::messenger()->addMessage('No relationship found to delete.');
+
+            }
+		}
+
+
+    }
+
+	// Code to add node to a group
+	foreach ($gids_wanted as $gid_val) {
+
+		$group = Group::load($gid_val);
+
+		//$relation = $group->getRelationshipsByEntity($node, $pluginId);
+		$existing_relationships = $group->getRelationshipsByEntity($node, $plugin_id);
+		//ksm($existing_relationships);
+        if (empty($existing_relationships)) {
+			$group->addRelationship($node, $plugin_id);
+			 \Drupal::messenger()->addMessage('Node relationship added successfully.');
+        }
+
+	}
+
+}
+
+
+
+//function _group_module_add_user_to_group(User $user ) {
+function _group_module_add_user_to_group($form, FormStateInterface $form_state){
+		//ksm($user->id());
+	//ksm($form_state->getValue('field_user_avail_group'));
+	//ksm($form_state);
+	    $uid = $form_state->getValue('uid');
+	    $user = User::load($uid);
+
+		if(!empty($form_state->getValue('field_user_avail_group'))){
+			$group_fields = $form_state->getValue('field_user_avail_group');
+		}
+		else{
+			$group_fields = '';
+		}
+		//$group_fields = isset($user->get('field_user_avail_group'))?$user->get('field_user_avail_group')->getValue():'';
+		//ksm($group_fields);
+	    if(!empty($group_fields)){
+			foreach ($group_fields as $gid) {
+				$gids_wanted[$gid['target_id']] = $gid['target_id'];
+			}
+		//ksm($gids_wanted);
+
+
+			// code to remove user from a group
+			$connection = Database::getConnection();
+			$query = $connection->select('group_relationship_field_data', 'gr')
+			->fields('gr') // Select all fields.
+			->condition('entity_id', $uid,'=')
+			->condition('plugin_id', 'group_membership','=');
+			$result = $query->execute()->fetchAll(); // Fetch all results indexed by group ID (gid).
+
+			foreach ($result as $record) {
+				$gids_existing[] = $record->gid;
+			}
+			//ksm($gids_existing);
+			// Index-Array gnodes to create
+			// Union for existing and wanted groups
+			$gids_union = !empty($gids_existing)? $gids_existing + $gids_wanted: $gids_wanted;
+			//ksm($gids_union);
+			// = (Union for existing and wanted) minus existing
+			$gids_create = !empty($gids_existing)?array_diff($gids_union, $gids_existing):$gids_union;
+			//ksm($gids_create);
+
+			 foreach ($gids_create as $gid) {
+				$group = Group::load($gid);
+				if ($group && !$group->getMember($user)) {
+				  $group->addMember($user);
+				  $group->save();
+				  \Drupal::messenger()->addMessage(t('User @uid added to group @gid.', ['@uid' => $uid, '@gid' => $gid]));
+				}
+			  }
+
+			// = (Union for existing and wanted) minus existing
+			 $gids_delete = array_diff($gids_union, $gids_wanted);
+			 //ksm($gids_delete);
+			 foreach ($gids_delete as $del_gid) {
+				$delgroup = Group::load($del_gid);
+				if ($delgroup) {
+				// Check if the relationship exists.
+
+				$del_existing_relationships = $delgroup->getRelationshipsByEntity($user, 'group_membership');
+			  //  ksm($del_existing_relationships);
+				if (!empty($del_existing_relationships)) {
+
+					// Delete the relationship.
+
+					foreach ($del_existing_relationships as $del_relationship) {
+						// ksm($del_relationship);
+						$del_relationship->delete();
+
+					}
+				} else {
+
+				   // drupal_set_message('No relationship found to delete.');
+
+				}
+			}
+
+
+			}
+	 	}
+
+}

@@ -1,0 +1,38 @@
+input[data-drupal-selector="edit-title"] {
+  width: 100% !important;
+}
+@media screen and (min-width: 992px) {
+
+  /*fieldset[data-drupal-selector="edit-field-topic-target-id"] {*/
+  #wrap1 {
+    float: left;
+    margin-right: 4rem;
+    width: 18rem;
+  }
+  .form-control {
+    width: auto !important;
+  }
+  .js-form-item-title,
+  .faqs2-results
+  {
+    margin-left: 22rem !important;
+  }
+
+}
+small {
+  font-size: inherit !important;
+}
+fieldset[data-drupal-selector="edit-field-topic-target-id"].card-foldable {
+  border-left: .5rem solid inherit !important;
+}
+fieldset[data-drupal-selector="edit-field-topic-target-id"].card {
+  border-right: none !important;
+  border-left: none !important;
+  background-color: transparent !important;
+}
+fieldset[data-drupal-selector="edit-field-topic-target-id"].card-foldable .card-header:hover {
+  background-color: transparent !important;
+}
+fieldset[data-drupal-selector="edit-field-topic-target-id"] > .card-header+.card-body {
+  border-top: none !important;
+}

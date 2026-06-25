@@ -1,0 +1,7 @@
+name: 'AAS2BAS Search'
+type: module
+description: 'AAS2BAS Search module'
+core_version_requirement: ^9 || ^10
+package: Custom
+dependencies:
+  - taxonomy

@@ -1,0 +1,7 @@
+name: 'Cron Email Sender'
+type: module
+description: 'Sends an email to BIOS team with file url of the new registered emails for constant contact.'
+core_version_requirement: ^10
+package: Custom
+dependencies:
+  - drupal:system

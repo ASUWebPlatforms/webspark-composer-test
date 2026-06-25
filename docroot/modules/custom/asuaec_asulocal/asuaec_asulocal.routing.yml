@@ -1,0 +1,71 @@
+# Settings for ASU Local specific Web service for Degree search page and Degree detail page
+asuaec_asulocal.settings:
+  path: '/admin/config/asulocal-degrees'
+  defaults:
+    _form: '\Drupal\asuaec_asulocal\Form\SettingsForm'
+    _title: 'ASU Local Degrees Settings'
+  requirements:
+    _permission: 'administer site configuration'
+
+# Settings for Online RFI posting
+asuaec_asulocal.rfi_settings:
+  path: '/admin/config/asulocal-rfi'
+  defaults:
+    _form: '\Drupal\asuaec_asulocal\Form\RfiAdminSwitch'
+    _title: 'ASU Local RFI Settings'
+  requirements:
+    _permission: 'administer site configuration'
+
+# This ensures Drupal renders the page normally (header/footer included), and Layout Builder + blocks provide the content.
+asuaec_asulocal.view:
+  path: '/degrees/{code}'
+  defaults:
+    _title: 'Degree'
+    _controller: '\Drupal\asuaec_asulocal\Controller\DegreesPageController::page'
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      code:
+        type: string
+
+asuaec_asulocal.list:
+  path: '/degrees'
+  defaults:
+    _title: 'ASU Online Degrees'
+    _controller: '\Drupal\asuaec_asulocal\Controller\DegreesPageController::page'
+  requirements:
+    _permission: 'access content'
+
+# Custom APIs
+asuaec_asulocal.json.categories.online.ugrad.wsdirect:
+  path: '/asuaec-asulocal/json/wsdirect/categories/online/ugrad'
+  defaults:
+    _controller: '\Drupal\asuaec_asulocal\Controller\JsonController::generateJsonWsdirectCat'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_asulocal.json.categories.online.grad.wsdirect:
+  path: '/asuaec-asulocal/json/wsdirect/categories/online/grad'
+  defaults:
+    _controller: '\Drupal\asuaec_asulocal\Controller\JsonController::generateJsonWsdirectCat'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_asulocal.json.degrees.online.ugrad.wsdirect:
+  path: '/asuaec-asulocal/json/wsdirect/degrees/online/ugrad/{interest}'
+  defaults:
+    _controller: '\Drupal\asuaec_asulocal\Controller\JsonController::generateJsonWsdirectDegree'
+    _format: json
+  requirements:
+    _permission: 'access content'
+
+asuaec_asulocal.json.degrees.online.grad.wsdirect:
+  path: '/asuaec-asulocal/json/wsdirect/degrees/online/grad/{interest}'
+  defaults:
+    _controller: '\Drupal\asuaec_asulocal\Controller\JsonController::generateJsonWsdirectDegree'
+    _format: json
+  requirements:
+    _permission: 'access content'

@@ -1,0 +1,85 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\Entity\WebformSubmission;
+
+/**
+ * Implements hook_form_alter().
+ */
+function asuaec_custom_api_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Read target form IDs from Visit Revamp config
+  $config = \Drupal::config('asuaec_visit_revamp.settings');
+  $form_ids = $config->get('form_ids_expasu_and_other');
+
+  // Normalize to array (supports legacy string storage)
+  if (is_string($form_ids)) {
+    $normalized = str_replace(["\r\n", "\r"], "\n", $form_ids);
+    $form_ids = array_values(array_filter(array_map('trim', explode("\n", $normalized))));
+  }
+
+  // Fallback (keeps current behavior if config not set yet)
+  if (!is_array($form_ids) || empty($form_ids)) {
+    $form_ids = [
+      'webform_submission_visit_form_node_24_add_form', // PROD old Visit form
+      'webform_submission_registration_form_node_217080_add_form', // PROD old "Other" form
+      'webform_submission_visit_form_revamp_node_282750_add_form', // PROD new Visit form (Revamp)
+      'webform_submission_registration_form_other_revamp_node_356301_add_form', // PROD new "Other" form (Revamp)
+    ];
+  }
+
+  // Modify only the target webform.
+  if (in_array($form_id, $form_ids, TRUE)) {
+
+    $c_sid = \Drupal::request()->query->get('c-sid');
+
+    // Ensure $c_nid is a valid number before proceeding
+    if (!empty($c_sid) && is_numeric($c_sid)) {    
+                  
+      $webform_submission = WebformSubmission::load($c_sid);
+
+      if ($webform_submission) {
+        $data_from_submission = $webform_submission->getData();
+
+        $form['elements']['first_name']['#default_value'] = $data_from_submission['first_name'] ?? '';
+        $form['elements']['last_name']['#default_value'] = $data_from_submission['last_name'] ?? '';
+        $form['elements']['email_address']['#default_value'] = $data_from_submission['email_address'] ?? '';
+        $form['elements']['phone']['#default_value'] = $data_from_submission['phone'] ?? '';
+        $form['elements']['guests']['#default_value'] = $data_from_submission['guests'] ?? '';
+        $form['elements']['address']['#default_value'] = $data_from_submission['address'] ?? '';
+        $form['elements']['city']['#default_value'] = $data_from_submission['city'] ?? '';
+        $form['elements']['postal_code']['#default_value'] = $data_from_submission['postal_code'] ?? '';
+        $form['elements']['country']['#default_value'] = $data_from_submission['country'] ?? '';
+        $form['elements']['state']['#default_value'] = $data_from_submission['state'] ?? '';
+        $form['elements']['country_of_citizenship']['#default_value'] = $data_from_submission['country_of_citizenship'] ?? '';
+        $form['elements']['birthdate']['#default_value'] = $data_from_submission['birthdate'] ?? '';
+        $form['elements']['entry_term']['#default_value'] = $data_from_submission['entry_term'] ?? '';
+        // HS info 
+        $form['elements']['high_school_you_are_currently_attending']['hsstate']['#default_value'] = $data_from_submission['hsstate'] ?? '';
+        $form['elements']['high_school_you_are_currently_attending']['hscity']['#default_value'] = $data_from_submission['hscity'] ?? '';
+        $form['elements']['high_school_you_are_currently_attending']['hsname']['#default_value'] = $data_from_submission['hsname'] ?? '';
+        // Institution info
+        $form['elements']['set_us_institution']['istate']['#default_value'] = $data_from_submission['istate'] ?? '';
+        $form['elements']['set_us_institution']['icity']['#default_value'] = $data_from_submission['icity'] ?? '';
+        $form['elements']['set_us_institution']['iname']['#default_value'] = $data_from_submission['iname'] ?? '';        
+        // Parent
+        $form['elements']['parentsinformation']['parent1']['parent1_fname']['#default_value'] = $data_from_submission['parent1_fname'] ?? '';
+        $form['elements']['parentsinformation']['parent1']['parent1_lname']['#default_value'] = $data_from_submission['parent1_lname'] ?? '';
+        $form['elements']['parentsinformation']['parent1']['parent1_email']['#default_value'] = $data_from_submission['parent1_email'] ?? '';
+        $form['elements']['parentsinformation']['parent1']['parent1_cell_phone']['#default_value'] = $data_from_submission['parent1_cell_phone'] ?? '';
+        $form['elements']['parentsinformation']['parent1']['parent1_relation']['#default_value'] = $data_from_submission['parent1_relation'] ?? '';
+        $form['elements']['parentsinformation']['parent2']['parent2_fname']['#default_value'] = $data_from_submission['parent2_fname'] ?? '';
+        $form['elements']['parentsinformation']['parent2']['parent2_lname']['#default_value'] = $data_from_submission['parent2_lname'] ?? '';
+        $form['elements']['parentsinformation']['parent2']['parent2_email']['#default_value'] = $data_from_submission['parent2_email'] ?? '';
+        $form['elements']['parentsinformation']['parent2']['parent2_cell_phone']['#default_value'] = $data_from_submission['parent2_cell_phone'] ?? '';
+        $form['elements']['parentsinformation']['parent2']['parent2_relation']['#default_value'] = $data_from_submission['parent2_relation'] ?? '';
+        // For Grad
+        $form['elements']['email_address_additional']['#default_value'] = $data_from_submission['email_address_additional'] ?? '';
+        $form['elements']['college']['#default_value'] = $data_from_submission['college'] ?? '';
+        $form['elements']['major']['#default_value'] = $data_from_submission['major'] ?? '';
+        // For Other
+        $form['elements']['profession']['#default_value'] = $data_from_submission['profession'] ?? '';
+
+      }
+    }
+  }
+}

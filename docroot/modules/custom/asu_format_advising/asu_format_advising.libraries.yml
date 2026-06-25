@@ -1,0 +1,21 @@
+first_next_message:
+  version: 1.1
+  js:
+    js/FirstNextMessage.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+form_js_behaviors:
+  version: 2.4
+  js:
+    js/CharacterCount.js: {}
+    js/ConditionalFont.js: {}
+    js/CoChairText.js: {}
+    js/AbstractWordCount.js: {}
+    js/JumpToStep.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once
+    - core/drupalSettings

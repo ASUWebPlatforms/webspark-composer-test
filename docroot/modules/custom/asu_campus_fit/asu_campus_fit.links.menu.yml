@@ -1,0 +1,10 @@
+asu_campus_fit.admin_settings:
+  title: 'ASU Camps Fit Quiz'
+  description: 'Administer ASU Camps Fit Quiz settings'
+  route_name: asu_campus_fit.admin_settings
+  parent: 'system.admin_config_system'
+  weight: -20
+
+    
+    
+    

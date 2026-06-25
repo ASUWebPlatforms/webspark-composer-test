@@ -1,0 +1,6 @@
+analytics_operations.admin:
+  title: Analytics Operations
+  description: Perform Analytics admin operations.
+  route_name: analytics_operations.index
+  parent: system.admin_config_development
+  weight: 100

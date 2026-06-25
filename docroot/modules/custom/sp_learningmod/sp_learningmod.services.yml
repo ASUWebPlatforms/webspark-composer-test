@@ -1,0 +1,13 @@
+services:
+  sp_learningmod.user_budget:
+    class: Drupal\sp_learningmod\Service\UserBudgetService
+    arguments:
+      - '@database'
+      - '@current_user'
+      - '@entity_type.manager'
+
+  sp_learningmod.council_meeting:
+    class: Drupal\sp_learningmod\Service\CouncilMeetingService
+    arguments:
+      - '@database'
+      - '@current_user'

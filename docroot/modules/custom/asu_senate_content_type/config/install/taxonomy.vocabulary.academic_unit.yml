@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Academic Unit'
+vid: academic_unit
+description: 'List of ASU academic units'
+weight: 0
+new_revision: false

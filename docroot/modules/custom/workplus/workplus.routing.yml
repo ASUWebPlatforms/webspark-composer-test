@@ -1,0 +1,26 @@
+workplus.workplus:
+  path: '/workplus'
+  defaults:
+    _controller: '\Drupal\workplus\Controller\workplusController::workplus_load'
+    _title: 'Work + Learn'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+
+workplus.post:
+  path: '/workplus/php/post'
+  defaults:
+    _controller: '\Drupal\workplus\Controller\workplusController::workplus_post'
+    _title: 'Work + Learn - post'
+  methods:  'POST'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+
+workplus.sync:
+  path: '/workplus/php/sync'
+  defaults:
+    _controller: '\Drupal\workplus\Controller\workplusController::workplus_sync'
+    _title: 'Work + Learn - sync'
+  methods:  'GET'
+  requirements: 
+    _user_is_logged_in: 'TRUE'
+

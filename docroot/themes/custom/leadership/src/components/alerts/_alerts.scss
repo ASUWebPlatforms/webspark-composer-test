@@ -1,0 +1,31 @@
+@import '../../sass/extends/alerts';
+
+// Override for FA5 icon.
+.alert {
+  button {
+    border: 1px solid $uds-color-base-gray-3;
+    background: transparent;
+    border-radius: 100%;
+    padding: 0;
+    width: 34px;
+    height: 34px;
+  }
+  .alert-close {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    button {
+      padding: 0;
+      width: 34px;
+      height: 34px;
+      border-radius: 100%;
+      border: 1px solid #bfbfbf;
+    }
+    .close {
+      font-size: 1rem;
+    }
+    .fa-times {
+      left: 1.5px;
+    }
+  }
+}

@@ -1,0 +1,84 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall hooks for ASU Custom Schema.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Creates base field storage (database columns) automatically.
+ */
+function asu_custom_schema_install(): void {
+  $manager     = \Drupal::entityDefinitionUpdateManager();
+  $entity_type = \Drupal::entityTypeManager()->getDefinition('node');
+
+  foreach (asu_custom_schema_entity_base_field_info($entity_type) as $field_name => $field_definition) {
+    // Only install if not already tracked (prevents duplicate column errors
+    // if the module is re-enabled without a proper uninstall).
+    if (!$manager->getFieldStorageDefinition($field_name, 'node')) {
+      $manager->installFieldStorageDefinition(
+        $field_name,
+        'node',
+        'asu_custom_schema',
+        $field_definition
+      );
+    }
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Removes base field storage and all bundle config objects.
+ */
+function asu_custom_schema_uninstall(): void {
+  $manager = \Drupal::entityDefinitionUpdateManager();
+
+  foreach (['asu_schema_enabled', 'asu_schema_json'] as $field_name) {
+    try {
+      $definition = $manager->getFieldStorageDefinition($field_name, 'node');
+      if ($definition) {
+        $manager->uninstallFieldStorageDefinition($definition);
+      }
+    }
+    catch (\Exception $e) {
+      // Column may not exist if module was installed before the install hook
+      // created the fields (e.g. a previous version without hook_install).
+      // Log and continue so the rest of the uninstall can complete.
+      \Drupal::logger('asu_custom_schema')->warning(
+        'Could not uninstall field @field: @message',
+        ['@field' => $field_name, '@message' => $e->getMessage()]
+      );
+    }
+  }
+
+  // Remove all bundle config objects.
+  $config_factory = \Drupal::configFactory();
+  foreach ($config_factory->listAll('asu_custom_schema.bundle.') as $config_name) {
+    $config_factory->getEditable($config_name)->delete();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Installs base fields for sites that enabled the module before hook_install
+ * existed (i.e. columns were never created via drush entity:updates either).
+ */
+function asu_custom_schema_update_10001(): void {
+  $manager     = \Drupal::entityDefinitionUpdateManager();
+  $entity_type = \Drupal::entityTypeManager()->getDefinition('node');
+
+  foreach (asu_custom_schema_entity_base_field_info($entity_type) as $field_name => $field_definition) {
+    if (!$manager->getFieldStorageDefinition($field_name, 'node')) {
+      $manager->installFieldStorageDefinition(
+        $field_name,
+        'node',
+        'asu_custom_schema',
+        $field_definition
+      );
+    }
+  }
+}

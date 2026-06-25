@@ -1,0 +1,16 @@
+
+{% set image = content.field_profile_image|render|striptags|trim %}
+
+<div class="profile-item uds-person-profile" id="profile-{{ paragraph.uuid.value }}">
+  <div class="profile-img-container">
+    <div class="profile-img-placeholder">
+      <img class="profile-img" src="{{ image }}" alt="{{ content.field_name|render }}">
+    </div>
+  </div>
+  <div class="person">
+    <h3 class="person-name">{{ content.field_name|render }}</h3>
+    <div class="person-profession">
+      {{ content.field_title_and_organization|render }}
+    </div>
+  </div>
+</div>

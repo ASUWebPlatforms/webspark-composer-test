@@ -1,0 +1,7 @@
+analytics_designs.my_content:
+  path: '/my-content'
+  defaults:
+    _controller: '\Drupal\analytics_designs\Controller\AnalyticsDesignsController::renderMyContent'
+    _title: My Content
+  requirements:
+    _permission: access content

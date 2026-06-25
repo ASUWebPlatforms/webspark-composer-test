@@ -1,0 +1,217 @@
+<?php
+
+
+
+use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+/**
+ * Alter webform elements.
+ *
+ * @param array $element
+ *   The webform element.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ * @param array $context
+ *   An associative array containing the following key-value pairs:
+ *   - form: The form structure to which elements is being attached.
+ */
+
+
+
+
+/** Implementation of hook_form_alter to add encryption functionality to the individual webforms **/
+function asu_webform_encrypt_form_alter(&$form, FormStateInterface $form_state, $form_id){
+    $element_default_values[] = '';
+
+    if(isset($form['#webform_id'])){
+        $node = \Drupal::routeMatch()->getParameter('node');
+        if ($node instanceof \Drupal\node\NodeInterface) {
+            $encrypted_webform_id = $form['#webform_id'];
+            $webform_hosted_node_id = \Drupal::state()->get("$encrypted_webform_id-nodeid-encrypt");
+            $nodeid = $node->id();
+			//ksm($webform_hosted_node_id);
+			//ksm($form_id);
+            if($webform_hosted_node_id == $nodeid){
+				if($form_id == "webform_submission_quiz_node_".$nodeid."_add_form"){
+					/** code to get form key values from asu_webform_encrypt table in the database : code 1**/
+					$query = \Drupal::database();
+					$hasData = $query->select('asu_webform_encrypt', 'n')
+						->fields('n')
+						->condition('webnodeid', $nodeid,'=')
+						->condition('value', 1,'=')
+						->execute()
+						->fetchAll();
+					foreach($hasData as $key_values){
+						$exploded_keys = explode('-',$key_values->name);
+						$form_keys[] = $exploded_keys[1];
+						$url_vars[] = $key_values->urlvarname;
+					}
+				  
+					$parameters = $param = \Drupal::request()->query->all(); //get all url variables
+					
+					/** end of code 1 **/
+					/** code 2:  to encode url variable values and redirect the form */
+					for($i= 0; $i< sizeof($url_vars); $i++){
+						$get_var[$i] =   $url_vars[$i];
+						$url_var_data[$url_vars[$i]] = \Drupal::request()->query->get($get_var[$i]);
+						if(isset($url_vars[$i] )){
+							$coded[$url_vars[$i]] = base64_encode($url_var_data[$url_vars[$i]] ); //get the field keys that are encrypted
+						}
+						unset($parameters[$url_vars[$i]]); //remove the field keys from all url variables array
+					}
+					$coded['r'] = 1; //add a r variable to the url to perform check on it and avoid redirect loop
+					$coded_url = array_merge($coded,$parameters); //merge arrays
+					
+					$r_variable = \Drupal::request()->query->get('r');
+					if(isset($r_variable )){
+
+					}
+					else { /** @var  $redirect_url to redirect the node */
+						$redirect_url = new RedirectResponse(\Drupal\Core\Url::fromRoute('<current>', array($coded_url))->toString());
+						$redirect_url->send();
+					}
+					/** end of code 2 **/
+
+					/** code to decode the encoded value in the form elements default values **/
+
+					/* Decode the url variables and save in form fields */
+					foreach($form_keys as $form_elements_keys){
+						//$element_default_values[$form_elements_keys] = base64_decode($form['elements'][$form_elements_keys]['#default_value']);
+						$form['elements'][$form_elements_keys]['#default_value'] = base64_decode($form['elements'][$form_elements_keys]['#default_value']);
+						
+					}
+
+					/** end of code 2 **/
+				} 
+			}else {
+
+            }
+        }
+    }
+
+
+    /** code the add encryption field on all webform sesstings page **/
+
+    if ($form_id == 'webform_settings_form') {
+        $form_build_info = $form_state->getBuildInfo();
+        $webform_id = $form_build_info['callback_object']->getEntity()->id();
+        $form['webform_encrypt'] = [
+            '#type' => 'details',
+            '#title' => t('Encryption'),
+            '#group' => 'tab_general',
+        ];
+
+        $form['webform_encrypt']["$webform_id-setting-encrypt"] = [
+            '#type' => 'checkbox',
+            '#title' => t('Encrypt this form'),
+            '#default_value' => \Drupal::state()->get("$webform_id-setting-encrypt"),
+        ];
+
+        $form['webform_id'] =  [
+            '#type' => 'hidden',
+            '#title' => 'Webform id',
+            '#default_value' => $webform_id,
+        ];
+
+        $form['webform_encrypt']["$webform_id-nodeid-encrypt"] =  [
+            '#type' => 'textfield',
+            '#title' => 'Node id of the node hosting this webform. NOTE: enter node id only if you want to encrypt the form',
+            '#default_value' => \Drupal::state()->get("$webform_id-nodeid-encrypt"),
+        ];
+        $form['actions']['submit']['#submit'][] = 'asu_webform_encrypt_custom_form_submit';
+    }
+}
+
+function asu_webform_encrypt_custom_form_submit(array $form, \Drupal\Core\Form\FormStateInterface $form_state){
+    $webform_name = $form_state->getValue('webform_id');
+    $webform_encryption =  $form_state->getValue($webform_name.'-setting-encrypt');
+    $parent_web_nid = $form_state->getValue($webform_name.'-nodeid-encrypt');ksm($parent_web_nid );
+    \Drupal::state()->set("$webform_name-setting-encrypt",$webform_encryption);
+    \Drupal::state()->set("$webform_name-nodeid-encrypt",$parent_web_nid);
+}
+
+/** Implementation of hook form alter to save the encryption data into database **/
+function asu_webform_encrypt_form_webform_ui_element_form_alter(&$form, FormStateInterface $form_state) {
+
+    $build_info = $form_state->getBuildInfo();
+    $form_id = $build_info['args'][0]->id();
+    $key = $build_info['args'][1];
+    $encrypt_key_name = $form_id.'-'.$key;
+    $is_webform_encrypt_on = \Drupal::state()->get("$form_id-setting-encrypt");
+    if($is_webform_encrypt_on == 1) {
+
+        $form['web_id'] = [
+            '#type' => 'hidden',
+            '#title' => 'Webform id',
+            '#default_value' => $form_id,
+        ];
+
+        $form['element_key'] = [
+            '#type' => 'hidden',
+            '#title' => 'Element key',
+            '#default_value' => $key,
+        ];
+
+        $form['element_encrypt'] = [
+            '#type' => 'details',
+            '#title' => t('Encryption'),
+            '#group' => 'tab_general',
+        ];
+
+        // To provide the encryption fields for webform elements.
+        $form['element_encrypt']["$form_id-$key"] = [
+            '#type' => 'checkbox',
+            '#title' => t('Encrypt this field'),
+            '#default_value' => \Drupal::state()->get($encrypt_key_name),
+        ];
+
+        $form['#submit'][] = 'asu_webform_encrypt_submit';
+
+    }
+
+    return $form;
+}
+
+function asu_webform_encrypt_submit(array $form, \Drupal\Core\Form\FormStateInterface $form_state){
+    $build_info = $form_state->getBuildInfo();
+    $element_data = $build_info['callback_object']->getElement();
+    $element_default_values_array = explode(':',$element_data['#default_value']);
+    $element_default_values[] = str_replace(']','',$element_default_values_array[2]);
+    $element_default_values = str_replace(']','',$element_default_values_array[2]);
+    $web_id = $form_state->getValue('web_id');
+    $element_key = $form_state->getValue('element_key');
+    $field_name = $web_id.'-'.$element_key;
+    $encrypted_value = $form_state->getValue("$web_id-$element_key");
+    $form_state->setValue("$web_id-$element_key",$encrypted_value  );
+    $node_web_id =  \Drupal::state()->get("$web_id-nodeid-encrypt");
+    \Drupal::state()->set("$web_id-$element_key",$encrypted_value);
+
+    /**  check if values already exist in the database */
+    $query = \Drupal::database();
+    $hasData = $query->select('asu_webform_encrypt', 'n')
+        ->fields('n')
+        ->condition('name', $field_name,'=')
+        ->execute()
+        ->fetchAssoc();
+
+    $field_arr = [
+        'name' =>$field_name,
+        'value' => $encrypted_value,
+        'webnodeid' => $node_web_id,
+        'urlvarname' => $element_default_values,
+    ];
+    if(!$hasData) {
+        $query->insert('asu_webform_encrypt')
+            ->fields($field_arr)
+            ->execute();
+    }
+   else {
+            $query->update('asu_webform_encrypt')
+                ->fields($field_arr)
+                ->condition('name', $field_name)
+                ->execute();
+
+        }
+
+}

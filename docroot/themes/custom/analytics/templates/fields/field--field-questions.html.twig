@@ -1,0 +1,7 @@
+{% for item in items %}
+  {% set link = item.content['#url'] %}
+  {% set title = item.content['#title'] %}
+
+  <a class="tw-font-bold" href="{{ link }}">{{ title }}</a>
+  {{ not loop.last ? '<br/>' }}
+{% endfor %}

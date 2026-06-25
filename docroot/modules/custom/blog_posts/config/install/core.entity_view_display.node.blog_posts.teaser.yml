@@ -1,0 +1,96 @@
+langcode: en
+status: false
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.blog_posts.body
+    - field.field.node.blog_posts.feeds_item
+    - field.field.node.blog_posts.field_blog_image
+    - field.field.node.blog_posts.field_blog_svg_image
+    - field.field.node.blog_posts.field_button_text
+    - field.field.node.blog_posts.field_categories
+    - field.field.node.blog_posts.field_featured
+    - field.field.node.blog_posts.field_import_id
+    - field.field.node.blog_posts.field_podcast_videos
+    - field.field.node.blog_posts.field_previous_site_pub_date
+    - field.field.node.blog_posts.field_short_description
+    - field.field.node.blog_posts.field_show_on_blog_home_page
+    - field.field.node.blog_posts.field_top_content
+    - field.field.node.blog_posts.field_type_of_post
+    - field.field.node.blog_posts.layout_builder__layout
+    - node.type.blog_posts
+  module:
+    - layout_builder
+    - layout_discovery
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    allow_custom: false
+    enabled: true
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          f5168ff5-1029-4772-850a-0b7d895e6b34:
+            uuid: f5168ff5-1029-4772-850a-0b7d895e6b34
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'extra_field_block:node:blog_posts:links'
+            additional: {  }
+            weight: 0
+          78612ece-48ca-4c2a-a267-fd6770d9e616:
+            uuid: 78612ece-48ca-4c2a-a267-fd6770d9e616
+            region: content
+            configuration:
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              id: 'field_block:node:blog_posts:body'
+              formatter:
+                label: hidden
+                type: text_summary_or_trimmed
+                settings:
+                  trim_length: 600
+                third_party_settings: {  }
+            additional: {  }
+            weight: 1
+        third_party_settings: {  }
+id: node.blog_posts.teaser
+targetEntityType: node
+bundle: blog_posts
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  feeds_item: true
+  field_blog_image: true
+  field_blog_svg_image: true
+  field_button_text: true
+  field_categories: true
+  field_featured: true
+  field_import_id: true
+  field_podcast_videos: true
+  field_previous_site_pub_date: true
+  field_short_description: true
+  field_show_on_blog_home_page: true
+  field_top_content: true
+  field_type_of_post: true
+  layout_builder__layout: true

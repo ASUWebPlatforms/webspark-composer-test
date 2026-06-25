@@ -1,0 +1,176 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function asu_graduate_faculty_schema() {
+  $schema['gf_categorylist'] = [
+    'description' => 'The table for category details.',
+    'fields' => [
+      'asu_plan_cat_cd' => [
+        'description' => 'The primary identifier for a category.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'descr100' => [
+        'description' => 'The Category name and description.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['asu_plan_cat_cd'],
+    'indexes' => [
+      'descr100' => ['descr100'],
+    ],
+  ];
+
+	$schema['gf_data'] = [
+		'description' => 'The table for faculty details.',
+		'fields' => [
+			'emplid' => [
+				'description' => 'The employee id',
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE,
+			],
+			'last_name' => [
+				'description' => 'Faculty last name',
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE,
+			],
+			'first_name' => [
+				'description' => 'Faculty first name',
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE,
+			],
+			'email_addr' => [
+				'description' => 'Email address',
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE,
+			],
+			'phone' => [
+				'description' => 'Phone number',
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE,
+			],
+			'oprid' => [
+				'description' => 'OPR ID',
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE,
+			],
+			'job_title' => [
+				'description' => 'Job title',
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE,
+			],
+			'company_name' => [
+				'description' => 'Company name',
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE,
+			],
+			'highest_lvl_approval' => [
+				'description' => 'Highest level approval',
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE,
+			],
+			'plancode' => [
+				'description' => 'Plancode',
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE,
+			],
+			'plan_descr' => [
+				'description' => 'Plan Description',
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE,
+			],
+			'category' => [
+				'description' => 'Category',
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE,
+			],
+			'website' => [
+				'description' => 'Website',
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE,
+			],
+			'eid' => [
+				'description' => 'Employee ID',
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE,
+			],
+			'employee_flag' => [
+				'description' => 'Employee flag',
+				'type' => 'varchar',
+				'length' => 255,
+				'not null' => TRUE,
+			],
+		],
+		'indexes' => [
+			'emplid' => ['emplid'],
+			'plancode' => ['plancode'],
+			'category' => ['category'],
+		],
+	];
+
+	$schema['gf_plancodes'] = [
+    'description' => 'The table for plan codes.',
+    'fields' => [
+      'plancode' => [
+        'description' => 'Plancode',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'plan_descr' => [
+        'description' => 'Plan Description',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['plancode'],
+    'indexes' => [
+      'plan_descr' => ['plan_descr'],
+    ],
+  ];
+	
+	$schema['gf_eid'] = [
+    'description' => 'The table for plan codes.',
+    'fields' => [
+      'eid' => [
+        'description' => 'Employee ID',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'emplid' => [
+        'description' => 'The employee ID',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+    ],
+    'indexes' => [
+      'emplid' => ['emplid'],
+      'eid' => ['eid'],
+    ],
+  ];
+
+  return $schema;
+}
+

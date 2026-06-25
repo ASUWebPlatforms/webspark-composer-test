@@ -1,0 +1,121 @@
+asuaec_visit_revamp.resend_email:
+  path: '/admin/resend-email/{node}'
+  defaults:
+    _controller: '\Drupal\asuaec_visit_revamp\Controller\EmailResendController::resendEmail'
+    _title: 'Resend Confirmation Email (Revamp)'
+  requirements:
+    _permission: 'administer nodes'
+    node: \d+
+
+visit_revamp_config_form:
+  path: '/admin/config/visit-revamp'
+  defaults:
+    _form: '\Drupal\asuaec_visit_revamp\Form\VisitRevampConfigForm'
+    _title: 'Visit Revamp Config'
+  requirements:
+    _permission: 'administer site configuration'
+
+asuaec_visit_revamp.filtered_eventinstances:
+  path: '/visit-revamp-api/filtered-eventinstances'
+  defaults:
+    _controller: '\Drupal\asuaec_visit_revamp\Controller\FilteredEventInstanceController::getFilteredEvents'
+    _format: 'json'
+  requirements:
+    _permission: 'access content'  # Or a custom permission
+
+asuaec_visit_revamp.filtered_eventseries:
+  path: '/visit-revamp-api/filtered-eventseries'
+  defaults:
+    _controller: '\Drupal\asuaec_visit_revamp\Controller\FilteredEventSeriesController::getEventSeries'
+    _format: 'json'
+  requirements:
+    _permission: 'access content'
+
+asuaec_visit_revamp.student_registration_count:
+  path: '/visit-revamp-api/student-registrations-count'
+  defaults:
+    _controller: '\Drupal\asuaec_visit_revamp\Controller\StudentRegistrationCountController::getCount'
+    _format: 'json'
+  requirements:
+    _access: 'TRUE'
+
+asuaec_visit_revamp.student_registration_count_addtour:
+  path: '/visit-revamp-api/student-registrations-count-addtour'
+  defaults:
+    _controller: '\Drupal\asuaec_visit_revamp\Controller\StudentRegistrationCountController::getCountAddTour'
+    _format: 'json'
+  requirements:
+    _access: 'TRUE'
+
+asuaec_visit_revamp.addtour.resolved_capacity:
+  path: '/visit-revamp-api/addtour-resolved-capacity/{addtour_eventid}'
+  defaults:
+    _controller: '\Drupal\asuaec_visit_revamp\Controller\AdditionalTourParaController::getAddTourResolvedCapacity'
+  requirements:
+    _permission: 'access content'
+    # e.g. "356-2142-1758910500"
+    addtour_eventid: '^\d+-\d+-\d+$'
+
+asuaec_visit_revamp.campus_description:
+  path: '/visit-revamp-api/campus-description/{campus}/{interest}' # /visit-revamp-api/campus-description/20/28
+  defaults:
+    _controller: '\Drupal\asuaec_visit_revamp\Controller\CampusDescriptionController::getCampusDescription'
+    _format: 'json'
+  requirements:
+    _access: 'TRUE'
+    campus: '\d+' # taxonomy term ID
+    interest: '\d+' # taxonomy term ID
+
+# Added on 10/14/2025
+asuaec_visit_revamp.additional_tour:
+  path: '/visit-revamp-api/additional-tour/{uuid}'
+  defaults:
+    _controller: '\Drupal\asuaec_visit_revamp\Controller\AdditionalTourController::byUuid'
+    _title: 'Additional tour'
+  requirements:
+    _permission: 'access content'
+
+asuaec_visit_revamp.barrett_tour:
+  path: '/visit-revamp-api/barrett-tour/{uuid}'
+  defaults:
+    _controller: '\Drupal\asuaec_visit_revamp\Controller\BarrettTourController::byUuid'
+    _title: 'Barrett tour'
+  requirements:
+    _permission: 'access content'
+
+# Added on 11/24/2025
+asuaec_visit_revamp.filtered_eventinstances_month:
+  path: '/visit-revamp-api/filtered-eventinstances-month/{year}/{month}'
+  defaults:
+    _controller: '\Drupal\asuaec_visit_revamp\Controller\FilteredEventInstanceMonthController::getEventsByMonth'
+    _format: 'json'
+  requirements:
+    _permission: 'access content'
+    year: '\d{4}'
+    month: '\d{1,2}'
+
+asuaec_visit_revamp.month_metadata:
+  path: '/visit-revamp-api/month-metadata/{year}/{month}'
+  defaults:
+    _controller: '\Drupal\asuaec_visit_revamp\Controller\MonthMetadataController::getMonthMetadata'
+    _title: 'Visit Revamp Month Metadata'
+  requirements:
+    year: '\d{4}'
+    month: '\d{1,2}'
+    _permission: 'access content'
+
+visit_revamp_api.student_registrations_count_batch:
+  path: '/visit-revamp-api/student-registrations-count-batch'
+  defaults:
+    _controller: '\Drupal\asuaec_visit_revamp\Controller\StudentRegistrationCountController::getStudentRegistrationsCountBatch'
+  requirements:
+    _permission: 'access content'
+  methods: [GET, POST]
+
+# visit_revamp_api.student_registrations_count_addtour_batch:
+#   path: '/visit-revamp-api/student-registrations-count-batch-addtour'
+#   defaults:
+#     _controller: '\Drupal\asuaec_visit_revamp\Controller\StudentRegistrationCountController::getAdditionalTourRegistrationsCountBatch'
+#   requirements:
+#     _permission: 'access content'
+#   methods: [GET, POST]

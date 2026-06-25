@@ -1,0 +1,15 @@
+<?php
+
+
+/**
+ * @file
+ * asu_cb_views module help and theme functions.
+ *
+ * @author
+ * Originally created by Jeff Beeman in Drupal 6, updated to Drupal 8 by Archana Vannela (apuliroj@asu.edu)
+ * 
+ */
+
+// Store asu_cb_views preprocess theme functions in a separate .inc file.
+\Drupal::moduleHandler()->loadInclude('asu_cb_views', 'inc', 'asu_cb_views.theme');
+

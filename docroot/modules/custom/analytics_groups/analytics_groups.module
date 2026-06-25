@@ -1,0 +1,265 @@
+<?php
+
+use Drupal\Core\Access\AccessResultForbidden;
+use Drupal\Core\Access\AccessResultNeutral;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Url;
+use Drupal\group\Entity\Group;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_entity_base_field_info().
+ * Define two base fields for all Group entities.
+ * These fields will store the Active Directory groups which should have power
+ * user and viewer roles in the Drupal group.
+ */
+function analytics_groups_entity_base_field_info(EntityTypeInterface $entity_type)
+{
+  if ($entity_type->id() == 'group') {
+    $fields = [];
+
+    $fields['adfs_claims_handler_pwr'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Power User AD Groups'))
+      ->setDescription(t('The Active Directory groups that should be Power Users of this group.'))
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setDisplayConfigurable('form', true);
+
+    $fields['adfs_claims_handler_vwr'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Viewer AD Groups'))
+      ->setDescription(t('The Active Directory groups that should be Viewers of this group.'))
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setDisplayConfigurable('form', true);
+
+    return $fields;
+  }
+}
+
+/**
+ * Implements hook_entity_field_access().
+ * Only Group Admins should be able to change the "adfs_claims_handler_pwr"
+ * and "adfs_claims_handler_vwr" fields.
+ *
+ * @param $operation
+ * @param FieldDefinitionInterface $field_definition
+ * @param AccountInterface $account
+ * @param FieldItemListInterface|null $items
+ *
+ * @return AccessResultForbidden|AccessResultNeutral|AccessResult
+ */
+function analytics_groups_entity_field_access(
+  $operation,
+  FieldDefinitionInterface $field_definition,
+  AccountInterface $account,
+  FieldItemListInterface $items = null
+): AccessResultForbidden|AccessResultNeutral|AccessResult {
+  if ($field_definition->getName() == 'adfs_claims_handler_pwr' || $field_definition->getName(
+    ) == 'adfs_claims_handler_vwr') {
+    return AccessResult::forbiddenIf(!$account->hasPermission('administer group'));
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ * Ensure the following fields are unique:
+ * field_doc_library_container_id
+ * field_report_server_container_id
+ * field_tableau_container_id
+ *
+ * @param $fields
+ * @param EntityTypeInterface $entity_type
+ * @param $bundle
+ *
+ * @return void
+ */
+function analytics_groups_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle): void
+{
+  if ($entity_type->id() === 'node' && $bundle === 'group') {
+    $fields['field_doc_library_container_id']->addConstraint('UniqueField', []);
+    $fields['field_report_server_container_id']->addConstraint('UniqueField', []);
+    $fields['field_tableau_container_id']->addConstraint('UniqueField', []);
+  }
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ * Add a tab to the Group listing page to add a new Analytics Group.
+ *
+ * @param $data
+ * @param $route_name
+ *
+ * @return void
+ */
+function analytics_groups_menu_local_tasks_alter(&$data, $route_name): void
+{
+  // Ensure that the "All Entities" tab is not shown on the Group listing page.
+  unset($data['tabs'][0]['group.content']);
+
+  if ($route_name == 'entity.group.collection') {
+    $data['tabs'][0]['analytics_groups.add_group'] = [
+      '#theme' => 'menu_local_task',
+      '#link' => [
+        'title' => t('Add Analytics Group'),
+        'url' => Url::fromRoute('analytics_groups.add_group'),
+      ],
+    ];
+  }
+}
+
+/**
+ * Add the Report to the proper group once inserted via the API.
+ * Implements hook_node_insert().
+ *
+ * @see https://git.drupalcode.org/project/group/-/blob/3.0.x/src/Entity/Group.php?ref_type=heads
+ *
+ * @param NodeInterface $node
+ *
+ * @return void
+ */
+function analytics_groups_node_insert(Drupal\node\NodeInterface $node): void
+{
+  $contentType = $node->getType();
+
+  if ($contentType == 'report') {
+    $values = $node->get('field_group')->getValue();
+    $gid = !empty($values) ? reset($values)['target_id'] : null;
+
+    if ($gid) {
+      $group = Group::load($gid);
+
+      if ($group && !$group->getRelationshipsByEntity($node, 'group_node:report')) {
+        try {
+          $group->addRelationship($node, 'group_node:report');
+          Drupal::logger('analytics_groups')->info('Node added to group successfully. Node ID: @nid, Group ID: @gid', [
+            '@nid' => $node->id(),
+            '@gid' => $gid,
+          ]);
+        } catch (Exception $e) {
+          Drupal::logger('analytics_groups')->error(
+            'Error adding node to group. Node ID: @nid, Group ID: @gid. Error: @error',
+            [
+              '@nid' => $node->id(),
+              '@gid' => $gid,
+              '@error' => $e->getMessage(),
+            ]
+          );
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Alter the form when creating Group content.
+ *
+ * @param $form
+ * @param FormStateInterface $form_state
+ * @param $form_id
+ *
+ * @return void
+ */
+function analytics_groups_form_node_group_training_material_form_alter(
+  &$form,
+  FormStateInterface $form_state,
+  $form_id
+): void {
+  setGroupContentRelationship($form);
+}
+
+/**
+ * Alter the form when creating Group content.
+ *
+ * @param $form
+ * @param FormStateInterface $form_state
+ * @param $form_id
+ *
+ * @return void
+ */
+function analytics_groups_form_node_navigation_tiles_form_alter(
+  &$form,
+  FormStateInterface $form_state,
+  $form_id
+): void {
+  setGroupContentRelationship($form);
+}
+
+/**
+ * Alter the form when creating Group content.
+ *
+ * @param $form
+ * @param FormStateInterface $form_state
+ * @param $form_id
+ *
+ * @return void
+ */
+function analytics_groups_form_node_dashboard_tableau_tiles_form_alter(
+  &$form,
+  FormStateInterface $form_state,
+  $form_id
+): void {
+  setGroupContentRelationship($form);
+}
+
+/**
+ * Alter the form when creating Group content.
+ *
+ * @param $form
+ * @param FormStateInterface $form_state
+ * @param $form_id
+ *
+ * @return void
+ */
+function analytics_groups_form_node_dashboard_tableau_menu_nav_form_alter(
+  &$form,
+  FormStateInterface $form_state,
+  $form_id
+): void {
+  setGroupContentRelationship($form);
+}
+
+/**
+ * Alter the form when creating Group content.
+ *
+ * @param $form
+ * @param FormStateInterface $form_state
+ * @param $form_id
+ *
+ * @return void
+ */
+function analytics_groups_form_node_group_page_form_alter(
+  &$form,
+  FormStateInterface $form_state,
+  $form_id
+): void {
+  setGroupContentRelationship($form);
+}
+
+/**
+ * Automatically set the proper Group.
+ *
+ * @param $form
+ *
+ * @return void
+ */
+function setGroupContentRelationship(&$form): void
+{
+  $route_name = Drupal::routeMatch()->getRouteName();
+  if ($route_name == 'entity.group_relationship.create_form') {
+    $group_id = Drupal::routeMatch()->getParameter('group');
+    $form['field_group']['widget'][0]['target_id']['#default_value'] = $group_id;
+
+    // Hide the field so the user cannot change it, regardless of permissions.
+    // Admins and BI Team members can change a group's content relationship, however
+    // this is not the location to do so.
+    $form['field_group']['#access'] = false;
+  }
+}

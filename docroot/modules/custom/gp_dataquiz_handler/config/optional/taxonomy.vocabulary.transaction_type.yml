@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Transaction Type'
+vid: transaction_type
+description: 'Used as options in Data Quiz'
+weight: 0
+new_revision: false

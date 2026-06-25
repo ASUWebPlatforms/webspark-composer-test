@@ -1,0 +1,12 @@
+/* make reports hero viewable again after WS2.13.1 update */
+.node-type-report .bg-white {
+  --bs-bg-opacity: 0 !important;
+}
+
+/* make reports form have correct spacing and font size again after WS2.13.1 update */
+.reports-view .form-group {
+  margin: 0 0 2rem;
+}
+.reports-view .form-label {
+  font-size: 1rem;
+}

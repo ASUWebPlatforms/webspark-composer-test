@@ -1,0 +1,6 @@
+name: ASU Local Degrees and RFI
+type: module
+description: 'Fetch ASU degrees from AppSync and render them locally. Also, post submission to Online SF.'
+core_version_requirement: ^10 || ^11
+package: Custom
+version: 1.0.0

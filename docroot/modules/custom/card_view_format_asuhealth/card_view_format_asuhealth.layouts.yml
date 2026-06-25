@@ -1,0 +1,8 @@
+card_degree_tags:
+  label: 'Card Degree Tags'
+  template: layouts/card-degree-tags
+  category: 'Columns 1'
+  default_region: content
+  regions:
+    content:
+      label: Content

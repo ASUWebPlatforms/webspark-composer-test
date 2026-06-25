@@ -1,0 +1,4 @@
+services:
+  asu_edu_components.processor:
+    class: Drupal\asu_edu_components\Processor
+    arguments: ['@path.current', '@path_alias.manager']

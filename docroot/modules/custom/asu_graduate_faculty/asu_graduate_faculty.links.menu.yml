@@ -1,0 +1,12 @@
+asu_modules.admin_settings:
+  title: 'ASU Modules'
+  description: 'Settings for ASU Modules.'
+  parent: system.admin_config
+  route_name: system.admin_config_system
+  weight: -50
+asu_graduate_faculty.admin_settings:
+  title: 'ASU Graduate Faculty'
+  description: 'Configure ASU Graduate Faculty settings.'
+  parent: asu_modules.admin_settings
+  route_name: asu_graduate_faculty.settings
+  weight: 100

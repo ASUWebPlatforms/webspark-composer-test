@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+_core:
+  default_config_hash: r0PNvXGqP3TxU7mJ_uAUCB0EEO_Dc9YeHklCyfrChfU
+id: paragraph.asu_health_era
+label: 'ASU Health Era'
+description: ''
+targetEntityType: paragraph
+cache: true

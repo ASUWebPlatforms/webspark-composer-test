@@ -1,0 +1,5 @@
+name: ASU Embryo
+type: module
+description: Provides Custom code for Embryo site
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10

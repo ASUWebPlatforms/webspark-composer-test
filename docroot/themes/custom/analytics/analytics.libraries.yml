@@ -1,0 +1,36 @@
+style:
+  version: 2.17.0
+  css:
+    theme:
+      assets/css/analytics.style.css: { weight: 50 }
+  js:
+    assets/js/analytics.script.js: { }
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+
+tableau:
+  js:
+    https://bi.arizona.edu/javascripts/api/tableau.embedding.3.latest.min.js: { type: external, attributes: { type: module } }
+
+reports:
+  js:
+    assets/js/reports.js: { }
+
+tableau-tiles:
+  js:
+    assets/js/tableau-tiles.js: { }
+  dependencies:
+    - analytics/tableau
+
+tableau-menu-nav:
+  css:
+    theme:
+      assets/css/reveal/reveal.css: { }
+      assets/css/reveal/white.css: { }
+  js:
+    assets/js/reveal/reveal.js: { preprocess: false }
+    assets/js/tableau-menu-nav.js: { preprocess: false }
+  dependencies:
+    - analytics/tableau

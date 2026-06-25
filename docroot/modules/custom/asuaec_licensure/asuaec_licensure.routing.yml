@@ -1,0 +1,7 @@
+asuaec_licensure.json.programnodetitles:
+  path: '/admin/asuaec_licensure/json/programnodetitles/{college_school}'
+  defaults:
+    _controller: '\Drupal\asuaec_licensure\Controller\JsonControllerLicensure::generateJsonProgramNodeTitles'
+    _format: json
+  requirements:
+    _permission: 'access content'

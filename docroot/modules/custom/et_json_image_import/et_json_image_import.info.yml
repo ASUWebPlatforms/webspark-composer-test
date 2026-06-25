@@ -1,0 +1,8 @@
+name: 'ET Json Image Import'
+type: module
+description: 'A custom module to import images scraped from websites into Drupal media entities'
+package: Custom
+core_version_requirement: ^10 || ^11
+dependencies:
+  - migrate_plus:migrate_plus
+  - migrate_tools:migrate_tools

@@ -1,0 +1,414 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_collection
+    - field.storage.node.field_experience_type
+    - field.storage.node.field_location
+    - field.storage.node.field_new_cta_link
+    - field.storage.node.field_image
+  module:
+    - better_exposed_filters
+    - elevate_experience_import
+    - node
+    - taxonomy
+    - user
+id: experience_finder
+label: 'Experience Finder'
+module: views
+description: 'Public Experience Finder listing with exposed filters and card grid.'
+tag: ''
+base_table: node_field_data
+base_field: nid
+display:
+  default:
+    id: default
+    display_title: Default
+    display_plugin: default
+    position: 0
+    display_options:
+      title: 'Experiences for you'
+      fields:
+        nid:
+          id: nid
+          table: node_field_data
+          field: nid
+          entity_type: node
+          entity_field: nid
+          plugin_id: field
+          label: ''
+          exclude: false
+          element_label_colon: false
+          settings:
+            link_to_entity: false
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          entity_type: node
+          entity_field: title
+          plugin_id: field
+          label: ''
+          exclude: false
+          element_type: ''
+          element_class: 'experience-card__title'
+          element_label_colon: false
+          settings:
+            link_to_entity: false
+        field_location:
+          id: field_location
+          table: node__field_location
+          field: field_location
+          entity_type: node
+          entity_field: field_location
+          plugin_id: field
+          label: ''
+          exclude: false
+          element_class: 'experience-card__location'
+          element_label_colon: false
+          type: entity_reference_label
+          settings:
+            link: false
+        body:
+          id: body
+          table: node__body
+          field: body
+          entity_type: node
+          entity_field: body
+          plugin_id: field
+          label: ''
+          exclude: false
+          element_class: 'experience-card__description'
+          element_label_colon: false
+          type: text_trimmed
+          settings:
+            trim_length: 220
+        field_image:
+          id: field_image
+          table: node__field_image
+          field: field_image
+          entity_type: node
+          entity_field: field_image
+          plugin_id: field
+          label: ''
+          exclude: false
+          element_class: 'experience-card__image'
+          element_label_colon: false
+          type: entity_reference_entity_view
+          settings:
+            view_mode: thumbnail
+        field_new_cta_link:
+          id: field_new_cta_link
+          table: node__field_new_cta_link
+          field: field_new_cta_link
+          entity_type: node
+          entity_field: field_new_cta_link
+          plugin_id: field
+          label: ''
+          exclude: false
+          element_class: 'experience-card__cta'
+          element_label_colon: false
+          type: link
+          settings:
+            trim_length: null
+            url_only: false
+            url_plain: false
+            rel: '0'
+            target: '_blank'
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 6
+          total_pages: null
+          id: 0
+          tags:
+            next: 'Next ›'
+            previous: '‹ Prev'
+            first: '« First'
+            last: 'Last »'
+          expose:
+            items_per_page: false
+          quantity: 5
+      exposed_form:
+        type: bef
+        options:
+          submit_button: 'See Experiences'
+          reset_button: false
+          reset_button_label: 'Reset'
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+          text_input_required: 'Select any filter and click on Apply to see results'
+          bef:
+            general:
+              autosubmit: false
+              autosubmit_exclude_textfield: false
+              autosubmit_textfield_delay: 500
+              autosubmit_hide: false
+              input_required: false
+              allow_secondary: false
+              secondary_label: 'Advanced options'
+              reset_button_always_show: false
+            filter:
+              field_experience_type_target_id:
+                plugin_id: bef
+                advanced:
+                  sort_options: false
+                  placeholder_text: ''
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  is_secondary: false
+                select_all_none: false
+                select_all_none_nested: false
+                display_inline: false
+              field_collection_target_id:
+                plugin_id: bef
+                advanced:
+                  sort_options: false
+                  placeholder_text: ''
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  is_secondary: false
+                select_all_none: false
+                select_all_none_nested: false
+                display_inline: false
+              experience_program_specific:
+                plugin_id: bef
+                advanced:
+                  sort_options: false
+                  placeholder_text: ''
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  is_secondary: false
+                select_all_none: false
+                select_all_none_nested: false
+                display_inline: false
+              field_location_target_id:
+                plugin_id: bef
+                advanced:
+                  sort_options: false
+                  placeholder_text: ''
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  is_secondary: false
+                select_all_none: false
+                select_all_none_nested: false
+                display_inline: false
+              combine:
+                plugin_id: default
+                advanced:
+                  sort_options: false
+                  placeholder_text: 'Example: nanotechnology'
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  is_secondary: false
+      access:
+        type: perm
+        options:
+          perm: 'access content'
+      cache:
+        type: tag
+        options: {  }
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          plugin_id: text_custom
+          empty: true
+          content: 'No experiences match your selection. Try adjusting your filters.'
+      sorts:
+        sticky:
+          id: sticky
+          table: node_field_data
+          field: sticky
+          entity_type: node
+          entity_field: sticky
+          plugin_id: standard
+          order: DESC
+        created:
+          id: created
+          table: node_field_data
+          field: created
+          entity_type: node
+          entity_field: created
+          plugin_id: date
+          order: DESC
+      arguments: {  }
+      filters:
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          value:
+            experience: experience
+          group: 1
+        field_experience_type_target_id:
+          id: field_experience_type_target_id
+          table: node__field_experience_type
+          field: field_experience_type_target_id
+          plugin_id: taxonomy_index_tid
+          relationship: none
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_experience_type_target_id_op
+            label: 'Experience type'
+            description: ''
+            identifier: experience_type
+            multiple: true
+            remember: false
+            reduce: false
+          type: select
+          limit: true
+          vid: experience_type
+          hierarchy: false
+          error_message: true
+        field_collection_target_id:
+          id: field_collection_target_id
+          table: node__field_collection
+          field: field_collection_target_id
+          plugin_id: taxonomy_index_tid
+          relationship: none
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_collection_target_id_op
+            label: 'Career interests'
+            description: ''
+            identifier: career_interests
+            multiple: true
+          type: select
+          limit: true
+          vid: collection
+          hierarchy: false
+          error_message: true
+        experience_program_specific:
+          id: experience_program_specific
+          table: node_field_data
+          field: experience_program_specific
+          plugin_id: experience_program_specific_options
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: experience_program_specific_op
+            label: 'Program specific options'
+            description: ''
+            identifier: program
+            multiple: true
+        field_location_target_id:
+          id: field_location_target_id
+          table: node__field_location
+          field: field_location_target_id
+          plugin_id: taxonomy_index_tid
+          relationship: none
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_location_target_id_op
+            label: 'Location'
+            description: ''
+            identifier: location
+            multiple: true
+          type: select
+          limit: true
+          vid: location
+          hierarchy: false
+          error_message: true
+        combine:
+          id: combine
+          table: views
+          field: experience_keyword
+          plugin_id: experience_keyword
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: combine_op
+            label: 'Or search for a keyword or phrase'
+            description: ''
+            identifier: keyword
+            placeholder: 'Example: nanotechnology'
+          fields:
+            title: title
+            body: body
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      style:
+        type: default
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          uses_fields: false
+      row:
+        type: fields
+        options:
+          default_field_elements: true
+          inline: {  }
+          separator: ''
+          hide_empty: false
+      query:
+        type: views_query
+        options:
+          disable_sql_rewrite: false
+          distinct: true
+          pure_distinct: false
+      header: {  }
+      footer: {  }
+      relationships: {  }
+      display_extenders: {  }
+      use_ajax: false
+      css_class: 'experience-finder'
+  page_1:
+    id: page_1
+    display_title: Page
+    display_plugin: page
+    position: 1
+    display_options:
+      display_extenders: {  }
+      path: find-experiences
+      menu:
+        type: none

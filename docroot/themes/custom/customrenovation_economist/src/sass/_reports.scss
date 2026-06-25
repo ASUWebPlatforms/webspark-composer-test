@@ -1,0 +1,139 @@
+.report-cards .card-img-top img {
+  aspect-ratio: 2;
+}
+
+#views-exposed-form-reports-block-1 {
+  height: auto;
+  display: grid;
+
+  grid-template-columns: 1fr;
+  grid-column-gap: 1.5rem;
+
+  @media (min-width: $uds-breakpoint-md) {
+    grid-template-columns: 1fr 1fr 1fr;
+
+    .form-actions {
+      grid-column: span 3;
+    }
+  }
+
+  .custom-select, .select2 .select2-selection--multiple {
+    min-height: calc(1.5em + .75rem + 6px);
+    border-color: $gray-5;
+    border-radius: 0;
+  }
+
+  .select2 .select2-search__field {
+    height: 1.875rem;
+
+    &::placeholder {
+      line-height: 2rem;
+      color: #495057;
+    }
+  }
+
+  .form-control {
+    height: calc(1.5em + .75rem + 6px);
+  }
+
+}
+
+.reports-exposed-header h2 {
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+}
+
+/* Match padding on cards to the design */
+.card-story:not(.card.card-foldable) > div:first-of-type:not(.card-image-content) {
+  padding-top: 0;
+}
+
+.card-story > div:first-of-type:not(.card-image-content) {
+  padding: 0;
+}
+
+.bef-exposed-form {
+  input[id^='edit-submit-reports'] {
+    background: $dark;
+    border-color: $dark;
+    &:active {
+      background: $dark;
+    }
+  }
+
+  input[id^='edit-reset'] {
+    background: $gray-3;
+    border-color: $gray-3;
+    color: $dark;
+
+    &:active {
+      background: $gray-3;
+    }
+  }
+}
+
+.node-type-report div[class^=uds-hero] {
+
+  .hero {
+    z-index: -1;
+  }
+
+  &:after {
+    background-image: none;
+    z-index: -1;
+  }
+}
+
+.node-type-report .uds-hero-md {
+  height: 42.875rem;
+}
+
+.node-type-report .block__body {
+  font-size: 1.5rem;
+}
+
+@media (min-width: $uds-breakpoint-md) {
+  .layout__report_content__first {
+    margin-top: -10rem;
+    background-color: $white;
+    padding: 1rem;
+
+    &__inner {
+      max-width: 50rem;
+      margin: 5rem auto 1rem;
+    }
+  }
+
+  .layout-builder__region.layout-builder__region {
+    margin-top: 0;
+  }
+
+}
+
+.field-categories--report a {
+  font-weight: bold;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.node.report--full .report-row--narrow {
+  max-width: 51rem;
+  margin: 0 auto;
+}
+
+.field-published-date {
+  font-weight: bold;
+
+  time {
+    padding-left: 0.25rem;
+  }
+}
+
+.field--name-field-tags {
+  padding-bottom: 3rem;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid $gray-3;
+}

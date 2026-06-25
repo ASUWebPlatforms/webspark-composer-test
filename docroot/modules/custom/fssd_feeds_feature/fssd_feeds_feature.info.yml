@@ -1,0 +1,11 @@
+name: 'FSSD Feeds feature'
+type: module
+core_version_requirement: '^8.9 || ^9 || ^10'
+dependencies:
+  - feeds
+  - feeds_tamper
+  - image
+  - node
+  - options
+  - user
+  - views

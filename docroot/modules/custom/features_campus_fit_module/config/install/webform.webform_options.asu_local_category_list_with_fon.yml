@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies: {  }
+id: asu_local_category_list_with_fon
+label: 'ASU Local category list with font icons'
+category: ASU
+likert: false
+options: |-
+  'Art and design-10q': '<i class="fas fa-pencil-ruler"></i> Art and design'
+  Business-10q: '<i class="fas fa-briefcase"></i> Business'
+  'Communication and digital media-10q': '<i class="fas fa-comments"></i> Communication and digital media'
+  'Computer science and technology-10q': '<i class="fas fa-code"></i> Computer science and technology'
+  Education-10q: '<i class="fas fa-chalkboard-teacher"></i> Education'
+  Engineering-10q: '<i class="fas fa-cog"></i> Engineering'
+  'Entrepreneurship and innovation-10q': '<i class="fas fa-lightbulb"></i> Entrepreneurship and innovation'
+  'Geographical sciences and urban planning-10q': '<i class="fas fa-map"></i> Geographical sciences and urban planning'
+  'Health and wellness-10q': '<i class="fas fa-heartbeat"></i> Health and wellness'
+  History-10q: '<i class="fas fa-landmark"></i> History'
+  Humanities-10q: '<i class="fas fa-book"></i> Humanities'
+  'Information technology-10q': '<i class="fas fa-desktop"></i> Information technology'
+  'Law, criminal justice and public service-10q': '<i class="fas fa-balance-scale"></i> Law, criminal justice and public service'
+  Language-10q: '<i class="fas fa-globe"></i> Language'
+  'Liberal arts-10q': '<i class="fas fa-book"></i> Liberal arts'
+  Management-10q: '<i class="fas fa-network-wired"></i> Management'
+  Nursing-10q: '<i class="fas fa-stethoscope"></i> Nursing'
+  Nutrition-10q: '<i class="fas fa-carrot"></i> Nutrition'
+  Psychology-10q: '<i class="fas fa-brain"></i> Psychology'
+  Science-10q: '<i class="fas fa-microscope"></i> Science'
+  'Social and behavioral sciences-10q': '<i class="fas fa-users"></i> Social and behavioral sciences'
+  STEM-10q: '<i class="fas fa-square-root-alt"></i> STEM'
+  Sustainability-10q: '<i class="fas fa-globe-americas"></i> Sustainability'

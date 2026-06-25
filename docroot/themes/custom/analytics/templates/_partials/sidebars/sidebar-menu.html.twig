@@ -1,0 +1,69 @@
+{#
+/**
+ * @file
+ * Template for a Nav component.
+ *
+ * Available config:
+ * - alignment: left | right | center | vertical.
+ * - style: tabs | pills
+ * - fill: fill | justify
+ * - dropdown: true | false : wheather to show dropdowns or not.
+ * - utility_classes: An array of utility classes.
+ */
+#}
+
+{% import _self as menus %}
+
+{% set nav_classes = [
+  'analytics-menu-block--nav',
+  'tw-flex',
+  'tw-flex-1',
+  'tw-flex-col',
+]|merge(utility_classes ? utility_classes : []) %}
+
+{% if items %}
+  <div class="analytics-menu-block tw-border tw-border-[#d0d0d0] tw-border-solid tw-bg-white tw-py-6">
+    {% block menu_name %}
+      {% if menu_name %}
+        <div class="analytics-menu-block--title tw-mb-3 tw-px-6">
+          <p class="h5 tw-my-0">{{ menu_name|replace({ '-': ' ' })|title }}</p>
+        </div>
+      {% endif %}
+    {% endblock %}
+
+    <nav{{ attributes.addClass(nav_classes) }}>
+      {% block items %}
+        {% for item in items %}
+          {% set nav_item_classes = [
+            'nav-item',
+          ]|merge(nav_item_utility_classes ? nav_item_utility_classes : []) %}
+          {% set nav_link_classes = [
+            'nav-link',
+            'analytics-menu-block--nav-item',
+            'tw-py-4',
+            'tw-text-black',
+            'tw-no-underline',
+            'hover:tw-bg-[#fafafa]',
+            'tw-relative',
+            'tw-px-8',
+            'tw-flex',
+            'tw-content-center',
+            item.in_active_trail ? 'active',
+          ]|merge(nav_link_utility_classes ? nav_link_utility_classes : []) %}
+          {% if item.url.options.attributes.class is iterable %}
+            {% set nav_link_classes = nav_link_classes|merge(item.url.options.attributes.class) %}
+          {% elseif item.url.options.attributes.class %}
+            {% set nav_link_classes = nav_link_classes|merge([item.url.options.attributes.class]) %}
+          {% endif %}
+
+          {# TODO: Figure out how to keep the active state present when using AJAX in views #}
+          <a{{ item.attributes.setAttribute('href', item.url.toString()).addClass(nav_link_classes) }}>
+            {# TODO: Figure out a user friendly way to add the icon, attach a field to the menu item? #}
+            {# <span class="fas fa-lock tw-mr-2 tw-self-center tw-w-[16px] tw-h-[16px]"></span> #}
+            <span class="">{{ item.title }}</span>
+          </a>
+        {% endfor %}
+      {% endblock %}
+    </nav>
+  </div>
+{% endif %}

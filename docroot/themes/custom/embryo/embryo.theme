@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * Implements hook_preprocess_views_exposed_form().
+ */
+function embryo_preprocess_views_exposed_form(array &$variables) {
+  $form_id = $variables['form']['#id'] ?? '';
+
+  if ($form_id !== 'views-exposed-form-keep-search-page-1') {
+    return;
+  }
+
+  $facet = \Drupal::entityTypeManager()
+    ->getStorage('facets_facet')
+    ->load('page_keyword');
+
+  if ($facet) {
+    $variables['page_keyword_facet'] = \Drupal::service('facets.manager')->build($facet);
+  }
+}

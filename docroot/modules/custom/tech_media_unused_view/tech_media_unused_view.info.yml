@@ -1,0 +1,10 @@
+name: Tech Media Unused View
+type: module
+description: "Views field that, per Node, lists Layout Builder blocks (inline/reusable) with Media fields and their files, including a delete link. Includes options to scan node-level media, cache max-age, and filter by Media bundle."
+package: Custom
+core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:layout_builder
+  - drupal:block_content
+  - drupal:media
+  - drupal:file

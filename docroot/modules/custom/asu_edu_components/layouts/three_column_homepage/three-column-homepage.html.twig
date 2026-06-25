@@ -1,0 +1,54 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display three column fixed width layout.
+ *
+ * Available variables:
+ * - content: The content for this layout.
+ * - attributes: HTML attributes for the layout wrapper.
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+    'layout',
+    'layout--three-column-homepage'
+  ]
+%}
+
+{% if settings.extra_classes %}
+  {% set classes =  classes|merge(settings.extra_classes) %}
+{% endif %}
+
+{% if content %}
+  <div{{ attributes.addClass('max-size-container', 'center-container', classes) }}>
+
+    <div class="container">
+
+      <div class="row">
+
+        {% if content.left %}
+          <div {{ region_attributes.left.addClass('layout__region', 'layout__region--left col' ~ left_col_fractions) }}>
+            {{ content.left}}
+          </div>
+        {% endif %}
+
+        {% if content.center %}
+          <div {{ region_attributes.center.addClass('layout__region', 'layout__region--center col-md-5') }}>
+            {{ content.center }}
+          </div>
+        {% endif %}
+
+        {% if content.right %}
+          <div {{ region_attributes.right.addClass('layout__region', 'layout__region--right col') }}>
+            {{ content.right }}
+          </div>
+        {% endif %}
+
+      </div>
+
+    </div>
+
+  </div>
+{% endif %}

@@ -1,0 +1,12 @@
+eventlib:
+  version: 2.02
+  css:
+    theme:
+      css/eventstyles.style.css: {}
+      css/slick.css: {}
+      css/slick-theme.css: {}
+  js:
+    js/slick.js: {}
+    js/script.js: {}
+  dependencies:
+    - core/jquery

@@ -1,0 +1,6 @@
+name: Newsletter Breadcrumb
+description: Breadcrumb for Newsletter Content type.
+type: module
+core_version_requirement: ^8 || ^9 || ^10
+version: VERSION
+package: custom

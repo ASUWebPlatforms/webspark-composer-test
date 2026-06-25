@@ -1,0 +1,40 @@
+name: Renovation Leadership
+description: "Custom Theme Based on ASU's implementation of Web Standards 2.0 in Drupal 8+"
+screenshot: screenshot.png
+core_version_requirement: ^9.0 || ^10
+# version: VERSION
+engine: twig
+type: theme
+base theme: renovation
+
+regions:
+  header: Header
+  pre_content: Pre Content
+  content: Content
+  page_bottom: Page bottom
+  mega_footer: Mega Footer
+  footer: Footer
+
+libraries:
+  - radix/style
+  - leadership/style
+  - leadership/tables
+
+libraries-override:
+  radix/bootstrap: false
+  core/drupal.dialog.off_canvas:
+    css:
+      base:
+        misc/dialog/off-canvas.reset.css: css/core/dialog/off-canvas.reset.css
+        misc/dialog/off-canvas.base.css: css/core/dialog/off-canvas.base.css
+      component:
+        misc/dialog/off-canvas.table.css: css/core/dialog/off-canvas.table.css
+
+
+ckeditor_stylesheets:
+  - assets/css/leadership.style.css
+  - css/ckeditor-override.css
+
+components:
+  namespaces:
+    renovation: ./src/components

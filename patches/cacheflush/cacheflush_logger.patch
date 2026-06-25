@@ -1,0 +1,57 @@
+diff --git a/modules/cacheflush_drush/src/Commands/CacheflushDrushCommands.php b/modules/cacheflush_drush/src/Commands/CacheflushDrushCommands.php
+index fa97295..6e46890 100644
+--- a/modules/cacheflush_drush/src/Commands/CacheflushDrushCommands.php
++++ b/modules/cacheflush_drush/src/Commands/CacheflushDrushCommands.php
+@@ -5,6 +5,7 @@ namespace Drupal\cacheflush_drush\Commands;
+ use Drupal\cacheflush\Controller\CacheflushApi;
+ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+ use Drush\Commands\DrushCommands;
++use Psr\Log\LoggerInterface;
+ 
+ /**
+  * Defines drush commands for cacheflush_drush module.
+@@ -14,9 +15,9 @@ class CacheflushDrushCommands extends DrushCommands {
+   /**
+    * The logger channel for this service.
+    *
+-   * @var \Drupal\Core\Logger\LoggerChannelInterface
++   * @var \Psr\Log\LoggerInterface|null
+    */
+-  protected $logger;
++  protected ?LoggerInterface $logger = null;
+ 
+   /**
+    * CacheflushDrushCommands constructor.
+@@ -26,6 +27,7 @@ class CacheflushDrushCommands extends DrushCommands {
+    */
+   public function __construct(LoggerChannelFactoryInterface $logger_factory) {
+     parent::__construct();
++    // Name the channel as you like. 'qa_accounts' used in your example.
+     $this->logger = $logger_factory->get('qa_accounts');
+   }
+ 
+@@ -33,7 +35,7 @@ class CacheflushDrushCommands extends DrushCommands {
+    * Clear preset cache by id.
+    *
+    * @command cacheflush
+-   * 
++   *
+    * @param string|int $id
+    *   An optional argument.
+    *
+@@ -58,7 +60,7 @@ class CacheflushDrushCommands extends DrushCommands {
+       }
+     }
+     else {
+-      $this->logger->notice(t('Preset list. Use "drush cf ID" to clear cache.'));
++      // List all published presets.
+       foreach (cacheflush_load_multiple_by_properties(['status' => 1]) as $id => $entity) {
+         $msg = '[' . $id . ']   :   ' . $entity->getTitle();
+         $this->logger->notice($msg);
+@@ -66,4 +68,4 @@ class CacheflushDrushCommands extends DrushCommands {
+     }
+   }
+ 
+-}
++}
+\ No newline at end of file

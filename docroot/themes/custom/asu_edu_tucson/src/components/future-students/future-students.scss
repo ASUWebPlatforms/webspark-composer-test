@@ -1,0 +1,24 @@
+.asu-edu-future-students {
+  div.formatted-text {
+    margin-bottom: 24px;
+  }
+
+  a {
+    display: block;
+    color: black;
+    text-decoration: none;
+    margin-bottom: 24px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.asu-edu-future-students__field-paragraph {
+  button {
+    &.btn-gold {
+      display: none;
+    }
+  }
+}

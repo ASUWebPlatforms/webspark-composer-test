@@ -1,0 +1,9 @@
+{% if element['#field_type'] == 'text_long' %}
+    <div class="p-2 cardText">
+        {{ element }}
+    </div>
+{% else %}
+    <div class="cardimage">
+        {{ element }}
+    </div>
+{% endif %}

@@ -1,0 +1,19 @@
+provostcustom-library:
+  version: 1.x
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - core/once
+  js:
+    js/provostcustom.js: { }
+
+provostcustom-aprpage-library:
+  version: 1.x
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - core/once 
+  js:
+    js/provostcustom_aprpage.js: { }

@@ -1,0 +1,51 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a view of cards.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_card_view_format_asuhealth()
+ */
+#}
+
+
+<div>
+  {% if title %}
+    <h3>{{ title }}</h3>
+  {% endif %}
+  <div class="uds-card-arrangement default">
+    {% if options.columns == 0 %}
+      {% set columns = 'two-columns' %}
+    {% elseif options.columns == 2 %}
+      {% set columns = 'four-columns' %}
+    {% else %}
+      {% set columns = 'three-columns' %}
+    {% endif %}
+    {%
+      set container_classes = [
+        'uds-card-arrangement-card-container',
+        'auto-arrangement',
+        columns,
+      ]
+      %}
+    <div {{ attributes.addClass(container_classes) }}>
+      {% for row in rows %}
+        <div class="card-wrapper views-row">
+          <div class="card cards-components card-degree" data-testid="card-container">
+            <div{{ row.attributes.addClass(row_classes) }}>
+              {{ row.content }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

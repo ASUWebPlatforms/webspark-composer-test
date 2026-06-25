@@ -1,0 +1,7 @@
+asuaec_rfi_custompost.customadmin_settings:
+  path: '/admin/config/asuaec-rfi-custompost'
+  defaults:
+    _form: '\Drupal\asuaec_rfi_custompost\Form\RfiAdminSwitch'
+    _title: 'ASU AEC RFI Custom post - Set endpoint'
+  requirements:
+    _permission: 'administer site configuration'

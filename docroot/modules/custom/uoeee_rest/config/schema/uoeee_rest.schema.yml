@@ -1,0 +1,37 @@
+uoeee_rest.uoeee_db_api:
+  type: config_object
+  label: 'UOEEE DB API settings'
+  mapping:
+    defaults:
+      type: mapping
+      mapping:
+        columns: { type: text, label: 'Columns policy' }
+        writable: { type: text, label: 'Writable policy' }
+        deny_writable:
+          type: sequence
+          label: 'Never writable'
+          sequence: { type: text }
+    tables:
+      type: mapping
+      label: 'Per-table overrides'
+      mapping:
+        '*':
+          type: mapping
+          mapping:
+            columns: { type: text }
+            writable: { type: text }
+            deny_writable:
+              type: sequence
+              sequence: { type: text }
+    patterns:
+      type: mapping
+      label: 'Pattern overrides'
+      mapping:
+        '*':
+          type: mapping
+          mapping:
+            columns: { type: text }
+            writable: { type: text }
+            deny_writable:
+              type: sequence
+              sequence: { type: text }
