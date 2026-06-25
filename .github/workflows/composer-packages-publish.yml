@@ -180,14 +180,21 @@ jobs:
           set -euo pipefail
           # Combine every per-package record into a single JSON array.
           jq -s '.' meta/*.json > records.json
-          # client_payload has a documented size cap (~64KB); 6 small records
-          # are well within it.
-          echo "records=$(jq -c '.' records.json)" >> "$GITHUB_OUTPUT"
+          echo "Records to dispatch:"
+          jq . records.json
+          # Build the FULL request body with a properly nested client_payload.
+          # gh api -f/-F send flat form fields and will NOT construct nested
+          # objects (client_payload[records] would not become real nested JSON),
+          # so we assemble the body explicitly and send it via --input.
+          # client_payload has a documented ~64KB cap; 6 small records fit.
+          jq -n --argjson records "$(cat records.json)" \
+            '{event_type: "packages-publish", client_payload: {records: $records}}' \
+            > dispatch-body.json
+          jq . dispatch-body.json
 
       - name: Dispatch rebuild on target repo
         env:
           GH_TOKEN: ${{ steps.token.outputs.token }}
         run: |
-          gh api "repos/${TARGET_REPO}/dispatches" \
-            -f event_type='packages-publish' \
-            -F client_payload[records]='${{ steps.payload.outputs.records }}'
+          set -euo pipefail
+          gh api --method POST "repos/${TARGET_REPO}/dispatches" --input dispatch-body.json
