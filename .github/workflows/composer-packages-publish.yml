@@ -1,0 +1,193 @@
+name: 'Publish Composer Packages (TEST)'
+
+# TEST harness for the Satis-replacement pipeline. Runs on
+# ASUWebPlatforms/webspark-composer-test (in place of webspark-mirror) and
+# publishes to ASUWebPlatforms/composer-packages-test (in place of
+# composer-packages). Auth uses a service-user PAT (secrets.SERVICE_USER_PAT).
+#
+# To promote to production: change TARGET_REPO + the repo gate back to the
+# live names and switch the resolve-token action to the GitHub App path.
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      # Literal globs (GitHub tag filters are NOT regex).
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+
+# Don't let two publishes for the same ref race each other.
+concurrency:
+  group: composer-packages-publish-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  # Single place to flip between test and production targets.
+  PUBLISHER_REPO: ASUWebPlatforms/webspark-composer-test
+  TARGET_REPO: ASUWebPlatforms/composer-packages-test
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # 1) Ensure the release exists ONCE so matrix jobs don't race to create it.
+  # ---------------------------------------------------------------------------
+  ensure-release:
+    if: github.repository == 'ASUWebPlatforms/webspark-composer-test'
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.compute.outputs.tag }}
+      version: ${{ steps.compute.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/resolve-token
+        id: token
+        with:
+          service-user-pat: ${{ secrets.SERVICE_USER_PAT }}
+
+      - id: compute
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            VERSION="${GITHUB_REF#refs/tags/}"
+            TAG="${VERSION}"
+          else
+            # Branch build: fixed tag, clobbered each push. dev-main convention.
+            VERSION="dev-main"
+            TAG="dev-main"
+          fi
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: Ensure release exists on target repo
+        env:
+          GH_TOKEN: ${{ steps.token.outputs.token }}
+          TAG: ${{ steps.compute.outputs.tag }}
+        run: |
+          if ! gh release view "$TAG" --repo "$TARGET_REPO" >/dev/null 2>&1; then
+            gh release create "$TAG" \
+              --repo "$TARGET_REPO" \
+              --title "$TAG" \
+              --notes "Composer package artifacts for $TAG" \
+              ${{ steps.compute.outputs.version == 'dev-main' && '--prerelease' || '' }}
+          else
+            echo "Release $TAG already exists; assets will be clobbered."
+          fi
+
+  # ---------------------------------------------------------------------------
+  # 2) Package + upload each subdirectory (matrix), with retry.
+  # ---------------------------------------------------------------------------
+  publish:
+    needs: ensure-release
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - docroot/profiles/contrib/webspark/modules/asu_brand
+          - docroot/profiles/contrib/webspark/modules/asu_user
+          - docroot/profiles/contrib/webspark/modules/asu_react_core
+          - docroot/profiles/contrib/webspark/modules/asu_react_integration
+          - docroot/profiles/contrib/webspark/modules/asu_config_utility
+          - docroot/profiles/contrib/webspark
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/resolve-token
+        id: token
+        with:
+          service-user-pat: ${{ secrets.SERVICE_USER_PAT }}
+
+      - name: Package subdirectory
+        env:
+          TAG: ${{ needs.ensure-release.outputs.tag }}
+        run: |
+          chmod +x scripts/package.sh
+          ./scripts/package.sh "${{ matrix.package }}" "${{ needs.ensure-release.outputs.version }}" dist
+
+      - name: Upload asset (retry up to 2x, then fail)
+        env:
+          GH_TOKEN: ${{ steps.token.outputs.token }}
+          TAG: ${{ needs.ensure-release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          ZIP="$(ls dist/*.zip)"
+          attempt=1
+          max=3   # 1 initial + 2 retries
+          until [ "$attempt" -gt "$max" ]; do
+            echo "Upload attempt $attempt/$max for $ZIP"
+            if gh release upload "$TAG" "$ZIP" --repo "$TARGET_REPO" --clobber; then
+              echo "Upload succeeded."
+              break
+            fi
+            if [ "$attempt" -eq "$max" ]; then
+              echo "::error::upload failed after $max attempts for $ZIP" >&2
+              exit 1
+            fi
+            attempt=$((attempt+1))
+            sleep $((attempt * 5))
+          done
+
+      - name: Verify asset is reachable (follow redirect + check shasum)
+        env:
+          TAG: ${{ needs.ensure-release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          META="$(ls dist/*.json)"
+          URL="https://github.com/${TARGET_REPO}/releases/download/${TAG}/$(jq -r '.filename' "$META")"
+          EXPECTED="$(jq -r '.shasum' "$META")"
+          # -L follows the 302 to the signed objects URL.
+          curl -fsSL "$URL" -o downloaded.zip
+          GOT="$(sha1sum downloaded.zip | awk '{print $1}')"
+          if [ "$GOT" != "$EXPECTED" ]; then
+            echo "::error::shasum mismatch for $URL (expected $EXPECTED, got $GOT)" >&2
+            exit 1
+          fi
+          echo "Verified $URL"
+
+      - name: Stash metadata record for dispatch
+        uses: actions/upload-artifact@v4
+        with:
+          name: meta-${{ strategy.job-index }}
+          path: dist/*.json
+          retention-days: 1
+
+  # ---------------------------------------------------------------------------
+  # 3) After ALL uploads succeed, fire ONE repository_dispatch with metadata.
+  # ---------------------------------------------------------------------------
+  dispatch-rebuild:
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/resolve-token
+        id: token
+        with:
+          service-user-pat: ${{ secrets.SERVICE_USER_PAT }}
+
+      - name: Collect all metadata records
+        uses: actions/download-artifact@v4
+        with:
+          pattern: meta-*
+          path: meta
+          merge-multiple: true
+
+      - name: Build dispatch payload
+        id: payload
+        run: |
+          set -euo pipefail
+          # Combine every per-package record into a single JSON array.
+          jq -s '.' meta/*.json > records.json
+          # client_payload has a documented size cap (~64KB); 6 small records
+          # are well within it.
+          echo "records=$(jq -c '.' records.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Dispatch rebuild on target repo
+        env:
+          GH_TOKEN: ${{ steps.token.outputs.token }}
+        run: |
+          gh api "repos/${TARGET_REPO}/dispatches" \
+            -f event_type='packages-publish' \
+            -F client_payload[records]='${{ steps.payload.outputs.records }}'
