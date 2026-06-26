@@ -65,15 +65,33 @@ ZIP_PATH="${OUT_DIR_ABS}/${ZIP_NAME}"
 META_PATH="${OUT_DIR_ABS}/${SHORT_NAME}-${VERSION}.json"
 
 # --- Build the zip with composer.json at the archive root -------------------
-# Zip the *contents* of the dir (no leading parent path). Exclude build cruft.
+# Use git as the source of truth for WHICH files to include, so .gitignore is
+# honored exactly. A blanket filesystem exclude (e.g. "*/node_modules/*")
+# cannot tell an ignored file apart from one that was deliberately force-added
+# past .gitignore -- and Webspark force-adds specific built artifacts under
+# node_modules (compiled *.umd.js bundles and their assets) that MUST ship in
+# the package. Enumerating tracked files gets this right by construction:
+#   - ignored files are not tracked      -> excluded
+#   - force-added files ARE tracked       -> included
+# (.git itself is never tracked, so it needs no explicit exclude.)
+#
+# Note: only TRACKED files are archived. Untracked files present in the working
+# tree are intentionally excluded -- on a clean CI checkout there are none, and
+# this keeps artifacts reproducible from committed state.
 rm -f "$ZIP_PATH"
 (
   cd "$PKG_PATH"
-  zip -r -q "$ZIP_PATH" . \
-    -x '*.git*' \
-    -x '*/node_modules/*' -x 'node_modules/*' \
-    -x '*/.DS_Store' -x '.DS_Store'
+  if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "::error::$PKG_PATH is not inside a git work tree; cannot honor .gitignore" >&2
+    exit 1
+  fi
+  # NUL-delimited list -> xargs handles spaces/odd names; zip appends each batch.
+  git ls-files -z -- . | xargs -0 zip -q "$ZIP_PATH" --
 )
+if [ ! -f "$ZIP_PATH" ]; then
+  echo "::error::no tracked files were archived for $PKG_PATH (is composer.json committed?)" >&2
+  exit 1
+fi
 
 # sha1 is what Composer expects for dist.shasum.
 if command -v sha1sum >/dev/null 2>&1; then
