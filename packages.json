@@ -1,0 +1,160 @@
+{
+  "packages": {
+    "asuwebplatforms/asu_brand": {
+      "dev-main": {
+        "name": "asuwebplatforms/asu_brand",
+        "version": "dev-main",
+        "type": "drupal-module",
+        "require": {
+          "asuwebplatforms/asu_react_core": "^2.14",
+          "asuwebplatforms/asu_react_integration": "^2.14",
+          "asuwebplatforms/asu_user": "^2.14"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://github.com/ASUWebPlatforms/webspark-composer-test/releases/download/dev-main/asu_brand-dev-main.zip",
+          "reference": "33238d9a808724adc307ee9049ca91c848b97ee3",
+          "shasum": "4deb0f3cd7d8d1e6491cbb63a020d4b15a4f1d8a"
+        }
+      }
+    },
+    "asuwebplatforms/asu_config_utility": {
+      "dev-main": {
+        "name": "asuwebplatforms/asu_config_utility",
+        "version": "dev-main",
+        "type": "drupal-module",
+        "require": {
+          "drupal/config_update": "2.0.0-alpha3"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://github.com/ASUWebPlatforms/webspark-composer-test/releases/download/dev-main/asu_config_utility-dev-main.zip",
+          "reference": "33238d9a808724adc307ee9049ca91c848b97ee3",
+          "shasum": "a711e282342881a678835acf9751a82dc9707772"
+        }
+      }
+    },
+    "asuwebplatforms/asu_react_core": {
+      "dev-main": {
+        "name": "asuwebplatforms/asu_react_core",
+        "version": "dev-main",
+        "type": "drupal-module",
+        "require": {
+          "drupal/paragraphs": "^1.17.0"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://github.com/ASUWebPlatforms/webspark-composer-test/releases/download/dev-main/asu_react_core-dev-main.zip",
+          "reference": "33238d9a808724adc307ee9049ca91c848b97ee3",
+          "shasum": "0c4fb6930537be79f4c686a6427dcd24e701f2e8"
+        }
+      }
+    },
+    "asuwebplatforms/asu_react_integration": {
+      "dev-main": {
+        "name": "asuwebplatforms/asu_react_integration",
+        "version": "dev-main",
+        "type": "drupal-module",
+        "require": {
+          "asuwebplatforms/asu_react_core": "^2.14"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://github.com/ASUWebPlatforms/webspark-composer-test/releases/download/dev-main/asu_react_integration-dev-main.zip",
+          "reference": "33238d9a808724adc307ee9049ca91c848b97ee3",
+          "shasum": "c63137fbcfb6721726e745490cd105bf9284ec16"
+        }
+      }
+    },
+    "asuwebplatforms/asu_user": {
+      "dev-main": {
+        "name": "asuwebplatforms/asu_user",
+        "version": "dev-main",
+        "type": "drupal-module",
+        "require": {
+          "asuwebplatforms/asu_config_utility": "^2.14",
+          "drupal/cas": "^2.3.2"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://github.com/ASUWebPlatforms/webspark-composer-test/releases/download/dev-main/asu_user-dev-main.zip",
+          "reference": "33238d9a808724adc307ee9049ca91c848b97ee3",
+          "shasum": "984876e08ea610d5e114e88ca7af6c98d29a24f4"
+        }
+      }
+    },
+    "asuwebplatforms/webspark": {
+      "dev-main": {
+        "name": "asuwebplatforms/webspark",
+        "version": "dev-main",
+        "type": "drupal-profile",
+        "require": {
+          "asuwebplatforms/asu_governance": "1.2.1",
+          "cweagans/composer-patches": "1.7.3",
+          "drupal/acquia_purge": "1.5.0",
+          "drupal/admin_toolbar": "3.6.1",
+          "drupal/allowed_formats": "3.0.1",
+          "drupal/anchor_link": "3.0.3",
+          "drupal/block_field": "1.0.0-rc4",
+          "drupal/captcha": "2.0.10",
+          "drupal/cas": "2.3.2",
+          "drupal/ckeditor": "1.0.2",
+          "drupal/ckeditor_responsive_plugin": "2.1.0-beta1",
+          "drupal/components": "3.2.0",
+          "drupal/config_readonly": "1.0.0-beta5",
+          "drupal/config_update": "2.0.0-alpha3",
+          "drupal/core-composer-scaffold": "10.5.11",
+          "drupal/core-recommended": "10.5.11",
+          "drupal/crop": "2.3.0",
+          "drupal/ctools": "4.1.0",
+          "drupal/current_page_crumb": "1.5.0",
+          "drupal/decorative_image_widget": "1.0.1",
+          "drupal/devel": "5.4.0",
+          "drupal/devel_kint_extras": "1.1.0",
+          "drupal/editor_advanced_link": "2.3.4",
+          "drupal/editoria11y": "2.2.18",
+          "drupal/environment_indicator": "4.0.14",
+          "drupal/field_group": "3.6.0",
+          "drupal/field_menu": "2.2.0",
+          "drupal/field_states_ui": "3.0.0",
+          "drupal/fontawesome": "3.0.0",
+          "drupal/image_widget_crop": "2.4.0",
+          "drupal/imagemagick": "4.0.2",
+          "drupal/layout_builder_component_attributes": "2.2.0",
+          "drupal/layout_builder_restrictions": "2.19.0",
+          "drupal/layout_builder_usage_reports": "1.0.2",
+          "drupal/layout_section_classes": "1.5.0",
+          "drupal/linkit": "7.0.15",
+          "drupal/maxlength": "2.1.2",
+          "drupal/media_library_form_element": "2.1.0",
+          "drupal/metatag": "2.2.0",
+          "drupal/paragraphs": "1.17.0",
+          "drupal/pathauto": "1.13.0",
+          "drupal/radix": "5.0.11",
+          "drupal/redirect": "1.9.0",
+          "drupal/robotstxt": "1.5.0",
+          "drupal/schema_metatag": "3.0.1",
+          "drupal/seckit": "2.0.3",
+          "drupal/select2": "1.15.0",
+          "drupal/simple_sitemap": "4.2.3",
+          "drupal/smtp": "1.2.0",
+          "drupal/webform": "6.2.3",
+          "drush/drush": "12.5.3",
+          "fontawesome/fontawesome": "*",
+          "northernco/ckeditor5-anchor-drupal": "*",
+          "npm-asset/fonticonpicker--fonticonpicker": "3.1.1",
+          "npm-asset/select2": "4.1.0-RC.0",
+          "oomphinc/composer-installers-extender": "2.0.1",
+          "php": ">=8.3.0",
+          "zaporylie/composer-drupal-optimizations": "1.2.0"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://github.com/ASUWebPlatforms/webspark-composer-test/releases/download/dev-main/webspark-dev-main.zip",
+          "reference": "33238d9a808724adc307ee9049ca91c848b97ee3",
+          "shasum": "403e88abee960178738831dc902707f592918d72"
+        }
+      }
+    }
+  }
+}
