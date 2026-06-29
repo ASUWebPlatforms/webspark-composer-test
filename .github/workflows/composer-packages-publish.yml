@@ -81,15 +81,51 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ steps.compute.outputs.tag }}
+          IS_DEV: ${{ steps.compute.outputs.version == 'dev-main' && 'true' || 'false' }}
         run: |
+          set -euo pipefail
+
+          # Build the release notes; dev-main gets an extra clarifying note
+          # (see the tag re-point step below).
+          NOTES="Composer package artifacts for $TAG"
+          if [ "$IS_DEV" = "true" ]; then
+            NOTES="$(printf '%s\n\n%s\n' \
+              "Composer package artifacts for $TAG" \
+              "> **Note:** the auto-generated *Source code (zip/tar.gz)* archives attached to this release are a GitHub artifact of the tag, **not** the published packages. Install the per-package \`*-dev-main.zip\` assets via Composer instead; see the [registry](https://asuwebplatforms.github.io/webspark-composer-test).")"
+          fi
+
+          # dev-main is a FLOATING build: its tag must track the latest commit
+          # so the release's GitHub-generated "Source code" archives reflect the
+          # current main rather than freezing at the commit where the tag was
+          # first created. (Those archives can't be removed or hidden -- GitHub
+          # attaches them to every release -- so the best we can do is keep them
+          # accurate. Our own package zips are refreshed separately via the
+          # upload step's --clobber.) Versioned tags (e.g. 0.0.5) are fixed
+          # points and must NOT move.
+          if [ "$IS_DEV" = "true" ] \
+             && gh api "repos/$REPO/git/refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "Re-pointing floating tag $TAG -> $GITHUB_SHA"
+            gh api --method PATCH "repos/$REPO/git/refs/tags/$TAG" \
+              -f sha="$GITHUB_SHA" -F force=true >/dev/null
+          fi
+
           if ! gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
+            # --target pins the (new) tag to the triggering commit. On a version
+            # tag push GITHUB_SHA already equals that tag's commit, so --target
+            # is a no-op there; on a dev-main branch build it creates the tag at
+            # the current commit.
             gh release create "$TAG" \
               --repo "$REPO" \
               --title "$TAG" \
-              --notes "Composer package artifacts for $TAG" \
-              ${{ steps.compute.outputs.version == 'dev-main' && '--prerelease' || '' }}
+              --notes "$NOTES" \
+              --target "$GITHUB_SHA" \
+              $([ "$IS_DEV" = "true" ] && echo --prerelease || true)
           else
             echo "Release $TAG already exists; assets will be clobbered."
+            # The release pre-exists, so the --notes above never ran for it.
+            # Refresh the notes each run so the dev-main clarification is always
+            # present (and stays in sync if we change the wording later).
+            gh release edit "$TAG" --repo "$REPO" --notes "$NOTES" >/dev/null
           fi
 
   # ---------------------------------------------------------------------------
