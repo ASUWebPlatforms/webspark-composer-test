@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ASU Webspark Composer Packages</title>
+  <style>
+    :root {
+      --maroon: #8c1d40;
+      --gold: #ffc627;
+      --ink: #191919;
+      --muted: #5c5c5c;
+      --line: #e3e3e3;
+      --bg: #fafafa;
+      --gray2: #484848;
+      --code-bg: #f4f4f4;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+    header {
+      background: var(--maroon);
+      color: #fff;
+      padding: 1.5rem 1.25rem;
+      border-bottom: 4px solid var(--gold);
+    }
+    header h1 { margin: 0 0 .25rem; font-size: 1.4rem; }
+    header p { margin: 0; opacity: .9; font-size: .95rem; }
+    main { max-width: 920px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+    section { margin-bottom: 2rem; }
+    h2 { font-size: 1.1rem; border-bottom: 1px solid var(--line); padding-bottom: .35rem; }
+    h3 { font-size: 1rem; border-bottom: 1px solid var(--line); padding-bottom: .35rem; color: var(--gray2); }
+    code, pre {
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: .88rem;
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 1rem;
+      overflow-x: auto;
+    }
+    .pkg {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      margin-bottom: .85rem;
+    }
+    .pkg h3 { margin: 0 0 .15rem; font-size: 1rem; }
+    .pkg .type {
+      display: inline-block;
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: .05rem .5rem;
+      margin-left: .4rem;
+      vertical-align: middle;
+    }
+    .versions { margin-top: .5rem; display: flex; flex-wrap: wrap; gap: .35rem; }
+    .ver {
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: .8rem;
+      background: var(--code-bg);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: .1rem .45rem;
+    }
+    .ver.dev { border-color: var(--gold); background: #fff8e1; }
+    /* Tags that are links: keep the tag look, not the default link look. */
+    a.ver {
+      color: var(--ink);
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color .12s ease, background-color .12s ease;
+    }
+    a.ver:hover, a.ver:focus {
+      border-color: var(--maroon);
+      background: #fff;
+      text-decoration: none;
+    }
+    a.ver.dev:hover, a.ver.dev:focus { border-color: var(--gold); background: #fff3cd; }
+    .require { margin-top: .5rem; font-size: .85rem; color: var(--muted); }
+    .require strong { color: var(--ink); font-weight: 600; }
+    .status { color: var(--muted); font-style: italic; }
+    .error { color: var(--maroon); }
+    footer { color: var(--muted); font-size: .82rem; border-top: 1px solid var(--line); padding-top: 1rem; }
+    a { color: var(--maroon); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ASU Webspark Composer Packages</h1>
+    <p>A static Composer repository served via GitHub Pages.</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Add this repository</h2>
+      <p>Add the following to your project's <code>composer.json</code>, then require packages as normal:</p>
+      <pre>{
+    "repositories": [
+        { "type": "composer", "url": "https://asuwebplatforms.github.io/webspark-composer-test/" }
+    ]
+}</pre>
+        <h3>Require a package</h3>
+      <pre>composer require asuwebplatforms/asu_brand</pre>
+    </section>
+
+    <section>
+      <h2>Available packages</h2>
+      <div id="packages"><p class="status">Loading packages&hellip;</p></div>
+    </section>
+
+    <footer>
+      <p>
+        Source of truth: each package's own <code>composer.json</code>.
+        Artifacts are stored as GitHub Release assets; this metadata is
+        generated automatically on publish. View
+        <a href="packages.json">packages.json</a>.
+      </p>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      var container = document.getElementById("packages");
+
+      function esc(s) {
+        return String(s).replace(/[&<>"']/g, function (c) {
+          return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+        });
+      }
+
+      // Sort versions: stable (desc) first, dev-* last.
+      function sortVersions(a, b) {
+        var aDev = /^dev-/.test(a), bDev = /^dev-/.test(b);
+        if (aDev !== bDev) return aDev ? 1 : -1;
+        return b.localeCompare(a, undefined, { numeric: true });
+      }
+
+      fetch("packages.json", { cache: "no-store" })
+        .then(function (r) {
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          return r.json();
+        })
+        .then(function (data) {
+          var packages = (data && data.packages) || {};
+          var names = Object.keys(packages).sort();
+          if (names.length === 0) {
+            container.innerHTML = '<p class="status">No packages published yet.</p>';
+            return;
+          }
+          container.innerHTML = "";
+          names.forEach(function (name) {
+            var versionsObj = packages[name] || {};
+            var versions = Object.keys(versionsObj).sort(sortVersions);
+            // Use the newest version entry for type/require display.
+            var latest = versionsObj[versions[0]] || {};
+            var type = latest.type || "library";
+            var require = latest.require || {};
+
+            var verHtml = versions.map(function (v) {
+              var cls = /^dev-/.test(v) ? "ver dev" : "ver";
+              var entry = versionsObj[v] || {};
+              var dist = entry.dist && entry.dist.url;
+              var url = dist
+                ? dist.replace(/\/releases\/download\/([^/]+)\/[^/]+$/, "/releases/tag/$1")
+                : null;
+              if (url) {
+                // Link the tag to its release page; keep the .ver styling by
+                // applying the class to the anchor itself.
+                return '<a class="' + cls + '" href="' + esc(url) + '"' +
+                  ' title="View release ' + esc(v) + " of " + esc(name) + '">' +
+                  esc(v) + "</a>";
+              }
+              // No dist URL available: render a non-link tag.
+              return '<span class="' + cls + '">' + esc(v) + "</span>";
+            }).join("");
+
+            var reqKeys = Object.keys(require);
+            var reqHtml = "";
+            if (reqKeys.length) {
+              reqHtml = '<div class="require"><strong>requires:</strong> ' +
+                reqKeys.map(function (k) {
+                  return esc(k) + " " + esc(require[k]);
+                }).join(", ") + "</div>";
+            }
+
+            var el = document.createElement("div");
+            el.className = "pkg";
+            el.innerHTML =
+              "<h3>" + esc(name) + '<span class="type">' + esc(type) + "</span></h3>" +
+              '<div class="versions">' + verHtml + "</div>" +
+              reqHtml;
+            container.appendChild(el);
+          });
+        })
+        .catch(function (err) {
+          container.innerHTML =
+            '<p class="error">Could not load packages.json (' + esc(err.message) + ").</p>";
+        });
+    })();
+  </script>
+</body>
+</html>
