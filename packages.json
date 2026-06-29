@@ -13,8 +13,8 @@
         "dist": {
           "type": "zip",
           "url": "https://github.com/ASUWebPlatforms/webspark-composer-test/releases/download/dev-main/asu_brand-dev-main.zip",
-          "reference": "808d75eba0afac84c8251b099a981a330a119f5f",
-          "shasum": "ba69b9cd553b2731006d10dd33708e239e71a0ba"
+          "reference": "40edaa8894ca18693696a07576fbe3a004eb7b14",
+          "shasum": "566643889774678f4ab2ce9101eeb383ae28ecbc"
         }
       },
       "2.18.12": {
@@ -61,8 +61,8 @@
         "dist": {
           "type": "zip",
           "url": "https://github.com/ASUWebPlatforms/webspark-composer-test/releases/download/dev-main/asu_config_utility-dev-main.zip",
-          "reference": "808d75eba0afac84c8251b099a981a330a119f5f",
-          "shasum": "b920b12be0612fd15806485bbadcc4fb50f8de68"
+          "reference": "40edaa8894ca18693696a07576fbe3a004eb7b14",
+          "shasum": "e26b7e7e85d9e198c6ed7ca56c97716dc38ae3fb"
         }
       },
       "2.18.12": {
@@ -105,8 +105,8 @@
         "dist": {
           "type": "zip",
           "url": "https://github.com/ASUWebPlatforms/webspark-composer-test/releases/download/dev-main/asu_react_core-dev-main.zip",
-          "reference": "808d75eba0afac84c8251b099a981a330a119f5f",
-          "shasum": "54e9affa44b158e98b2111356103a1ff54fefbd3"
+          "reference": "40edaa8894ca18693696a07576fbe3a004eb7b14",
+          "shasum": "a9bea79d4d6c1a7499641bed767d93b8e5ac89bd"
         }
       },
       "2.18.12": {
@@ -149,8 +149,8 @@
         "dist": {
           "type": "zip",
           "url": "https://github.com/ASUWebPlatforms/webspark-composer-test/releases/download/dev-main/asu_react_integration-dev-main.zip",
-          "reference": "808d75eba0afac84c8251b099a981a330a119f5f",
-          "shasum": "a22ceb1fc9ef6f4cdc8feeb4819e735f26a3c4ec"
+          "reference": "40edaa8894ca18693696a07576fbe3a004eb7b14",
+          "shasum": "0d93fe5d578033f68a7180080d094b766e5950a5"
         }
       },
       "2.18.12": {
@@ -194,8 +194,8 @@
         "dist": {
           "type": "zip",
           "url": "https://github.com/ASUWebPlatforms/webspark-composer-test/releases/download/dev-main/asu_user-dev-main.zip",
-          "reference": "808d75eba0afac84c8251b099a981a330a119f5f",
-          "shasum": "5a524430e914721c9eb79e1f24cd25c2a32bf45e"
+          "reference": "40edaa8894ca18693696a07576fbe3a004eb7b14",
+          "shasum": "c1fed6876e1518e73ff57e9b870127f79f90e505"
         }
       },
       "2.18.12": {
@@ -297,8 +297,8 @@
         "dist": {
           "type": "zip",
           "url": "https://github.com/ASUWebPlatforms/webspark-composer-test/releases/download/dev-main/webspark-dev-main.zip",
-          "reference": "808d75eba0afac84c8251b099a981a330a119f5f",
-          "shasum": "8564a3c8b1e66ff5b6a9281cf948c395465f67f2"
+          "reference": "40edaa8894ca18693696a07576fbe3a004eb7b14",
+          "shasum": "6bd0c86884cfe9ef88518c355d20de71640b095e"
         }
       },
       "2.18.12": {
