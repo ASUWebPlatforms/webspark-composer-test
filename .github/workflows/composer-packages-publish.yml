@@ -17,8 +17,11 @@ name: 'Publish Composer Packages + Deploy Pages'
 # everything -- no PAT, no GitHub App, no resolve-token action.
 #
 # Note on loops: pushes made with GITHUB_TOKEN do NOT trigger new workflow
-# runs, so the bot's packages.json commit cannot re-trigger this workflow. The
-# "[skip ci]" marker on that commit is kept as belt-and-suspenders.
+# runs (GitHub's built-in recursion guard), so the bot's packages.json commit
+# cannot re-trigger this workflow. We therefore do NOT mark that commit with
+# "[skip ci]" -- doing so would also suppress any release tag a human cuts off
+# that commit (a release off main lands on the bot's commit), which would stop
+# the publish from running.
 
 on:
   push:
@@ -248,7 +251,13 @@ jobs:
             fi
 
             git add packages.json
-            git commit -m "Update packages.json [skip ci]"
+            # No "[skip ci]" here on purpose: this push uses the built-in
+            # GITHUB_TOKEN, which by GitHub's design does NOT trigger new
+            # workflow runs -- so the loop is already prevented. Adding
+            # "[skip ci]" would additionally suppress any RELEASE tag a human
+            # cuts off this commit (releases off main land on this exact tip),
+            # which is the bug we are fixing.
+            git commit -m "Update packages.json"
 
             if git push origin HEAD:main; then
               echo "Pushed on attempt $attempt."
