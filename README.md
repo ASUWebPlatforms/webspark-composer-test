@@ -122,7 +122,7 @@ Webspark.
 Browse the published packages at
 [https://asuwebplatforms.github.io/webspark-composer-test](https://asuwebplatforms.github.io/webspark-composer-test).
 
-### Consumer usage (test)
+### Consuming the packages
 
 Add the repository to your project's `composer.json`:
 
