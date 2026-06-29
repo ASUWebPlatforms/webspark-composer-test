@@ -1,12 +1,24 @@
-name: 'Publish Composer Packages (TEST)'
+name: 'Publish Composer Packages + Deploy Pages'
 
-# TEST harness for the Satis-replacement pipeline. Runs on
-# ASUWebPlatforms/webspark-composer-test (in place of webspark-mirror) and
-# publishes to ASUWebPlatforms/composer-packages-test (in place of
-# composer-packages). Auth uses a service-user PAT (secrets.SERVICE_USER_PAT).
+# Single-repo Composer registry pipeline. Everything happens here in
+# ASUWebPlatforms/webspark-composer-test:
 #
-# To promote to production: change TARGET_REPO + the repo gate back to the
-# live names and switch the resolve-token action to the GitHub App path.
+#   ensure-release  -> create (once) the GitHub Release that holds this ref's
+#                      zip assets, on THIS repo.
+#   publish (matrix)-> zip each package subdirectory and upload it as a Release
+#                      asset, then verify it downloads + checksums.
+#   rebuild         -> merge the new version records into the committed
+#                      packages.json accumulator, commit it back to main, and
+#                      deploy packages.json + index.html to GitHub Pages.
+#
+# This replaces the former two-repo design (publisher + separate registry repo
+# wired together by a cross-repo token and repository_dispatch). Because the
+# registry now lives in the same repo, the built-in GITHUB_TOKEN can do
+# everything -- no PAT, no GitHub App, no resolve-token action.
+#
+# Note on loops: pushes made with GITHUB_TOKEN do NOT trigger new workflow
+# runs, so the bot's packages.json commit cannot re-trigger this workflow. The
+# "[skip ci]" marker on that commit is kept as belt-and-suspenders.
 
 on:
   push:
@@ -18,15 +30,20 @@ on:
       - '[0-9]+.[0-9]+.[0-9]+'
   workflow_dispatch:
 
-# Don't let two publishes for the same ref race each other.
+# Serialize the whole pipeline so concurrent pushes never race on the release,
+# the packages.json commit, or the Pages deploy. Queue them (do NOT cancel) --
+# cancelling mid-push/mid-deploy can drop an update or wedge the Pages backend.
 concurrency:
-  group: composer-packages-publish-${{ github.ref }}
+  group: composer-packages-publish
   cancel-in-progress: false
 
 env:
-  # Single place to flip between test and production targets.
-  PUBLISHER_REPO: ASUWebPlatforms/webspark-composer-test
-  TARGET_REPO: ASUWebPlatforms/composer-packages-test
+  # Single place to flip between test and production. For production this
+  # becomes the live repo (e.g. ASUWebPlatforms/webspark-mirror) and its Pages
+  # URL; nothing else in the workflow hard-codes the repo.
+  REPO: ASUWebPlatforms/webspark-composer-test
+  BASE_URL: https://github.com/ASUWebPlatforms/webspark-composer-test/releases/download
+  PAGES_URL: https://asuwebplatforms.github.io/webspark-composer-test
 
 jobs:
   # ---------------------------------------------------------------------------
@@ -35,16 +52,13 @@ jobs:
   ensure-release:
     if: github.repository == 'ASUWebPlatforms/webspark-composer-test'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # create the release on this repo
     outputs:
       tag: ${{ steps.compute.outputs.tag }}
       version: ${{ steps.compute.outputs.version }}
     steps:
       - uses: actions/checkout@v4
-
-      - uses: ./.github/actions/resolve-token
-        id: token
-        with:
-          service-user-pat: ${{ secrets.SERVICE_USER_PAT }}
 
       - id: compute
         shell: bash
@@ -60,14 +74,14 @@ jobs:
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
 
-      - name: Ensure release exists on target repo
+      - name: Ensure release exists
         env:
-          GH_TOKEN: ${{ steps.token.outputs.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ steps.compute.outputs.tag }}
         run: |
-          if ! gh release view "$TAG" --repo "$TARGET_REPO" >/dev/null 2>&1; then
+          if ! gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
             gh release create "$TAG" \
-              --repo "$TARGET_REPO" \
+              --repo "$REPO" \
               --title "$TAG" \
               --notes "Composer package artifacts for $TAG" \
               ${{ steps.compute.outputs.version == 'dev-main' && '--prerelease' || '' }}
@@ -81,6 +95,8 @@ jobs:
   publish:
     needs: ensure-release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # upload assets to the release
     strategy:
       fail-fast: false
       matrix:
@@ -94,11 +110,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/resolve-token
-        id: token
-        with:
-          service-user-pat: ${{ secrets.SERVICE_USER_PAT }}
-
       - name: Package subdirectory
         env:
           TAG: ${{ needs.ensure-release.outputs.tag }}
@@ -108,7 +119,7 @@ jobs:
 
       - name: Upload asset (retry up to 2x, then fail)
         env:
-          GH_TOKEN: ${{ steps.token.outputs.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ needs.ensure-release.outputs.tag }}
         run: |
           set -euo pipefail
@@ -117,7 +128,7 @@ jobs:
           max=3   # 1 initial + 2 retries
           until [ "$attempt" -gt "$max" ]; do
             echo "Upload attempt $attempt/$max for $ZIP"
-            if gh release upload "$TAG" "$ZIP" --repo "$TARGET_REPO" --clobber; then
+            if gh release upload "$TAG" "$ZIP" --repo "$REPO" --clobber; then
               echo "Upload succeeded."
               break
             fi
@@ -135,7 +146,7 @@ jobs:
         run: |
           set -euo pipefail
           META="$(ls dist/*.json)"
-          URL="https://github.com/${TARGET_REPO}/releases/download/${TAG}/$(jq -r '.filename' "$META")"
+          URL="https://github.com/${REPO}/releases/download/${TAG}/$(jq -r '.filename' "$META")"
           EXPECTED="$(jq -r '.shasum' "$META")"
           # -L follows the 302 to the signed objects URL.
           curl -fsSL "$URL" -o downloaded.zip
@@ -146,7 +157,7 @@ jobs:
           fi
           echo "Verified $URL"
 
-      - name: Stash metadata record for dispatch
+      - name: Stash metadata record for merge
         uses: actions/upload-artifact@v4
         with:
           name: meta-${{ strategy.job-index }}
@@ -154,18 +165,41 @@ jobs:
           retention-days: 1
 
   # ---------------------------------------------------------------------------
-  # 3) After ALL uploads succeed, fire ONE repository_dispatch with metadata.
+  # 3) Merge records into packages.json, commit, and deploy to Pages.
   # ---------------------------------------------------------------------------
-  dispatch-rebuild:
+  rebuild:
     needs: publish
     runs-on: ubuntu-latest
+    # Fail cleanly if a Pages deploy ever wedges, instead of hanging until a
+    # human cancels it. A healthy run finishes well under a minute.
+    timeout-minutes: 15
+    permissions:
+      contents: write   # commit the updated packages.json back to this repo
+      pages: write      # deploy to Pages
+      id-token: write   # required by actions/deploy-pages (OIDC)
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/resolve-token
-        id: token
-        with:
-          service-user-pat: ${{ secrets.SERVICE_USER_PAT }}
+      - name: Guard - packages.json is valid and well-shaped
+        run: |
+          set -euo pipefail
+          # Fail fast (and clearly) if the committed accumulator is missing,
+          # not valid JSON, or not the expected { "packages": { ... } } shape.
+          if [ ! -f packages.json ]; then
+            echo "::error file=packages.json::packages.json is missing from the repo root." >&2
+            exit 1
+          fi
+          if ! jq empty packages.json 2>/dev/null; then
+            echo "::error file=packages.json::packages.json is not valid JSON." >&2
+            head -n 20 packages.json >&2 || true
+            exit 1
+          fi
+          if [ "$(jq -r 'type' packages.json)" != "object" ] \
+             || [ "$(jq -r '.packages | type' packages.json)" != "object" ]; then
+            echo "::error file=packages.json::packages.json must be an object with a top-level \"packages\" object." >&2
+            exit 1
+          fi
+          echo "packages.json OK ($(jq '.packages | length' packages.json) package(s))."
 
       - name: Collect all metadata records
         uses: actions/download-artifact@v4
@@ -174,27 +208,92 @@ jobs:
           path: meta
           merge-multiple: true
 
-      - name: Build dispatch payload
-        id: payload
+      - name: Build records.json
         run: |
           set -euo pipefail
-          # Combine every per-package record into a single JSON array.
-          jq -s '.' meta/*.json > records.json
-          echo "Records to dispatch:"
+          # Combine every per-package record into a single JSON array. If there
+          # are somehow no records (shouldn't happen after a successful publish
+          # matrix), fall back to an empty array so we just redeploy as-is.
+          if ls meta/*.json >/dev/null 2>&1; then
+            jq -s '.' meta/*.json > records.json
+          else
+            echo "No metadata records found; redeploying existing packages.json."
+            echo '[]' > records.json
+          fi
           jq . records.json
-          # Build the FULL request body with a properly nested client_payload.
-          # gh api -f/-F send flat form fields and will NOT construct nested
-          # objects (client_payload[records] would not become real nested JSON),
-          # so we assemble the body explicitly and send it via --input.
-          # client_payload has a documented ~64KB cap; 6 small records fit.
-          jq -n --argjson records "$(cat records.json)" \
-            '{event_type: "packages-publish", client_payload: {records: $records}}' \
-            > dispatch-body.json
-          jq . dispatch-body.json
 
-      - name: Dispatch rebuild on target repo
+      - name: Merge + commit + push (race-safe)
         env:
-          GH_TOKEN: ${{ steps.token.outputs.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          gh api --method POST "repos/${TARGET_REPO}/dispatches" --input dispatch-body.json
+          chmod +x scripts/merge-packages-json.sh
+          git config user.name  "ws2-release-bot"
+          git config user.email "ws2-release-bot@asu.edu"
+
+          attempt=1
+          max=5
+          until [ "$attempt" -gt "$max" ]; do
+            # Always re-apply the merge onto the freshest main. The merge is
+            # additive/idempotent, so re-applying after a remote update is
+            # always correct.
+            git fetch origin main
+            git reset --hard origin/main
+
+            ./scripts/merge-packages-json.sh packages.json records.json "$BASE_URL"
+
+            if git diff --quiet -- packages.json; then
+              echo "packages.json already up to date on origin/main; nothing to push."
+              break
+            fi
+
+            git add packages.json
+            git commit -m "Update packages.json [skip ci]"
+
+            if git push origin HEAD:main; then
+              echo "Pushed on attempt $attempt."
+              break
+            fi
+
+            if [ "$attempt" -eq "$max" ]; then
+              echo "::error::failed to push packages.json after $max attempts (persistent contention)" >&2
+              exit 1
+            fi
+            echo "Push rejected (remote moved); retrying ($attempt/$max)..."
+            attempt=$((attempt+1))
+            sleep $((attempt * 3))
+          done
+
+      - name: Prepare Pages artifact
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          cp packages.json _site/packages.json
+          # Optional human index, if present in the repo root.
+          [ -f index.html ] && cp index.html _site/index.html || true
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+      - name: Verify deployed packages.json
+        run: |
+          set -euo pipefail
+          # Give Pages a moment to propagate the new deploy.
+          sleep 10
+          curl -fsSL "${PAGES_URL}/packages.json" -o served.json
+          jq empty served.json
+          # If this run carried records, confirm each name->version is present.
+          if [ "$(jq 'length' records.json)" -gt 0 ]; then
+            while read -r name version; do
+              if [ "$(jq --arg n "$name" --arg v "$version" \
+                      '.packages[$n][$v] != null' served.json)" != "true" ]; then
+                echo "::error::served packages.json missing ${name}@${version}" >&2
+                exit 1
+              fi
+            done < <(jq -r '.[] | "\(.name) \(.version)"' records.json)
+          fi
+          echo "Verified ${PAGES_URL}/packages.json"

@@ -5,6 +5,7 @@ Sites running the Webspark build.
 
 [Local Development](#local-development) •
 [Code Quality Tools](#code-quality-tools) •
+[Composer Package Registry](#composer-package-registry) •
 [Resources](#resources)
 
 </div>
@@ -108,6 +109,84 @@ Use the `--help` flag to see available options for each command. For example:
 <div align="right"><a href="#webspark">↑ Top</a></div>
 <br>
 <br>
+
+## Composer Package Registry
+
+This repo doubles as a static [Composer repository](https://getcomposer.org/doc/05-repositories.md#composer)
+for some of the Webspark packages it contains. Selected subdirectories are packaged as
+zip artifacts, stored as GitHub Release assets on this repo, and advertised via
+a `packages.json` served from GitHub Pages — a simple, [Satis](https://composer.github.io/satis) alternative
+custom-built for ASU Webspark.
+
+Browse the published packages at
+[https://asuwebplatforms.github.io/webspark-composer-test](https://asuwebplatforms.github.io/webspark-composer-test).
+
+### Consumer usage (test)
+
+Add the repository to your project's `composer.json`:
+
+```json
+{
+    "repositories": [
+        { "type": "composer", "url": "https://asuwebplatforms.github.io/webspark-composer-test/" }
+    ]
+}
+```
+
+Then require packages as normal:
+
+```bash
+composer require asuwebplatforms/asu_brand
+```
+
+Notes for consumers:
+
+- The repository must remain **public** for unauthenticated `composer install`.
+- Branch builds are published as the `dev-main` version
+  (`composer require asuwebplatforms/asu_brand:dev-main`).
+- Release builds are published under the tag's version
+  (`composer require asuwebplatforms/asu_brand:0.0.5`).
+
+### How it works
+
+This all runs in **one repo** — there is no separate registry repo, and no
+cross-repo token. The single workflow
+`.github/workflows/composer-packages-publish.yml` does everything using the
+built-in `GITHUB_TOKEN`:
+
+1. **`ensure-release`** — on a tag push (or `dev-main` for a branch build),
+   creates the GitHub Release that will hold this version's assets.
+2. **`publish`** (matrix) — zips each selected package subdirectory with
+   `scripts/package.sh` and uploads it as a Release asset, then verifies the
+   asset downloads and its checksum matches.
+3. **`rebuild`** — merges the new version records into the committed
+   `packages.json` accumulator with `scripts/merge-packages-json.sh`, commits
+   it back to `main` (marked `[skip ci]`), and deploys `packages.json` +
+   `index.html` to GitHub Pages.
+
+`packages.json` is an **append-only accumulator of record** — it is committed
+to the repo and only ever has version entries added or replaced. Removing a
+package from the publish matrix stops new versions being added; it does **not**
+remove previously published entries.
+
+`scripts/package.sh` archives exactly the files **git tracks** (via
+`git ls-files`), so `.gitignore` is honored precisely — including build
+artifacts force-added under `node_modules`, which must ship with the package.
+
+### Registry files
+
+- `packages.json` — the accumulator of record (auto-generated; do not hand-edit).
+- `index.html` — human-readable browse page served alongside `packages.json`.
+- `scripts/package.sh` — zips a subdirectory + emits its metadata record.
+- `scripts/merge-packages-json.sh` — merges new version records into `packages.json`.
+- `.github/workflows/composer-packages-publish.yml` — the combined publish + Pages deploy pipeline.
+
+### Promoting to production
+
+The workflow's `REPO`, `BASE_URL`, and `PAGES_URL` env values are the single
+flip-point: change them to the production repo (`webspark-mirror`) and its Pages
+URL. Production will also be public, so the built-in `GITHUB_TOKEN` model
+carries over unchanged — no PAT or GitHub App required.
 
 ## Resources
 
