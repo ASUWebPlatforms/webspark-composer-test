@@ -117,8 +117,8 @@ jobs:
         env:
           TAG: ${{ needs.ensure-release.outputs.tag }}
         run: |
-          chmod +x scripts/package.sh
-          ./scripts/package.sh "${{ matrix.package }}" "${{ needs.ensure-release.outputs.version }}" dist
+          chmod +x composer-registry/package.sh
+          ./composer-registry/package.sh "${{ matrix.package }}" "${{ needs.ensure-release.outputs.version }}" dist
 
       - name: Upload asset (retry up to 2x, then fail)
         env:
@@ -230,7 +230,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          chmod +x scripts/merge-packages-json.sh
+          chmod +x composer-registry/merge-packages-json.sh
           git config user.name  "ws2-release-bot"
           git config user.email "ws2-release-bot@asu.edu"
 
@@ -243,7 +243,7 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
 
-            ./scripts/merge-packages-json.sh packages.json records.json "$BASE_URL"
+            ./composer-registry/merge-packages-json.sh packages.json records.json "$BASE_URL"
 
             if git diff --quiet -- packages.json; then
               echo "packages.json already up to date on origin/main; nothing to push."
@@ -278,8 +278,8 @@ jobs:
           set -euo pipefail
           mkdir -p _site
           cp packages.json _site/packages.json
-          # Optional human index, if present in the repo root.
-          [ -f index.html ] && cp index.html _site/index.html || true
+          # Optional human index, if present.
+          [ -f composer-registry/index.html ] && cp composer-registry/index.html _site/index.html || true
 
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
