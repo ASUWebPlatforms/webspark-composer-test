@@ -61,7 +61,7 @@ jobs:
       tag: ${{ steps.compute.outputs.tag }}
       version: ${{ steps.compute.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - id: compute
         shell: bash
@@ -111,7 +111,7 @@ jobs:
           - docroot/profiles/contrib/webspark/modules/asu_config_utility
           - docroot/profiles/contrib/webspark
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Package subdirectory
         env:
@@ -161,7 +161,7 @@ jobs:
           echo "Verified $URL"
 
       - name: Stash metadata record for merge
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: meta-${{ strategy.job-index }}
           path: dist/*.json
@@ -181,7 +181,7 @@ jobs:
       pages: write      # deploy to Pages
       id-token: write   # required by actions/deploy-pages (OIDC)
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Guard - packages.json is valid and well-shaped
         run: |
@@ -205,7 +205,7 @@ jobs:
           echo "packages.json OK ($(jq '.packages | length' packages.json) package(s))."
 
       - name: Collect all metadata records
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: meta-*
           path: meta
@@ -281,12 +281,12 @@ jobs:
           # Optional human index, if present in the repo root.
           [ -f index.html ] && cp index.html _site/index.html || true
 
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
       - id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
       - name: Verify deployed packages.json
         run: |
