@@ -152,8 +152,7 @@ Notes for consumers:
 
 The publishing pipeline, packaging scripts, and browse page live in the
 [`composer-registry/`](composer-registry/) directory. See
-[`composer-registry/README.md`](composer-registry/README.md) for how it works,
-the file layout, and how to promote it to production.
+[`composer-registry/README.md`](composer-registry/README.md) for how it works and the file layout.
 
 ## Resources
 

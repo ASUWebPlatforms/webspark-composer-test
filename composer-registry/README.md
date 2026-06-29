@@ -82,13 +82,6 @@ The list of packaged subdirectories is the `matrix.package` array in the
 `publish` job of the workflow. Add a path to publish it; remove a path to stop
 publishing new versions of it (existing versions remain — see above).
 
-## Promoting to production
-
-The workflow's `REPO`, `BASE_URL`, and `PAGES_URL` env values are the single
-flip-point: change them to the production repo (`webspark-mirror`) and its Pages
-URL. Production will also be public, so the built-in `GITHUB_TOKEN` model carries
-over unchanged — no PAT or GitHub App required.
-
 ## Local testing
 
 You can exercise the scripts without running the workflow:
